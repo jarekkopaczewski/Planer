@@ -9,7 +9,10 @@
             android:id="@+id/nav_home"
             android:name="skills.future.planer.ui.home.HomeFragment"
             android:label="@string/menu_home"
-            tools:layout="@layout/fragment_home"/>
+            tools:layout="@layout/fragment_home">
+        <action android:id="@+id/action_nav_home_to_nav_gallery" app:destination="@id/nav_gallery"/>
+        <action android:id="@+id/action_nav_home_to_nav_slideshow" app:destination="@id/nav_slideshow"/>
+    </fragment>
 
     <fragment
             android:id="@+id/nav_gallery"
@@ -22,4 +25,13 @@
             android:name="skills.future.planer.ui.slideshow.SlideshowFragment"
             android:label="@string/menu_slideshow"
             tools:layout="@layout/fragment_slideshow"/>
+    <fragment android:id="@+id/nav_month" android:name="skills.future.planer.ui.month.MonthFragment"
+              android:label="menu_month" tools:layout="@layout/fragment_month">
+        <action android:id="@+id/action_nav_month_to_nav_day" app:destination="@id/nav_day"/>
+        <action android:id="@+id/action_nav_month_to_nav_task_list" app:destination="@id/nav_task_list"/>
+    </fragment>
+    <fragment android:id="@+id/nav_day" android:name="skills.future.planer.ui.day.DayFragment" android:label="menu_day"
+              tools:layout="@layout/fragment_day"/>
+    <fragment android:id="@+id/nav_task_list" android:name="skills.future.planer.ui.tasklist.TaskListFragment"
+              android:label="menu_task_list" tools:layout="@layout/fragment_task_list"/>
 </navigation>

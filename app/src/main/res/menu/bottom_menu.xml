@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/nav_month"
+            android:icon="@drawable/calendar"
+            android:title="@string/month"/>
+    <item
+            android:id="@+id/nav_day"
+            android:icon="@drawable/calendar_day"
+            android:title="@string/day"/>
+    <item
+            android:id="@+id/nav_task_list"
+            android:icon="@drawable/task_list"
+            android:title="@string/tasks"/>
+</menu>
