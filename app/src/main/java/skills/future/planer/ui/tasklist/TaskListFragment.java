@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import skills.future.planer.R;
 
 /**
@@ -28,7 +31,7 @@ public class TaskListFragment extends Fragment {
     private String mParam2;
 
     private ListView listTotal;
-    private  TaskTotalAdapter taskTotalAdapter;
+    private TaskTotalAdapter taskTotalAdapter;
 
     public TaskListFragment() {
     }
@@ -65,11 +68,14 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-            View view = inflater.inflate(R.layout.fragment_task_list, container, false);
-            listTotal = (ListView) view.findViewById(R.id.listTotalView);
-            taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
-            listTotal.setAdapter(taskTotalAdapter);
-
+        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
+        listTotal = view.findViewById(R.id.listTotalView);
+        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
+        listTotal.setAdapter(taskTotalAdapter);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        //todo @Daniel Glazer handler fab
+        fab.setOnClickListener(view1 -> Snackbar.make(view1, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
         return view;
     }
 }
