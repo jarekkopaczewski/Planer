@@ -8,37 +8,34 @@
     android:orientation="vertical">
 
     <CheckBox
-        android:id="@+id/checkBox2"
+        android:id="@+id/checkBoxTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:id="@+id/taskDescriptionTextView"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintStart_toEndOf="@+id/checkBox2"
-        app:layout_constraintTop_toTopOf="@+id/checkBox2" />
+        app:layout_constraintEnd_toStartOf="@+id/iconTaskCategory"
+        app:layout_constraintStart_toEndOf="@+id/checkBoxTask"
+        app:layout_constraintTop_toTopOf="@+id/checkBoxTask"
+        android:layout_width="wrap_content" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/iconTaskCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/dataTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
-        app:layout_constraintStart_toEndOf="@+id/checkBox2" />
+        app:layout_constraintEnd_toStartOf="@+id/iconTaskCategory"
+        app:layout_constraintStart_toEndOf="@+id/checkBoxTask" />
 </androidx.constraintlayout.widget.ConstraintLayout>

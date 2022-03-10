@@ -1,11 +1,16 @@
 package skills.future.planer.ui.tasklist;
 
 import android.content.Context;
+import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
 
@@ -21,7 +26,15 @@ class TaskTotalAdapter extends BaseAdapter {
     public TaskTotalAdapter(Context context, LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
         this.context = context;
-        taskList.add(new TaskData());taskList.add(new TaskData());taskList.add(new TaskData());
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 1));
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 1));
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 1));
+        taskList.add(new TaskData(context, 0));
+
     }
 
     public void addItemToList(TaskData task) {
@@ -54,12 +67,30 @@ class TaskTotalAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).
                     inflate(R.layout.fragment_task_in_list, parent, false);
 
-       // String currentItem = (String) getItem(position);
+        TaskData currentTask = (TaskData) getItem(position);
 
-
-
-
+        setDateTextView(currentTask, convertView);
+        setIconCategory(currentTask, convertView);
 
         return convertView;
     }
+
+    private void setDateTextView(TaskData task, View convertView) {
+        String dateView = "";
+        if (task.getEndingDate() != null) {
+            if (task.getStartingDate() != null)
+                dateView = task.getStartingDate().toString() + " ";
+            dateView += task.getEndingDate();
+            ((TextView) convertView.findViewById(R.id.taskDescriptionTextView)).setText(dateView);
+        } else
+            (convertView.findViewById(R.id.taskDescriptionTextView)).setVisibility(View.INVISIBLE);
+    }
+
+    private void setIconCategory(TaskData task, View convertView) {
+        if (task.getCategory() != null)
+            ((ImageView) convertView.findViewById(R.id.iconTaskCategory))
+                    .setImageDrawable(task.getCategory());
+    }
+
+
 }

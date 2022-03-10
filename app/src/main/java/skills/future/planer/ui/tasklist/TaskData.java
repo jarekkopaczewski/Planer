@@ -2,16 +2,35 @@ package skills.future.planer.ui.tasklist;
 
 import lombok.Getter;
 import lombok.Setter;
-import android.graphics.drawable.Icon;
+import skills.future.planer.R;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+
+import androidx.core.content.res.ResourcesCompat;
+
 import java.util.Date;
 import java.util.Map;
 
 @Getter
 @Setter
 class TaskData {
-   private Icon category;
-   private Map.Entry<Priorities, Priorities> prioritiesMatrix;
-   private String taskText;
-   private Date startingDate;
-   private Date endingDate;
+    private Boolean status;
+    private Drawable category;
+    private Map.Entry<Priorities, Priorities> prioritiesMatrix;
+    private String taskText;
+    private Date startingDate = null;
+    private Date endingDate = null;
+
+    TaskData(Context context, int lifeCategory) {
+        if (lifeCategory == 0)
+            category = ResourcesCompat.getDrawable(context.getResources(),
+                    R.drawable.home,
+                    null);
+        else
+            category = ResourcesCompat.getDrawable(context.getResources(),
+                    R.drawable.briefcase,
+                    null);
+    }
+
 }
