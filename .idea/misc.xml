@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/uczelnia/projekt/Planer/app/src/main/res/layout/activity_main.xml" value="0.17119565217391305" />
+        <entry key="..\:/uczelnia/projekt/Planer/app/src/main/res/layout/app_bar_main.xml" value="0.13177083333333334" />
         <entry key="..\:/uczelnia/projekt/Planer/app/src/main/res/layout/content_main.xml" value="0.30842391304347827" />
+        <entry key="..\:/uczelnia/projekt/Planer/app/src/main/res/layout/nav_header_main.xml" value="0.17119565217391305" />
+        <entry key="..\:/uczelnia/projekt/Planer/app/src/main/res/menu/bottom_menu.xml" value="0.30625" />
+        <entry key="..\:/uczelnia/projekt/Planer/app/src/main/res/menu/main.xml" value="0.3072916666666667" />
       </map>
     </option>
   </component>
