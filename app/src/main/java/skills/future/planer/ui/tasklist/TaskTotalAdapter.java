@@ -21,6 +21,7 @@ class TaskTotalAdapter extends BaseAdapter {
     public TaskTotalAdapter(Context context, LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
         this.context = context;
+        taskList.add(new TaskData());taskList.add(new TaskData());taskList.add(new TaskData());
     }
 
     public void addItemToList(TaskData task) {
@@ -53,12 +54,11 @@ class TaskTotalAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).
                     inflate(R.layout.fragment_task_in_list, parent, false);
 
-        String currentItem = (String) getItem(position);
+       // String currentItem = (String) getItem(position);
 
-        TextView textViewItemName = (TextView)
-                convertView.findViewById(R.id.textViewList);
 
-        textViewItemName.setText(currentItem);
+
+
 
         return convertView;
     }
