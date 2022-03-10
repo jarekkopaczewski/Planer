@@ -8,8 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import skills.future.planer.R;
 
@@ -17,21 +15,30 @@ class TaskTotalAdapter extends BaseAdapter {
 
     LayoutInflater layoutInflater;
     Context context;
-    private ArrayList<String> taskListString = new ArrayList<> (Arrays.asList("Pierwsze zadanie", "Drugie zadanie", "Trzecie zadanie"));
 
-    public TaskTotalAdapter(Context context, LayoutInflater layoutInflater){
+    private ArrayList<TaskData> taskList = new ArrayList<>();
+
+    public TaskTotalAdapter(Context context, LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
         this.context = context;
     }
 
+    public void addItemToList(TaskData task) {
+        taskList.add(task);
+    }
+
+    public void deleteItemFromList(TaskData task) {
+        taskList.remove(task);
+    }
+
     @Override
     public int getCount() {
-        return taskListString.size();
+        return taskList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return taskListString.get(position);
+        return taskList.get(position);
     }
 
     @Override
@@ -42,10 +49,10 @@ class TaskTotalAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (convertView == null) {
+        if (convertView == null)
             convertView = LayoutInflater.from(context).
-                    inflate(R.layout.activity_listview, parent, false);
-        }
+                    inflate(R.layout.fragment_task_in_list, parent, false);
+
         String currentItem = (String) getItem(position);
 
         TextView textViewItemName = (TextView)
