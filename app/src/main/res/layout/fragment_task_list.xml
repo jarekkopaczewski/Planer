@@ -8,18 +8,21 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="124dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="64dp"
         android:clickable="true"
         android:src="@drawable/icons8_plus_64"
-        app:backgroundTint="#FFA9C6"
-        tools:layout_marginBottom="16dp"
-        tools:layout_marginEnd="16dp" />
+        app:backgroundTint="#0091EA"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <ListView
         android:id="@+id/listTotalView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|right"
+        android:scrollbars="vertical" />
 
 </FrameLayout>

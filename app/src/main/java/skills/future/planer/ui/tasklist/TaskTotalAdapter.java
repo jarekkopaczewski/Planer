@@ -34,6 +34,13 @@ class TaskTotalAdapter extends BaseAdapter {
         taskList.add(new TaskData(context, 0));
         taskList.add(new TaskData(context, 1));
         taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 0));
+        taskList.add(new TaskData(context, 0));
+
 
     }
 

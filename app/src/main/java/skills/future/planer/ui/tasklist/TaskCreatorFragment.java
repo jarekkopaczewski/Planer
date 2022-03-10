@@ -1,31 +1,21 @@
 package skills.future.planer.ui.tasklist;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Random;
 
 import skills.future.planer.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TaskListFragment#newInstance} factory method to
+ * Use the {@link TaskCreatorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskListFragment extends Fragment {
+public class TaskCreatorFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,10 +26,8 @@ public class TaskListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ListView listTotal;
-    private TaskTotalAdapter taskTotalAdapter;
-
-    public TaskListFragment() {
+    public TaskCreatorFragment() {
+        // Required empty public constructor
     }
 
     /**
@@ -48,11 +36,11 @@ public class TaskListFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TaskListFragment.
+     * @return A new instance of fragment TaskCreatorFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TaskListFragment newInstance(String param1, String param2) {
-        TaskListFragment fragment = new TaskListFragment();
+    public static TaskCreatorFragment newInstance(String param1, String param2) {
+        TaskCreatorFragment fragment = new TaskCreatorFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -67,27 +55,12 @@ public class TaskListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
-        listTotal = view.findViewById(R.id.listTotalView);
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
-        listTotal.setAdapter(taskTotalAdapter);
-
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setVisibility(View.VISIBLE);
-
-        // Tworzenie nowego taska
-        //TODO Dodanie przejścia na fragment kreatora
-        fab.setOnClickListener(view1 -> {
-            taskTotalAdapter.addItemToList(new TaskData(this.getContext(), new Random().nextInt() % 2));
-            listTotal.setAdapter(taskTotalAdapter);
-        });
-        return view;
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_task_creator, container, false);
     }
 }
