@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.tasklist.TaskCreatorFragment">
+    tools:context=".ui.tasklist.TaskListCreatorFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- TODO: @Mikołaj Szymczyk, wygląd fragmentu wpisywania danych do zadania -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

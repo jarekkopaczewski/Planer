@@ -1,20 +1,18 @@
 package skills.future.planer.ui.tasklist;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Random;
 
@@ -79,12 +77,9 @@ public class TaskListFragment extends Fragment {
         taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
         listTotal.setAdapter(taskTotalAdapter);
 
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setVisibility(View.VISIBLE);
-
-        // Tworzenie nowego taska
-        //TODO Dodanie przejścia na fragment kreatora
-        fab.setOnClickListener(view1 -> {
+        view.findViewById(R.id.fab).setOnClickListener(view1 -> {
+            Navigation.findNavController(view1)
+                    .navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
             taskTotalAdapter.addItemToList(new TaskData(this.getContext(), new Random().nextInt() % 2));
             listTotal.setAdapter(taskTotalAdapter);
         });

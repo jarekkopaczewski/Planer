@@ -2,14 +2,17 @@ package skills.future.planer;
 
 import android.os.Bundle;
 import android.view.Menu;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
 import skills.future.planer.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

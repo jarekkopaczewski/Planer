@@ -12,10 +12,10 @@ import skills.future.planer.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TaskCreatorFragment#newInstance} factory method to
+ * Use the {@link TaskListCreatorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskCreatorFragment extends Fragment {
+public class TaskListCreatorFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class TaskCreatorFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public TaskCreatorFragment() {
+    public TaskListCreatorFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class TaskCreatorFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TaskCreatorFragment.
+     * @return A new instance of fragment TaskListCreatorFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TaskCreatorFragment newInstance(String param1, String param2) {
-        TaskCreatorFragment fragment = new TaskCreatorFragment();
+    public static TaskListCreatorFragment newInstance(String param1, String param2) {
+        TaskListCreatorFragment fragment = new TaskListCreatorFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class TaskCreatorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task_creator, container, false);
+        return inflater.inflate(R.layout.fragment_task_list_creator, container, false);
     }
 }
