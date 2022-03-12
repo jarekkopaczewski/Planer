@@ -1,10 +1,21 @@
 package skills.future.planer.ui.month;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
+
+
 import skills.future.planer.R;
 
 /**
@@ -22,6 +33,18 @@ public class MonthFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextView textView;
+    private MaterialCalendarView materialCalendarView;
+    private String date ="0"; //wybrany dzień z kalendarza
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
 
     public MonthFragment() {
         // Required empty public constructor
@@ -58,6 +81,23 @@ public class MonthFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_month, container, false);
+        View view = inflater.inflate(R.layout.fragment_month, container, false);
+        textView = view.findViewById(R.id.TEXT);
+        materialCalendarView = view.findViewById(R.id.calendarView);
+        //wybór daty listener
+        //test - wyświetlanie w textview
+        materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                //NIESAMOWITE PARSOWANIE
+                String parse = date.toString();
+                String[] parse2 = parse.split(("\\{"));
+                parse2[1] = parse2[1].substring(0, parse2[1].length() - 1);
+                setDate(parse2[1]);
+                textView.setText(getDate());
+            }
+        });
+
+        return view;
     }
 }
