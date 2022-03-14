@@ -33,5 +33,14 @@
     <fragment android:id="@+id/nav_day" android:name="skills.future.planer.ui.day.DayFragment" android:label="menu_day"
               tools:layout="@layout/fragment_day"/>
     <fragment android:id="@+id/nav_task_list" android:name="skills.future.planer.ui.tasklist.TaskListFragment"
-              android:label="menu_task_list" tools:layout="@layout/fragment_task_list"/>
+              android:label="menu_task_list" tools:layout="@layout/fragment_task_list">
+        <action
+            android:id="@+id/action_nav_task_list_to_taskListCreatorFragment"
+            app:destination="@id/taskListCreatorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskListCreatorFragment"
+        android:name="skills.future.planer.ui.tasklist.TaskListCreatorFragment"
+        android:label="fragment_task_list_creator"
+        tools:layout="@layout/fragment_task_list_creator" />
 </navigation>
