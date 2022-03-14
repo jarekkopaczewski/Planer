@@ -1,10 +1,21 @@
 package skills.future.planer.ui.tasklist;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Random;
+
 import skills.future.planer.R;
 
 /**
@@ -23,8 +34,10 @@ public class TaskListFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private ListView listTotal;
+    private TaskTotalAdapter taskTotalAdapter;
+
     public TaskListFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -52,12 +65,24 @@ public class TaskListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task_list, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
+        listTotal = view.findViewById(R.id.listTotalView);
+        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
+        listTotal.setAdapter(taskTotalAdapter);
+
+        view.findViewById(R.id.fab).setOnClickListener(view1 -> {
+            Navigation.findNavController(view1)
+                    .navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
+            taskTotalAdapter.addItemToList(new TaskData(this.getContext(), new Random().nextInt() % 2));
+            listTotal.setAdapter(taskTotalAdapter);
+        });
+        return view;
     }
 }

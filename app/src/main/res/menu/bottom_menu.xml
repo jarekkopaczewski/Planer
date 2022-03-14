@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-            android:id="@+id/nav_month"
-            android:icon="@drawable/calendar"
-            android:title="@string/month"/>
+        android:id="@+id/nav_month"
+        android:icon="@drawable/calendar"
+        android:title="@string/month" />
     <item
             android:id="@+id/nav_day"
             android:icon="@drawable/calendar_day"
