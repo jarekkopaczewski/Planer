@@ -83,6 +83,7 @@ public class TaskListFragment extends Fragment {
             taskTotalAdapter.addItemToList(new TaskData(this.getContext(), new Random().nextInt() % 2));
             listTotal.setAdapter(taskTotalAdapter);
         });
+
         return view;
     }
 }
