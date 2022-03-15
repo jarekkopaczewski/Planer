@@ -15,4 +15,5 @@
     <string name="month">Month</string>
     <string name="day">Day</string>
     <string name="tasks">Tasks</string>
+    <string name="TaskListElementFabricButton">Zapisz</string>
 </resources>
