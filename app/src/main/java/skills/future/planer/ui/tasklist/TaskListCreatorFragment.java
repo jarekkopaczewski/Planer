@@ -3,7 +3,9 @@ package skills.future.planer.ui.tasklist;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -14,65 +16,30 @@ import android.widget.EditText;
 import android.widget.Switch;
 
 import java.util.Calendar;
+import android.widget.TextView;
 
-import skills.future.planer.R;
+import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TaskListCreatorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class TaskListCreatorFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FragmentTaskListCreatorBinding binding;
+    private TaskCreatorModelView taskCreatorModelView;
     private Button saveButton;
     private final Calendar myCalendar = Calendar.getInstance();
     private EditText editText;
     private Switch switchDate;
-
     public TaskListCreatorFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TaskListCreatorFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TaskListCreatorFragment newInstance(String param1, String param2) {
-        TaskListCreatorFragment fragment = new TaskListCreatorFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+        taskCreatorModelView = new ViewModelProvider(this).get(TaskCreatorModelView.class);
+        binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_task_list_creator, container, false);
+        final TextView textView = binding.taskCreatorLabel;
+        taskCreatorModelView.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         switchDate = view.findViewById(R.id.SwitchDatePicker);
         switchDate.setChecked(false);
@@ -83,10 +50,8 @@ public class TaskListCreatorFragment extends Fragment {
         saveBtnOnClickListenerSetter();
         editText = (EditText) view.findViewById(R.id.editTextDate);
         editTextSetter();
-
-        return view;
+        return root;
     }
-
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
             Navigation.findNavController(view1)
@@ -123,5 +88,10 @@ public class TaskListCreatorFragment extends Fragment {
 //                new SimpleDateFormat(pattern, dateFormatSymbols);
         editText.setText(myCalendar.getTime().toString());
         //todo ustawić lepszy format daty
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
