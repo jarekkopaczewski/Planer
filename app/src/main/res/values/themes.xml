@@ -19,4 +19,5 @@
     </style>
     <style name="Theme.Planer.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="Theme.Planer.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
 </resources>
