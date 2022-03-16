@@ -1,16 +1,16 @@
-package skills.future.planer.ui.home;
+package skills.future.planer.ui.tasklist;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class TaskListModelView extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public TaskListModelView() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is task list fragment");
     }
 
     public LiveData<String> getText() {

@@ -1,9 +1,5 @@
 package skills.future.planer.ui.tasklist;
 
-import lombok.Getter;
-import lombok.Setter;
-import skills.future.planer.R;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
@@ -11,6 +7,10 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.util.Date;
 import java.util.Map;
+
+import lombok.Getter;
+import lombok.Setter;
+import skills.future.planer.R;
 
 @Getter
 @Setter

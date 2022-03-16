@@ -1,16 +1,16 @@
-package skills.future.planer.ui.home;
+package skills.future.planer.ui.month;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class MonthViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public MonthViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+        mText.setValue("This is month fragment");
     }
 
     public LiveData<String> getText() {
