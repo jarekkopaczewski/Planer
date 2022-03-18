@@ -5,6 +5,9 @@ import android.graphics.drawable.Drawable;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
@@ -14,13 +17,13 @@ import skills.future.planer.R;
 
 @Getter
 @Setter
-class TaskData {
+class TaskData implements Serializable {
     private Boolean status;
     private Drawable category;
     private Map.Entry<Priorities, Priorities> prioritiesMatrix;
     private String taskText;
-    private Date startingDate = null;
-    private Date endingDate = null;
+    private CalendarDay startingDate = null;
+    private CalendarDay endingDate = null;
 
     TaskData(Context context, int lifeCategory) {
         if (lifeCategory == 0)
