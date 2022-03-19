@@ -1,10 +1,11 @@
-package skills.future.planer.ui.tasklist;
+package skills.future.planer.db.task;
 
-enum Priorities {
+import lombok.Getter;
+
+@Getter
+public enum Priorities {
     Important(0),
-    NotImportant(1),
-    Urgent(2),
-    NotUrgent(3);
+    NotImportant(1);
 
     private final int priorityLvl;
 

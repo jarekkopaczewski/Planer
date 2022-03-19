@@ -68,5 +68,9 @@
         android:id="@+id/taskListCreatorFragment"
         android:name="skills.future.planer.ui.tasklist.TaskListCreatorFragment"
         android:label="fragment_task_list_creator"
-        tools:layout="@layout/fragment_task_list_creator" />
+        tools:layout="@layout/fragment_task_list_creator" >
+        <action
+            android:id="@+id/action_taskListCreatorFragment_to_nav_task_list"
+            app:destination="@id/nav_task_list" />
+    </fragment>
 </navigation>

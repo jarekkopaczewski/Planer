@@ -14,7 +14,13 @@
     <string name="month">Month</string>
     <string name="day">Day</string>
     <string name="tasks">Tasks</string>
+    <string name="TaskListElementFabricButton">Zapisz</string>
     <string name="goals">Goals</string>
     <string name="priorities">Priorities</string>
     <string name="stats">Stats</string>
+    <string name="EditTextTitleHintt">Tytuł zadania</string>
+    <string name="EditTextDetailsHint">Szczegóły zadania</string>
+    <string name="imageViewTaskDetailsDescription">TODO</string>
+    <string name="imageViewTaskDateDescription">TODO</string>
+    <string name="SwitchDatePickerText">Ustaw datę zakończenia zadania</string>
 </resources>
