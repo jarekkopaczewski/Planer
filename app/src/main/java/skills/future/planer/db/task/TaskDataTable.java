@@ -40,6 +40,7 @@ public class TaskDataTable {
         values.put(COL_PRIORITIES, taskData.getPriorities().getPriorityLvl());
         values.put(COL_TIME_PRIORITIES, taskData.getTimePriority().getTimePriorityLvl());
         values.put(COL_TASK_TITLE, taskData.getTaskTitleText());
+        values.put(COL_TASK_DETAILS,taskData.getTaskDetailsText());
         values.put(COL_STARTING_DATE, taskData.getStartingDate() == null ? "" :
                 taskData.getStartingDate().getDay() + ";" +
                         taskData.getStartingDate().getMonth() + ";" +
@@ -61,8 +62,8 @@ public class TaskDataTable {
 
         if (cursor.moveToFirst()) {
             do {
-                String startingDayRes = cursor.getString(6),endingDayRes = cursor.getString(7) ;
-                if(startingDayRes!= null && endingDayRes!= null) {
+                String startingDayRes = cursor.getString(7),endingDayRes = cursor.getString(8) ;
+                if(!startingDayRes.equals("") && !endingDayRes.equals("")) {
                     String[] startingDay = startingDayRes.split(";"),
                             endingDay = endingDayRes.split(";");
                     taskDataList.add(new TaskData(
