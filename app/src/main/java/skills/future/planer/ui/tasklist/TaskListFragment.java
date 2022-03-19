@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import java.util.Random;
-
 import skills.future.planer.databinding.FragmentTaskListBinding;
 
 public class TaskListFragment extends Fragment {
@@ -25,7 +23,8 @@ public class TaskListFragment extends Fragment {
     public TaskListFragment() {
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         taskListModelView = new ViewModelProvider(this).get(TaskListModelView.class);
         binding = FragmentTaskListBinding.inflate(inflater, container, false);
@@ -35,12 +34,16 @@ public class TaskListFragment extends Fragment {
         taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
         listTotal.setAdapter(taskTotalAdapter);
 
-        binding.fab.setOnClickListener(view -> {
-            Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
-            taskTotalAdapter.addItemToList(new TaskData(this.getContext(), new Random().nextInt() % 2));
-            listTotal.setAdapter(taskTotalAdapter);
-        });
+        binding.fab.setOnClickListener(view ->
+            Navigation.findNavController(view).navigate(
+                    TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment()));
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        taskTotalAdapter.refreshTaskList();
     }
 
     @Override

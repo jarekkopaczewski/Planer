@@ -1,7 +1,6 @@
 package skills.future.planer.ui.tasklist;
 
 import android.content.Context;
-import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,39 +8,34 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import skills.future.planer.R;
+import skills.future.planer.db.DBHandler;
+import skills.future.planer.db.task.TaskData;
 
 class TaskTotalAdapter extends BaseAdapter {
 
     LayoutInflater layoutInflater;
     Context context;
 
-    private ArrayList<TaskData> taskList = new ArrayList<>();
+    private List<TaskData> taskList = new ArrayList<>();
 
     public TaskTotalAdapter(Context context, LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
         this.context = context;
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 1));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 1));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 1));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 0));
-        taskList.add(new TaskData(context, 0));
+        refreshTaskList();
+    }
 
-
+    public void refreshTaskList(){
+        try {
+            taskList = new DBHandler(context).getTaskData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void addItemToList(TaskData task) {
@@ -94,10 +88,21 @@ class TaskTotalAdapter extends BaseAdapter {
     }
 
     private void setIconCategory(TaskData task, View convertView) {
-        if (task.getCategory() != null)
-            ((ImageView) convertView.findViewById(R.id.iconTaskCategory))
-                    .setImageDrawable(task.getCategory());
+        if (task.getCategory() != null) {
+            switch (task.getCategory()){
+                case Work:
+                    ((ImageView) convertView.findViewById(R.id.iconTaskCategory))
+                            .setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),
+                                    R.drawable.home,
+                                    null));
+                    break;
+                case Private:
+                    ((ImageView) convertView.findViewById(R.id.iconTaskCategory))
+                            .setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),
+                                    R.drawable.briefcase,
+                                    null));
+                    break;
+            }
+        }
     }
-
-
 }
