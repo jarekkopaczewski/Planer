@@ -2,60 +2,76 @@ package skills.future.planer.ui.tasklist;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
-import android.widget.TextView;
 
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
+import skills.future.planer.db.DBHandler;
+import skills.future.planer.db.task.Priorities;
+import skills.future.planer.db.task.TaskCategory;
+import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TimePriority;
 
 
 public class TaskListCreatorFragment extends Fragment {
 
     private FragmentTaskListCreatorBinding binding;
-    private TaskCreatorModelView taskCreatorModelView;
     private Button saveButton;
     private final Calendar myCalendar = Calendar.getInstance();
-    private EditText editText;
-    private Switch switchDate;
+    private EditText endingDateEditText,taskTitleEditText, taskDetailsEditText;
+    private CalendarDay endingCalendarDay;
+    private SwitchCompat switchDate;
     public TaskListCreatorFragment() {
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        taskCreatorModelView = new ViewModelProvider(this).get(TaskCreatorModelView.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.taskCreatorLabel;
-        taskCreatorModelView.getText().observe(getViewLifecycleOwner(), textView::setText);
-
-        switchDate = view.findViewById(R.id.SwitchDatePicker);
+        switchDate = binding.SwitchDatePicker;
         switchDate.setChecked(false);
-        switchDate.setOnCheckedChangeListener((compoundButton, b) -> {
-            editText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
-        });
-        saveButton = view.findViewById(R.id.saveCreatorButton);
+        switchDate.setOnCheckedChangeListener((compoundButton, b) ->
+            endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE)
+        );
+        saveButton=binding.saveCreatorButton;
         saveBtnOnClickListenerSetter();
-        editText = (EditText) view.findViewById(R.id.editTextDate);
+        endingDateEditText = binding.editTextDate;
+        endingDateEditText.setVisibility(View.INVISIBLE);
         editTextSetter();
+        taskTitleEditText= binding.EditTextTitle;
+        taskDetailsEditText = binding.EditTextDetails;
         return root;
     }
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
+            if(switchDate.isChecked()){
+                new DBHandler(this.getContext()).addOne( new TaskData(TaskCategory.Private,
+                        Priorities.Important, TimePriority.Urgent, taskTitleEditText.getText().
+                        toString(),taskDetailsEditText.getText().toString(), CalendarDay.today(),
+                        endingCalendarDay));
+            }else {
+                new DBHandler(this.getContext()).addOne( new TaskData(TaskCategory.Private,
+                        Priorities.Important, TimePriority.Urgent, taskTitleEditText.getText().
+                        toString(),taskDetailsEditText.getText().toString() ));
+            }
             Navigation.findNavController(view1)
-                    .navigate(TaskListCreatorFragmentDirections.actionTaskListCreatorFragmentToNavTaskList());
+                    .navigate(TaskListCreatorFragmentDirections
+                            .actionTaskListCreatorFragmentToNavTaskList());
         });
     }
 
@@ -66,7 +82,10 @@ public class TaskListCreatorFragment extends Fragment {
             myCalendar.set(Calendar.DAY_OF_MONTH, i2);
             updateLabel();
         };
-        editText.setOnClickListener(view12 -> new DatePickerDialog(this.getContext(), date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show());
+        endingDateEditText.setOnClickListener(view12 ->
+                new DatePickerDialog(this.getContext(), date, myCalendar.get(Calendar.YEAR),
+                        myCalendar.get(Calendar.MONTH), myCalendar
+                        .get(Calendar.DAY_OF_MONTH)).show());
     }
 
     private void updateLabel() {
@@ -86,7 +105,12 @@ public class TaskListCreatorFragment extends Fragment {
 //        String pattern = "EEEEE MMMMM yyyy";
 //        SimpleDateFormat simpleDateFormat =
 //                new SimpleDateFormat(pattern, dateFormatSymbols);
-        editText.setText(myCalendar.getTime().toString());
+        LocalDate date =  myCalendar.getTime().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+        int day = date.getDayOfMonth(), month = date.getMonthValue(),
+                year = date.getYear();
+        endingCalendarDay = CalendarDay.from(year,month,day);
+        endingDateEditText.setText(myCalendar.getTime().toString());
         //todo ustawić lepszy format daty
     }
     @Override
