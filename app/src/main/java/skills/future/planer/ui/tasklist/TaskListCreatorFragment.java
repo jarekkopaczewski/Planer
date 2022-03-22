@@ -24,6 +24,7 @@ import skills.future.planer.db.DBHandler;
 import skills.future.planer.db.task.Priorities;
 import skills.future.planer.db.task.TaskCategory;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataTable;
 import skills.future.planer.db.task.TimePriority;
 
 
@@ -60,12 +61,12 @@ public class TaskListCreatorFragment extends Fragment {
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
             if(switchDate.isChecked()){
-                new DBHandler(this.getContext()).addOne( new TaskData(TaskCategory.Private,
+                new TaskDataTable(this.getContext()).addOne( new TaskData(TaskCategory.Private,
                         Priorities.Important, TimePriority.Urgent, taskTitleEditText.getText().
                         toString(),taskDetailsEditText.getText().toString(), CalendarDay.today(),
                         endingCalendarDay));
             }else {
-                new DBHandler(this.getContext()).addOne( new TaskData(TaskCategory.Private,
+                new TaskDataTable(this.getContext()).addOne( new TaskData(TaskCategory.Private,
                         Priorities.Important, TimePriority.Urgent, taskTitleEditText.getText().
                         toString(),taskDetailsEditText.getText().toString() ));
             }

@@ -16,6 +16,7 @@ import java.util.List;
 import skills.future.planer.R;
 import skills.future.planer.db.DBHandler;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataTable;
 
 class TaskTotalAdapter extends BaseAdapter {
 
@@ -32,7 +33,7 @@ class TaskTotalAdapter extends BaseAdapter {
 
     public void refreshTaskList(){
         try {
-            taskList = new DBHandler(context).getTaskData();
+            taskList = new TaskDataTable(context).getTaskData();
         } catch (Exception e) {
             e.printStackTrace();
         }
