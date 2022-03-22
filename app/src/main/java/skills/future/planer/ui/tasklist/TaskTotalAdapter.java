@@ -82,9 +82,9 @@ class TaskTotalAdapter extends BaseAdapter {
             if (task.getStartingDate() != null)
                 dateView = task.getStartingDate().toString() + " ";
             dateView += task.getEndingDate();
-            ((TextView) convertView.findViewById(R.id.taskDescriptionTextView)).setText(dateView);
+            ((TextView) convertView.findViewById(R.id.taskTitleTextView)).setText(dateView);
         } else
-            (convertView.findViewById(R.id.taskDescriptionTextView)).setVisibility(View.INVISIBLE);
+            (convertView.findViewById(R.id.taskTitleTextView)).setVisibility(View.INVISIBLE);
     }
 
     private void setIconCategory(TaskData task, View convertView) {
