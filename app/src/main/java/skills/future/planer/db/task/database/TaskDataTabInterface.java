@@ -1,10 +1,13 @@
-package skills.future.planer.db.task;
-
-import android.database.sqlite.SQLiteDatabase;
+package skills.future.planer.db.task.database;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.List;
+
+import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.category.TaskCategory;
+import skills.future.planer.db.task.priority.Priorities;
+import skills.future.planer.db.task.priority.TimePriority;
 
 public interface TaskDataTabInterface {
     TaskData findById(int id) throws Exception;

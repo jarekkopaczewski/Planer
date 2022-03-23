@@ -4,10 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.List;
-
-import skills.future.planer.db.task.TaskData;
-import skills.future.planer.db.task.TaskDataTable;
+import skills.future.planer.db.task.database.TaskDataTable;
+import skills.future.planer.db.task.database.TaskDataTableEnum;
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -27,7 +25,7 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
-        db.execSQL("DROP TABLE IF EXISTS " + TaskDataTable.TAB_TASK_DATA);
+        db.execSQL("DROP TABLE IF EXISTS " + TaskDataTableEnum.TAB_TASK_DATA);
         onCreate(db);
     }
 }

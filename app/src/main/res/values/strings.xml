@@ -23,4 +23,5 @@
     <string name="imageViewTaskDetailsDescription">TODO</string>
     <string name="imageViewTaskDateDescription">TODO</string>
     <string name="SwitchDatePickerText">Ustaw datę zakończenia zadania</string>
+    <string name="fabContentDescription">Create new task </string>
 </resources>
