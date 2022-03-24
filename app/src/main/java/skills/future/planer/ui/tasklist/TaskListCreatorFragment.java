@@ -20,21 +20,21 @@ import java.time.ZoneId;
 import java.util.Calendar;
 
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
-import skills.future.planer.db.task.priority.Priorities;
-import skills.future.planer.db.task.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
+import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.database.TaskDataTable;
-import skills.future.planer.db.task.priority.TimePriority;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 
 
 public class TaskListCreatorFragment extends Fragment {
 
     private FragmentTaskListCreatorBinding binding;
     private Button saveButton;
-    private final Calendar myCalendar = Calendar.getInstance();
-    private EditText endingDateEditText, taskTitleEditText, taskDetailsEditText;
-    private CalendarDay endingCalendarDay;
-    private SwitchCompat switchDate;
+    private final Calendar endingDayCalendar = Calendar.getInstance(), beginDayCalendar = Calendar.getInstance();
+    private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
+    private CalendarDay endingCalendarDay, beginCalendarDay = CalendarDay.today();
+    private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
 
     public TaskListCreatorFragment() {
     }
@@ -44,15 +44,23 @@ public class TaskListCreatorFragment extends Fragment {
         binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        beginDateEditText = binding.editTextBeginDate;
+        beginDateEditText.setVisibility(View.INVISIBLE);
+        endingDateEditText = binding.editTextEndDate;
+        endingDateEditText.setVisibility(View.INVISIBLE);
+        switchPriorities = binding.switchImportant;
+        switchTimePriorities = binding.switchUrgent;
+        switchCategory = binding.switchCategory;
         switchDate = binding.SwitchDatePicker;
         switchDate.setChecked(false);
-        switchDate.setOnCheckedChangeListener((compoundButton, b) ->
-                endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE)
+        switchDate.setOnCheckedChangeListener((compoundButton, b) -> {
+                    beginDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
+                    endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
+                }
         );
         saveButton = binding.saveCreatorButton;
         saveBtnOnClickListenerSetter();
-        endingDateEditText = binding.editTextDate;
-        endingDateEditText.setVisibility(View.INVISIBLE);
+
         editTextSetter();
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
@@ -63,17 +71,15 @@ public class TaskListCreatorFragment extends Fragment {
         saveButton.setOnClickListener(view1 -> {
             TaskData data;
             TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
-
+            data = new TaskData(
+                    switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
+                    switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
+                    switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
+                    taskTitleEditText.getText().toString(),
+                    taskDetailsEditText.getText().toString());
             if (switchDate.isChecked()) {
-                data = new TaskData(TaskCategory.Private,
-                        Priorities.Important, TimePriority.Urgent, taskTitleEditText.getText().
-                        toString(), taskDetailsEditText.getText().toString(), CalendarDay.today(),
-                        endingCalendarDay);
-
-            } else {
-                data = new TaskData(TaskCategory.Private,
-                        Priorities.Important, TimePriority.Urgent, taskTitleEditText.getText().
-                        toString(), taskDetailsEditText.getText().toString());
+                data.setEndingDate(endingCalendarDay);
+                data.setStartingDate(beginCalendarDay);
             }
             if (taskDataTable.addOne(data))
                 data.setTaskDataId(taskDataTable.getIdOfLastAddedTask());
@@ -86,41 +92,53 @@ public class TaskListCreatorFragment extends Fragment {
 
     private void editTextSetter() {
         DatePickerDialog.OnDateSetListener date = (datePicker, i, i1, i2) -> {
-            myCalendar.set(Calendar.YEAR, i);
-            myCalendar.set(Calendar.MONTH, i1);
-            myCalendar.set(Calendar.DAY_OF_MONTH, i2);
-            updateLabel();
+            endingDayCalendar.set(Calendar.YEAR, i);
+            endingDayCalendar.set(Calendar.MONTH, i1);
+            endingDayCalendar.set(Calendar.DAY_OF_MONTH, i2);
+            updateEndingDateEditText();
         };
+        DatePickerDialog.OnDateSetListener date2 = (datePicker, i, i1, i2) -> {
+            beginDayCalendar.set(Calendar.YEAR, i);
+            beginDayCalendar.set(Calendar.MONTH, i1);
+            beginDayCalendar.set(Calendar.DAY_OF_MONTH, i2);
+            updateBeginDateEditText();
+        };
+        beginDateEditText.setOnClickListener(view12 ->
+                new DatePickerDialog(this.getContext(), date2,
+                        beginDayCalendar.get(Calendar.YEAR),
+                        beginDayCalendar.get(Calendar.MONTH),
+                        beginDayCalendar.get(Calendar.DAY_OF_MONTH)
+                ).show());
         endingDateEditText.setOnClickListener(view12 ->
-                new DatePickerDialog(this.getContext(), date, myCalendar.get(Calendar.YEAR),
-                        myCalendar.get(Calendar.MONTH), myCalendar
-                        .get(Calendar.DAY_OF_MONTH)).show());
+                new DatePickerDialog(this.getContext(), date,
+                        endingDayCalendar.get(Calendar.YEAR),
+                        endingDayCalendar.get(Calendar.MONTH),
+                        endingDayCalendar.get(Calendar.DAY_OF_MONTH)
+                ).show());
     }
 
-    private void updateLabel() {
-//        Locale locale = new Locale("en", "UK");
-//        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(locale);
-//        dateFormatSymbols.setWeekdays(new String[]{
-//                "Unused",
-//                "Niedz",
-//                "Pon",
-//                "Wt",
-//                "ŚR",
-//                "Czw",
-//                "Pt",
-//                "Sob",
-//        });
-//
-//        String pattern = "EEEEE MMMMM yyyy";
-//        SimpleDateFormat simpleDateFormat =
-//                new SimpleDateFormat(pattern, dateFormatSymbols);
-        LocalDate date = myCalendar.getTime().toInstant()
+    private void updateEndingDateEditText() {
+        LocalDate date = endingDayCalendar.getTime().toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         int day = date.getDayOfMonth(), month = date.getMonthValue(),
                 year = date.getYear();
         endingCalendarDay = CalendarDay.from(year, month, day);
-        endingDateEditText.setText(myCalendar.getTime().toString());
-        //todo ustawić lepszy format daty
+        String dateString = endingCalendarDay.getDay() + "." +
+                endingCalendarDay.getMonth() + "." +
+                endingCalendarDay.getYear();
+        endingDateEditText.setText(dateString);
+    }
+
+    private void updateBeginDateEditText() {
+        LocalDate date = beginDayCalendar.getTime().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+        int day = date.getDayOfMonth(), month = date.getMonthValue(),
+                year = date.getYear();
+        beginCalendarDay = CalendarDay.from(year, month, day);
+        String dateString =beginCalendarDay.getDay() + "." +
+                beginCalendarDay.getMonth() + "." +
+                beginCalendarDay.getYear();
+        beginDateEditText.setText(dateString);
     }
 
     @Override

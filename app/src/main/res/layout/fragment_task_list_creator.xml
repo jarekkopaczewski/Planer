@@ -40,7 +40,6 @@
             android:autofillHints="Dodaj tytuł"
             android:hint="@string/EditTextTitleHintt"
             android:inputType="text" />
-        <!--            android:text="Tytuł"-->
 
 
     </LinearLayout>
@@ -68,10 +67,10 @@
             android:id="@+id/imageViewTaskDetails"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_margin="10dp"
             android:contentDescription="@string/imageViewTaskDetailsDescription"
             android:scaleType="fitXY"
-            android:src="@android:drawable/ic_dialog_info"
-            android:layout_margin="10dp" />
+            android:src="@android:drawable/ic_dialog_info" />
 
         <EditText
             android:id="@+id/EditTextDetails"
@@ -106,10 +105,10 @@
             android:id="@+id/imageViewImportant"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_margin="10dp"
             android:contentDescription="@string/imageViewTaskDetailsDescription"
             android:scaleType="fitXY"
-            android:src="@android:drawable/ic_dialog_info"
-            android:layout_margin="10dp" />
+            android:src="@android:drawable/ic_dialog_info" />
 
         <TextView
             android:id="@+id/textViewImportant"
@@ -142,10 +141,10 @@
             android:id="@+id/imageViewTaskUrgent"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_margin="10dp"
             android:contentDescription="@string/imageViewTaskDetailsDescription"
             android:scaleType="fitXY"
-            android:src="@android:drawable/ic_dialog_info"
-            android:layout_margin="10dp" />
+            android:src="@android:drawable/ic_dialog_info" />
 
         <TextView
             android:id="@+id/textViewUrgent"
@@ -178,10 +177,10 @@
             android:id="@+id/imageViewTaskDetails2"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_margin="10dp"
             android:contentDescription="@string/imageViewTaskDetailsDescription"
             android:scaleType="fitXY"
-            android:src="@android:drawable/ic_dialog_info"
-            android:layout_margin="10dp" />
+            android:src="@android:drawable/ic_dialog_info" />
 
         <TextView
             android:id="@+id/textViewWork"
