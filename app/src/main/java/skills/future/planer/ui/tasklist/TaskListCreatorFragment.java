@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
@@ -48,6 +49,7 @@ public class TaskListCreatorFragment extends Fragment {
         beginDateEditText.setVisibility(View.INVISIBLE);
         endingDateEditText = binding.editTextEndDate;
         endingDateEditText.setVisibility(View.INVISIBLE);
+        updateBeginDateEditText();
         switchPriorities = binding.switchImportant;
         switchTimePriorities = binding.switchUrgent;
         switchCategory = binding.switchCategory;
@@ -61,7 +63,7 @@ public class TaskListCreatorFragment extends Fragment {
         saveButton = binding.saveCreatorButton;
         saveBtnOnClickListenerSetter();
 
-        editTextSetter();
+        datePickers();
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
         return root;
@@ -90,7 +92,7 @@ public class TaskListCreatorFragment extends Fragment {
         });
     }
 
-    private void editTextSetter() {
+    private void datePickers() {
         DatePickerDialog.OnDateSetListener date = (datePicker, i, i1, i2) -> {
             endingDayCalendar.set(Calendar.YEAR, i);
             endingDayCalendar.set(Calendar.MONTH, i1);
@@ -118,27 +120,64 @@ public class TaskListCreatorFragment extends Fragment {
     }
 
     private void updateEndingDateEditText() {
+
         LocalDate date = endingDayCalendar.getTime().toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         int day = date.getDayOfMonth(), month = date.getMonthValue(),
                 year = date.getYear();
-        endingCalendarDay = CalendarDay.from(year, month, day);
-        String dateString = endingCalendarDay.getDay() + "." +
-                endingCalendarDay.getMonth() + "." +
-                endingCalendarDay.getYear();
-        endingDateEditText.setText(dateString);
+        CalendarDay chosenDay;
+        chosenDay = CalendarDay.from(year, month, day);
+        if (checkDate(chosenDay,beginCalendarDay)) {
+            endingCalendarDay = chosenDay;
+            String dateString = endingCalendarDay.getDay() + "." +
+                    endingCalendarDay.getMonth() + "." +
+                    endingCalendarDay.getYear();
+            endingDateEditText.setText(dateString);
+        } else {
+            Toast toast = Toast.makeText(this.getContext(),
+                    "Data zakończenia zadania nie może być wcześniej niż data jego rozpoczęcia!",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     private void updateBeginDateEditText() {
+
         LocalDate date = beginDayCalendar.getTime().toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         int day = date.getDayOfMonth(), month = date.getMonthValue(),
                 year = date.getYear();
-        beginCalendarDay = CalendarDay.from(year, month, day);
-        String dateString =beginCalendarDay.getDay() + "." +
-                beginCalendarDay.getMonth() + "." +
-                beginCalendarDay.getYear();
-        beginDateEditText.setText(dateString);
+        CalendarDay chosenDay;
+        chosenDay = CalendarDay.from(year, month, day);
+        if (checkDate(chosenDay,CalendarDay.today())) {
+            beginCalendarDay = chosenDay;
+            String dateString = beginCalendarDay.getDay() + "." +
+                    beginCalendarDay.getMonth() + "." +
+                    beginCalendarDay.getYear();
+            beginDateEditText.setText(dateString);
+        } else {
+            Toast toast = Toast.makeText(this.getContext(),
+                    "Data rozpoczenia zadania nie może być wcześniej niż dzisiaj!",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    /**
+     * @return true if beginCalendarDay is later then today or is today
+     */
+    private boolean checkDate(CalendarDay day, CalendarDay dayLandmark) {
+        if (day.equals(dayLandmark))
+            return true;
+        if (day.getYear() > dayLandmark.getYear())
+            return true;
+        if (day.getYear() < dayLandmark.getYear())
+            return false;
+        if (day.getMonth() > dayLandmark.getMonth())
+            return true;
+        if (day.getMonth() < dayLandmark.getMonth())
+            return false;
+        return day.getDay() >= dayLandmark.getDay();
     }
 
     @Override
