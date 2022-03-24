@@ -184,11 +184,11 @@
 
         <TextView
             android:id="@+id/textViewWork"
-            android:layout_width="wrap_content"
+            android:layout_width="12dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/TextViewWork" />
+            android:text="@string/TextViewPrivate" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switchCategory"
@@ -201,7 +201,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/TextViewPrivate" />
+            android:text="@string/TextViewWork" />
     </LinearLayout>
 
     <Space
