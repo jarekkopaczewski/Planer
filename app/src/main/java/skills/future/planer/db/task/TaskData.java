@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.Setter;
-import skills.future.planer.db.task.category.TaskCategory;
-import skills.future.planer.db.task.priority.Priorities;
-import skills.future.planer.db.task.priority.TimePriority;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 
 @Getter
 @Setter
