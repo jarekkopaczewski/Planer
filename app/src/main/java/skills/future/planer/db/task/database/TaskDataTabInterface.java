@@ -25,4 +25,6 @@ public interface TaskDataTabInterface {
     boolean deleteOne(TaskData taskData);
 
     boolean editOne(TaskData taskData);
+
+    int getIdOfLastAddedTask();
 }

@@ -11,7 +11,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "planer.db";
-    //private final TaskDataTable taskDataTable = new TaskDataTable();
 
     public DBHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

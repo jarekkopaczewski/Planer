@@ -103,8 +103,6 @@ public class TaskDataTable implements TaskDataTabInterface {
     public boolean addOne(TaskData taskData) {
         SQLiteDatabase db = database.getWritableDatabase();
         ContentValues values = new ContentValues();
-
-
         values.put(TaskDataTableEnum.COL_CATEGORY.toString(), taskData.getCategory().getTaskCategory());
         values.put(TaskDataTableEnum.COL_STATUS.toString(), taskData.getStatus());
         values.put(TaskDataTableEnum.COL_PRIORITIES.toString(), taskData.getPriorities().getPriorityLvl());
@@ -129,7 +127,7 @@ public class TaskDataTable implements TaskDataTabInterface {
     /**
      * @return List of all TaskData
      * @throws Exception if there was a problem with reading
-     * @author XD
+     * @author XD Mikołaj Szymczyk
      */
     @Override
     public List<TaskData> getTaskData() throws Exception {
@@ -148,9 +146,12 @@ public class TaskDataTable implements TaskDataTabInterface {
                     String[] endingDay = endingDayRes.split(";");
 
                     taskDataList.add(new TaskData(
-                            cursor.getInt(0)/*id*/, cursor.getInt(1) == 1/*status*/,
-                            cursor.getInt(2)/*category*/, cursor.getInt(3)/*priorities*/,
-                            cursor.getInt(4)/*timePriorities*/, cursor.getString(5)/*taskTitle*/,
+                            cursor.getInt(0)/*id*/,
+                            cursor.getInt(1) == 1/*status*/,
+                            cursor.getInt(2)/*category*/,
+                            cursor.getInt(3)/*priorities*/,
+                            cursor.getInt(4)/*timePriorities*/,
+                            cursor.getString(5)/*taskTitle*/,
                             cursor.getString(6)/*taskDetails*/,
                             CalendarDay.from(Integer.parseInt(startingDay[2]),
                                     Integer.parseInt(startingDay[1]),
@@ -161,9 +162,12 @@ public class TaskDataTable implements TaskDataTabInterface {
                     ));
                 } else {
                     taskDataList.add(new TaskData(
-                            cursor.getInt(0)/*id*/, cursor.getInt(1) == 1/*status*/,
-                            cursor.getInt(2)/*category*/, cursor.getInt(3)/*priorities*/,
-                            cursor.getInt(4)/*timePriorities*/, cursor.getString(5)/*taskTitle*/,
+                            cursor.getInt(0)/*id*/,
+                            cursor.getInt(1) == 1/*status*/,
+                            cursor.getInt(2)/*category*/,
+                            cursor.getInt(3)/*priorities*/,
+                            cursor.getInt(4)/*timePriorities*/,
+                            cursor.getString(5)/*taskTitle*/,
                             cursor.getString(6)/*taskDetails*/,
                             null/*startDate*/,
                             null/*endDate*/
@@ -235,8 +239,11 @@ public class TaskDataTable implements TaskDataTabInterface {
 
     /**
      * Gets last id index of TAB_TASK_DATA
+     *
      * @return COL_TASK_DATA_ID
+     * @author Daniel Glazer
      */
+    @Override
     public int getIdOfLastAddedTask() {
         SQLiteDatabase db = database.getReadableDatabase();
         String query = " SELECT MAX(" + TaskDataTableEnum.COL_TASK_DATA_ID + ") FROM " + TaskDataTableEnum.TAB_TASK_DATA;
