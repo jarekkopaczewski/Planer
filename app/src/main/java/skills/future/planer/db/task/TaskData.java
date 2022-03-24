@@ -6,6 +6,9 @@ import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.Setter;
+import skills.future.planer.db.task.category.TaskCategory;
+import skills.future.planer.db.task.priority.Priorities;
+import skills.future.planer.db.task.priority.TimePriority;
 
 @Getter
 @Setter
@@ -24,29 +27,17 @@ public class TaskData implements Serializable {
                     CalendarDay startingDate, CalendarDay endingDate) {
         this.taskDataId = taskDataId;
         this.status = status;
-        switch (category){
-            case 0:
-                this.category = TaskCategory.Private;
-                break;
-            case 1:
-                this.category = TaskCategory.Work;
-                break;
+        switch (category) {
+            case 0 -> this.category = TaskCategory.Private;
+            case 1 -> this.category = TaskCategory.Work;
         }
-        switch (priorities){
-            case 0:
-                this.priorities = Priorities.Important;
-                break;
-            case 1:
-                this.priorities = Priorities.NotImportant;
-                break;
+        switch (priorities) {
+            case 0 -> this.priorities = Priorities.Important;
+            case 1 -> this.priorities = Priorities.NotImportant;
         }
-        switch (timePriority){
-            case 0:
-                this.timePriority = TimePriority.Urgent;
-                break;
-            case 1:
-                this.timePriority = TimePriority.NotUrgent;
-                break;
+        switch (timePriority) {
+            case 0 -> this.timePriority = TimePriority.Urgent;
+            case 1 -> this.timePriority = TimePriority.NotUrgent;
         }
         this.taskTitleText = taskTitleText;
         this.taskDetailsText = taskDetailsText;

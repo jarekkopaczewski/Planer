@@ -1,4 +1,4 @@
-package skills.future.planer.db.task;
+package skills.future.planer.db.task.category;
 
 import lombok.Getter;
 

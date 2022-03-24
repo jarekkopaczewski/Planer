@@ -20,11 +20,11 @@ import java.time.ZoneId;
 import java.util.Calendar;
 
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
-import skills.future.planer.db.DBHandler;
-import skills.future.planer.db.task.Priorities;
-import skills.future.planer.db.task.TaskCategory;
+import skills.future.planer.db.task.priority.Priorities;
+import skills.future.planer.db.task.category.TaskCategory;
 import skills.future.planer.db.task.TaskData;
-import skills.future.planer.db.task.TimePriority;
+import skills.future.planer.db.task.database.TaskDataTable;
+import skills.future.planer.db.task.priority.TimePriority;
 
 
 public class TaskListCreatorFragment extends Fragment {
@@ -32,9 +32,10 @@ public class TaskListCreatorFragment extends Fragment {
     private FragmentTaskListCreatorBinding binding;
     private Button saveButton;
     private final Calendar myCalendar = Calendar.getInstance();
-    private EditText endingDateEditText,taskTitleEditText, taskDetailsEditText;
+    private EditText endingDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingCalendarDay;
     private SwitchCompat switchDate;
+
     public TaskListCreatorFragment() {
     }
 
@@ -46,29 +47,37 @@ public class TaskListCreatorFragment extends Fragment {
         switchDate = binding.SwitchDatePicker;
         switchDate.setChecked(false);
         switchDate.setOnCheckedChangeListener((compoundButton, b) ->
-            endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE)
+                endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE)
         );
-        saveButton=binding.saveCreatorButton;
+        saveButton = binding.saveCreatorButton;
         saveBtnOnClickListenerSetter();
         endingDateEditText = binding.editTextDate;
         endingDateEditText.setVisibility(View.INVISIBLE);
         editTextSetter();
-        taskTitleEditText= binding.EditTextTitle;
+        taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
         return root;
     }
+
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
-            if(switchDate.isChecked()){
-                new DBHandler(this.getContext()).addOne( new TaskData(TaskCategory.Private,
+            TaskData data;
+            TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
+
+            if (switchDate.isChecked()) {
+                data = new TaskData(TaskCategory.Private,
                         Priorities.Important, TimePriority.Urgent, taskTitleEditText.getText().
-                        toString(),taskDetailsEditText.getText().toString(), CalendarDay.today(),
-                        endingCalendarDay));
-            }else {
-                new DBHandler(this.getContext()).addOne( new TaskData(TaskCategory.Private,
+                        toString(), taskDetailsEditText.getText().toString(), CalendarDay.today(),
+                        endingCalendarDay);
+
+            } else {
+                data = new TaskData(TaskCategory.Private,
                         Priorities.Important, TimePriority.Urgent, taskTitleEditText.getText().
-                        toString(),taskDetailsEditText.getText().toString() ));
+                        toString(), taskDetailsEditText.getText().toString());
             }
+            if (taskDataTable.addOne(data))
+                data.setTaskDataId(taskDataTable.getIdOfLastAddedTask());
+
             Navigation.findNavController(view1)
                     .navigate(TaskListCreatorFragmentDirections
                             .actionTaskListCreatorFragmentToNavTaskList());
@@ -105,14 +114,15 @@ public class TaskListCreatorFragment extends Fragment {
 //        String pattern = "EEEEE MMMMM yyyy";
 //        SimpleDateFormat simpleDateFormat =
 //                new SimpleDateFormat(pattern, dateFormatSymbols);
-        LocalDate date =  myCalendar.getTime().toInstant()
+        LocalDate date = myCalendar.getTime().toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         int day = date.getDayOfMonth(), month = date.getMonthValue(),
                 year = date.getYear();
-        endingCalendarDay = CalendarDay.from(year,month,day);
+        endingCalendarDay = CalendarDay.from(year, month, day);
         endingDateEditText.setText(myCalendar.getTime().toString());
         //todo ustawić lepszy format daty
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
