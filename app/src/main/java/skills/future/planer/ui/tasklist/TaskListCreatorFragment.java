@@ -40,16 +40,19 @@ public class TaskListCreatorFragment extends Fragment {
     public TaskListCreatorFragment() {
     }
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        // date edit texts
         beginDateEditText = binding.editTextBeginDate;
         beginDateEditText.setVisibility(View.INVISIBLE);
         endingDateEditText = binding.editTextEndDate;
         endingDateEditText.setVisibility(View.INVISIBLE);
         updateBeginDateEditText();
+        datePickers();
+        // switches
         switchPriorities = binding.switchImportant;
         switchTimePriorities = binding.switchUrgent;
         switchCategory = binding.switchCategory;
@@ -60,26 +63,30 @@ public class TaskListCreatorFragment extends Fragment {
                     endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
                 }
         );
+        // save btn
         saveButton = binding.saveCreatorButton;
         saveBtnOnClickListenerSetter();
-
-        datePickers();
+        // title and details edit texts
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
         return root;
     }
 
+    /**
+     * Method is saveBtn On Click Listener
+     * Listener will add new TaskData to database and back to listView
+     */
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
-            TaskData data;
             TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
-            data = new TaskData(
+            TaskData data = new TaskData(
                     switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
                     switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
                     switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
                     taskTitleEditText.getText().toString(),
                     taskDetailsEditText.getText().toString());
             if (switchDate.isChecked()) {
+                //if user want to add dates
                 data.setEndingDate(endingCalendarDay);
                 data.setStartingDate(beginCalendarDay);
             }
@@ -92,6 +99,10 @@ public class TaskListCreatorFragment extends Fragment {
         });
     }
 
+    /**
+     * Method sets OnClickListeners on editTextBeginDate and editTextEndDate
+     * listener will show calendar popup
+     */
     private void datePickers() {
         DatePickerDialog.OnDateSetListener date = (datePicker, i, i1, i2) -> {
             endingDayCalendar.set(Calendar.YEAR, i);
@@ -119,15 +130,19 @@ public class TaskListCreatorFragment extends Fragment {
                 ).show());
     }
 
+    /**
+     * Method update EndDateEditText
+     * after check if date isn't earlier than endingCalendarDay it will set new date
+     * if date isn't correct there will be generate toast with information that date is wrong
+     */
     private void updateEndingDateEditText() {
-
         LocalDate date = endingDayCalendar.getTime().toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         int day = date.getDayOfMonth(), month = date.getMonthValue(),
                 year = date.getYear();
         CalendarDay chosenDay;
         chosenDay = CalendarDay.from(year, month, day);
-        if (checkDate(chosenDay,beginCalendarDay)) {
+        if (checkDate(chosenDay, beginCalendarDay)) {
             endingCalendarDay = chosenDay;
             String dateString = endingCalendarDay.getDay() + "." +
                     endingCalendarDay.getMonth() + "." +
@@ -141,6 +156,11 @@ public class TaskListCreatorFragment extends Fragment {
         }
     }
 
+    /**
+     * Method update BeginDateEditText
+     * after check if date isn't earlier than today it will set new date
+     * if date isn't correct there will be generate toast with information that date is wrong
+     */
     private void updateBeginDateEditText() {
 
         LocalDate date = beginDayCalendar.getTime().toInstant()
@@ -149,7 +169,7 @@ public class TaskListCreatorFragment extends Fragment {
                 year = date.getYear();
         CalendarDay chosenDay;
         chosenDay = CalendarDay.from(year, month, day);
-        if (checkDate(chosenDay,CalendarDay.today())) {
+        if (checkDate(chosenDay, CalendarDay.today())) {
             beginCalendarDay = chosenDay;
             String dateString = beginCalendarDay.getDay() + "." +
                     beginCalendarDay.getMonth() + "." +
