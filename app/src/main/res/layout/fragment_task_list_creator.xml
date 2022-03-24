@@ -71,7 +71,7 @@
             android:contentDescription="@string/imageViewTaskDetailsDescription"
             android:scaleType="fitXY"
             android:src="@android:drawable/ic_dialog_info"
-            tools:layout_margin="10dp" />
+            android:layout_margin="10dp" />
 
         <EditText
             android:id="@+id/EditTextDetails"
@@ -109,7 +109,7 @@
             android:contentDescription="@string/imageViewTaskDetailsDescription"
             android:scaleType="fitXY"
             android:src="@android:drawable/ic_dialog_info"
-            tools:layout_margin="10dp" />
+            android:layout_margin="10dp" />
 
         <TextView
             android:id="@+id/textViewImportant"
@@ -145,7 +145,7 @@
             android:contentDescription="@string/imageViewTaskDetailsDescription"
             android:scaleType="fitXY"
             android:src="@android:drawable/ic_dialog_info"
-            tools:layout_margin="10dp" />
+            android:layout_margin="10dp" />
 
         <TextView
             android:id="@+id/textViewUrgent"
@@ -181,7 +181,7 @@
             android:contentDescription="@string/imageViewTaskDetailsDescription"
             android:scaleType="fitXY"
             android:src="@android:drawable/ic_dialog_info"
-            tools:layout_margin="10dp" />
+            android:layout_margin="10dp" />
 
         <TextView
             android:id="@+id/textViewWork"
