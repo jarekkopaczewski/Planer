@@ -9,7 +9,7 @@ import skills.future.planer.db.task.database.TaskDataTableEnum;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 3;
     private static final String DB_NAME = "planer.db";
 
     public DBHandler(Context context) {
