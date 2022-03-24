@@ -9,7 +9,7 @@ import skills.future.planer.db.task.database.TaskDataTableEnum;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 3;
     private static final String DB_NAME = "planer.db";
 
     public DBHandler(Context context) {
@@ -25,6 +25,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
         db.execSQL("DROP TABLE IF EXISTS " + TaskDataTableEnum.TAB_TASK_DATA);
+        db.execSQL("DROP TABLE IF EXISTS TASK_DATA_TABLE");
         onCreate(db);
     }
 }
