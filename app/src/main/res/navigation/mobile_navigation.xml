@@ -44,10 +44,10 @@
         <action
             android:id="@+id/action_nav_month_to_nav_task_list"
             app:destination="@id/nav_task_list"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_in_left"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_in_left" />
+            app:enterAnim="@android:anim/cycle_interpolator"
+            app:exitAnim="@android:anim/cycle_interpolator"
+            app:popEnterAnim="@android:anim/cycle_interpolator"
+            app:popExitAnim="@android:anim/cycle_interpolator" />
         <action
             android:id="@+id/action_nav_month_to_nav_home"
             app:destination="@id/nav_home" />
@@ -57,12 +57,23 @@
         <action
             android:id="@+id/action_nav_day_to_nav_task_list"
             app:destination="@id/nav_task_list" />
+        <action
+            android:id="@+id/action_nav_day_to_nav_month"
+            app:destination="@id/nav_month"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment android:id="@+id/nav_task_list" android:name="skills.future.planer.ui.tasklist.TaskListFragment"
               android:label="menu_task_list" tools:layout="@layout/fragment_task_list">
         <action
             android:id="@+id/action_nav_task_list_to_taskListCreatorFragment"
-            app:destination="@id/taskListCreatorFragment" />
+            app:destination="@id/taskListCreatorFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/taskListCreatorFragment"
@@ -71,6 +82,10 @@
         tools:layout="@layout/fragment_task_list_creator" >
         <action
             android:id="@+id/action_taskListCreatorFragment_to_nav_task_list"
-            app:destination="@id/nav_task_list" />
+            app:destination="@id/nav_task_list"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 </navigation>
