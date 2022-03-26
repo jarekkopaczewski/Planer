@@ -1,6 +1,7 @@
 package skills.future.planer.ui.tasklist;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,16 +9,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.database.TaskDataTable;
+import skills.future.planer.db.task.enums.priority.Priorities;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 
 class TaskTotalAdapter extends BaseAdapter {
 
@@ -58,8 +63,31 @@ class TaskTotalAdapter extends BaseAdapter {
 
         setTextTitle(currentTask, convertView);
         setIconCategory(currentTask, convertView);
+        setColor(currentTask, convertView);
 
         return convertView;
+    }
+
+    /**
+     * Sets color of left card view
+     * @param taskData current task
+     * @param convertView current task view
+     */
+    public void setColor(TaskData taskData, View convertView)
+    {
+        System.out.printf(taskData.getPriorities().toString() + " " + taskData.getTimePriority().toString());
+        // urgent & important
+        if( taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.Important)
+            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Color.rgb(255, 102, 109));
+        // urgent & not important
+        else if( taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant)
+            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Color.rgb(95, 191, 217));
+        // not urgent & important
+        else if( taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important)
+            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Color.rgb(245, 189, 76));
+        // not urgent & not important
+        else if( taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant)
+            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Color.rgb(255, 153, 193));
     }
 
     /**
@@ -77,18 +105,21 @@ class TaskTotalAdapter extends BaseAdapter {
      * Sets title of tasks
      */
     private void setTextTitle(TaskData task, View convertView) {
-        String titleText = task.getTaskTitleText() + setDateTextView(task);
+        String titleText = task.getTaskTitleText();
+        String dateText =  setDateTextView(task);
         ((TextView) convertView.findViewById(R.id.taskTitleTextView)).setText(titleText);
+        ((TextView) convertView.findViewById(R.id.taskDateTextView)).setText(dateText);
     }
 
     /**
      * Merges date strings
      */
+    // delete "/n"
     private String setDateTextView(TaskData task) {
         String dateView = "";
         if (task.getEndingDate() != null) {
             if (task.getStartingDate() != null)
-                dateView = "\n" + convertCalendarDay(task.getStartingDate()) + " - ";
+                dateView = convertCalendarDay(task.getStartingDate()) + " - ";
             dateView += convertCalendarDay(task.getEndingDate());
         }
         return dateView;
