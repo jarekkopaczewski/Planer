@@ -204,6 +204,8 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
         return new TaskFilter();
     }
 
+
+    // Trzeba zrobić synchronizacje po filtrze jezeli będą zmiany
     /**
      * Filter class
      * Searches for string match in task titles

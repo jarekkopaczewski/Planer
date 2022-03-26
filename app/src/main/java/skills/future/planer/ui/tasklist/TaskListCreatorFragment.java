@@ -121,25 +121,37 @@ public class TaskListCreatorFragment extends Fragment {
      */
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
-            AnimateView.singleAnimation(saveButton, getContext(), R.anim.bounce);
-            TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
-            TaskData data = new TaskData(
-                    switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
-                    switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
-                    switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
-                    taskTitleEditText.getText().toString(),
-                    taskDetailsEditText.getText().toString());
-            if (switchDate.isChecked()) {
-                //if user want to add dates
-                data.setEndingDate(endingCalendarDay);
-                data.setStartingDate(beginCalendarDay);
-            }
-            if (taskDataTable.addOne(data))
-                data.setTaskDataId(taskDataTable.getIdOfLastAddedTask());
+            AnimateView.animateInOut(saveButton, getContext());
 
-            Navigation.findNavController(view1)
-                    .navigate(TaskListCreatorFragmentDirections
-                            .actionTaskListCreatorFragmentToNavTaskList());
+            if(taskTitleEditText.getText().toString().isEmpty())
+            {
+                Toast toast = Toast.makeText(this.getContext(),
+                        "Tytuł nie może być pusty!",
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            else
+            {
+                taskDetailsEditText.getText().toString();
+                TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
+                TaskData data = new TaskData(
+                        switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
+                        switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
+                        switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
+                        taskTitleEditText.getText().toString(),
+                        taskDetailsEditText.getText().toString());
+                if (switchDate.isChecked()) {
+                    //if user want to add dates
+                    data.setEndingDate(endingCalendarDay);
+                    data.setStartingDate(beginCalendarDay);
+                }
+                if (taskDataTable.addOne(data))
+                    data.setTaskDataId(taskDataTable.getIdOfLastAddedTask());
+
+                Navigation.findNavController(view1)
+                        .navigate(TaskListCreatorFragmentDirections
+                                .actionTaskListCreatorFragmentToNavTaskList());
+            }
         });
     }
 
