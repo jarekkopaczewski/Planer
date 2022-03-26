@@ -15,11 +15,6 @@ public class AnimateView {
         view.startAnimation(zoomOut);
     }
 
-    public static void scaleZoom(View view, Context context) {
-        Animation scaleZoom  = AnimationUtils.loadAnimation(context, R.anim.scalezoom);
-        view.startAnimation(scaleZoom);
-    }
-
     public static void singleAnimation(View view, Context context, int id) {
         Animation animation  = AnimationUtils.loadAnimation(context, id);
         view.startAnimation(animation);

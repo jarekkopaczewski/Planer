@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +53,11 @@ class TaskTotalAdapter extends BaseAdapter {
         return position;
     }
 
+    public void removeItem(TaskData taskData){
+        taskList.remove(taskData);
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -67,10 +73,22 @@ class TaskTotalAdapter extends BaseAdapter {
 
         // animation test
         View finalConvertView = convertView;
-        convertView.setOnClickListener(e-> AnimateView.animateInOut(finalConvertView, context));
-        // animation test
 
-        AnimateView.scaleZoom(finalConvertView, context);
+        convertView.setOnClickListener(e-> {
+            CheckBox checkBox = finalConvertView.findViewById(R.id.checkBoxTask);
+            boolean isSelected = checkBox.isChecked();
+            checkBox.setChecked(!isSelected);
+            AnimateView.animateInOut(finalConvertView, context);
+        });
+
+        // usuwanie - średnio to działa - brak synchronizacji
+        convertView.setOnLongClickListener(e->{
+                AnimateView.singleAnimation(finalConvertView, context, R.anim.rotate);
+                removeItem(currentTask);
+                    return true;
+                });
+
+        AnimateView.singleAnimation(finalConvertView, context, R.anim.scalezoom);
 
         return convertView;
     }
@@ -85,16 +103,16 @@ class TaskTotalAdapter extends BaseAdapter {
         System.out.printf(taskData.getPriorities().toString() + " " + taskData.getTimePriority().toString());
         // urgent & important
         if( taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.Important)
-            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Color.rgb(255, 102, 109));
+            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.RED.getColor());
         // urgent & not important
         else if( taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant)
-            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Color.rgb(95, 191, 217));
+            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.BLUE.getColor());
         // not urgent & important
         else if( taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important)
-            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Color.rgb(245, 189, 76));
+            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.YELLOW.getColor());
         // not urgent & not important
         else if( taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant)
-            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Color.rgb(255, 153, 193));
+            ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.PINK.getColor());
     }
 
     /**

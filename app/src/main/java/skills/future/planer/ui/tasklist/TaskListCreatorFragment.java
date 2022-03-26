@@ -1,15 +1,18 @@
 package skills.future.planer.ui.tasklist;
 
 import android.app.DatePickerDialog;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -67,12 +70,49 @@ public class TaskListCreatorFragment extends Fragment {
         );
         // save btn
         saveButton = binding.saveCreatorButton;
-
         saveBtnOnClickListenerSetter();
         // title and details edit texts
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
+
+        processFabColor();
+
+        switchPriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (switchPriorities.isChecked()) binding.imageViewImportant.setImageResource(R.drawable.trash);
+            else binding.imageViewImportant.setImageResource(R.drawable.star);
+            processFabColor();
+        });
+
+        switchTimePriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (switchTimePriorities.isChecked()) binding.imageViewTaskUrgent.setImageResource(R.drawable.ice);
+            else binding.imageViewTaskUrgent.setImageResource(R.drawable.fire);
+            processFabColor();
+        });
+
+        switchCategory.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (switchCategory.isChecked()) binding.imageViewTaskDetails2.setImageResource(R.drawable.case_doodle);
+            else binding.imageViewTaskDetails2.setImageResource(R.drawable.home_doodle);
+            processFabColor();
+        });
+
         return root;
+    }
+
+    /**
+     * Changes color of fab button
+     */
+    private void processFabColor()
+    {
+        AnimateView.singleAnimation(saveButton, getContext(), R.anim.rotate);
+
+        if( !switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.RED.getColor()));
+        else if( switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.BLUE.getColor()));
+        else if( !switchPriorities.isChecked()  && switchTimePriorities.isChecked() )
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.YELLOW.getColor()));
+        else if( switchPriorities.isChecked()  && switchTimePriorities.isChecked() )
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.PINK.getColor()));
     }
 
     /**

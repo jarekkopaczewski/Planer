@@ -28,6 +28,7 @@
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,6 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -106,7 +108,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDetailsDescription"
                     android:scaleType="fitXY"
-                    android:src="@android:drawable/ic_dialog_info" />
+                    app:srcCompat="@drawable/star" />
 
                 <TextView
                     android:id="@+id/textViewImportant"
@@ -143,7 +145,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDetailsDescription"
                     android:scaleType="fitXY"
-                    android:src="@android:drawable/ic_dialog_info" />
+                    app:srcCompat="@drawable/fire" />
 
                 <TextView
                     android:id="@+id/textViewUrgent"
@@ -180,7 +182,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDetailsDescription"
                     android:scaleType="fitXY"
-                    android:src="@android:drawable/ic_dialog_info" />
+                    app:srcCompat="@drawable/home_doodle" />
 
                 <TextView
                     android:id="@+id/textViewWork"
@@ -214,6 +216,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -223,12 +226,13 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDateDescription"
                     android:scaleType="fitXY"
-                    android:src="@drawable/task_list" />
+                    android:src="@drawable/calendar_doodle" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/SwitchDatePicker"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="40dp"
                     android:text="@string/SwitchDatePickerText" />
 
             </LinearLayout>
