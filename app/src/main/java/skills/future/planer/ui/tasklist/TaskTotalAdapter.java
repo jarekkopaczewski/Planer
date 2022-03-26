@@ -34,7 +34,6 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
 
     private List<TaskData> taskList = new ArrayList<>();
     private List<TaskData> filteredTaskList = new ArrayList<>();
-    private TaskFilter filter;
 
     public TaskTotalAdapter(Context context, LayoutInflater layoutInflater) {
         this.layoutInflater = layoutInflater;
@@ -75,7 +74,6 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
         setIconCategory(currentTask, convertView);
         setColor(currentTask, convertView);
 
-        // animation test
         View finalConvertView = convertView;
 
         convertView.setOnClickListener(e -> {
@@ -196,18 +194,26 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
         }
     }
 
+    /**
+     * Creates new filter
+     *
+     * @return new Task filter
+     */
     @Override
     public Filter getFilter() {
         return new TaskFilter();
     }
 
+    /**
+     * Filter class
+     * Searches for string match in task titles
+     */
     private class TaskFilter extends Filter {
-
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             constraint = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
-            if (constraint != null && constraint.toString().length() > 0) {
+            if (constraint.toString().length() > 0) {
                 ArrayList<TaskData> filteredItems = new ArrayList<TaskData>();
 
                 for (int i = 0, l = taskList.size(); i < l; i++) {
@@ -225,10 +231,11 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
             }
             return result;
         }
+
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredTaskList = (ArrayList<TaskData>)results.values;
+            filteredTaskList = (ArrayList<TaskData>) results.values;
             notifyDataSetChanged();
         }
     }
