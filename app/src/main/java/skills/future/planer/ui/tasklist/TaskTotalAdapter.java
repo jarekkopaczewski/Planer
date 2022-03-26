@@ -83,8 +83,8 @@ class TaskTotalAdapter extends BaseAdapter {
 
         // usuwanie - średnio to działa - brak synchronizacji
         convertView.setOnLongClickListener(e->{
-                AnimateView.singleAnimation(finalConvertView, context, R.anim.rotate);
-                removeItem(currentTask);
+                AnimateView.singleAnimation(finalConvertView, context, R.anim.removetask);
+                //removeItem(currentTask);
                     return true;
                 });
 
