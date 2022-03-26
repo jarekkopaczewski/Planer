@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="60dp"
         android:autoSizeTextType="none"
         android:gravity="center|start"
         android:textAlignment="viewStart"
@@ -65,7 +65,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="10dp"
+            android:padding="5dp" />
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -81,5 +82,22 @@
         app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
         app:layout_constraintTop_toBottomOf="@+id/taskTitleTextView"
         app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/detailImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="10dp"
+        android:foregroundGravity="center"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/taskDateTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintStart_toEndOf="@+id/taskTitleTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.538"
+        app:srcCompat="@drawable/info" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

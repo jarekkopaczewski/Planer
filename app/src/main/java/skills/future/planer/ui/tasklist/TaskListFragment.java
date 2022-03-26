@@ -46,6 +46,12 @@ public class TaskListFragment extends Fragment {
             AnimateView.animateInOut(binding.fab, getContext());
             Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
         });
+
+        binding.searchImageView.setOnClickListener(e->{
+            //TODO search
+            AnimateView.animateInOut(binding.searchImageView, getContext());
+        });
+
         return root;
     }
 

@@ -1,6 +1,7 @@
 package skills.future.planer.ui.tasklist;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +89,9 @@ class TaskTotalAdapter extends BaseAdapter {
                     return true;
                 });
 
+        convertView.findViewById(R.id.detailImageView).setOnClickListener(e->
+                AnimateView.singleAnimation(finalConvertView.findViewById(R.id.detailImageView), context, R.anim.rotate));
+
         AnimateView.singleAnimation(finalConvertView, context, R.anim.scalezoom);
 
         return convertView;
@@ -100,19 +104,30 @@ class TaskTotalAdapter extends BaseAdapter {
      */
     public void setColor(TaskData taskData, View convertView)
     {
-        System.out.printf(taskData.getPriorities().toString() + " " + taskData.getTimePriority().toString());
         // urgent & important
-        if( taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.Important)
+        if( taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.Important){
             ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.RED.getColor());
+            ((ImageView) convertView.findViewById(R.id.detailImageView)).setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
+            ((ImageView) convertView.findViewById(R.id.iconTaskCategory)).setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
+        }
         // urgent & not important
-        else if( taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant)
+        else if( taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant){
             ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.BLUE.getColor());
+            ((ImageView) convertView.findViewById(R.id.detailImageView)).setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
+            ((ImageView) convertView.findViewById(R.id.iconTaskCategory)).setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
+        }
         // not urgent & important
-        else if( taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important)
+        else if( taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important){
             ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.YELLOW.getColor());
+            ((ImageView) convertView.findViewById(R.id.detailImageView)).setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
+            ((ImageView) convertView.findViewById(R.id.iconTaskCategory)).setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
+        }
         // not urgent & not important
-        else if( taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant)
+        else if( taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant){
             ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.PINK.getColor());
+            ((ImageView) convertView.findViewById(R.id.detailImageView)).setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
+            ((ImageView) convertView.findViewById(R.id.iconTaskCategory)).setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
+        }
     }
 
     /**
@@ -168,11 +183,11 @@ class TaskTotalAdapter extends BaseAdapter {
             switch (task.getCategory()) {
                 case Work -> ((ImageView) convertView.findViewById(R.id.iconTaskCategory))
                         .setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),
-                                R.drawable.home,
+                                R.drawable.home_2,
                                 null));
                 case Private -> ((ImageView) convertView.findViewById(R.id.iconTaskCategory))
                         .setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),
-                                R.drawable.briefcase,
+                                R.drawable.briefcase_2,
                                 null));
             }
         }
