@@ -18,7 +18,7 @@
         android:paddingBottom="70dp"
         android:scaleType="center"
         android:src="@drawable/icons8_plus_64"
-        app:backgroundTint="#0091EA"
+        app:backgroundTint="@color/teal_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.97"

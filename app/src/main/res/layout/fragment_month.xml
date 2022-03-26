@@ -11,7 +11,8 @@
         android:id="@+id/TEXT"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:text="@string/hello_blank_fragment"
+        android:visibility="invisible" />
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         android:id="@+id/calendarView"

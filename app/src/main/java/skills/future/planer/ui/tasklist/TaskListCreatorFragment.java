@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,24 +13,27 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.database.TaskDataTable;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.ui.AnimateView;
 
 
 public class TaskListCreatorFragment extends Fragment {
 
     private FragmentTaskListCreatorBinding binding;
-    private Button saveButton;
+    private FloatingActionButton saveButton;
     private final Calendar endingDayCalendar = Calendar.getInstance(), beginDayCalendar = Calendar.getInstance();
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingCalendarDay, beginCalendarDay = CalendarDay.today();
@@ -65,6 +67,7 @@ public class TaskListCreatorFragment extends Fragment {
         );
         // save btn
         saveButton = binding.saveCreatorButton;
+
         saveBtnOnClickListenerSetter();
         // title and details edit texts
         taskTitleEditText = binding.EditTextTitle;
@@ -78,6 +81,7 @@ public class TaskListCreatorFragment extends Fragment {
      */
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
+            AnimateView.singleAnimation(saveButton, getContext(), R.anim.bounce);
             TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
             TaskData data = new TaskData(
                     switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,

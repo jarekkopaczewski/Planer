@@ -14,7 +14,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +22,7 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.database.TaskDataTable;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.ui.AnimateView;
 
 class TaskTotalAdapter extends BaseAdapter {
 
@@ -64,6 +64,13 @@ class TaskTotalAdapter extends BaseAdapter {
         setTextTitle(currentTask, convertView);
         setIconCategory(currentTask, convertView);
         setColor(currentTask, convertView);
+
+        // animation test
+        View finalConvertView = convertView;
+        convertView.setOnClickListener(e-> AnimateView.animateInOut(finalConvertView, context));
+        // animation test
+
+        AnimateView.scaleZoom(finalConvertView, context);
 
         return convertView;
     }
