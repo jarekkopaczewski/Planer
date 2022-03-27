@@ -1,6 +1,7 @@
 package skills.future.planer.ui.tasklist;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +10,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.room.Room;
+
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
+import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.database.TaskDataTabDao;
 import skills.future.planer.db.task.database.TaskDataTable;
 
 class TaskTotalAdapter extends BaseAdapter {
@@ -67,7 +75,14 @@ class TaskTotalAdapter extends BaseAdapter {
      */
     public void refreshTaskList() {
         try {
-            taskList = new TaskDataTable(context).getTaskData();
+            FutureTask<List<TaskData>> futureTask = new FutureTask<>(() -> {
+                try {
+                    taskList = AppDatabase.getInstance(context.getApplicationContext()).taskDataTabDao().getTaskData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, taskList);
+            futureTask.run();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,11 +101,11 @@ class TaskTotalAdapter extends BaseAdapter {
      */
     private String setDateTextView(TaskData task) {
         String dateView = "";
-        if (task.getEndingDate() != null) {
-            if (task.getStartingDate() != null)
-                dateView = "\n" + convertCalendarDay(task.getStartingDate()) + " - ";
-            dateView += convertCalendarDay(task.getEndingDate());
-        }
+//        if (task.getEndingDate() != null) {
+//            if (task.getStartingDate() != null)
+////                dateView = "\n" + convertCalendarDay(task.getStartingDate()) + " - ";
+////            dateView += convertCalendarDay(task.getEndingDate());
+//        }
         return dateView;
     }
 

@@ -1,6 +1,7 @@
 package skills.future.planer.ui.tasklist;
 
 import android.app.DatePickerDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.room.Room;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.concurrent.FutureTask;
 
+import lombok.SneakyThrows;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
+import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.TaskData;
@@ -78,7 +83,7 @@ public class TaskListCreatorFragment extends Fragment {
      */
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
-            TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
+            TaskDataTable taskDataTable /*= new TaskDataTable(this.getContext())*/;
             TaskData data = new TaskData(
                     switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
                     switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
@@ -87,11 +92,15 @@ public class TaskListCreatorFragment extends Fragment {
                     taskDetailsEditText.getText().toString());
             if (switchDate.isChecked()) {
                 //if user want to add dates
-                data.setEndingDate(endingCalendarDay);
-                data.setStartingDate(beginCalendarDay);
+                data.setEndingCalendarDate(endingCalendarDay);
+                data.setStartingCalendarDate(beginCalendarDay);
             }
-            if (taskDataTable.addOne(data))
-                data.setTaskDataId(taskDataTable.getIdOfLastAddedTask());
+            Object result = new Object();
+            FutureTask futureTask = new FutureTask(() -> {
+                AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().addOne(data);
+                data.setTaskDataId(AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().getIdOfLastAddedTask());
+            }, result);
+            futureTask.run();
 
             Navigation.findNavController(view1)
                     .navigate(TaskListCreatorFragmentDirections
