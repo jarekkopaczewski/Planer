@@ -58,7 +58,7 @@
             android:id="@+id/checkBoxTask"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck"/>
 
         <ImageView
             android:id="@+id/iconTaskCategory"
