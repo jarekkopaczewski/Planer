@@ -110,28 +110,24 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
             ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.RED.getColor());
             ((ImageView) convertView.findViewById(R.id.detailImageView)).setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
             ((ImageView) convertView.findViewById(R.id.iconTaskCategory)).setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
-            ((CheckBox) convertView.findViewById(R.id.checkBoxTask)).setButtonTintList(ColorStateList.valueOf((Colors.RED.getColor())));
         }
         // urgent & not important
         else if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant) {
             ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.BLUE.getColor());
             ((ImageView) convertView.findViewById(R.id.detailImageView)).setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
             ((ImageView) convertView.findViewById(R.id.iconTaskCategory)).setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
-            ((CheckBox) convertView.findViewById(R.id.checkBoxTask)).setButtonTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
         }
         // not urgent & important
         else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important) {
             ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.YELLOW.getColor());
             ((ImageView) convertView.findViewById(R.id.detailImageView)).setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
             ((ImageView) convertView.findViewById(R.id.iconTaskCategory)).setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
-            ((CheckBox) convertView.findViewById(R.id.checkBoxTask)).setButtonTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
         }
         // not urgent & not important
         else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant) {
             ((CardView) convertView.findViewById(R.id.colorMarkCardView)).setCardBackgroundColor(Colors.PINK.getColor());
             ((ImageView) convertView.findViewById(R.id.detailImageView)).setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
             ((ImageView) convertView.findViewById(R.id.iconTaskCategory)).setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
-            ((CheckBox) convertView.findViewById(R.id.checkBoxTask)).setButtonTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
         }
     }
 
