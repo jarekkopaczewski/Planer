@@ -16,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import skills.future.planer.databinding.ActivityMainBinding;
+import skills.future.planer.db.AppDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         NavController bottomNavController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, bottomNavController, bottomAppBarConfiguration);
         NavigationUI.setupWithNavController(bottomView, bottomNavController);
+
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
     }
 
     @Override

@@ -14,14 +14,21 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.loader.content.AsyncTaskLoader;
+import androidx.room.Room;
+
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
+import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.database.TaskDataTabDao;
 import skills.future.planer.db.task.database.TaskDataTable;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -136,7 +143,14 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
      */
     public void refreshTaskList() {
         try {
-            taskList = new TaskDataTable(context).getTaskData();
+            FutureTask<List<TaskData>> futureTask = new FutureTask<>(() -> {
+                try {
+                    taskList = AppDatabase.getInstance(context.getApplicationContext()).taskDataTabDao().getTaskData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }, taskList);
+            futureTask.run();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,20 +174,10 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
         String dateView = "";
         if (task.getEndingDate() != null) {
             if (task.getStartingDate() != null)
-                dateView = convertCalendarDay(task.getStartingDate()) + " - ";
-            dateView += convertCalendarDay(task.getEndingDate());
+                dateView = task.getStartingDate() + " - ";
+            dateView += task.getEndingDate();
         }
         return dateView;
-    }
-
-    /**
-     * Coverts calendar day format to string
-     *
-     * @param calendarDay date in CalendarDay format
-     * @return CalendarDay in string format
-     */
-    private String convertCalendarDay(CalendarDay calendarDay) {
-        return calendarDay.getDay() + "." + calendarDay.getMonth() + "." + calendarDay.getYear();
     }
 
     /**
@@ -216,7 +220,7 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
             constraint = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
             if (constraint.toString().length() > 0) {
-                ArrayList<TaskData> filteredItems = new ArrayList<TaskData>();
+                ArrayList<TaskData> filteredItems = new ArrayList<>();
 
                 for (int i = 0, l = taskList.size(); i < l; i++) {
                     TaskData taskData = taskList.get(i);
@@ -242,6 +246,3 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
         }
     }
 }
-
-
-
