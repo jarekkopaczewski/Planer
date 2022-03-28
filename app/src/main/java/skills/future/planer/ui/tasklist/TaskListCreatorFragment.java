@@ -135,8 +135,7 @@ public class TaskListCreatorFragment extends Fragment {
             }
             else
             {
-                taskDetailsEditText.getText().toString();
-                TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
+                taskDetailsEditText.getText();
                 TaskData data = new TaskData(
                         switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
                         switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
@@ -145,12 +144,15 @@ public class TaskListCreatorFragment extends Fragment {
                         taskDetailsEditText.getText().toString());
                 if (switchDate.isChecked()) {
                     //if user want to add dates
-                    data.setEndingDate(endingCalendarDay);
-                    data.setStartingDate(beginCalendarDay);
+                    data.setEndingCalendarDate(endingCalendarDay);
+                    data.setStartingCalendarDate(beginCalendarDay);
                 }
-                if (taskDataTable.addOne(data))
-                    data.setTaskDataId(taskDataTable.getIdOfLastAddedTask());
-
+                Object result = new Object();
+                FutureTask<Object> futureTask = new FutureTask<>(() -> {
+                    AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().addOne(data);
+                    data.setTaskDataId(AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().getIdOfLastAddedTask());
+                }, result);
+                futureTask.run();
                 Navigation.findNavController(view1)
                         .navigate(TaskListCreatorFragmentDirections
                                 .actionTaskListCreatorFragmentToNavTaskList());

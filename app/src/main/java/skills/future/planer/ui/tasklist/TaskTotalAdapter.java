@@ -174,20 +174,10 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
         String dateView = "";
         if (task.getEndingDate() != null) {
             if (task.getStartingDate() != null)
-                dateView = convertCalendarDay(task.getStartingDate()) + " - ";
-            dateView += convertCalendarDay(task.getEndingDate());
+                dateView = task.getStartingDate() + " - ";
+            dateView += task.getEndingDate();
         }
         return dateView;
-    }
-
-    /**
-     * Coverts calendar day format to string
-     *
-     * @param calendarDay date in CalendarDay format
-     * @return CalendarDay in string format
-     */
-    private String convertCalendarDay(CalendarDay calendarDay) {
-        return calendarDay.getDay() + "." + calendarDay.getMonth() + "." + calendarDay.getYear();
     }
 
     /**
@@ -230,7 +220,7 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
             constraint = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
             if (constraint.toString().length() > 0) {
-                ArrayList<TaskData> filteredItems = new ArrayList<TaskData>();
+                ArrayList<TaskData> filteredItems = new ArrayList<>();
 
                 for (int i = 0, l = taskList.size(); i < l; i++) {
                     TaskData taskData = taskList.get(i);
