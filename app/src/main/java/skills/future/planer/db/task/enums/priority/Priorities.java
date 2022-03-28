@@ -1,4 +1,4 @@
-package skills.future.planer.db.task.priority;
+package skills.future.planer.db.task.enums.priority;
 
 import lombok.Getter;
 

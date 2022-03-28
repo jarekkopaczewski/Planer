@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMonthBinding;
+import skills.future.planer.ui.AnimateView;
 
 public class MonthFragment extends Fragment {
 
@@ -45,6 +47,9 @@ public class MonthFragment extends Fragment {
         View root = binding.getRoot();
         textView = binding.TEXT;
         materialCalendarView = binding.calendarView;
+
+        // animation test
+        AnimateView.singleAnimation(materialCalendarView, getContext(), R.anim.scalezoom);
 
         //wybór daty listener
         //test - wyświetlanie w textview

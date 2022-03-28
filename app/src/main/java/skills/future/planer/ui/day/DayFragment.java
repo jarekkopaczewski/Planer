@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentDayBinding;
 
 public class DayFragment extends Fragment {
@@ -24,6 +26,7 @@ public class DayFragment extends Fragment {
         dayViewModel = new ViewModelProvider(this).get(DayViewModel.class);
         binding = FragmentDayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
         return root;
     }
 
