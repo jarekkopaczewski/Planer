@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,17 +17,19 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
-import org.intellij.lang.annotations.JdkConstants;
-
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Objects;
 
+import lombok.Getter;
+import lombok.Setter;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMonthBinding;
+import skills.future.planer.db.task.TaskData;
 
+@Getter
+@Setter
 public class MonthFragment extends Fragment {
 
     private TextView textView;
@@ -37,16 +38,10 @@ public class MonthFragment extends Fragment {
     private MonthViewModel monthViewModel;
     private FragmentMonthBinding binding;
     HashSet<CalendarDay> dates = new HashSet<CalendarDay>();
+    HashSet<TaskData> calendarTaskDates = new HashSet<>();
+    HashMap<CalendarDay, Integer> dayTasks = new HashMap<>();
 
     public MonthFragment() {
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     @Override
@@ -59,38 +54,56 @@ public class MonthFragment extends Fragment {
         monthViewModel = new ViewModelProvider(this).get(MonthViewModel.class);
         binding = FragmentMonthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        textView = binding.TEXT;
         materialCalendarView = binding.calendarView;
-        CalendarDay d = CalendarDay.from(2022,3,27);
-       // CalendarDay cd = binding.calendarView.getCurrentDate();
-      //  dates.add(cd);
-       // CalendarDay day = new CalendarDay(LocalDate.now().get().);
+        materialCalendarView.setDateSelected(CalendarDay.today(), true);
+
+        materialCalendarView.addDecorator(new DayViewDecorator() {
+            @Override
+            public boolean shouldDecorate(CalendarDay day) {
+                return day.toString().equals(CalendarDay.today().toString());
+            }
+
+            @Override
+            public void decorate(DayViewFacade view) {
+                view.setBackgroundDrawable(Objects.requireNonNull(ContextCompat.getDrawable(materialCalendarView.getContext(), R.drawable.selector)));
+            }
+        });
 
         int[] threeColors = {
                 Color.rgb(0, 0, 255),
                 Color.rgb(0, 255, 0),
                 Color.rgb(255, 0, 0),
-               // Color.rgb(255, 0, 0),
 
         };
-
-
-
-    //    materialCalendarView.addDecorator(new EventDecorator(dates,threeColors));
-
-        //wybór daty listener
-        //test - wyświetlanie w textview
+        dates.add(CalendarDay.from(2022,3,28));
+        dates.add(CalendarDay.from(2022,3,23));
+        dates.add(CalendarDay.from(2022,3,22));
+        dates.add(CalendarDay.from(2022,3,11));
+        // createDayTasks(calendarTaskDates);
+        materialCalendarView.addDecorator(new EventDecorator(dates, threeColors));
+        dates.clear();
+        threeColors = new int[]{
+                Color.rgb(0, 0, 255)
+        };
+        dates.add(CalendarDay.from(2022,3,31));
+        dates.add(CalendarDay.from(2022,3,1));
+        dates.add(CalendarDay.from(2022,3,13));
+        dates.add(CalendarDay.from(2022,3,17));
+        materialCalendarView.addDecorator(new EventDecorator(dates, threeColors));
+        dates.clear();
+        threeColors = new int[]{
+                Color.rgb(0, 0, 255),
+                Color.rgb(0, 255, 0),
+        };
+        dates.add(CalendarDay.from(2022,3,15));
+        dates.add(CalendarDay.from(2022,3,14));
+        dates.add(CalendarDay.from(2022,3,6));
+        dates.add(CalendarDay.from(2022,3,3));
+        materialCalendarView.addDecorator(new EventDecorator(dates, threeColors));
         materialCalendarView.setOnDateChangedListener((widget, date, selected) -> {
-            //NIESAMOWITE PARSOWANIE
-            String parse = date.toString();
-            dates.add(date);
-            System.out.println(dates);
+           // dates.add(date);
+            //materialCalendarView.addDecorator(new EventDecorator(dates, threeColors));
 
-            String[] parse2 = parse.split(("\\{"));
-            parse2[1] = parse2[1].substring(0, parse2[1].length() - 1);
-            setDate(parse2[1]);
-            textView.setText(getDate());
-            materialCalendarView.addDecorator(new EventDecorator(dates,threeColors));
         });
         return root;
     }
@@ -99,5 +112,19 @@ public class MonthFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    public void createDayTasks(Collection<TaskData> taskData) {
+        for (TaskData taskData_instance : taskData) {
+            CalendarDay key = taskData_instance.getStartingDate();
+
+            Integer value = dayTasks.get(key);
+            if (value == null) {
+                value = 1;
+            } else {
+                value++;
+            }
+            dayTasks.put(key, value);
+        }
     }
 }

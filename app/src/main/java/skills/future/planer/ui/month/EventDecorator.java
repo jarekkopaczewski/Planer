@@ -5,34 +5,28 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 
-
+import skills.future.planer.db.task.TaskData;
 
 public class EventDecorator implements DayViewDecorator {
 
     private final int[] colors;
-    private final HashSet<CalendarDay> dates;
+    private  HashSet<CalendarDay> dates;
+    private HashMap<CalendarDay,Integer> dates_tasks;
 
 
     public EventDecorator(Collection<CalendarDay> dates, int[] colors) {
-        //this.color = color;
         this.dates = new HashSet<>(dates);
-
         this.colors = colors;
-
     }
 
+   // public EventDecorator(HashMap<CalendarDay,Integer> dates, int[] colors) {
+    //    this.dates_tasks = new HashMap<>(dates);
+    //    this.colors = colors;
+   // }
 
-  //  public EventDecorator(List<MonthFragment.Filter> filteredEvents) {
-        //this.color = color;
-
-   //     this.dates = new HashSet<>(filteredEvents.get(0).calDayArr);
-   //     int[] colors = new int[1];
-    //    colors[0] = filteredEvents.get(0).color;
-   //     this.colors = colors;
-
-  //  }
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
@@ -42,7 +36,7 @@ public class EventDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
 
-        view.addSpan((new CustomMultipleDotSpan(8,colors)));
+        view.addSpan((new CustomMultipleDotSpan(5,colors)));
 
     }
 

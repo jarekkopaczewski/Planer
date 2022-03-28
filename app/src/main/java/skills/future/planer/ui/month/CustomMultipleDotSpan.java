@@ -37,6 +37,8 @@ public class CustomMultipleDotSpan implements LineBackgroundSpan {
         this.color = color;
     }
 
+
+
     @Override
     public void drawBackground(
             Canvas canvas, Paint paint,
@@ -47,7 +49,6 @@ public class CustomMultipleDotSpan implements LineBackgroundSpan {
 
         int total = color.length > 5 ? 5 : color.length;
         int leftMost = (total - 1) * -10;
-      //  Paint paint2 = new Paint();
 
         for (int i = 0; i < total; i++) {
             int oldColor = paint.getColor();
