@@ -1,6 +1,8 @@
 package skills.future.planer.ui.tasklist;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
+import skills.future.planer.ui.AnimateView;
 
 public class TaskListFragment extends Fragment {
 
@@ -33,10 +37,42 @@ public class TaskListFragment extends Fragment {
         listTotal = binding.listTotalView;
         taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
         listTotal.setAdapter(taskTotalAdapter);
+        listTotal.setTextFilterEnabled(true);
+        taskTotalAdapter.getFilter().filter("");
 
-        binding.fab.setOnClickListener(view ->
-            Navigation.findNavController(view).navigate(
-                    TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment()));
+        // animation test
+        AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
+
+        binding.fab.setOnClickListener(view -> {
+            AnimateView.animateInOut(binding.fab, getContext());
+            Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
+        });
+
+        binding.searchImageView.setOnClickListener(e -> {
+            AnimateView.animateInOut(binding.searchImageView, getContext());
+            taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+        });
+
+        binding.searchEditText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (binding.searchEditText.getText().toString().equals("")) {
+                    taskTotalAdapter.getFilter().filter("");
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+            }
+        });
+
         return root;
     }
 

@@ -1,21 +1,23 @@
 package skills.future.planer.ui.tasklist;
 
 import android.app.DatePickerDialog;
-import android.os.AsyncTask;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.room.Room;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.time.LocalDate;
@@ -23,7 +25,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.concurrent.FutureTask;
 
-import lombok.SneakyThrows;
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.enums.priority.Priorities;
@@ -31,12 +33,13 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.database.TaskDataTable;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.ui.AnimateView;
 
 
 public class TaskListCreatorFragment extends Fragment {
 
     private FragmentTaskListCreatorBinding binding;
-    private Button saveButton;
+    private FloatingActionButton saveButton;
     private final Calendar endingDayCalendar = Calendar.getInstance(), beginDayCalendar = Calendar.getInstance();
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingCalendarDay, beginCalendarDay = CalendarDay.today();
@@ -74,7 +77,45 @@ public class TaskListCreatorFragment extends Fragment {
         // title and details edit texts
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
+
+        processFabColor();
+
+        switchPriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (switchPriorities.isChecked()) binding.imageViewImportant.setImageResource(R.drawable.trash);
+            else binding.imageViewImportant.setImageResource(R.drawable.star);
+            processFabColor();
+        });
+
+        switchTimePriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (switchTimePriorities.isChecked()) binding.imageViewTaskUrgent.setImageResource(R.drawable.ice);
+            else binding.imageViewTaskUrgent.setImageResource(R.drawable.fire);
+            processFabColor();
+        });
+
+        switchCategory.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (switchCategory.isChecked()) binding.imageViewTaskDetails2.setImageResource(R.drawable.case_doodle);
+            else binding.imageViewTaskDetails2.setImageResource(R.drawable.home_doodle);
+            processFabColor();
+        });
+
         return root;
+    }
+
+    /**
+     * Changes color of fab button
+     */
+    private void processFabColor()
+    {
+        AnimateView.singleAnimation(saveButton, getContext(), R.anim.rotate);
+
+        if( !switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.RED.getColor()));
+        else if( switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.BLUE.getColor()));
+        else if( !switchPriorities.isChecked()  && switchTimePriorities.isChecked() )
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.YELLOW.getColor()));
+        else if( switchPriorities.isChecked()  && switchTimePriorities.isChecked() )
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.PINK.getColor()));
     }
 
     /**
@@ -83,28 +124,37 @@ public class TaskListCreatorFragment extends Fragment {
      */
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
-            TaskDataTable taskDataTable /*= new TaskDataTable(this.getContext())*/;
-            TaskData data = new TaskData(
-                    switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
-                    switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
-                    switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
-                    taskTitleEditText.getText().toString(),
-                    taskDetailsEditText.getText().toString());
-            if (switchDate.isChecked()) {
-                //if user want to add dates
-                data.setEndingCalendarDate(endingCalendarDay);
-                data.setStartingCalendarDate(beginCalendarDay);
-            }
-            Object result = new Object();
-            FutureTask futureTask = new FutureTask(() -> {
-                AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().addOne(data);
-                data.setTaskDataId(AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().getIdOfLastAddedTask());
-            }, result);
-            futureTask.run();
+            AnimateView.animateInOut(saveButton, getContext());
 
-            Navigation.findNavController(view1)
-                    .navigate(TaskListCreatorFragmentDirections
-                            .actionTaskListCreatorFragmentToNavTaskList());
+            if(taskTitleEditText.getText().toString().isEmpty())
+            {
+                Toast toast = Toast.makeText(this.getContext(),
+                        "Tytuł nie może być pusty!",
+                        Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            else
+            {
+                taskDetailsEditText.getText().toString();
+                TaskDataTable taskDataTable = new TaskDataTable(this.getContext());
+                TaskData data = new TaskData(
+                        switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
+                        switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
+                        switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
+                        taskTitleEditText.getText().toString(),
+                        taskDetailsEditText.getText().toString());
+                if (switchDate.isChecked()) {
+                    //if user want to add dates
+                    data.setEndingDate(endingCalendarDay);
+                    data.setStartingDate(beginCalendarDay);
+                }
+                if (taskDataTable.addOne(data))
+                    data.setTaskDataId(taskDataTable.getIdOfLastAddedTask());
+
+                Navigation.findNavController(view1)
+                        .navigate(TaskListCreatorFragmentDirections
+                                .actionTaskListCreatorFragmentToNavTaskList());
+            }
         });
     }
 
