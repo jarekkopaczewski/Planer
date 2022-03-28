@@ -60,22 +60,21 @@ dependencies {
     testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
     // Optional -- Mockk framework
     testImplementation "io.mockk:mockk:1.4.1"
-    def room_version = "2.4.2"
 
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-runtime:2.4.2"
+    annotationProcessor "androidx.room:room-compiler:2.4.2"
 
     // optional - RxJava2 support for Room
-    implementation "androidx.room:room-rxjava2:$room_version"
+    implementation "androidx.room:room-rxjava2:2.4.2"
 
     // optional - RxJava3 support for Room
-    implementation "androidx.room:room-rxjava3:$room_version"
+    implementation "androidx.room:room-rxjava3:2.4.2"
 
     // optional - Guava support for Room, including Optional and ListenableFuture
-    implementation "androidx.room:room-guava:$room_version"
+    implementation "androidx.room:room-guava:2.4.2"
 
     // optional - Test helpers
-    testImplementation "androidx.room:room-testing:$room_version"
+    testImplementation "androidx.room:room-testing:2.4.2"
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.5.0-alpha01"
