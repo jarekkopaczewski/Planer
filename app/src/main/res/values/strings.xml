@@ -2,12 +2,35 @@
     <string name="app_name">Planer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Jan Testowy</string>
+    <string name="nav_header_subtitle">jan.testowy@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="month">Month</string>
+    <string name="day">Day</string>
+    <string name="tasks">Tasks</string>
+    <string name="TaskListElementFabricButton">Zapisz</string>
+    <string name="goals">Goals</string>
+    <string name="priorities">Priorities</string>
+    <string name="stats">Stats</string>
+    <string name="EditTextTitleHintt">Tytuł zadania</string>
+    <string name="EditTextDetailsHint">Szczegóły zadania</string>
+    <string name="imageViewTaskDetailsDescription">TODO</string>
+    <string name="imageViewTaskDateDescription">TODO</string>
+    <string name="SwitchDatePickerText">Ustaw czas trwania zadania</string>
+    <string name="fabContentDescription">Create new task </string>
+    <string name="editTextEndDateHint">Data zakończenia zadania</string>
+    <string name="textViewImportant">Ważne</string>
+    <string name="TextViewNotImportant">Nie ważne</string>
+    <string name="TextViewUrgent">Pilne</string>
+    <string name="TextViewNotUrgent">Nie pilne</string>
+    <string name="TextViewWork">Praca</string>
+    <string name="TextViewPrivate">Prywatne</string>
+    <string name="editTextBeginDate">Data rozpoczęcia zadania</string>
+    <string name="SearchMessage">Czego szukasz?</string>
 </resources>

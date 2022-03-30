@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.month.MonthFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/TEXT"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment"
+        android:visibility="invisible" />
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:mcv_calendarMode="month"
+        app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:mcv_firstDayOfWeek="monday"
+        app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:mcv_selectionColor="#00F"
+        app:mcv_selectionMode="single"
+        app:mcv_showOtherDates="all" />
+
+</FrameLayout>
