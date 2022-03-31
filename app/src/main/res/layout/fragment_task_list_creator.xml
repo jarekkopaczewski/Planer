@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical"
     tools:context=".ui.tasklist.TaskListCreatorFragment">
 
@@ -13,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:src="@drawable/icons8_plus_64"
+        android:src="@drawable/save"
         android:text="@string/TaskListElementFabricButton"
         app:backgroundTint="@color/teal_200"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -121,7 +122,8 @@
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchImportant"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchStyle" />
 
                 <TextView
                     android:id="@+id/TextViewNotImportant"
@@ -158,7 +160,8 @@
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchUrgent"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchStyle"/>
 
                 <TextView
                     android:id="@+id/textViewNotUrgent"
@@ -182,7 +185,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDetailsDescription"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/home_doodle" />
+                    app:srcCompat="@drawable/home_2" />
 
                 <TextView
                     android:id="@+id/textViewWork"
@@ -195,7 +198,8 @@
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchCategory"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchStyle" />
 
                 <TextView
                     android:id="@+id/TextViewPrivate"
@@ -226,14 +230,15 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDateDescription"
                     android:scaleType="fitXY"
-                    android:src="@drawable/calendar_doodle" />
+                    android:src="@drawable/calendar" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/SwitchDatePicker"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="40dp"
-                    android:text="@string/SwitchDatePickerText" />
+                    android:text="@string/SwitchDatePickerText"
+                    android:theme="@style/SwitchStyle" />
 
             </LinearLayout>
 

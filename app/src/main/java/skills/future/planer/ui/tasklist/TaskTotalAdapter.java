@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.loader.content.AsyncTaskLoader;
-import androidx.room.Room;
 
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -87,7 +85,7 @@ class TaskTotalAdapter extends BaseAdapter implements Filterable {
             CheckBox checkBox = finalConvertView.findViewById(R.id.checkBoxTask);
             boolean isSelected = checkBox.isChecked();
             checkBox.setChecked(!isSelected);
-            AnimateView.animateInOut(finalConvertView, context);
+            AnimateView.animateInOut(finalConvertView.findViewById(R.id.taskCard), context);
         });
 
         // usuwanie - średnio to działa - brak synchronizacji

@@ -87,14 +87,14 @@ public class TaskListCreatorFragment extends Fragment {
         });
 
         switchTimePriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (switchTimePriorities.isChecked()) binding.imageViewTaskUrgent.setImageResource(R.drawable.ice);
+            if (switchTimePriorities.isChecked()) binding.imageViewTaskUrgent.setImageResource(R.drawable.snail);
             else binding.imageViewTaskUrgent.setImageResource(R.drawable.fire);
             processFabColor();
         });
 
         switchCategory.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (switchCategory.isChecked()) binding.imageViewTaskDetails2.setImageResource(R.drawable.case_doodle);
-            else binding.imageViewTaskDetails2.setImageResource(R.drawable.home_doodle);
+            if (switchCategory.isChecked()) binding.imageViewTaskDetails2.setImageResource(R.drawable.briefcase_2);
+            else binding.imageViewTaskDetails2.setImageResource(R.drawable.home_2);
             processFabColor();
         });
 
@@ -106,7 +106,6 @@ public class TaskListCreatorFragment extends Fragment {
      */
     private void processFabColor()
     {
-        AnimateView.singleAnimation(saveButton, getContext(), R.anim.rotate);
 
         if( !switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.RED.getColor()));
