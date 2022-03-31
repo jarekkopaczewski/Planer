@@ -45,11 +45,10 @@ public class MonthFragment extends Fragment {
         monthViewModel = new ViewModelProvider(this).get(MonthViewModel.class);
         binding = FragmentMonthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        textView = binding.TEXT;
         materialCalendarView = binding.calendarView;
 
         // animation test
-        AnimateView.singleAnimation(materialCalendarView, getContext(), R.anim.scalezoom);
+        AnimateView.singleAnimation(binding.monthCard, getContext(), R.anim.scalezoom);
 
         //wybór daty listener
         //test - wyświetlanie w textview
@@ -59,7 +58,6 @@ public class MonthFragment extends Fragment {
             String[] parse2 = parse.split(("\\{"));
             parse2[1] = parse2[1].substring(0, parse2[1].length() - 1);
             setDate(parse2[1]);
-            textView.setText(getDate());
         });
         return root;
     }
