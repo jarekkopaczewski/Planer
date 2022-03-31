@@ -17,7 +17,7 @@
         android:contentDescription="@string/fabContentDescription"
         android:paddingBottom="70dp"
         android:scaleType="center"
-        android:src="@drawable/icons8_plus_64"
+        android:src="@drawable/plus"
         app:backgroundTint="@color/second_color_30"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
