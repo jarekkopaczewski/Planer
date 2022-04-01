@@ -35,7 +35,8 @@
             app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
             app:mcv_selectionColor="#00F"
             app:mcv_selectionMode="single"
-            app:mcv_showOtherDates="all" />
+            app:mcv_showOtherDates="all"
+            android:fontFamily="@font/signika_regular" />
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

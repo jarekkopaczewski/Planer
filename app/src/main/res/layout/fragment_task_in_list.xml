@@ -19,6 +19,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
         android:background="@color/foreground"
+        app:cardBackgroundColor="@color/foreground"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +28,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/foreground">
 
             <TextView
                 android:id="@+id/taskTitleTextView"
@@ -37,11 +39,12 @@
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="10dp"
                 android:autoSizeTextType="none"
+                android:fontFamily="@font/signika_regular"
                 android:gravity="center|start"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
                 android:textAlignment="viewStart"
-                android:textColor="#20242E"
+                android:textColor="@color/textColor"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
@@ -91,9 +94,10 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="10dp"
+                android:fontFamily="@font/signika_regular"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:textColor="#B3B2B2"
+                android:textColor="@color/textColor_2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
                 app:layout_constraintTop_toBottomOf="@+id/taskTitleTextView" />

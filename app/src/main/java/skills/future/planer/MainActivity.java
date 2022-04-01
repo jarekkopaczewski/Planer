@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         AppDatabase appDatabase = AppDatabase.getInstance(this);
 
         // change navigation bar color
-        // getWindow().setNavigationBarColor( getColor(R.color.navigationBarColor));
+        getWindow().setNavigationBarColor( getColor(R.color.navigationBarColor));
     }
 
     @Override

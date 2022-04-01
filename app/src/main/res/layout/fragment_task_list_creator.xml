@@ -58,8 +58,10 @@
                     android:layout_height="48dp"
                     android:autofillHints="Dodaj tytuł"
                     android:background="@null"
+                    android:fontFamily="@font/signika_regular"
                     android:hint="@string/EditTextTitleHintt"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:textColor="@color/textColor" />
 
 
             </LinearLayout>
@@ -85,8 +87,10 @@
                     android:layout_height="match_parent"
                     android:autofillHints="Dodaj szczegóły"
                     android:background="@null"
+                    android:fontFamily="@font/signika_regular"
                     android:hint="@string/EditTextDetailsHint"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:textColor="@color/textColor" />
 
             </LinearLayout>
 
@@ -109,6 +113,7 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDetailsDescription"
                     android:scaleType="fitXY"
+                    app:tint="@color/imageTintColor"
                     app:srcCompat="@drawable/star" />
 
                 <TextView
@@ -116,8 +121,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
                     android:gravity="center"
-                    android:text="@string/textViewImportant" />
+                    android:text="@string/textViewImportant"
+                    android:textColor="@color/textColor" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchImportant"
@@ -130,8 +137,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
                     android:gravity="center"
-                    android:text="@string/TextViewNotImportant" />
+                    android:text="@string/TextViewNotImportant"
+                    android:textColor="@color/textColor" />
             </LinearLayout>
 
             <LinearLayout
@@ -147,15 +156,18 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDetailsDescription"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/fire" />
+                    app:srcCompat="@drawable/fire"
+                    app:tint="@color/imageTintColor" />
 
                 <TextView
                     android:id="@+id/textViewUrgent"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
                     android:gravity="center"
-                    android:text="@string/TextViewUrgent" />
+                    android:text="@string/TextViewUrgent"
+                    android:textColor="@color/textColor" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchUrgent"
@@ -168,8 +180,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
                     android:gravity="center"
-                    android:text="@string/TextViewNotUrgent" />
+                    android:text="@string/TextViewNotUrgent"
+                    android:textColor="@color/textColor" />
             </LinearLayout>
 
             <LinearLayout
@@ -185,15 +199,18 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDetailsDescription"
                     android:scaleType="fitXY"
-                    app:srcCompat="@drawable/home_2" />
+                    app:srcCompat="@drawable/home_2"
+                    app:tint="@color/imageTintColor" />
 
                 <TextView
                     android:id="@+id/textViewWork"
                     android:layout_width="12dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
                     android:gravity="center"
-                    android:text="@string/TextViewPrivate" />
+                    android:text="@string/TextViewPrivate"
+                    android:textColor="@color/textColor" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchCategory"
@@ -206,8 +223,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
                     android:gravity="center"
-                    android:text="@string/TextViewWork" />
+                    android:text="@string/TextViewWork"
+                    android:textColor="@color/textColor" />
             </LinearLayout>
 
             <View
@@ -230,14 +249,17 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDateDescription"
                     android:scaleType="fitXY"
-                    android:src="@drawable/calendar" />
+                    android:src="@drawable/calendar"
+                    app:tint="@color/imageTintColor" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/SwitchDatePicker"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="40dp"
+                    android:fontFamily="@font/signika_regular"
                     android:text="@string/SwitchDatePickerText"
+                    android:textColor="@color/textColor"
                     android:theme="@style/SwitchStyle" />
 
             </LinearLayout>
@@ -261,10 +283,12 @@
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:fontFamily="@font/signika_regular"
                     android:hint="@string/editTextBeginDate"
                     android:importantForAutofill="no"
                     android:inputType="date"
-                    android:minHeight="48dp" />
+                    android:minHeight="48dp"
+                    android:textColor="@color/textColor" />
 
             </LinearLayout>
 
@@ -287,10 +311,12 @@
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:fontFamily="@font/signika_regular"
                     android:hint="@string/editTextEndDateHint"
                     android:importantForAutofill="no"
                     android:inputType="date"
-                    android:minHeight="48dp" />
+                    android:minHeight="48dp"
+                    android:textColor="@color/textColor" />
 
             </LinearLayout>
 

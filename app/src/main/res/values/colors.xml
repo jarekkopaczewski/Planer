@@ -10,10 +10,14 @@
     <color name="your_unchecked_color">#b5b3b3</color>
     <color name="your_checked_color">#868686</color>
     <color name="taskListBottomColor">#F3EDED</color>
-    <color name="navigationBarColor">#424242</color>
+    <color name="navigationBarColor">#FFFFFF</color>
     <color name="second_color_30">#007E8F</color>
     <color name="second_color_30_2">#63FFFA</color>
     <color name="background">#F4F4F4</color>
     <color name="foreground">#FFFFFF</color>
     <color name="second_color_3320">#F36718</color>
+    <color name="imageTintColor">#FF000000</color>
+    <color name="shadow">#ACABAB</color>
+    <color name="textColor">#20242E</color>
+    <color name="textColor_2">#B3B2B2</color>
 </resources>

@@ -3,5 +3,6 @@
     <declare-styleable name="dt">
         <attr name="taskViewBottom" format ="color"/>
         <attr name="navigationBarColor" format="color"/>
+        <attr name="imageTint" format="color"/>
     </declare-styleable>
 </resources>
