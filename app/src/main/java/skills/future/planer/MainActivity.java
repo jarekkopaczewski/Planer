@@ -31,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.getDefaultNightMode());
         setContentView(binding.getRoot());
 
         // bind views
