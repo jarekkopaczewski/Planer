@@ -2,8 +2,11 @@ package skills.future.planer;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -50,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomView, bottomNavController);
 
         AppDatabase appDatabase = AppDatabase.getInstance(this);
+
+        // change navigation bar color
+        getWindow().setNavigationBarColor( getColor(R.color.navigationBarColor));
     }
 
     @Override
