@@ -1,5 +1,6 @@
-package skills.future.planer.db.task.database;
+package skills.future.planer.db.task;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -16,18 +17,16 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 
 @Dao
-public interface TaskDataTabDao {
+public interface TaskDataDao {
     @Query("SELECT * FROM taskData WHERE taskDataId = :id")
     TaskData findById(int id) throws Exception;
 
     @Insert
-    void addOne(TaskData taskData);
+    void insert(TaskData taskData);
 
     @Query("SELECT * FROM taskData")
-    List<TaskData> getTaskData() throws Exception;
-//
-//    Query("SELECT * FROM ta"
-//    List<TaskData> getTaskData(CalendarDay startingDay, CalendarDay calendarDay) throws Exception;
+    LiveData<List<TaskData>> getTaskData();
+
     @Query("SELECT * FROM taskData WHERE category = :taskCategory ")
     List<TaskData> getTaskData(TaskCategory taskCategory) throws Exception;
 
@@ -36,6 +35,9 @@ public interface TaskDataTabDao {
 
     @Delete
     void deleteOne(TaskData taskData);
+
+    @Query("DELETE FROM taskData")
+    void deleteAll();
 
     @Update
     void editOne(TaskData taskData);
