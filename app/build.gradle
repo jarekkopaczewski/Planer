@@ -35,7 +35,10 @@ android {
 dependencies {
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // Android preferences
+    implementation 'androidx.preference:preference:1.2.0'
+
     //noinspection AnnotationProcessorOnCompilePath
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
