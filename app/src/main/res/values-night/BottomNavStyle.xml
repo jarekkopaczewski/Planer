@@ -3,5 +3,4 @@
     <style name="BottomNavStyle">
         <item name="fontFamily">"@font/signika_regular"</item>
     </style>
-
 </resources>

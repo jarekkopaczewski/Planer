@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ArrowsStyle">
+        <item name="mcv_leftArrowMask">@drawable/mcv_action_previous_w</item>
+        <item name="mcv_rightArrowMask">@drawable/mcv_action_next_w</item>
+    </style>
+</resources>
