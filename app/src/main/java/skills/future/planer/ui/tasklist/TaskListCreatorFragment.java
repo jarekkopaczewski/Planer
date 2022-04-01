@@ -6,16 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.room.Room;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -31,7 +28,6 @@ import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.TaskData;
-import skills.future.planer.db.task.database.TaskDataTable;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 
@@ -146,9 +142,12 @@ public class TaskListCreatorFragment extends Fragment {
                     data.setEndingCalendarDate(endingCalendarDay);
                     data.setStartingCalendarDate(beginCalendarDay);
                 }
+                //todo https://developer.android.com/codelabs/android-training-livedata-viewmodel?index=..%2F..%2Fandroid-training#13
+                // https://stackoverflow.com/questions/50702643/equivalent-of-startactivityforresult-with-android-architecture-navigation
+                //tutaj tylko zwracamy gotowy objekt nie dodajemy go do bazy
                 Object result = new Object();
                 FutureTask<Object> futureTask = new FutureTask<>(() -> {
-                    AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().addOne(data);
+                    AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().insert(data);
                     data.setTaskDataId(AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().getIdOfLastAddedTask());
                 }, result);
                 futureTask.run();

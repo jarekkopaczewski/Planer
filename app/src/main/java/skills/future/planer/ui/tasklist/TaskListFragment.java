@@ -6,23 +6,25 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 
 public class TaskListFragment extends Fragment {
 
-    private ListView listTotal;
+    private RecyclerView listTotal;
     private TaskTotalAdapter taskTotalAdapter;
     private FragmentTaskListBinding binding;
-    private TaskListModelView taskListModelView;
+    private TaskDataViewModel mWordViewModel;
 
     public TaskListFragment() {
     }
@@ -30,21 +32,26 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        taskListModelView = new ViewModelProvider(this).get(TaskListModelView.class);
         binding = FragmentTaskListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         listTotal = binding.listTotalView;
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
+        taskTotalAdapter = new TaskTotalAdapter(this.getContext());
         listTotal.setAdapter(taskTotalAdapter);
-        listTotal.setTextFilterEnabled(true);
-        taskTotalAdapter.getFilter().filter("");
+        //todo listTotal.setTextFilterEnabled(true);
+        //todo taskTotalAdapter.getFilter().filter("");
+        listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
+        mWordViewModel.getAllWords().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setTaskList(taskData));
+
 
         // animation test
         AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
 
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
+            //todo https://stackoverflow.com/questions/50702643/equivalent-of-startactivityforresult-with-android-architecture-navigation
+            // trzeba pobirać gotowe task data
             Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
         });
 
@@ -76,11 +83,10 @@ public class TaskListFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        taskTotalAdapter.refreshTaskList();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//    }
 
     @Override
     public void onDestroyView() {
