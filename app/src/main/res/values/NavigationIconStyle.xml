@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NavigationIconStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation" >
+        <item name="android:tint">@color/imageTintColor</item>
+    </style>
+</resources>

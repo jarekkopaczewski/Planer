@@ -4,5 +4,4 @@
         parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/signika_regular</item>
     </style>
-
 </resources>

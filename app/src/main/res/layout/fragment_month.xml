@@ -29,14 +29,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/foreground"
+            android:fontFamily="@font/signika_regular"
+            android:theme="@style/ArrowsStyle"
             app:mcv_calendarMode="month"
             app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
             app:mcv_firstDayOfWeek="monday"
             app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
             app:mcv_selectionColor="#00F"
             app:mcv_selectionMode="single"
-            app:mcv_showOtherDates="all"
-            android:fontFamily="@font/signika_regular" />
+            app:mcv_showOtherDates="all" />
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

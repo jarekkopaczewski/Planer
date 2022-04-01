@@ -6,7 +6,6 @@
     <string name="nav_header_subtitle">jan.testowy@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -33,5 +32,4 @@
     <string name="TextViewPrivate">Prywatne</string>
     <string name="editTextBeginDate">Data rozpoczęcia zadania</string>
     <string name="SearchMessage">Czego szukasz?</string>
-
 </resources>
