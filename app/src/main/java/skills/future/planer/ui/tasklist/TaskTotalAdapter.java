@@ -59,6 +59,26 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
     @Override
     public TaskDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = layoutInflater.inflate(R.layout.fragment_task_in_list, parent, false);
+        View finalConvertView = itemView;
+
+        itemView.setOnClickListener(e -> {
+            CheckBox checkBox = finalConvertView.findViewById(R.id.checkBoxTask);
+            boolean isSelected = checkBox.isChecked();
+            checkBox.setChecked(!isSelected);
+            AnimateView.animateInOut(finalConvertView.findViewById(R.id.taskCard), context);
+        });
+
+        // usuwanie - średnio to działa - brak synchronizacji
+        itemView.setOnLongClickListener(e -> {
+            AnimateView.singleAnimation(finalConvertView, context, R.anim.removetask);
+            //removeItem(currentTask);
+            return true;
+        });
+
+        itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
+                AnimateView.singleAnimation(finalConvertView.findViewById(R.id.detailImageView), context, R.anim.rotate));
+
+        AnimateView.singleAnimation(finalConvertView, context, R.anim.scalezoom);
         return new TaskDataViewHolder(itemView);
     }
 
@@ -96,42 +116,7 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
 //        notifyDataSetChanged();
 //    }
 
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//
-//        if (convertView == null)
-//            convertView = LayoutInflater.from(context).
-//                    inflate(R.layout.fragment_task_in_list, parent, false);
-//
-//        TaskData currentTask = (TaskData) getItem(position);
-//
-//        setTextTitle(currentTask, convertView);
-//        setIconCategory(currentTask, convertView);
-//        setColor(currentTask, convertView);
-//
-//        View finalConvertView = convertView;
-//
-//        convertView.setOnClickListener(e -> {
-//            CheckBox checkBox = finalConvertView.findViewById(R.id.checkBoxTask);
-//            boolean isSelected = checkBox.isChecked();
-//            checkBox.setChecked(!isSelected);
-//            AnimateView.animateInOut(finalConvertView.findViewById(R.id.taskCard), context);
-//        });
-//
-//        // usuwanie - średnio to działa - brak synchronizacji
-//        convertView.setOnLongClickListener(e -> {
-//            AnimateView.singleAnimation(finalConvertView, context, R.anim.removetask);
-//            //removeItem(currentTask);
-//            return true;
-//        });
-//
-//        convertView.findViewById(R.id.detailImageView).setOnClickListener(e ->
-//                AnimateView.singleAnimation(finalConvertView.findViewById(R.id.detailImageView), context, R.anim.rotate));
-//
-//        AnimateView.singleAnimation(finalConvertView, context, R.anim.scalezoom);
-//
-//        return convertView;
-//    }
+
 
     /**
      * Creates new filter
