@@ -41,10 +41,10 @@ public class TaskListFragment extends Fragment {
         taskTotalAdapter = new TaskTotalAdapter(this.getContext());
         listTotal.setAdapter(taskTotalAdapter);
         //listTotal.setTextFilterEnabled(true);
-        //todo askTotalAdapter.getFilter().filter("");
+        taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
-        mWordViewModel.getAllWords().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setTaskList(taskData));
+        mWordViewModel.getAllWords().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
 
         // animation test
@@ -63,14 +63,14 @@ public class TaskListFragment extends Fragment {
                 new ItemTouchHelper.SimpleCallback(0,
                         ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
-                    public boolean onMove(RecyclerView recyclerView,
-                                          RecyclerView.ViewHolder viewHolder,
-                                          RecyclerView.ViewHolder target) {
+                    public boolean onMove(@NonNull RecyclerView recyclerView,
+                                          @NonNull RecyclerView.ViewHolder viewHolder,
+                                          @NonNull RecyclerView.ViewHolder target) {
                         return false;
                     }
 
                     @Override
-                    public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
                                          int direction) {
                         int position = viewHolder.getAdapterPosition();
                         TaskData myTaskData = taskTotalAdapter.getTaskDataAtPosition(position);
@@ -82,7 +82,7 @@ public class TaskListFragment extends Fragment {
 
 
         binding.searchImageView.setOnClickListener(e -> {
-            AnimateView.animateInOut(binding.searchImageView, getContext());
+            AnimateView.animateInOut(binding.searchImageView, this.getContext());
             taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
         });
 
@@ -91,7 +91,9 @@ public class TaskListFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (binding.searchEditText.getText().toString().equals("")) {
-                    //todo taskTotalAdapter.getFilter().filter("");
+                    taskTotalAdapter.getFilter().filter("");
+                }else {
+                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
                 }
             }
 

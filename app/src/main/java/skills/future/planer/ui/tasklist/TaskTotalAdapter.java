@@ -6,7 +6,6 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -16,18 +15,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.FutureTask;
 
 import skills.future.planer.R;
-import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
-import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
@@ -36,25 +31,13 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
 
     private final LayoutInflater layoutInflater;
     private final Context context;
-    private List<TaskData> taskList;
     private List<TaskData> filteredTaskList = new ArrayList<>();
+    private List<TaskData> fullTaskList = new ArrayList<>();
 
     public TaskTotalAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
     }
-
-//    @Override
-//    public int getCount() {
-//        if(taskList != null)
-//            return filteredTaskList.size();
-//        return 0;
-//    }
-//
-//    @Override
-//    public Object getItem(int position) {
-//        return filteredTaskList.get(position);
-//    }
 
     @NonNull
     @Override
@@ -76,13 +59,13 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
     }
 
     public TaskData getTaskDataAtPosition(int position) {
-        return taskList.get(position);
+        return filteredTaskList.get(position);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TaskDataViewHolder holder, int position) {
-        if (taskList != null) {
-            TaskData current = taskList.get(position);
+        if (filteredTaskList != null) {
+            TaskData current = filteredTaskList.get(position);
             holder.setEveryThing(current);
         } else {
             // Covers the case of data not being ready yet.
@@ -91,9 +74,9 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    void setTaskList(List<TaskData> words){
-        taskList = words;
-        filteredTaskList = new ArrayList<>(taskList);
+    void setFilteredTaskList(List<TaskData> words){
+        filteredTaskList = words;
+        fullTaskList = new ArrayList<>(filteredTaskList);
         notifyDataSetChanged();
     }
 
@@ -103,8 +86,8 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
 
     @Override
     public int getItemCount() {
-        if (taskList != null)
-            return taskList.size();
+        if (filteredTaskList != null)
+            return filteredTaskList.size();
         else return 0;
     }
 
@@ -132,8 +115,8 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
             if (constraint.toString().length() > 0) {
                 ArrayList<TaskData> filteredItems = new ArrayList<>();
 
-                for (int i = 0, l = taskList.size(); i < l; i++) {
-                    TaskData taskData = taskList.get(i);
+                for (int i = 0, l = filteredTaskList.size(); i < l; i++) {
+                    TaskData taskData = filteredTaskList.get(i);
                     if (taskData.getTaskTitleText().toLowerCase().contains(constraint))
                         filteredItems.add(taskData);
                 }
@@ -141,8 +124,7 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
                 result.values = filteredItems;
             } else {
                 synchronized (this) {
-                    result.values = taskList;
-                    result.count = taskList.size();
+                    result.values = fullTaskList;
                 }
             }
             return result;
@@ -152,7 +134,8 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredTaskList = (ArrayList<TaskData>) results.values;
+            filteredTaskList.clear();
+            filteredTaskList.addAll ((ArrayList<TaskData>) results.values);
             notifyDataSetChanged();
         }
     }
