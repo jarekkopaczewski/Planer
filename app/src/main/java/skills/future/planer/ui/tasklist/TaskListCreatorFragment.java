@@ -20,14 +20,12 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.concurrent.FutureTask;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
-import skills.future.planer.db.AppDatabase;
-import skills.future.planer.db.task.enums.priority.Priorities;
-import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 
@@ -115,7 +113,8 @@ public class TaskListCreatorFragment extends Fragment {
 
     /**
      * Method is saveBtn On Click Listener
-     * Listener will add new TaskData to database and back to listView
+     * Listener will setFragmentResult on request key: requestKey, bundle key is: bundleKey
+     * then it will back up
      */
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
@@ -142,18 +141,11 @@ public class TaskListCreatorFragment extends Fragment {
                     data.setEndingCalendarDate(endingCalendarDay);
                     data.setStartingCalendarDate(beginCalendarDay);
                 }
-                //todo https://developer.android.com/codelabs/android-training-livedata-viewmodel?index=..%2F..%2Fandroid-training#13
-                // https://stackoverflow.com/questions/50702643/equivalent-of-startactivityforresult-with-android-architecture-navigation
-                //tutaj tylko zwracamy gotowy objekt nie dodajemy go do bazy
-                Object result = new Object();
-                FutureTask<Object> futureTask = new FutureTask<>(() -> {
-                    AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().insert(data);
-                    data.setTaskDataId(AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().getIdOfLastAddedTask());
-                }, result);
-                futureTask.run();
+                Bundle result = new Bundle();
+                result.putParcelable("bundleKey",data);
+                getParentFragmentManager().setFragmentResult("requestKey", result);
                 Navigation.findNavController(view1)
-                        .navigate(TaskListCreatorFragmentDirections
-                                .actionTaskListCreatorFragmentToNavTaskList());
+                        .navigateUp();
             }
         });
     }

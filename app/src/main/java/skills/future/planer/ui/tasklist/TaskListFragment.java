@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
+import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 
@@ -38,8 +39,8 @@ public class TaskListFragment extends Fragment {
         listTotal = binding.listTotalView;
         taskTotalAdapter = new TaskTotalAdapter(this.getContext());
         listTotal.setAdapter(taskTotalAdapter);
-        //todo listTotal.setTextFilterEnabled(true);
-        //todo taskTotalAdapter.getFilter().filter("");
+        //listTotal.setTextFilterEnabled(true);
+        //todo askTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
         mWordViewModel.getAllWords().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setTaskList(taskData));
@@ -48,16 +49,21 @@ public class TaskListFragment extends Fragment {
         // animation test
         AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
 
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            TaskData result = bundle.getParcelable("bundleKey");
+            mWordViewModel.insert(result);
+        });
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            //todo https://stackoverflow.com/questions/50702643/equivalent-of-startactivityforresult-with-android-architecture-navigation
-            // trzeba pobirać gotowe task data
             Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
         });
 
+
+
+
         binding.searchImageView.setOnClickListener(e -> {
             AnimateView.animateInOut(binding.searchImageView, getContext());
-            taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+            //todo taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
         });
 
         binding.searchEditText.addTextChangedListener(new TextWatcher() {
@@ -65,7 +71,7 @@ public class TaskListFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (binding.searchEditText.getText().toString().equals("")) {
-                    taskTotalAdapter.getFilter().filter("");
+                    //todo taskTotalAdapter.getFilter().filter("");
                 }
             }
 
@@ -82,11 +88,6 @@ public class TaskListFragment extends Fragment {
 
         return root;
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//    }
 
     @Override
     public void onDestroyView() {
