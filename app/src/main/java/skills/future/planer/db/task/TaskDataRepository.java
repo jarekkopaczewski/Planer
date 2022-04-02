@@ -41,4 +41,21 @@ public class TaskDataRepository {
         }
     }
 
+    public void deleteTaskData(TaskData taskData)  {
+        new deleteTaskDataAsyncTask(taskDataDao).execute(taskData);
+    }
+
+    private static class deleteTaskDataAsyncTask extends AsyncTask<TaskData, Void, Void> {
+        private TaskDataDao mAsyncTaskDao;
+
+        deleteTaskDataAsyncTask(TaskDataDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final TaskData... params) {
+            mAsyncTaskDao.deleteOne(params[0]);
+            return null;
+        }
+    }
 }

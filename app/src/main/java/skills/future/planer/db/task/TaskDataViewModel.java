@@ -21,4 +21,8 @@ public class TaskDataViewModel extends AndroidViewModel {
     public LiveData<List<TaskData>> getAllWords() { return mAllWords; }
 
     public void insert(TaskData word) { mRepository.insert(word); }
+
+    public void deleteTaskData(TaskData taskData){
+        mRepository.deleteTaskData(taskData);
+    }
 }

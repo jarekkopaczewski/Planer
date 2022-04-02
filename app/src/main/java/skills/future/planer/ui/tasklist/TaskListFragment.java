@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,12 +59,31 @@ public class TaskListFragment extends Fragment {
             Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
         });
 
+        ItemTouchHelper helper = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(0,
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView,
+                                          RecyclerView.ViewHolder viewHolder,
+                                          RecyclerView.ViewHolder target) {
+                        return false;
+                    }
 
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder,
+                                         int direction) {
+                        int position = viewHolder.getAdapterPosition();
+                        TaskData myTaskData = taskTotalAdapter.getTaskDataAtPosition(position);
+                        mWordViewModel.deleteTaskData(myTaskData);
+                    }
+                });
+
+        helper.attachToRecyclerView(listTotal);
 
 
         binding.searchImageView.setOnClickListener(e -> {
             AnimateView.animateInOut(binding.searchImageView, getContext());
-            //todo taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+            taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
         });
 
         binding.searchEditText.addTextChangedListener(new TextWatcher() {

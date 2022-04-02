@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -26,19 +27,19 @@ import java.util.concurrent.FutureTask;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 
 class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataViewHolder> implements Filterable {
 
-    LayoutInflater layoutInflater;
-    Context context;
-
+    private final LayoutInflater layoutInflater;
+    private final Context context;
     private List<TaskData> taskList;
     private List<TaskData> filteredTaskList = new ArrayList<>();
 
-    public TaskTotalAdapter(Context context/*, LayoutInflater layoutInflater*/) {
+    public TaskTotalAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
     }
@@ -59,27 +60,23 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
     @Override
     public TaskDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = layoutInflater.inflate(R.layout.fragment_task_in_list, parent, false);
-        View finalConvertView = itemView;
 
         itemView.setOnClickListener(e -> {
-            CheckBox checkBox = finalConvertView.findViewById(R.id.checkBoxTask);
+            CheckBox checkBox = itemView.findViewById(R.id.checkBoxTask);
             boolean isSelected = checkBox.isChecked();
             checkBox.setChecked(!isSelected);
-            AnimateView.animateInOut(finalConvertView.findViewById(R.id.taskCard), context);
-        });
-
-        // usuwanie - średnio to działa - brak synchronizacji
-        itemView.setOnLongClickListener(e -> {
-            AnimateView.singleAnimation(finalConvertView, context, R.anim.removetask);
-            //removeItem(currentTask);
-            return true;
+            AnimateView.animateInOut(itemView.findViewById(R.id.taskCard), context);
         });
 
         itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
-                AnimateView.singleAnimation(finalConvertView.findViewById(R.id.detailImageView), context, R.anim.rotate));
+                AnimateView.singleAnimation(itemView.findViewById(R.id.detailImageView), context, R.anim.rotate));
 
-        AnimateView.singleAnimation(finalConvertView, context, R.anim.scalezoom);
+        AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
         return new TaskDataViewHolder(itemView);
+    }
+
+    public TaskData getTaskDataAtPosition(int position) {
+        return taskList.get(position);
     }
 
     @Override
@@ -96,13 +93,13 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
     @SuppressLint("NotifyDataSetChanged")
     void setTaskList(List<TaskData> words){
         taskList = words;
+        filteredTaskList = new ArrayList<>(taskList);
         notifyDataSetChanged();
     }
 
-//    @Override
-//    public long getItemId(int position) {
-//        return position;
-//    }
+    public long getItemId(int position) {
+        return position;
+    }
 
     @Override
     public int getItemCount() {
@@ -110,13 +107,6 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
             return taskList.size();
         else return 0;
     }
-
-//    public void removeItem(TaskData taskData) {
-//        taskList.remove(taskData);
-//        notifyDataSetChanged();
-//    }
-
-
 
     /**
      * Creates new filter
@@ -158,6 +148,7 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
             return result;
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
