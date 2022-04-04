@@ -12,7 +12,6 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,12 +28,17 @@ android {
     buildFeatures {
         viewBinding true
     }
+    buildToolsVersion '31.0.0'
 }
 
 dependencies {
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
-   // testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // Android preferences
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
     //noinspection AnnotationProcessorOnCompilePath
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -59,4 +63,16 @@ dependencies {
     testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
     // Optional -- Mockk framework
     testImplementation "io.mockk:mockk:1.4.1"
+    implementation "androidx.room:room-runtime:2.4.2"
+    annotationProcessor "androidx.room:room-compiler:2.4.2"
+    // optional - RxJava2 support for Room
+    implementation "androidx.room:room-rxjava2:2.4.2"
+    // optional - RxJava3 support for Room
+    implementation "androidx.room:room-rxjava3:2.4.2"
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation "androidx.room:room-guava:2.4.2"
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:2.4.2"
+    // optional - Paging 3 Integration
+    implementation "androidx.room:room-paging:2.5.0-alpha01"
 }

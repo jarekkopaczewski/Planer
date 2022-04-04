@@ -1,142 +1,330 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical"
     tools:context=".ui.tasklist.TaskListCreatorFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/saveCreatorButton"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/TaskListElementFabricButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveCreatorButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:clickable="true"
+        android:foreground="@drawable/save"
+        android:foregroundGravity="fill_horizontal|center|fill_vertical"
+        android:foregroundTint="@color/imageTintColor"
+        android:scaleType="center"
+        android:text="@string/TaskListElementFabricButton"
+        android:tint="@color/imageTintColor"
+        app:backgroundTint="@color/second_color_30"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        tools:ignore="SpeakableTextPresentCheck" />
 
-        <Space
-            android:layout_width="50dp"
-            android:layout_height="match_parent" />
-
-
-        <EditText
-            android:id="@+id/EditTextTitle"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:autofillHints="Dodaj tytuł"
-            android:hint="@string/EditTextTitleHintt"
-            android:inputType="text" />
-        <!--            android:text="Tytuł"-->
-
-
-    </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="2dp" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#716969" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="2dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageViewTaskDetails"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="fitXY"
-            android:src="@android:drawable/ic_dialog_info"
-            android:contentDescription="@string/imageViewTaskDetailsDescription" />
-
-        <EditText
-            android:id="@+id/EditTextDetails"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/EditTextDetailsHint"
-            android:autofillHints="Dodaj szczegóły"
-            android:inputType="text" />
-
-    </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="2dp" />
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="2dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageViewTaskDate"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/task_list"
-            android:contentDescription="@string/imageViewTaskDateDescription" />
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/SwitchDatePicker"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/SwitchDatePickerText" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_marginTop="20dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <Space
-            android:layout_width="50dp"
-            android:layout_height="match_parent" />
-
-        <EditText
-            android:id="@+id/editTextDate"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:importantForAutofill="no"
-            android:inputType="date"
-            android:minHeight="48dp" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal">
 
-</LinearLayout>
+                <Space
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent" />
+
+
+                <EditText
+                    android:id="@+id/EditTextTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:autofillHints="Dodaj tytuł"
+                    android:background="@null"
+                    android:fontFamily="@font/signika_regular"
+                    android:hint="@string/EditTextTitleHintt"
+                    android:inputType="text"
+                    android:textColor="@color/textColor" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewTaskDetails"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/imageViewTaskDetailsDescription"
+                    android:scaleType="fitXY" />
+
+                <EditText
+                    android:id="@+id/EditTextDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="Dodaj szczegóły"
+                    android:background="@null"
+                    android:fontFamily="@font/signika_regular"
+                    android:hint="@string/EditTextDetailsHint"
+                    android:inputType="text"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewImportant"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/imageViewTaskDetailsDescription"
+                    android:scaleType="fitXY"
+                    app:tint="@color/imageTintColor"
+                    app:srcCompat="@drawable/star" />
+
+                <TextView
+                    android:id="@+id/textViewImportant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center"
+                    android:text="@string/textViewImportant"
+                    android:textColor="@color/textColor" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchImportant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchStyle" />
+
+                <TextView
+                    android:id="@+id/TextViewNotImportant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center"
+                    android:text="@string/TextViewNotImportant"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewTaskUrgent"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/imageViewTaskDetailsDescription"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/fire"
+                    app:tint="@color/imageTintColor" />
+
+                <TextView
+                    android:id="@+id/textViewUrgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center"
+                    android:text="@string/TextViewUrgent"
+                    android:textColor="@color/textColor" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchUrgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchStyle"/>
+
+                <TextView
+                    android:id="@+id/textViewNotUrgent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center"
+                    android:text="@string/TextViewNotUrgent"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewTaskDetails2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/imageViewTaskDetailsDescription"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/home_2"
+                    app:tint="@color/imageTintColor" />
+
+                <TextView
+                    android:id="@+id/textViewWork"
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center"
+                    android:text="@string/TextViewPrivate"
+                    android:textColor="@color/textColor" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switchCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:theme="@style/SwitchStyle" />
+
+                <TextView
+                    android:id="@+id/TextViewPrivate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center"
+                    android:text="@string/TextViewWork"
+                    android:textColor="@color/textColor" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#716969" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewTaskDate"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:contentDescription="@string/imageViewTaskDateDescription"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/calendar"
+                    app:tint="@color/imageTintColor" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/SwitchDatePicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="40dp"
+                    android:fontFamily="@font/signika_regular"
+                    android:text="@string/SwitchDatePickerText"
+                    android:textColor="@color/textColor"
+                    android:theme="@style/SwitchStyle" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/editTextBeginDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/signika_regular"
+                    android:hint="@string/editTextBeginDate"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:minHeight="48dp"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/editTextEndDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/signika_regular"
+                    android:hint="@string/editTextEndDateHint"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:minHeight="48dp"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

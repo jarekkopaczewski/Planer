@@ -3,45 +3,112 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     android:layout_marginTop="10dp"
+    android:background="@color/background"
     android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/checkBoxTask"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/taskTitleTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/taskTitleTextView"
-        android:layout_width="0dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/taskCard"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="10dp"
-        android:autoSizeTextType="none"
-        android:gravity="center"
-        android:textAlignment="viewStart"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iconTaskCategory"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/checkBoxTask"
-        app:layout_constraintTop_toTopOf="@+id/checkBoxTask" />
-
-    <ImageView
-        android:id="@+id/iconTaskCategory"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="10dp"
+        android:background="@color/foreground"
+        app:cardBackgroundColor="@color/foreground"
+        app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/foreground">
+
+            <TextView
+                android:id="@+id/taskTitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="10dp"
+                android:autoSizeTextType="none"
+                android:fontFamily="@font/signika_regular"
+                android:gravity="center|start"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/textColor"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <CheckBox
+                android:id="@+id/checkBoxTask"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginBottom="7dp"
+                android:buttonTint="@drawable/check_box_tint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
+                app:layout_constraintTop_toBottomOf="@+id/taskDateTextView"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <ImageView
+                android:id="@+id/iconTaskCategory"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:padding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/taskDateTextView" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/colorMarkCardView"
+                android:layout_width="4dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                app:cardBackgroundColor="#8E60DF"
+                app:cardCornerRadius="3dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/taskDateTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/signika_regular"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textColor="@color/textColor_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
+                app:layout_constraintTop_toBottomOf="@+id/taskTitleTextView" />
+
+            <ImageView
+                android:id="@+id/detailImageView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:foregroundGravity="center"
+                android:scaleType="fitCenter"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/info"
+                tools:layout_editor_absoluteY="7dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

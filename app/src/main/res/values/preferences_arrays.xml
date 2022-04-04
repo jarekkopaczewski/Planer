@@ -1,0 +1,12 @@
+<resources>
+    <string-array name="themes_name">
+        <item>Ciemny</item>
+        <item>Jasny</item>
+        <item>Systemowy</item>
+    </string-array>
+    <string-array name="themes_values">
+        <item>2</item>
+        <item>1</item>
+        <item>-1</item>
+    </string-array>
+</resources>
