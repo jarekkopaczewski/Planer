@@ -12,6 +12,14 @@ public class CustomMultipleDotSpan implements LineBackgroundSpan {
 
     private final float radius;
     private int[] color = new int[0];
+    private int taskNumber;
+    int[] threeColors = {
+            Color.rgb(0, 0, 255),
+            Color.rgb(0, 255, 0),
+            Color.rgb(255, 0, 0),
+            Color.rgb(255, 0, 255),
+
+    };
 
 
     public CustomMultipleDotSpan() {
@@ -20,23 +28,24 @@ public class CustomMultipleDotSpan implements LineBackgroundSpan {
     }
 
 
-    public CustomMultipleDotSpan(int color) {
-        this.radius = DEFAULT_RADIUS;
-        this.color[0] = 0;
-    }
+//    public CustomMultipleDotSpan(int color) {
+//        this.radius = DEFAULT_RADIUS;
+//        this.color[0] = 0;
+//    }
 
 
-    public CustomMultipleDotSpan(float radius) {
+//    public CustomMultipleDotSpan(float radius) {
+//        this.radius = radius;
+//        this.color[0] = 0;
+//    }
+
+
+    public CustomMultipleDotSpan(float radius, int taskNumber) {
         this.radius = radius;
-        this.color[0] = 0;
+        this.taskNumber = taskNumber;
+        //this.color = color;
+        this.color = threeColors;
     }
-
-
-    public CustomMultipleDotSpan(float radius, int[] color) {
-        this.radius = radius;
-        this.color = color;
-    }
-
 
 
     @Override
@@ -47,10 +56,10 @@ public class CustomMultipleDotSpan implements LineBackgroundSpan {
             int start, int end, int lineNum
     ) {
 
-        int total = color.length > 5 ? 5 : color.length;
+        int total = taskNumber;
         int leftMost = (total - 1) * -10;
 
-        for (int i = 0; i < total; i++) {
+        for (int i = total - 1; i >= 0; i--) {
             int oldColor = paint.getColor();
             if (color[i] != 0) {
                 paint.setColor(color[i]);

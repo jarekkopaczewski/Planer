@@ -124,7 +124,7 @@ public class TaskData implements Parcelable {
     public CalendarDay getEndingCalendarDate() {
         if (endingDate != null) {
             String[] strings = endingDate.split("\\.");
-            return CalendarDay.from(Integer.parseInt(strings[1]),Integer.parseInt(strings[1]),Integer.parseInt(strings[0]));
+            return CalendarDay.from(Integer.parseInt(strings[2]),Integer.parseInt(strings[1]),Integer.parseInt(strings[0]));
         }
         return null;
     }
@@ -133,7 +133,7 @@ public class TaskData implements Parcelable {
     public CalendarDay getStartingCalendarDate() {
         if (startingDate != null) {
             String[] strings = startingDate.split("\\.");
-            return CalendarDay.from(Integer.parseInt(strings[1]),Integer.parseInt(strings[1]),Integer.parseInt(strings[0]));
+            return CalendarDay.from(Integer.parseInt(strings[2]),Integer.parseInt(strings[1]),Integer.parseInt(strings[0]));
         }
         return null;
     }
