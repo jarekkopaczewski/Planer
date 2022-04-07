@@ -3,9 +3,11 @@ package skills.future.planer.ui.tasklist;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -44,7 +46,9 @@ public class TaskListFragment extends Fragment {
         taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
-        mWordViewModel.getAllWords().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+        mWordViewModel.getAllWords()
+                .observe(this.getViewLifecycleOwner(),
+                        taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
 
         // animation test
@@ -61,7 +65,9 @@ public class TaskListFragment extends Fragment {
 
         ItemTouchHelper helper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(0,
-                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
+
+
                     @Override
                     public boolean onMove(@NonNull RecyclerView recyclerView,
                                           @NonNull RecyclerView.ViewHolder viewHolder,
@@ -79,7 +85,6 @@ public class TaskListFragment extends Fragment {
                 });
 
         helper.attachToRecyclerView(listTotal);
-
 
         binding.searchImageView.setOnClickListener(e -> {
             AnimateView.animateInOut(binding.searchImageView, this.getContext());

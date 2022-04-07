@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
@@ -33,6 +34,10 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
     private final Context context;
     private List<TaskData> filteredTaskList = new ArrayList<>();
     private List<TaskData> fullTaskList = new ArrayList<>();
+    private static final int LAYOUT_SMALL = 0;
+    private static final int LAYOUT_BIG = 1;
+    private AtomicInteger positionToChange = new AtomicInteger(-1);
+
 
     public TaskTotalAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -42,15 +47,27 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
     @NonNull
     @Override
     public TaskDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.fragment_task_in_list, parent, false);
+        View itemView;
 
-        itemView.setOnClickListener(e -> {
-            CheckBox checkBox = itemView.findViewById(R.id.checkBoxTask);
-            boolean isSelected = checkBox.isChecked();
-            checkBox.setChecked(!isSelected);
-            AnimateView.animateInOut(itemView.findViewById(R.id.taskCard), context);
-        });
+        switch (viewType) {
+            case LAYOUT_SMALL -> {
+                itemView = layoutInflater.inflate(R.layout.fragment_task_in_list, parent, false);
+                itemView.setOnClickListener(e -> {
+                    CheckBox checkBox = itemView.findViewById(R.id.checkBoxTask);
+                    boolean isSelected = checkBox.isChecked();
+                    checkBox.setChecked(!isSelected);
+                    AnimateView.animateInOut(itemView.findViewById(R.id.taskCard), context);
+                });
 
+
+            }
+            case LAYOUT_BIG -> {
+                itemView = layoutInflater.inflate(R.layout.fragment_task_in_list_2, parent, false);
+                itemView.setOnClickListener(e -> {
+                });
+            }
+            default -> itemView = null;
+        }
         itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
                 AnimateView.singleAnimation(itemView.findViewById(R.id.detailImageView), context, R.anim.rotate));
 
@@ -71,10 +88,31 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
             // Covers the case of data not being ready yet.
             holder.title.setText("No Word");
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (positionToChange.get() == -1) {
+                System.out.println(holder.getAdapterPosition());
+                positionToChange.set(holder.getAdapterPosition());
+                this.notifyItemChanged(holder.getAdapterPosition());
+            }else {
+                int p = positionToChange.get();
+                positionToChange.set(-1);
+                this.notifyItemChanged(p);
+            }
+        });
+
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == positionToChange.get())
+            return LAYOUT_BIG;
+        return LAYOUT_SMALL;
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    void setFilteredTaskList(List<TaskData> words){
+    void setFilteredTaskList(List<TaskData> words) {
         filteredTaskList = words;
         fullTaskList = new ArrayList<>(filteredTaskList);
         notifyDataSetChanged();
@@ -135,7 +173,7 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredTaskList.clear();
-            filteredTaskList.addAll ((ArrayList<TaskData>) results.values);
+            filteredTaskList.addAll((ArrayList<TaskData>) results.values);
             notifyDataSetChanged();
         }
     }
@@ -166,7 +204,101 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
         /**
          * Sets color of left card view
          *
-         * @param taskData    current task
+         * @param taskData current task
+         */
+        public void setColor(TaskData taskData) {
+            // urgent & important
+            if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.Important) {
+                cardView.setCardBackgroundColor(Colors.RED.getColor());
+                detailImageView.setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
+                imageView.setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
+            }
+            // urgent & not important
+            else if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant) {
+                cardView.setCardBackgroundColor(Colors.BLUE.getColor());
+                detailImageView.setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
+                imageView.setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
+            }
+            // not urgent & important
+            else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important) {
+                cardView.setCardBackgroundColor(Colors.YELLOW.getColor());
+                detailImageView.setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
+                imageView.setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
+            }
+            // not urgent & not important
+            else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant) {
+                cardView.setCardBackgroundColor(Colors.PINK.getColor());
+                detailImageView.setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
+                imageView.setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
+            }
+        }
+
+        /**
+         * Sets title of tasks
+         */
+        private void setTextTitle(TaskData task) {
+            String titleText = task.getTaskTitleText();
+            String dateText = setDateTextView(task);
+            title.setText(titleText);
+            date.setText(dateText);
+        }
+
+        /**
+         * Merges date strings
+         */
+        // delete "/n"
+        private String setDateTextView(TaskData task) {
+            String dateView = "";
+            if (task.getEndingDate() != null) {
+                if (task.getStartingDate() != null)
+                    dateView = task.getStartingDate() + " - ";
+                dateView += task.getEndingDate();
+            }
+            return dateView;
+        }
+
+        /**
+         * Sets icon of category
+         */
+        private void setIconCategory(TaskData task) {
+            if (task.getCategory() != null) {
+                switch (task.getCategory()) {
+                    case Work -> imageView.setImageDrawable(ResourcesCompat.getDrawable(
+                            context.getResources(), R.drawable.home_2, null));
+                    case Private -> imageView.setImageDrawable(ResourcesCompat.getDrawable(
+                            context.getResources(), R.drawable.briefcase_2, null));
+                }
+            }
+        }
+    }
+
+    class TaskDataViewHolder2 extends RecyclerView.ViewHolder {
+        private final TextView title, date;
+        private final CheckBox checkBox;
+        private final ImageView imageView, detailImageView;
+        private final CardView cardView;
+
+
+        private TaskDataViewHolder2(View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.taskTitleTextView);
+            checkBox = itemView.findViewById(R.id.checkBoxTask);
+            imageView = itemView.findViewById(R.id.iconTaskCategory);
+            cardView = itemView.findViewById(R.id.colorMarkCardView);
+            date = itemView.findViewById(R.id.taskDateTextView);
+            detailImageView = itemView.findViewById(R.id.detailImageView);
+        }
+
+        public void setEveryThing(TaskData taskData) {
+            setColor(taskData);
+            setTextTitle(taskData);
+            setIconCategory(taskData);
+        }
+
+        /**
+         * Sets color of left card view
+         *
+         * @param taskData current task
          */
         public void setColor(TaskData taskData) {
             // urgent & important
