@@ -32,7 +32,7 @@ public class TaskDataDaoTest {
     @Before
     public void setUp() {
         Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).allowMainThreadQueries().build();
         userDao = db.taskDataTabDao();
         taskData = new TaskData(TaskCategory.Private, Priorities.Important,
                 TimePriority.Urgent, "Title","Details");
