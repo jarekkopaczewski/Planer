@@ -6,16 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.room.Room;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -23,15 +20,12 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.concurrent.FutureTask;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
-import skills.future.planer.db.AppDatabase;
-import skills.future.planer.db.task.enums.priority.Priorities;
-import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.TaskData;
-import skills.future.planer.db.task.database.TaskDataTable;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 
@@ -119,7 +113,8 @@ public class TaskListCreatorFragment extends Fragment {
 
     /**
      * Method is saveBtn On Click Listener
-     * Listener will add new TaskData to database and back to listView
+     * Listener will setFragmentResult on request key: requestKey, bundle key is: bundleKey
+     * then it will back up
      */
     private void saveBtnOnClickListenerSetter() {
         saveButton.setOnClickListener(view1 -> {
@@ -146,15 +141,11 @@ public class TaskListCreatorFragment extends Fragment {
                     data.setEndingCalendarDate(endingCalendarDay);
                     data.setStartingCalendarDate(beginCalendarDay);
                 }
-                Object result = new Object();
-                FutureTask<Object> futureTask = new FutureTask<>(() -> {
-                    AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().addOne(data);
-                    data.setTaskDataId(AppDatabase.getInstance(this.getContext().getApplicationContext()).taskDataTabDao().getIdOfLastAddedTask());
-                }, result);
-                futureTask.run();
+                Bundle result = new Bundle();
+                result.putParcelable("bundleKey",data);
+                getParentFragmentManager().setFragmentResult("requestKey", result);
                 Navigation.findNavController(view1)
-                        .navigate(TaskListCreatorFragmentDirections
-                                .actionTaskListCreatorFragmentToNavTaskList());
+                        .navigateUp();
             }
         });
     }
