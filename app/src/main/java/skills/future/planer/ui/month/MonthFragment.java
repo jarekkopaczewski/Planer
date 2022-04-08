@@ -118,7 +118,10 @@ public class MonthFragment extends Fragment {
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
 
         //observes TaskDataViewModel, runs setDots method
-        mWordViewModel.getAllWords().observe(this.getViewLifecycleOwner(), taskData -> this.setDots(taskData));
+        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskNumber(taskData));
+
+        //todo - add choice for dots view - number of task/only Urgent/Important task
+        // mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskCategory(taskData));
 
         //adding decorator
         materialCalendarView.addDecorator(new DayViewDecorator() {
@@ -159,7 +162,7 @@ public class MonthFragment extends Fragment {
      *
      * @param words List of TaskData - contains starting and ending date
      */
-    public void setDots(List<TaskData> words) {
+    public void setDotsTaskNumber(List<TaskData> words) {
 
         //clearing sets
         dayTasks.clear();
@@ -202,4 +205,28 @@ public class MonthFragment extends Fragment {
         materialCalendarView.addDecorator(new EventDecorator(category3, 3));
         materialCalendarView.addDecorator(new EventDecorator(category4, 4));
     }
+
+    /**
+     * Method sets dots under dates based on category: Important/Urgent
+     * @param words tasks list
+     */
+    public void setDotsTaskCategory(List<TaskData> words){
+
+        dayTasks.clear();
+        category1.clear();
+        category2.clear();
+        category3.clear();
+        category4.clear();
+
+        for (TaskData taskData_instance : words) {
+            CalendarDay key = taskData_instance.getStartingCalendarDate();
+            if(taskData_instance.getPriorities().getPriorityLvl()==0 &&
+               taskData_instance.getTimePriority().getTimePriorityLvl()==0){
+            if(!category1.contains(key))
+            category1.add(key);
+        }}
+        materialCalendarView.addDecorator(new EventDecorator(category1, 1));
+    }
+
+
 }

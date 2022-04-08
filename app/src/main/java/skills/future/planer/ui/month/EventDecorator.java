@@ -8,26 +8,29 @@ import java.util.HashSet;
 /**
  * Class implements DayViewDecorator.
  * Prepares decoration of dots under given dates.
+ * @author Paweł Helisz
+ * @version 0.2.2
+ * @since 0.2.1
  */
 public class EventDecorator implements DayViewDecorator {
 
     /**
      * Dates which are to be decorated
      */
-    private HashSet<CalendarDay> dates_tasks;
+    private final HashSet<CalendarDay> dates_tasks;
     /**
      * Numer of tasks in given day represented by dots
      */
-    private int taskNumber;
+    private final int dots_number;
 
     /**
      * Constructor of EventDecorator
      * @param dates HashSet of CalendarDay - dates to be decorated
-     * @param taskNumber number of tasks in that day/dots
+     * @param dots_number number of tasks in that day/dots
      */
-    public EventDecorator(HashSet<CalendarDay> dates, int taskNumber) {
+    public EventDecorator(HashSet<CalendarDay> dates, int dots_number) {
         this.dates_tasks = new HashSet<>(dates);
-        this.taskNumber = taskNumber;
+        this.dots_number = dots_number;
     }
 
     /**
@@ -48,6 +51,6 @@ public class EventDecorator implements DayViewDecorator {
     public void decorate(DayViewFacade view) {
 
         //adding dots (radius of the dot, number of dots)
-        view.addSpan((new CustomMultipleDotSpan(5, taskNumber)));
+        view.addSpan((new CustomMultipleDotSpan(5, dots_number)));
     }
 }
