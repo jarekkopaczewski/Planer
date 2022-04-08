@@ -32,7 +32,7 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 
-class TaskTotalAdapter extends BaseAdapter implements Filterable {
+public class TaskTotalAdapter extends BaseAdapter implements Filterable {
 
     LayoutInflater layoutInflater;
     Context context;

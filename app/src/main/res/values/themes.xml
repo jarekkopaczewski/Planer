@@ -11,6 +11,7 @@
         <item name="imageTint">@color/imageTintColor</item>
         <item name="actionOverflowButtonStyle">@style/DotsStyle</item>
         <item name="toolbarNavigationButtonStyle">@style/NavigationIconStyle</item>
+        <item name="android:actionMenuTextColor">@color/imageTintColor</item>
     </style>
 
     <style name="Theme.Planer.NoActionBar">

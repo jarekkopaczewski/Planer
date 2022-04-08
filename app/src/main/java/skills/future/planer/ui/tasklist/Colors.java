@@ -3,10 +3,10 @@ package skills.future.planer.ui.tasklist;
 import android.graphics.Color;
 
 public enum Colors {
-    RED(0, 126, 143),
-    BLUE(243, 103, 24),
-    YELLOW(255, 125, 25),
-    PINK(0, 172, 195);
+    RED(81, 205, 197),
+    BLUE(198, 162, 202),
+    YELLOW(0, 126, 143),
+    PINK(113, 83, 151);
 
     private final int r;
     private final int g;

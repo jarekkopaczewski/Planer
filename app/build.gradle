@@ -37,6 +37,7 @@ dependencies {
 
     // Android preferences
     implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
     //noinspection AnnotationProcessorOnCompilePath
     compileOnly 'org.projectlombok:lombok:1.18.22'
