@@ -8,47 +8,89 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.task.enums.category.TaskCategory;
 
-
+/**
+ * Class implement separation of concerns
+ *
+ * @author Mikołaj Szymczyk
+ */
 public class TaskDataRepository {
-    private TaskDataDao taskDataDao;
-    private LiveData<List<TaskData>> listLiveData;
+    /**
+     * Reference to taskDataDao
+     */
+    private final TaskDataDao taskDataDao;
+    /**
+     * List od all taskData
+     */
+    private final LiveData<List<TaskData>> listLiveData;
 
-    TaskDataRepository(Application application){
+    /**
+     * Constructor of TaskDataRepository
+     *
+     * @param application require to get AppDatabase reference
+     * @author Mikołaj Szymczyk
+     */
+    TaskDataRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDataDao = db.taskDataTabDao();
         listLiveData = taskDataDao.getTaskData();
     }
 
-    void insert(TaskData taskData){
+    /**
+     * Method start new asyncTask which insert taskData into database
+     *
+     * @param taskData which will be inserted
+     * @author Mikołaj Szymczyk
+     */
+    void insert(TaskData taskData) {
         new InsertAsyncTask(taskDataDao).execute(taskData);
     }
 
+    /**
+     * @return reference to list of all taskData
+     * @author Mikołaj Szymczyk
+     */
     LiveData<List<TaskData>> getAllTaskData() {
         return listLiveData;
     }
 
-    private static class InsertAsyncTask extends AsyncTask<TaskData,Void,Void> {
+    /**
+     * Method start new asyncTask which delete taskData from database
+     *
+     * @param taskData which will be inserted
+     * @author Mikołaj Szymczyk
+     */
+    void deleteTaskData(TaskData taskData) {
+        new deleteTaskDataAsyncTask(taskDataDao).execute(taskData);
+    }
+
+    /**
+     * Class run asyncTask to insert taskData
+     */
+    private static class InsertAsyncTask extends AsyncTask<TaskData, Void, Void> {
         private final TaskDataDao asyncTaskDao;
-        InsertAsyncTask(TaskDataDao taskDataDao){
+
+        InsertAsyncTask(TaskDataDao taskDataDao) {
+            super();
             asyncTaskDao = taskDataDao;
         }
 
         @Override
-        protected Void doInBackground(final TaskData... params){
+        protected Void doInBackground(final TaskData... params) {
             asyncTaskDao.insert(params[0]);
             return null;
         }
     }
 
-    public void deleteTaskData(TaskData taskData)  {
-        new deleteTaskDataAsyncTask(taskDataDao).execute(taskData);
-    }
-
+    /**
+     * Class run asyncTask to delete taskData from database
+     */
     private static class deleteTaskDataAsyncTask extends AsyncTask<TaskData, Void, Void> {
-        private TaskDataDao mAsyncTaskDao;
+        private final TaskDataDao mAsyncTaskDao;
 
         deleteTaskDataAsyncTask(TaskDataDao dao) {
+            super();
             mAsyncTaskDao = dao;
         }
 
