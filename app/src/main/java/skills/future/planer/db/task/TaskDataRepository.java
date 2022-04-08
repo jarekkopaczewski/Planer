@@ -8,12 +8,10 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import skills.future.planer.db.AppDatabase;
-import skills.future.planer.db.task.enums.category.TaskCategory;
 
 /**
  * Class implement separation of concerns
  *
- * @author Mikołaj Szymczyk
  */
 public class TaskDataRepository {
     /**
@@ -29,7 +27,6 @@ public class TaskDataRepository {
      * Constructor of TaskDataRepository
      *
      * @param application require to get AppDatabase reference
-     * @author Mikołaj Szymczyk
      */
     TaskDataRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
@@ -41,7 +38,6 @@ public class TaskDataRepository {
      * Method start new asyncTask which insert taskData into database
      *
      * @param taskData which will be inserted
-     * @author Mikołaj Szymczyk
      */
     void insert(TaskData taskData) {
         new InsertAsyncTask(taskDataDao).execute(taskData);
@@ -49,7 +45,6 @@ public class TaskDataRepository {
 
     /**
      * @return reference to list of all taskData
-     * @author Mikołaj Szymczyk
      */
     LiveData<List<TaskData>> getAllTaskData() {
         return listLiveData;
@@ -59,7 +54,6 @@ public class TaskDataRepository {
      * Method start new asyncTask which delete taskData from database
      *
      * @param taskData which will be inserted
-     * @author Mikołaj Szymczyk
      */
     void deleteTaskData(TaskData taskData) {
         new deleteTaskDataAsyncTask(taskDataDao).execute(taskData);

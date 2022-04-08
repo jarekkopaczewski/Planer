@@ -43,15 +43,11 @@ public class TaskListFragment extends Fragment {
         taskTotalAdapter = new TaskTotalAdapter(this.getContext());
         listTotal.setAdapter(taskTotalAdapter);
         //listTotal.setTextFilterEnabled(true);
-        taskTotalAdapter.getFilter().filter("");
+        //taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
         mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
-
-
-        // animation test
-        AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             TaskData result = bundle.getParcelable("bundleKey");
@@ -59,7 +55,7 @@ public class TaskListFragment extends Fragment {
         });
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
+            Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment(-1));
         });
 
         ItemTouchHelper helper = new ItemTouchHelper(

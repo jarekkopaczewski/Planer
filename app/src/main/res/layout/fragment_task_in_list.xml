@@ -105,7 +105,8 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/info"
-                tools:layout_editor_absoluteY="7dp" />
+                tools:layout_editor_absoluteY="7dp"
+                tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

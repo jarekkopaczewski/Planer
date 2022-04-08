@@ -23,7 +23,9 @@ import java.util.Calendar;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
+import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -32,12 +34,15 @@ import skills.future.planer.ui.AnimateView;
 
 public class TaskListCreatorFragment extends Fragment {
 
+    private TaskData editTask;
     private FragmentTaskListCreatorBinding binding;
+    private TaskDataDao taskDataDao;
     private FloatingActionButton saveButton;
     private final Calendar endingDayCalendar = Calendar.getInstance(), beginDayCalendar = Calendar.getInstance();
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingCalendarDay, beginCalendarDay = CalendarDay.today();
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
+
 
     public TaskListCreatorFragment() {
     }
@@ -47,6 +52,7 @@ public class TaskListCreatorFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
         // date edit texts
         beginDateEditText = binding.editTextBeginDate;
         beginDateEditText.setVisibility(View.INVISIBLE);
@@ -65,9 +71,11 @@ public class TaskListCreatorFragment extends Fragment {
                     endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
                 }
         );
+
         // save btn
         saveButton = binding.saveCreatorButton;
-        saveBtnOnClickListenerSetter();
+
+
         // title and details edit texts
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
@@ -75,39 +83,67 @@ public class TaskListCreatorFragment extends Fragment {
         processFabColor();
 
         switchPriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (switchPriorities.isChecked()) binding.imageViewImportant.setImageResource(R.drawable.trash);
-            else binding.imageViewImportant.setImageResource(R.drawable.star);
+            if (switchPriorities.isChecked()) {
+                binding.imageViewImportant.setImageResource(R.drawable.trash);
+            } else binding.imageViewImportant.setImageResource(R.drawable.star);
             processFabColor();
         });
 
         switchTimePriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (switchTimePriorities.isChecked()) binding.imageViewTaskUrgent.setImageResource(R.drawable.snail);
-            else binding.imageViewTaskUrgent.setImageResource(R.drawable.fire);
+            if (switchTimePriorities.isChecked()) {
+                binding.imageViewTaskUrgent.setImageResource(R.drawable.snail);
+            } else binding.imageViewTaskUrgent.setImageResource(R.drawable.fire);
             processFabColor();
         });
 
         switchCategory.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (switchCategory.isChecked()) binding.imageViewTaskDetails2.setImageResource(R.drawable.briefcase_2);
-            else binding.imageViewTaskDetails2.setImageResource(R.drawable.home_2);
+            if (switchCategory.isChecked()) {
+                binding.imageViewTaskDetails2.setImageResource(R.drawable.briefcase_2);
+            } else binding.imageViewTaskDetails2.setImageResource(R.drawable.home_2);
             processFabColor();
         });
 
+        // Checks is edit of task or create new task
+        Integer taskID = -1;
+        if (getArguments() != null) {
+            taskID = (Integer) getArguments().get("idTaskToEdit");
+            if (taskID != -1)
+                loadDataFromTask(taskID);
+        }
+        saveBtnOnClickListenerSetter(taskID);
+
         return root;
+    }
+
+    private void loadDataFromTask(Integer taskID) {
+        taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
+        try {
+            editTask = taskDataDao.findById(taskID);
+            taskTitleEditText.setText(editTask.getTaskTitleText());
+            taskDetailsEditText.setText(editTask.getTaskDetailsText());
+            if (editTask.getPriorities() == Priorities.NotImportant)
+                switchPriorities.setChecked(true);
+            if (editTask.getTimePriority() == TimePriority.NotUrgent)
+                switchTimePriorities.setChecked(true);
+            if (editTask.getCategory() == TaskCategory.Work)
+                switchCategory.setChecked(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Changes color of fab button
      */
-    private void processFabColor()
-    {
+    private void processFabColor() {
 
-        if( !switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
+        if (!switchPriorities.isChecked() && !switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.RED.getColor()));
-        else if( switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
+        else if (switchPriorities.isChecked() && !switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.BLUE.getColor()));
-        else if( !switchPriorities.isChecked()  && switchTimePriorities.isChecked() )
+        else if (!switchPriorities.isChecked() && switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.YELLOW.getColor()));
-        else if( switchPriorities.isChecked()  && switchTimePriorities.isChecked() )
+        else if (switchPriorities.isChecked() && switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.PINK.getColor()));
     }
 
@@ -116,38 +152,56 @@ public class TaskListCreatorFragment extends Fragment {
      * Listener will setFragmentResult on request key: requestKey, bundle key is: bundleKey
      * then it will back up
      */
-    private void saveBtnOnClickListenerSetter() {
+    private void saveBtnOnClickListenerSetter(Integer taskID) {
         saveButton.setOnClickListener(view1 -> {
             AnimateView.animateInOut(saveButton, getContext());
 
-            if(taskTitleEditText.getText().toString().isEmpty())
-            {
-                Toast toast = Toast.makeText(this.getContext(),
-                        "Tytuł nie może być pusty!",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-            }
-            else
-            {
-                taskDetailsEditText.getText();
-                TaskData data = new TaskData(
+            if (checkTitle(saveButton)) {
+                if (editTask == null)
+                    editTask = new TaskData();
+                editTask.setAllDataWithoutDates(
                         switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
                         switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
                         switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
                         taskTitleEditText.getText().toString(),
                         taskDetailsEditText.getText().toString());
+
+                //if user want to add dates
                 if (switchDate.isChecked()) {
-                    //if user want to add dates
-                    data.setEndingCalendarDate(endingCalendarDay);
-                    data.setStartingCalendarDate(beginCalendarDay);
+                    editTask.setEndingCalendarDate(endingCalendarDay);
+                    editTask.setStartingCalendarDate(beginCalendarDay);
                 }
-                Bundle result = new Bundle();
-                result.putParcelable("bundleKey",data);
-                getParentFragmentManager().setFragmentResult("requestKey", result);
-                Navigation.findNavController(view1)
-                        .navigateUp();
+
+                //If the task is edited
+                if (taskID != -1)
+                    taskDataDao.editOne(editTask);
+                else { //If the task is created
+                    Bundle result = new Bundle();
+                    result.putParcelable("bundleKey", editTask);
+                    getParentFragmentManager().setFragmentResult("requestKey", result);
+                }
+                Navigation.findNavController(view1).navigateUp();
             }
         });
+    }
+
+
+    /**
+     * Checks title is empty
+     * @param saveButton instance of button
+     * @return true if title is not empty
+     */
+    private boolean checkTitle(FloatingActionButton saveButton) {
+        AnimateView.animateInOut(saveButton, getContext());
+
+        if (taskTitleEditText.getText().toString().isEmpty()) {
+            Toast toast = Toast.makeText(this.getContext(),
+                    "Tytuł nie może być pusty!",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+        return true;
     }
 
     /**
