@@ -48,7 +48,7 @@ public interface TaskDataDao {
      * @throws Exception
      */
     @Query("SELECT * FROM taskData WHERE category = :taskCategory ")
-    List<TaskData> getTaskData(TaskCategory taskCategory) throws Exception;
+    LiveData<List<TaskData>> getTaskData(TaskCategory taskCategory) throws Exception;
 
     /**
      * @param priorities   specified taskCategory
@@ -57,7 +57,7 @@ public interface TaskDataDao {
      * @throws Exception
      */
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority")
-    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
+    LiveData<List<TaskData>> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
 
     /**
      * Method delete taskData from database
