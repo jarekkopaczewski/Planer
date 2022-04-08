@@ -46,9 +46,8 @@ public class TaskListFragment extends Fragment {
         taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
-        mWordViewModel.getAllWords()
-                .observe(this.getViewLifecycleOwner(),
-                        taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+
 
 
         // animation test
@@ -88,18 +87,18 @@ public class TaskListFragment extends Fragment {
 
         binding.searchImageView.setOnClickListener(e -> {
             AnimateView.animateInOut(binding.searchImageView, this.getContext());
-            taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+            //taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
         });
 
         binding.searchEditText.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (binding.searchEditText.getText().toString().equals("")) {
-                    taskTotalAdapter.getFilter().filter("");
-                }else {
-                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
-                }
+//                if (binding.searchEditText.getText().toString().equals("")) {
+//                    taskTotalAdapter.getFilter().filter("");
+//                }else {
+//                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+//                }
             }
 
             @Override

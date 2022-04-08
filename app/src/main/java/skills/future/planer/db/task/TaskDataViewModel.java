@@ -7,22 +7,50 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+/**
+ * View Model to keep a reference to the taskDataRepository and
+ * an up-to-date list of all taskData.
+ */
 public class TaskDataViewModel extends AndroidViewModel {
-    private TaskDataRepository mRepository;
+    /**
+     * Reference to taskDataRepository
+     */
+    private final TaskDataRepository mRepository;
+    /**
+     * Up-to-date list of all taskData
+     */
+    private final LiveData<List<TaskData>> mAllWords;
 
-    private LiveData<List<TaskData>> mAllWords;
-
-    public TaskDataViewModel (Application application) {
+    /**
+     * Constructor require by viewModelProvider
+     * @param application reference to application
+     */
+    public TaskDataViewModel(Application application) {
         super(application);
         mRepository = new TaskDataRepository(application);
         mAllWords = mRepository.getAllTaskData();
     }
 
-    public LiveData<List<TaskData>> getAllWords() { return mAllWords; }
+    /**
+     * @return Up-to-date list of all taskData
+     */
+    public LiveData<List<TaskData>> getAllTaskData() {
+        return mAllWords;
+    }
 
-    public void insert(TaskData word) { mRepository.insert(word); }
+    /**
+     * Method delegate insertion to TaskDataRepository
+     * @param taskData which will be inserted
+     */
+    public void insert(TaskData taskData) {
+        mRepository.insert(taskData);
+    }
 
-    public void deleteTaskData(TaskData taskData){
+    /**
+     * Method delegate deletion to TaskDataRepository
+     * @param taskData which will be deleted
+     */
+    public void deleteTaskData(TaskData taskData) {
         mRepository.deleteTaskData(taskData);
     }
 }
