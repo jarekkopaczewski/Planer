@@ -1,0 +1,103 @@
+package skills.future.planer.db.task;
+
+import android.app.Application;
+import android.os.AsyncTask;
+
+import androidx.lifecycle.LiveData;
+
+import java.util.List;
+
+import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+
+/**
+ * Class implement separation of concerns
+ *
+ * @author Mikołaj Szymczyk
+ */
+public class TaskDataRepository {
+    /**
+     * Reference to taskDataDao
+     */
+    private final TaskDataDao taskDataDao;
+    /**
+     * List od all taskData
+     */
+    private final LiveData<List<TaskData>> listLiveData;
+
+    /**
+     * Constructor of TaskDataRepository
+     *
+     * @param application require to get AppDatabase reference
+     * @author Mikołaj Szymczyk
+     */
+    TaskDataRepository(Application application) {
+        AppDatabase db = AppDatabase.getInstance(application);
+        taskDataDao = db.taskDataTabDao();
+        listLiveData = taskDataDao.getTaskData();
+    }
+
+    /**
+     * Method start new asyncTask which insert taskData into database
+     *
+     * @param taskData which will be inserted
+     * @author Mikołaj Szymczyk
+     */
+    void insert(TaskData taskData) {
+        new InsertAsyncTask(taskDataDao).execute(taskData);
+    }
+
+    /**
+     * @return reference to list of all taskData
+     * @author Mikołaj Szymczyk
+     */
+    LiveData<List<TaskData>> getAllTaskData() {
+        return listLiveData;
+    }
+
+    /**
+     * Method start new asyncTask which delete taskData from database
+     *
+     * @param taskData which will be inserted
+     * @author Mikołaj Szymczyk
+     */
+    void deleteTaskData(TaskData taskData) {
+        new deleteTaskDataAsyncTask(taskDataDao).execute(taskData);
+    }
+
+    /**
+     * Class run asyncTask to insert taskData
+     */
+    private static class InsertAsyncTask extends AsyncTask<TaskData, Void, Void> {
+        private final TaskDataDao asyncTaskDao;
+
+        InsertAsyncTask(TaskDataDao taskDataDao) {
+            super();
+            asyncTaskDao = taskDataDao;
+        }
+
+        @Override
+        protected Void doInBackground(final TaskData... params) {
+            asyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    /**
+     * Class run asyncTask to delete taskData from database
+     */
+    private static class deleteTaskDataAsyncTask extends AsyncTask<TaskData, Void, Void> {
+        private final TaskDataDao mAsyncTaskDao;
+
+        deleteTaskDataAsyncTask(TaskDataDao dao) {
+            super();
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final TaskData... params) {
+            mAsyncTaskDao.deleteOne(params[0]);
+            return null;
+        }
+    }
+}
