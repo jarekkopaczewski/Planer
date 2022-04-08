@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -17,10 +19,12 @@ import skills.future.planer.db.task.enums.priority.TimePriority;
  *
  * @author Mikołaj Szymczyk
  */
+@Getter
 public class TaskDataRepository {
     /**
      * Reference to taskDataDao
      */
+    @Getter(AccessLevel.NONE)
     private final TaskDataDao taskDataDao;
     /**
      * List od all taskData
@@ -53,46 +57,6 @@ public class TaskDataRepository {
      */
     void insert(TaskData taskData) {
         new InsertAsyncTask(taskDataDao).execute(taskData);
-    }
-
-    /**
-     * @return reference to liveData list of all taskData
-     * @author Mikołaj Szymczyk
-     */
-    LiveData<List<TaskData>> getAllTaskData() {
-        return listLiveData;
-    }
-
-    /**
-     * @return reference to liveData list of important and urgent task
-     * @author Mikołaj Szymczyk
-     */
-    public LiveData<List<TaskData>> getImportantUrgentTask() {
-        return importantUrgentTask;
-    }
-
-    /**
-     * @return reference to liveData list of important and not urgent task
-     * @author Mikołaj Szymczyk
-     */
-    public LiveData<List<TaskData>> getImportantNotUrgent() {
-        return importantNotUrgent;
-    }
-
-    /**
-     * @return reference to liveData list of not important and urgent task
-     * @author Mikołaj Szymczyk
-     */
-    public LiveData<List<TaskData>> getNotImportantUrgentTask() {
-        return notImportantUrgentTask;
-    }
-
-    /**
-     * @return reference to liveData list of not important and not urgent task
-     * @author Mikołaj Szymczyk
-     */
-    public LiveData<List<TaskData>> getNotImportantNotUrgent() {
-        return notImportantNotUrgent;
     }
 
     /**
