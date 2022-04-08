@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +20,7 @@ import skills.future.planer.databinding.FragmentTaskListBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.slideshow.SlideshowViewModel;
 
 public class TaskListFragment extends Fragment {
 
@@ -43,7 +44,7 @@ public class TaskListFragment extends Fragment {
         //listTotal.setTextFilterEnabled(true);
 //        taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
+        mWordViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
         mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
 

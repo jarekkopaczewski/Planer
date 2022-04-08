@@ -27,7 +27,7 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 
-class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataViewHolder> implements Filterable {
+public class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataViewHolder> implements Filterable {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
@@ -74,7 +74,7 @@ class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataVie
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    void setFilteredTaskList(List<TaskData> words){
+    public void setFilteredTaskList(List<TaskData> words){
         filteredTaskList = words;
         fullTaskList = new ArrayList<>(filteredTaskList);
         notifyDataSetChanged();

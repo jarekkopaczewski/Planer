@@ -7,6 +7,7 @@
     <color name="second_color_30">#007E8F</color>
     <color name="second_color_30_2">#63FFFA</color>
     <color name="background">#151515</color>
+    <color name="background_2">#80151515</color>
     <color name="foreground">#2C2C2C</color>
     <color name="second_color_3320">#F36718</color>
     <color name="imageTintColor">#FFFFFF</color>
