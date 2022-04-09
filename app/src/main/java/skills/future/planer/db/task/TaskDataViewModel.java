@@ -7,39 +7,44 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 /**
  * View Model to keep a reference to the taskDataRepository and
  * an up-to-date list of all taskData.
  */
+@Getter
 public class TaskDataViewModel extends AndroidViewModel {
     /**
      * Reference to taskDataRepository
      */
+    @Getter(AccessLevel.NONE)
     private final TaskDataRepository mRepository;
     /**
      * Up-to-date list of all taskData
      */
-    private final LiveData<List<TaskData>> mAllWords;
+    private final LiveData<List<TaskData>> allTaskData, mImportantUrgentTaskData,
+            mImportantNotUrgentTaskData, mNotImportantUrgentTaskData, mNotImportantNotUrgentTaskData;
 
     /**
      * Constructor require by viewModelProvider
+     *
      * @param application reference to application
      */
     public TaskDataViewModel(Application application) {
         super(application);
         mRepository = new TaskDataRepository(application);
-        mAllWords = mRepository.getAllTaskData();
-    }
-
-    /**
-     * @return Up-to-date list of all taskData
-     */
-    public LiveData<List<TaskData>> getAllTaskData() {
-        return mAllWords;
+        allTaskData = mRepository.getListLiveData();
+        mImportantUrgentTaskData = mRepository.getImportantUrgentTask();
+        mImportantNotUrgentTaskData = mRepository.getImportantNotUrgent();
+        mNotImportantUrgentTaskData = mRepository.getNotImportantUrgentTask();
+        mNotImportantNotUrgentTaskData = mRepository.getNotImportantNotUrgent();
     }
 
     /**
      * Method delegate insertion to TaskDataRepository
+     *
      * @param taskData which will be inserted
      */
     public void insert(TaskData taskData) {
@@ -48,6 +53,7 @@ public class TaskDataViewModel extends AndroidViewModel {
 
     /**
      * Method delegate deletion to TaskDataRepository
+     *
      * @param taskData which will be deleted
      */
     public void deleteTaskData(TaskData taskData) {
