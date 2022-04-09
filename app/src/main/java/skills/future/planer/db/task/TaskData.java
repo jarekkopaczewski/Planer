@@ -89,6 +89,7 @@ public class TaskData implements Parcelable {
      * sets taskDataId = 0
      * sets status = false
      */
+    @Ignore
     public TaskData() {
         this.taskDataId = 0;
         this.status = false;
@@ -254,6 +255,7 @@ public class TaskData implements Parcelable {
     }
 
     @Override
+    @Ignore
     public int hashCode() {
         int result = getTaskDataId();
         if (getStatus() != null)
@@ -277,6 +279,7 @@ public class TaskData implements Parcelable {
      * @param taskTitleText   task title
      * @param taskDetailsText task details
      */
+    @Ignore
     public void setAllDataWithoutDates(TaskCategory category, Priorities priorities, TimePriority timePriority,
                                        String taskTitleText, String taskDetailsText) {
         this.category = category;
