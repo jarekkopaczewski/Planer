@@ -32,7 +32,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private List<TaskData> fullTaskList = new ArrayList<>();
     private static final int LAYOUT_SMALL = 0;
     private static final int LAYOUT_BIG = 1;
-    private AtomicInteger positionToChange = new AtomicInteger(-1);
+    private final AtomicInteger positionToChange = new AtomicInteger(-1);
 
 
     public TaskTotalAdapter(Context context) {
@@ -43,69 +43,85 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     @NonNull
     @Override
     public TaskDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return switch (viewType) {
+            case LAYOUT_SMALL -> new TaskDataViewHolder(
+                    createViewOfItem(parent,
+                            R.layout.fragment_task_in_list), context);
+            case LAYOUT_BIG -> new TaskDataViewHolderExtended(
+                    createViewOfItem(parent,
+                            R.layout.fragment_task_in_list_extended), context);
+            default -> new TaskDataViewHolder(null, context);
+        };
+    }
+
+    @NonNull
+    private View createViewOfItem(@NonNull ViewGroup parent, int layoutType) {
         View itemView;
-
-        switch (viewType) {
-            case LAYOUT_SMALL -> {
-                itemView = layoutInflater.inflate(R.layout.fragment_task_in_list, parent, false);
-
-                AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
-                itemView.setOnClickListener(e -> {
-                    CheckBox checkBox = itemView.findViewById(R.id.checkBoxTask);
-                    boolean isSelected = checkBox.isChecked();
-                    checkBox.setChecked(!isSelected);
-                    AnimateView.animateInOut(itemView.findViewById(R.id.taskCard), context);
-                });
-                return new TaskDataViewHolder(itemView, context);
-            }
-            case LAYOUT_BIG -> {
-                itemView = layoutInflater.inflate(R.layout.fragment_task_in_list_extended, parent, false);
-                itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
-                        AnimateView.singleAnimation(itemView.findViewById(R.id.detailImageView), context, R.anim.rotate));
-
-                AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
-
-                return new TaskDataViewHolderExtended(itemView, context);
-            }
-            default -> {
-                return new TaskDataViewHolder(null, context);
-            }
-        }
+        itemView = layoutInflater.inflate(layoutType, parent, false);
+        AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
+        itemView.setOnClickListener(e -> {
+            CheckBox checkBox = itemView.findViewById(R.id.checkBoxTask);
+            checkBox.setChecked(!checkBox.isChecked());
+        });
+        return itemView;
     }
 
     public TaskData getTaskDataAtPosition(int position) {
         return filteredTaskList.get(position);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TaskDataViewHolder holder, int position) {
         if (filteredTaskList != null) {
             TaskData current = filteredTaskList.get(position);
             holder.setEveryThing(current);
-        } else {
-            // Covers the case of data not being ready yet.
+        } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
-        }
 
+        createListenerToExtendView(holder);
+        createListenerToEditButton(holder, position);
+
+
+    }
+
+    /**
+     * Creates listener to taskView in list
+     * When someone presses on a taskView it will expand or close
+     */
+    private void createListenerToExtendView(@NonNull TaskDataViewHolder holder) {
         holder.itemView.setOnClickListener(v -> {
-            if (positionToChange.get() == -1) {
-                System.out.println(holder.getAdapterPosition());
+
+            int positionAtomic = positionToChange.get();
+
+            // if no window is open
+            if (positionAtomic == -1) {
                 positionToChange.set(holder.getAdapterPosition());
                 this.notifyItemChanged(holder.getAdapterPosition());
             } else {
-                int p = positionToChange.get();
-                positionToChange.set(-1);
-                this.notifyItemChanged(p);
+
+                int adapterPosition = holder.getAdapterPosition();
+                this.notifyItemChanged(positionAtomic);
+
+                //if the window is open but we choose another
+                if (positionAtomic != adapterPosition) {
+                    positionToChange.set(adapterPosition);
+                    this.notifyItemChanged(positionAtomic);
+                } else
+                    positionToChange.set(-1);
+
             }
         });
+    }
 
-        holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e -> {
-            Navigation.findNavController(holder.itemView)
-                    .navigate(TaskListFragmentDirections
-                            .navToEditTaskListCreatorFragment(fullTaskList.get(position).getTaskDataId()));
-        });
-
-
+    /**
+     * Creates listener to edit button which starts a TaskListCreatorFragment
+     */
+    private void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
+        holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
+                Navigation.findNavController(holder.itemView)
+                        .navigate(TaskListFragmentDirections
+                                .navToEditTaskListCreatorFragment(fullTaskList.get(position).getTaskDataId())));
     }
 
     @Override
