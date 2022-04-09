@@ -10,6 +10,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
@@ -54,7 +56,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final TaskDataDao mDao;
-        String[] words = {"dolphin", "crocodile", "cobra"};
+        //String[] words = {"dolphin", "crocodile", "cobra"};
 
         PopulateDbAsync(AppDatabase db) {
             mDao = db.taskDataTabDao();
@@ -67,8 +69,25 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
 
-            for (int i = 0; i <= words.length - 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, words[i],"");
+            for (int i = 0; i <= 2; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important,
+                        TimePriority.Urgent, i+"iutekst","",
+                        CalendarDay.from(2000,1,1),CalendarDay.from(2000,1,1));
+                mDao.insert(word);
+            }
+            for (int i = 0; i <= 2; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, i+"niutekst","",
+                        CalendarDay.from(2000,1,1),CalendarDay.from(2000,1,1));
+                mDao.insert(word);
+            }
+            for (int i = 0; i <= 2; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.NotUrgent, i+"inutekst","",
+                        CalendarDay.from(2000,1,1),CalendarDay.from(2000,1,1));
+                mDao.insert(word);
+            }
+            for (int i = 0; i <= 2; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.NotUrgent, i+"ninutekst","",
+                        CalendarDay.from(2000,1,1),CalendarDay.from(2000,1,1));
                 mDao.insert(word);
             }
             return null;

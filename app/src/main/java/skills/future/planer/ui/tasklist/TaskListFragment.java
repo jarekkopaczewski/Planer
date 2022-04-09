@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
 import skills.future.planer.db.task.TaskData;
@@ -43,7 +44,7 @@ public class TaskListFragment extends Fragment {
         //listTotal.setTextFilterEnabled(true);
 //        taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
+        mWordViewModel = new TaskDataViewModel(this.requireActivity().getApplication());
         mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
 
