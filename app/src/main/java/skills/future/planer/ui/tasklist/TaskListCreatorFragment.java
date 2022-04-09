@@ -207,8 +207,10 @@ public class TaskListCreatorFragment extends Fragment {
                 if (switchDate.isChecked()) {
                     editTask.setEndingCalendarDate(endingCalendarDay);
                     editTask.setStartingCalendarDate(beginCalendarDay);
+                } else {
+                    editTask.setEndingDate(null);
+                    editTask.setStartingDate(null);
                 }
-
                 //If the task is edited
                 if (taskID != -1)
                     taskDataDao.editOne(editTask);

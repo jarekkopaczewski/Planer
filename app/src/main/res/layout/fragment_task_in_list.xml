@@ -26,14 +26,16 @@
             android:background="@color/foreground">
 
             <TextView
-                android:id="@+id/taskTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:id="@+id/taskTitleTextView"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="10dp"
                 android:autoSizeTextType="none"
                 android:fontFamily="@font/signika_regular"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:gravity="center|start"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
