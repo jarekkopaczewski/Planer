@@ -56,7 +56,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final TaskDataDao mDao;
-        String[] words = {"dolphin", "crocodile", "cobra","1","2","3"};
+        //String[] words = {"dolphin", "crocodile", "cobra"};
 
         PopulateDbAsync(AppDatabase db) {
             mDao = db.taskDataTabDao();
