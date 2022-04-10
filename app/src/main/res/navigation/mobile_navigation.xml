@@ -88,7 +88,18 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
+        <action
+            android:id="@+id/nav_to_edit_taskListCreatorFragment"
+            app:destination="@id/taskListCreatorFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+            <argument
+                android:name="idTaskToEdit"
+                app:argType="integer"
+                android:defaultValue="0" />
+</fragment>
     <fragment
         android:id="@+id/taskListCreatorFragment"
         android:name="skills.future.planer.ui.tasklist.TaskListCreatorFragment"
@@ -108,5 +119,8 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="idTaskToEdit"
+            app:argType="integer" />
     </fragment>
 </navigation>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:background="@color/background"
     android:orientation="vertical">
@@ -11,7 +11,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/taskCard"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/foreground"
         app:cardBackgroundColor="@color/foreground"
         app:cardCornerRadius="15dp"
@@ -25,24 +25,63 @@
             android:layout_height="match_parent"
             android:background="@color/foreground">
 
+            <ImageView
+                android:id="@+id/iconPriorities"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="7dp"
+                android:padding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iconTimePriority"
+                app:layout_constraintTop_toBottomOf="@+id/taskDescriptionView"
+                app:layout_constraintVertical_bias="0.555" />
+
+            <ImageView
+                android:id="@+id/iconTimePriority"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="7dp"
+                android:padding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iconTaskCategory"
+                app:layout_constraintTop_toBottomOf="@+id/taskDescriptionView"
+                app:layout_constraintVertical_bias="0.555" />
+
             <TextView
+                android:id="@+id/taskDescriptionView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/taskTitleTextView"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="10dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
+                app:layout_constraintTop_toBottomOf="@+id/taskDateTextView" />
+
+            <TextView
+                android:id="@+id/taskTitleTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
                 android:autoSizeTextType="none"
                 android:fontFamily="@font/signika_regular"
-                android:ellipsize="end"
-                android:maxLines="1"
                 android:gravity="center|start"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
                 android:textAlignment="viewStart"
                 android:textColor="@color/textColor"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/detailImageView"
                 app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,7 +94,8 @@
                 android:buttonTint="@drawable/check_box_tint"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
-                app:layout_constraintTop_toBottomOf="@+id/taskDateTextView"
+                app:layout_constraintTop_toBottomOf="@+id/taskDescriptionView"
+                app:layout_constraintVertical_bias="0.733"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <ImageView
@@ -63,12 +103,13 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="7dp"
                 android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/taskDateTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/taskDescriptionView" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/colorMarkCardView"
@@ -100,15 +141,13 @@
 
             <ImageView
                 android:id="@+id/detailImageView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:foregroundGravity="center"
-                android:scaleType="fitCenter"
-                android:visibility="invisible"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/info"
-                tools:layout_editor_absoluteY="7dp"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/pencil" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
