@@ -13,8 +13,9 @@ import lombok.Getter;
 @Getter
 public class DayCategorizedTaskData {
     private final Map<CalendarDay, CategorizedTaskData> taskDataMap;
-
+    private final ArrayList<CalendarDay> listOfAddedDays;
     public DayCategorizedTaskData(List<TaskData> data) {
+        listOfAddedDays = new ArrayList<>();
         taskDataMap = new HashMap<>();
         run(data);
     }
@@ -23,8 +24,10 @@ public class DayCategorizedTaskData {
         for (TaskData datum : data) {
             if (datum.getStartingCalendarDate() != null) {
                 for (CalendarDay calendarDay : getAllDaysBetween(datum.getStartingCalendarDate(), datum.getEndingCalendarDate())) {
-                    if (!taskDataMap.containsKey(calendarDay))
+                    if (!taskDataMap.containsKey(calendarDay)) {
                         taskDataMap.put(calendarDay, new CategorizedTaskData());
+                        listOfAddedDays.add(calendarDay);
+                    }
                     switch (datum.getPriorities()) {
                         case Important:
                             switch (datum.getTimePriority()) {
@@ -44,7 +47,21 @@ public class DayCategorizedTaskData {
         }
     }
 
+    public List<TaskData> getAllCategorizedDayFromQuarter(int i){
+        List<TaskData> result = new ArrayList<>();
+        for (CalendarDay listOfAddedDay : listOfAddedDays) {
+            switch (i) {
+                case 0 -> result.addAll(Objects.requireNonNull(taskDataMap.get(listOfAddedDay)).getImportantUrgentTask());
+                case 1 -> result.addAll(Objects.requireNonNull(taskDataMap.get(listOfAddedDay)).getImportantNotUrgent());
+                case 2 -> result.addAll(Objects.requireNonNull(taskDataMap.get(listOfAddedDay)).getNotImportantUrgentTask());
+                case 3 -> result.addAll(Objects.requireNonNull(taskDataMap.get(listOfAddedDay)).getNotImportantNotUrgent());
+            }
+        }
+        return result;
+    }
+
     public CategorizedTaskData getCategorizedTaskDataFromDay(CalendarDay day) {
+
         if (taskDataMap.containsKey(day))
             return taskDataMap.get(day);
         return null;
