@@ -13,4 +13,5 @@
     <color name="shadow">#353535</color>
     <color name="textColor">#F4F4F4</color>
     <color name="textColor_2">#BFBFBF</color>
+    <color name="todayChooseColor">#00F</color>
 </resources>
