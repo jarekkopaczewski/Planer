@@ -132,7 +132,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    void setFilteredTaskList(List<TaskData> words) {
+    public void setFilteredTaskList(List<TaskData> words) {
         filteredTaskList = words;
         fullTaskList = new ArrayList<>(filteredTaskList);
         notifyDataSetChanged();
