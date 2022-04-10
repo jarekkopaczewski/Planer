@@ -18,8 +18,6 @@ import skills.future.planer.db.task.enums.priority.TimePriority;
 
 /**
  * Class encapsulate data for task
- *
- * @author Mikołaj Szymczyk
  */
 @Getter
 @Setter
@@ -88,13 +86,23 @@ public class TaskData implements Parcelable {
 
     /**
      * Constructor of taskData
+     * sets taskDataId = 0
+     * sets status = false
+     */
+    @Ignore
+    public TaskData() {
+        this.taskDataId = 0;
+        this.status = false;
+    }
+
+    /**
+     * Constructor of taskData
      *
      * @param category        could be private of word (take from enum TaskCategory)
      * @param priorities      could be important or unimportant (take from enum Priorities)
      * @param timePriority    could be urgent or not urgent (take from TimePriority)
      * @param taskTitleText   task title
      * @param taskDetailsText task details
-     * @author Mikołaj Szymczyk
      */
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText) {
@@ -107,6 +115,7 @@ public class TaskData implements Parcelable {
         this.taskDetailsText = taskDetailsText;
     }
 
+
     /**
      * Constructor of taskData
      *
@@ -117,7 +126,6 @@ public class TaskData implements Parcelable {
      * @param taskDetailsText task details
      * @param startingDate    starting date of task period
      * @param endingDate      ending date of task period
-     * @author Mikołaj Szymczyk
      */
     @Ignore
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
@@ -135,7 +143,6 @@ public class TaskData implements Parcelable {
      * Constructor of taskData used to unpack taskData from bundle
      *
      * @param in packed taskData
-     * @author Mikołaj Szymczyk
      */
     @Ignore
     protected TaskData(Parcel in) {
@@ -153,7 +160,6 @@ public class TaskData implements Parcelable {
      * Setter of endingDate
      *
      * @param endingCalendarDay date to set
-     * @author Mikołaj Szymczyk
      */
     @Ignore
     public void setEndingCalendarDate(CalendarDay endingCalendarDay) {
@@ -249,6 +255,7 @@ public class TaskData implements Parcelable {
     }
 
     @Override
+    @Ignore
     public int hashCode() {
         int result = getTaskDataId();
         if (getStatus() != null)
@@ -261,5 +268,24 @@ public class TaskData implements Parcelable {
         result = 31 * result + (getStartingDate() != null ? getStartingDate().hashCode() : 0);
         result = 31 * result + (getEndingDate() != null ? getEndingDate().hashCode() : 0);
         return result;
+    }
+
+    /**
+     * Sets all data without dates
+     *
+     * @param category        could be private or work (take from enum TaskCategory)
+     * @param priorities      could be important or unimportant (take from enum Priorities)
+     * @param timePriority    could be urgent or not urgent (take from TimePriority)
+     * @param taskTitleText   task title
+     * @param taskDetailsText task details
+     */
+    @Ignore
+    public void setAllDataWithoutDates(TaskCategory category, Priorities priorities, TimePriority timePriority,
+                                       String taskTitleText, String taskDetailsText) {
+        this.category = category;
+        this.priorities = priorities;
+        this.timePriority = timePriority;
+        this.taskTitleText = taskTitleText;
+        this.taskDetailsText = taskDetailsText;
     }
 }

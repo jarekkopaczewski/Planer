@@ -17,7 +17,6 @@ import skills.future.planer.db.task.enums.priority.TimePriority;
 /**
  * Class implement separation of concerns
  *
- * @author Mikołaj Szymczyk
  */
 @Getter
 public class TaskDataRepository {
@@ -40,7 +39,6 @@ public class TaskDataRepository {
      * Constructor of TaskDataRepository
      *
      * @param application require to get AppDatabase reference
-     * @author Mikołaj Szymczyk
      */
     TaskDataRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
@@ -53,17 +51,22 @@ public class TaskDataRepository {
      * Method start new asyncTask which insert taskData into database
      *
      * @param taskData which will be inserted
-     * @author Mikołaj Szymczyk
      */
     void insert(TaskData taskData) {
         new InsertAsyncTask(taskDataDao).execute(taskData);
     }
 
     /**
+     * @return reference to list of all taskData
+     */
+    LiveData<List<TaskData>> getAllTaskData() {
+        return listLiveData;
+    }
+
+    /**
      * Method start new asyncTask which delete taskData from database
      *
      * @param taskData which will be inserted
-     * @author Mikołaj Szymczyk
      */
     void deleteTaskData(TaskData taskData) {
         new deleteTaskDataAsyncTask(taskDataDao).execute(taskData);

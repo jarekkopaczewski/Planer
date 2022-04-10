@@ -42,18 +42,25 @@ public class SettingsActivity extends AppCompatActivity {
     public static class SettingsFragment extends PreferenceFragmentCompat {
 
 
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
+            setTheme();
+        }
+
+        /**
+         * Finds preference responsible for themes
+         * gets value and sets theme value
+         */
+        private void setTheme(){
             ListPreference listPreference = findPreference("themes");
             Objects.requireNonNull(listPreference).setOnPreferenceChangeListener((preference, newValue) -> {
                 AppCompatDelegate.setDefaultNightMode(Integer.parseInt((String) newValue));
                 return true;
             });
         }
-
-
     }
 
 }

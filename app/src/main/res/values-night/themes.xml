@@ -12,5 +12,10 @@
         <item name="actionOverflowButtonStyle">@style/DotsStyle</item>
         <item name="toolbarNavigationButtonStyle">@style/NavigationIconStyle</item>
         <item name="android:actionMenuTextColor">@color/imageTintColor</item>
+        <item name="android:itemTextAppearance">@style/myCustomMenuTextAppearance</item>
+    </style>
+
+    <style name="myCustomMenuTextAppearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/imageTintColor</item>
     </style>
 </resources>
