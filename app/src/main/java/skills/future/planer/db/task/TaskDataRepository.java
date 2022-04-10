@@ -127,10 +127,10 @@ public class TaskDataRepository {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                categorisedTaskData.importantNotUrgent = asyncTaskDao.getTaskData(Priorities.Important, TimePriority.NotUrgent);
-                categorisedTaskData.importantUrgentTask = asyncTaskDao.getTaskData(Priorities.Important, TimePriority.Urgent);
-                categorisedTaskData.notImportantUrgentTask = asyncTaskDao.getTaskData(Priorities.NotImportant, TimePriority.Urgent);
-                categorisedTaskData.notImportantNotUrgent = asyncTaskDao.getTaskData(Priorities.NotImportant, TimePriority.NotUrgent);
+//                categorisedTaskData.importantNotUrgent = asyncTaskDao.getTaskData(Priorities.Important, TimePriority.NotUrgent);
+//                categorisedTaskData.importantUrgentTask = asyncTaskDao.getTaskData(Priorities.Important, TimePriority.Urgent);
+//                categorisedTaskData.notImportantUrgentTask = asyncTaskDao.getTaskData(Priorities.NotImportant, TimePriority.Urgent);
+//                categorisedTaskData.notImportantNotUrgent = asyncTaskDao.getTaskData(Priorities.NotImportant, TimePriority.NotUrgent);
             } catch (Exception e) {
                 e.printStackTrace();
             }

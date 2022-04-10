@@ -17,6 +17,13 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
 import skills.future.planer.db.task.TaskData;
@@ -29,6 +36,7 @@ public class TaskListFragment extends Fragment {
     private TaskTotalAdapter taskTotalAdapter;
     private FragmentTaskListBinding binding;
     private TaskDataViewModel mWordViewModel;
+    private ArrayList<String> names;
 
     public TaskListFragment() {
     }
@@ -48,6 +56,9 @@ public class TaskListFragment extends Fragment {
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
         mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
+
+        // animation test
+        AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             TaskData result = bundle.getParcelable("bundleKey");
@@ -107,6 +118,82 @@ public class TaskListFragment extends Fragment {
                                       int before, int count) {
             }
         });
+
+        /**
+         * Chips OnClick Listeners
+         */
+        binding.workChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.privateChip.isChecked())
+                binding.privateChip.setChecked(false);
+            }
+        });
+
+        binding.privateChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.workChip.isChecked())
+                    binding.workChip.setChecked(false);
+            }
+        });
+
+        binding.importantChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.notImportantChip.isChecked())
+                    binding.notImportantChip.setChecked(false);
+            }
+        });
+
+        binding.notImportantChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.importantChip.isChecked())
+                    binding.importantChip.setChecked(false);
+            }
+        });
+
+        binding.urgentChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.notUrgentChip.isChecked())
+                    binding.notUrgentChip.setChecked(false);
+            }
+        });
+
+        binding.notUrgentChip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(binding.urgentChip.isChecked())
+                    binding.urgentChip.setChecked(false);
+            }
+        });
+
+        /**
+         * Chip Group Listener
+         * Searches by iDs and returns list of checked filters
+         */
+        binding.chipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+            @SneakyThrows
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+                //System.out.println(binding.chipGroup.getCheckedChipIds());
+               List<Integer> checked = binding.chipGroup.getCheckedChipIds();
+               names = new ArrayList<>();
+
+               for (Integer id:checked){
+                    Chip chip = binding.chipGroup.findViewById(id);
+                    names.add((String)chip.getText());
+                }
+
+                //todo przesłać listę kategorii do TaskTotalAdapter i tam filtrować po nich
+               // System.out.println(names);
+               taskTotalAdapter.CategoryFilter(names);
+
+            }
+        });
+
 
         return root;
     }

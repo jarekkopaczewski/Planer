@@ -19,7 +19,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import skills.future.planer.R;
+import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
@@ -147,6 +151,48 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         if (filteredTaskList != null)
             return filteredTaskList.size();
         else return 0;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void CategoryFilter(ArrayList<String> names) throws Exception {
+
+        TaskCategory category = null;
+        Priorities priorities = null;
+        TimePriority timePriority = null;
+        for(String name : names) {
+            if (name.equals(TaskCategory.Private.toString())) {
+                category = TaskCategory.Private;
+            }
+            if (name.equals("Work")) {
+                category = TaskCategory.Work;
+            }
+            if (name.equals("Urgent")) {
+                timePriority = TimePriority.Urgent;
+            }
+            if (name.equals("Not Urgent")) {
+                timePriority = TimePriority.NotUrgent;
+            }
+            if (name.equals("Important")) {
+                priorities = Priorities.Important;
+            }
+            if (name.equals("Not Important")) {
+                priorities = Priorities.NotImportant;
+            }
+        }
+
+        List<TaskData> list = new ArrayList<>();
+
+        if(category == null && priorities == null && timePriority!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(timePriority);}
+        if(category == null && timePriority == null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities);}
+        if(timePriority == null && priorities == null && category!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(category);}
+        if(category == null && timePriority!=null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities,timePriority);}
+        if(timePriority == null && category!=null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities,category);}
+        if(priorities == null && timePriority!=null && category!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(category,timePriority);}
+        if(category!=null && timePriority!=null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities,timePriority,category);}
+        if(category==null && priorities==null && timePriority==null ){list = fullTaskList;}
+        filteredTaskList=list;
+        notifyDataSetChanged();
+
     }
 
     /**
