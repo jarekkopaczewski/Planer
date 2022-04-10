@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/mobile_navigation"
-            app:startDestination="@+id/nav_month">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_month">
 
     <fragment
-            android:id="@+id/nav_home"
-            android:name="skills.future.planer.ui.home.HomeFragment"
-            android:label="@string/menu_home"
-            tools:layout="@layout/fragment_home">
+        android:id="@+id/nav_home"
+        android:name="skills.future.planer.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_nav_gallery"
             app:destination="@id/nav_gallery"
@@ -17,22 +17,27 @@
             app:exitAnim="@android:anim/cycle_interpolator"
             app:popEnterAnim="@android:anim/cycle_interpolator"
             app:popExitAnim="@android:anim/cycle_interpolator" />
-        <action android:id="@+id/action_nav_home_to_nav_slideshow" app:destination="@id/nav_slideshow"/>
+        <action
+            android:id="@+id/action_nav_home_to_nav_slideshow"
+            app:destination="@id/nav_slideshow" />
     </fragment>
 
     <fragment
-            android:id="@+id/nav_gallery"
-            android:name="skills.future.planer.ui.gallery.GalleryFragment"
-            android:label="@string/menu_gallery"
-            tools:layout="@layout/fragment_gallery"/>
+        android:id="@+id/nav_gallery"
+        android:name="skills.future.planer.ui.gallery.GalleryFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_gallery" />
 
     <fragment
-            android:id="@+id/nav_slideshow"
-            android:name="skills.future.planer.ui.slideshow.SlideshowFragment"
-            android:label="@string/menu_slideshow"
-            tools:layout="@layout/fragment_slideshow"/>
-    <fragment android:id="@+id/nav_month" android:name="skills.future.planer.ui.month.MonthFragment"
-              android:label="menu_month" tools:layout="@layout/fragment_month">
+        android:id="@+id/nav_slideshow"
+        android:name="skills.future.planer.ui.slideshow.SlideshowFragment"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_month"
+        android:name="skills.future.planer.ui.month.MonthFragment"
+        android:label="menu_month"
+        tools:layout="@layout/fragment_month">
         <action
             android:id="@+id/action_nav_month_to_nav_day"
             app:destination="@id/nav_day"
@@ -61,9 +66,9 @@
     </fragment>
     <fragment
         android:id="@+id/nav_day"
-        android:name="skills.future.planer.ui.day.DayTaskListFragment"
+        android:name="skills.future.planer.ui.day.DayFragment"
         android:label="menu_day"
-        tools:layout="@layout/day_task_list_fragment">
+        tools:layout="@layout/fragment_day">
         <action
             android:id="@+id/action_nav_day_to_nav_task_list"
             app:destination="@id/nav_task_list" />
@@ -78,8 +83,11 @@
             android:id="@+id/action_nav_day_to_taskListCreatorFragment"
             app:destination="@id/taskListCreatorFragment" />
     </fragment>
-    <fragment android:id="@+id/nav_task_list" android:name="skills.future.planer.ui.tasklist.TaskListFragment"
-              android:label="menu_task_list" tools:layout="@layout/fragment_task_list">
+    <fragment
+        android:id="@+id/nav_task_list"
+        android:name="skills.future.planer.ui.tasklist.TaskListFragment"
+        android:label="menu_task_list"
+        tools:layout="@layout/fragment_task_list">
         <action
             android:id="@+id/action_nav_task_list_to_taskListCreatorFragment"
             app:destination="@id/taskListCreatorFragment"
@@ -100,12 +108,12 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
-            <argument
-                android:name="idTaskToEdit"
-                app:argType="integer"
-                android:defaultValue="0" />
-</fragment>
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="idTaskToEdit"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
     <fragment
         android:id="@+id/taskListCreatorFragment"
         android:name="skills.future.planer.ui.tasklist.TaskListCreatorFragment"

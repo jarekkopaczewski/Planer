@@ -1,4 +1,4 @@
-package skills.future.planer.ui.day;
+package skills.future.planer.ui.day.views.daylist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +23,7 @@ import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.day.DayFragmentDirections;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 public class DayTaskListFragment extends Fragment {
@@ -31,13 +32,13 @@ public class DayTaskListFragment extends Fragment {
     private TaskDataViewModel mWordViewModel;
     private DayTaskListFragmentBinding binding;
     private MaterialCalendarView materialCalendarView;
-    private FloatingActionButton fabList, fabDay;
+    private FloatingActionButton fabDay;
     private RecyclerView listDay;
     private TaskTotalAdapter taskTotalAdapter;
     private TextView dayNumberView;
 
-    public static DayTaskListFragment newInstance() {
-        return new DayTaskListFragment();
+    public DayTaskListFragment() {
+
     }
 
     @Override
@@ -67,6 +68,8 @@ public class DayTaskListFragment extends Fragment {
         return root;
     }
 
+
+    //TODO Zrobić to dla widoku dnia
     private void createList() {
         listDay = binding.listTotalView;
         taskTotalAdapter = new TaskTotalAdapter(this.getContext());
@@ -84,7 +87,7 @@ public class DayTaskListFragment extends Fragment {
         });
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            Navigation.findNavController(view).navigate(DayTaskListFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
+            Navigation.findNavController(view).navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
         });
 
         ItemTouchHelper helper = new ItemTouchHelper(
@@ -117,7 +120,6 @@ public class DayTaskListFragment extends Fragment {
     private void componentBindings() {
         materialCalendarView = binding.calendarView;
         fabDay = binding.dayFab;
-        fabList = binding.fab;
         dayNumberView = binding.dayNumber;
     }
 

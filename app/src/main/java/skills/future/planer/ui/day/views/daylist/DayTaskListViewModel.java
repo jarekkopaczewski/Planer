@@ -1,4 +1,4 @@
-package skills.future.planer.ui.day;
+package skills.future.planer.ui.day.views.daylist;
 
 import android.view.View;
 import android.widget.TextView;
