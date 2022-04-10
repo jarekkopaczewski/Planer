@@ -36,8 +36,6 @@ import skills.future.planer.db.task.TaskDataViewModel;
  * @version 0.2.2
  * @since 0.2.1
  */
-@Getter
-@Setter
 public class MonthFragment extends Fragment {
 
     /**
