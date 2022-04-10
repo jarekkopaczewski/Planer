@@ -5,10 +5,10 @@
         android:shape="rectangle">
         <gradient
             android:type="radial"
-            android:gradientRadius="100%"
+            android:gradientRadius="90%"
             android:startColor="@color/f2"
             android:centerX="0"
-            android:centerY="1"
+            android:centerY="0"
             android:endColor="@color/background"
             /> </shape>
     </item>

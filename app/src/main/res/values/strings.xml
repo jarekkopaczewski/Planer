@@ -10,9 +10,9 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="month">Month</string>
-    <string name="day">Day</string>
-    <string name="tasks">Tasks</string>
+    <string name="month">Miesiąc</string>
+    <string name="day">Dzień</string>
+    <string name="tasks">Zadania</string>
     <string name="TaskListElementFabricButton">Zapisz</string>
     <string name="goals">Goals</string>
     <string name="priorities">Priorities</string>
@@ -34,7 +34,9 @@
     <string name="SearchMessage">Czego szukasz?</string>
     <string name="title_activity_settings">Ustawienia</string>
     <string name="theme_title">Domyślny motyw aplikacji</string>
+    <string name="empty_description"> </string>
     <string name="large_text">
+
         "Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
