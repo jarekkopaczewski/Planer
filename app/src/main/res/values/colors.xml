@@ -8,10 +8,16 @@
     <color name="second_color_30">#007E8F</color>
     <color name="second_color_30_2">#63FFFA</color>
     <color name="background">#F4F4F4</color>
+    <color name="background_2">#DCDCDC</color>
     <color name="foreground">#FFFFFF</color>
     <color name="second_color_3320">#F36718</color>
     <color name="imageTintColor">#FF000000</color>
     <color name="shadow">#ACABAB</color>
     <color name="textColor">#20242E</color>
     <color name="textColor_2">#B3B2B2</color>
+
+    <color name="f1">#E141E1D6</color>
+    <color name="f3">#007E8F</color>
+    <color name="f4">#C6A2CA</color>
+    <color name="f2">#715397</color>
 </resources>

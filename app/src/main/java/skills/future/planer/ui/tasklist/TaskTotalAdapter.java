@@ -24,7 +24,7 @@ import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
 
-public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> implements Filterable {
+public class TaskTotalAdapter extends RecyclerView.Adapter<TaskTotalAdapter.TaskDataViewHolder> implements Filterable {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
@@ -132,7 +132,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    void setFilteredTaskList(List<TaskData> words) {
+    public void setFilteredTaskList(List<TaskData> words){
         filteredTaskList = words;
         fullTaskList = new ArrayList<>(filteredTaskList);
         notifyDataSetChanged();
