@@ -105,9 +105,9 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
     private void setIconCategory(TaskData task) {
         if (task.getCategory() != null) {
             switch (task.getCategory()) {
-                case Work -> iconTaskCategory.setImageDrawable(ResourcesCompat.getDrawable(
-                        context.getResources(), R.drawable.home_2, null));
                 case Private -> iconTaskCategory.setImageDrawable(ResourcesCompat.getDrawable(
+                        context.getResources(), R.drawable.home_2, null));
+                case Work -> iconTaskCategory.setImageDrawable(ResourcesCompat.getDrawable(
                         context.getResources(), R.drawable.briefcase_2, null));
             }
         }

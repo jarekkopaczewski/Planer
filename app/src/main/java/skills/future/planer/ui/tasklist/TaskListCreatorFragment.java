@@ -197,7 +197,7 @@ public class TaskListCreatorFragment extends Fragment {
                 if (editTask == null)
                     editTask = new TaskData();
                 editTask.setAllDataWithoutDates(
-                        switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
+                        switchCategory.isChecked() ? TaskCategory.Work:TaskCategory.Private,
                         switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
                         switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
                         taskTitleEditText.getText().toString(),
