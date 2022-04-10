@@ -33,7 +33,7 @@
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,22 +49,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <Space
-                    android:layout_width="50dp"
+                    android:layout_width="30dp"
                     android:layout_height="match_parent" />
 
 
                 <EditText
                     android:id="@+id/EditTextTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
                     android:autofillHints="Dodaj tytuł"
                     android:background="@null"
                     android:fontFamily="@font/signika_regular"
                     android:hint="@string/EditTextTitleHintt"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:minHeight="48dp"
+                    android:scrollHorizontally="false"
                     android:textColor="@color/textColor" />
 
 
@@ -74,26 +80,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imageViewTaskDetails"
+                <Space
                     android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="10dp"
-                    android:contentDescription="@string/imageViewTaskDetailsDescription"
-                    android:scaleType="fitXY" />
+                    android:layout_height="match_parent" />
 
                 <EditText
                     android:id="@+id/EditTextDetails"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
                     android:autofillHints="Dodaj szczegóły"
                     android:background="@null"
                     android:fontFamily="@font/signika_regular"
                     android:hint="@string/EditTextDetailsHint"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:scrollHorizontally="false"
                     android:textColor="@color/textColor" />
 
             </LinearLayout>
@@ -117,8 +123,8 @@
                     android:layout_margin="10dp"
                     android:contentDescription="@string/imageViewTaskDetailsDescription"
                     android:scaleType="fitXY"
-                    app:tint="@color/imageTintColor"
-                    app:srcCompat="@drawable/star" />
+                    app:srcCompat="@drawable/star"
+                    app:tint="@color/imageTintColor" />
 
                 <TextView
                     android:id="@+id/textViewImportant"
@@ -177,7 +183,7 @@
                     android:id="@+id/switchUrgent"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:theme="@style/SwitchStyle"/>
+                    android:theme="@style/SwitchStyle" />
 
                 <TextView
                     android:id="@+id/textViewNotUrgent"
@@ -268,20 +274,17 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent" />
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/editTextBeginDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="5dp"
                     android:background="@null"
                     android:clickable="false"
                     android:cursorVisible="false"
@@ -292,24 +295,35 @@
                     android:importantForAutofill="no"
                     android:inputType="date"
                     android:minHeight="48dp"
-                    android:textColor="@color/textColor" />
+                    android:textAlignment="center"
+                    android:textColor="@color/textColor"
+                    app:layout_constraintEnd_toStartOf="@+id/textView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:background="@null"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center"
+                    android:minHeight="48dp"
+                    android:text="@string/dateInterval"
+                    android:textAlignment="center"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/editTextEndDate"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <EditText
                     android:id="@+id/editTextEndDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="30dp"
                     android:background="@null"
                     android:clickable="false"
                     android:cursorVisible="false"
@@ -320,7 +334,24 @@
                     android:importantForAutofill="no"
                     android:inputType="date"
                     android:minHeight="48dp"
-                    android:textColor="@color/textColor" />
+                    android:textAlignment="center"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:orientation="horizontal">
+
+                <Space
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
 

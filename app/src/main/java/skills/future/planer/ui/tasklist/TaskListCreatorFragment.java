@@ -23,7 +23,9 @@ import java.util.Calendar;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
+import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -32,29 +34,59 @@ import skills.future.planer.ui.AnimateView;
 
 public class TaskListCreatorFragment extends Fragment {
 
+    private TaskData editTask;
     private FragmentTaskListCreatorBinding binding;
+    private TaskDataDao taskDataDao;
     private FloatingActionButton saveButton;
     private final Calendar endingDayCalendar = Calendar.getInstance(), beginDayCalendar = Calendar.getInstance();
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingCalendarDay, beginCalendarDay = CalendarDay.today();
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
 
-    public TaskListCreatorFragment() {
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        // date edit texts
+
+        createEditDateFields();
+        createSwitch();
+
+        // save btn
+        saveButton = binding.saveCreatorButton;
+
+        // title and details edit texts
+        taskTitleEditText = binding.EditTextTitle;
+        taskDetailsEditText = binding.EditTextDetails;
+
+        processFabColor();
+
+        Integer taskID = -1;
+        taskID = getTaskIDFromFragmentArgument(taskID);
+        saveBtnOnClickListenerSetter(taskID);
+
+        return root;
+    }
+
+    /**
+     * Creates date edit texts
+     */
+    private void createEditDateFields() {
         beginDateEditText = binding.editTextBeginDate;
         beginDateEditText.setVisibility(View.INVISIBLE);
+
         endingDateEditText = binding.editTextEndDate;
         endingDateEditText.setVisibility(View.INVISIBLE);
+
+        updateEndingDateEditText();
         updateBeginDateEditText();
         datePickers();
-        // switches
+    }
+
+    /**
+     * Creates switch in TaskListCreatorFragment
+     */
+    private void createSwitch() {
         switchPriorities = binding.switchImportant;
         switchTimePriorities = binding.switchUrgent;
         switchCategory = binding.switchCategory;
@@ -65,89 +97,151 @@ public class TaskListCreatorFragment extends Fragment {
                     endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
                 }
         );
-        // save btn
-        saveButton = binding.saveCreatorButton;
-        saveBtnOnClickListenerSetter();
-        // title and details edit texts
-        taskTitleEditText = binding.EditTextTitle;
-        taskDetailsEditText = binding.EditTextDetails;
+        createSwitchIconListeners();
+    }
 
-        processFabColor();
+    /**
+     * Checks is edit of task or create new task
+     */
+    private Integer getTaskIDFromFragmentArgument(Integer taskID) {
+        if (getArguments() != null) {
+            taskID = (Integer) getArguments().get("idTaskToEdit");
+            if (taskID != -1)
+                loadDataFromTask(taskID);
+        }
+        return taskID;
+    }
 
+    /**
+     * Creates switch listeners for changing icons
+     */
+    private void createSwitchIconListeners() {
         switchPriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (switchPriorities.isChecked()) binding.imageViewImportant.setImageResource(R.drawable.trash);
-            else binding.imageViewImportant.setImageResource(R.drawable.star);
+            if (switchPriorities.isChecked()) {
+                binding.imageViewImportant.setImageResource(R.drawable.trash);
+            } else binding.imageViewImportant.setImageResource(R.drawable.star);
             processFabColor();
         });
 
         switchTimePriorities.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (switchTimePriorities.isChecked()) binding.imageViewTaskUrgent.setImageResource(R.drawable.snail);
-            else binding.imageViewTaskUrgent.setImageResource(R.drawable.fire);
+            if (switchTimePriorities.isChecked()) {
+                binding.imageViewTaskUrgent.setImageResource(R.drawable.snail);
+            } else binding.imageViewTaskUrgent.setImageResource(R.drawable.fire);
             processFabColor();
         });
 
         switchCategory.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (switchCategory.isChecked()) binding.imageViewTaskDetails2.setImageResource(R.drawable.briefcase_2);
-            else binding.imageViewTaskDetails2.setImageResource(R.drawable.home_2);
+            if (switchCategory.isChecked()) {
+                binding.imageViewTaskDetails2.setImageResource(R.drawable.briefcase_2);
+            } else binding.imageViewTaskDetails2.setImageResource(R.drawable.home_2);
             processFabColor();
         });
+    }
 
-        return root;
+    /**
+     * Gets TaskData from database, and sets fields of creatorFragment
+     */
+    private void loadDataFromTask(Integer taskID) {
+        taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
+        try {
+            editTask = taskDataDao.findById(taskID);
+            taskTitleEditText.setText(editTask.getTaskTitleText());
+            taskDetailsEditText.setText(editTask.getTaskDetailsText());
+
+            // types of task
+            if (editTask.getPriorities() == Priorities.NotImportant)
+                switchPriorities.setChecked(true);
+            if (editTask.getTimePriority() == TimePriority.NotUrgent)
+                switchTimePriorities.setChecked(true);
+            if (editTask.getCategory() == TaskCategory.Work)
+                switchCategory.setChecked(true);
+
+            //dates
+            if (editTask.getStartingDate() != null) {
+                switchDate.setChecked(true);
+                beginDateEditText.setText(editTask.getStartingDate());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Changes color of fab button
      */
-    private void processFabColor()
-    {
+    private void processFabColor() {
 
-        if( !switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
+        if (!switchPriorities.isChecked() && !switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.RED.getColor()));
-        else if( switchPriorities.isChecked()  && !switchTimePriorities.isChecked() )
+        else if (switchPriorities.isChecked() && !switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.BLUE.getColor()));
-        else if( !switchPriorities.isChecked()  && switchTimePriorities.isChecked() )
+        else if (!switchPriorities.isChecked() && switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.YELLOW.getColor()));
-        else if( switchPriorities.isChecked()  && switchTimePriorities.isChecked() )
+        else if (switchPriorities.isChecked() && switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.PINK.getColor()));
     }
 
     /**
-     * Method is saveBtn On Click Listener
-     * Listener will setFragmentResult on request key: requestKey, bundle key is: bundleKey
+     * Sets listener on save button
+     * If new task is created
+     * listener will setFragmentResult on request key: requestKey, bundle key is: bundleKey
      * then it will back up
+     * But if task is edited
+     * listener sends edited TaskData
      */
-    private void saveBtnOnClickListenerSetter() {
+    private void saveBtnOnClickListenerSetter(Integer taskID) {
         saveButton.setOnClickListener(view1 -> {
             AnimateView.animateInOut(saveButton, getContext());
 
-            if(taskTitleEditText.getText().toString().isEmpty())
-            {
-                Toast toast = Toast.makeText(this.getContext(),
-                        "Tytuł nie może być pusty!",
-                        Toast.LENGTH_SHORT);
-                toast.show();
-            }
-            else
-            {
-                taskDetailsEditText.getText();
-                TaskData data = new TaskData(
+            if (checkTitle(saveButton)) {
+                if (editTask == null)
+                    editTask = new TaskData();
+                editTask.setAllDataWithoutDates(
                         switchCategory.isChecked() ? TaskCategory.Private : TaskCategory.Work,
                         switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
                         switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
                         taskTitleEditText.getText().toString(),
                         taskDetailsEditText.getText().toString());
+
+                //if user want to add dates
                 if (switchDate.isChecked()) {
-                    //if user want to add dates
-                    data.setEndingCalendarDate(endingCalendarDay);
-                    data.setStartingCalendarDate(beginCalendarDay);
+                    editTask.setEndingCalendarDate(endingCalendarDay);
+                    editTask.setStartingCalendarDate(beginCalendarDay);
+                } else {
+                    editTask.setEndingDate(null);
+                    editTask.setStartingDate(null);
                 }
-                Bundle result = new Bundle();
-                result.putParcelable("bundleKey",data);
-                getParentFragmentManager().setFragmentResult("requestKey", result);
-                Navigation.findNavController(view1)
-                        .navigateUp();
+                //If the task is edited
+                if (taskID != -1)
+                    taskDataDao.editOne(editTask);
+                else { //If the task is created
+                    Bundle result = new Bundle();
+                    result.putParcelable("bundleKey", editTask);
+                    getParentFragmentManager().setFragmentResult("requestKey", result);
+                }
+                Navigation.findNavController(view1).navigateUp();
             }
         });
+    }
+
+
+    /**
+     * Checks title is empty
+     *
+     * @param saveButton instance of button
+     * @return true if title is not empty
+     */
+    private boolean checkTitle(FloatingActionButton saveButton) {
+        AnimateView.animateInOut(saveButton, getContext());
+
+        if (taskTitleEditText.getText().toString().isEmpty()) {
+            Toast toast = Toast.makeText(this.getContext(),
+                    "Tytuł nie może być pusty!",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -155,16 +249,16 @@ public class TaskListCreatorFragment extends Fragment {
      * listener will show calendar popup
      */
     private void datePickers() {
-        DatePickerDialog.OnDateSetListener date = (datePicker, i, i1, i2) -> {
-            endingDayCalendar.set(Calendar.YEAR, i);
-            endingDayCalendar.set(Calendar.MONTH, i1);
-            endingDayCalendar.set(Calendar.DAY_OF_MONTH, i2);
+        DatePickerDialog.OnDateSetListener date = (datePicker, y, m, d) -> {
+            endingDayCalendar.set(Calendar.YEAR, y);
+            endingDayCalendar.set(Calendar.MONTH, m);
+            endingDayCalendar.set(Calendar.DAY_OF_MONTH, d);
             updateEndingDateEditText();
         };
-        DatePickerDialog.OnDateSetListener date2 = (datePicker, i, i1, i2) -> {
-            beginDayCalendar.set(Calendar.YEAR, i);
-            beginDayCalendar.set(Calendar.MONTH, i1);
-            beginDayCalendar.set(Calendar.DAY_OF_MONTH, i2);
+        DatePickerDialog.OnDateSetListener date2 = (datePicker, y, m, d) -> {
+            beginDayCalendar.set(Calendar.YEAR, y);
+            beginDayCalendar.set(Calendar.MONTH, m);
+            beginDayCalendar.set(Calendar.DAY_OF_MONTH, d);
             updateBeginDateEditText();
         };
         beginDateEditText.setOnClickListener(view12 ->
@@ -191,20 +285,19 @@ public class TaskListCreatorFragment extends Fragment {
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         int day = date.getDayOfMonth(), month = date.getMonthValue(),
                 year = date.getYear();
-        CalendarDay chosenDay;
-        chosenDay = CalendarDay.from(year, month, day);
+        CalendarDay chosenDay = CalendarDay.from(year, month, day);
+
         if (checkDate(chosenDay, beginCalendarDay)) {
             endingCalendarDay = chosenDay;
             String dateString = endingCalendarDay.getDay() + "." +
                     endingCalendarDay.getMonth() + "." +
                     endingCalendarDay.getYear();
             endingDateEditText.setText(dateString);
-        } else {
-            Toast toast = Toast.makeText(this.getContext(),
+        } else
+            Toast.makeText(this.getContext(),
                     "Data zakończenia zadania nie może być wcześniej niż data jego rozpoczęcia!",
-                    Toast.LENGTH_SHORT);
-            toast.show();
-        }
+                    Toast.LENGTH_SHORT).show();
+
     }
 
     /**
@@ -218,20 +311,25 @@ public class TaskListCreatorFragment extends Fragment {
                 .atZone(ZoneId.systemDefault()).toLocalDate();
         int day = date.getDayOfMonth(), month = date.getMonthValue(),
                 year = date.getYear();
-        CalendarDay chosenDay;
-        chosenDay = CalendarDay.from(year, month, day);
-        if (checkDate(chosenDay, CalendarDay.today())) {
-            beginCalendarDay = chosenDay;
-            String dateString = beginCalendarDay.getDay() + "." +
-                    beginCalendarDay.getMonth() + "." +
-                    beginCalendarDay.getYear();
-            beginDateEditText.setText(dateString);
-        } else {
-            Toast toast = Toast.makeText(this.getContext(),
-                    "Data rozpoczenia zadania nie może być wcześniej niż dzisiaj!",
-                    Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        CalendarDay chosenDay = CalendarDay.from(year, month, day);
+        if (checkDate(endingCalendarDay, chosenDay)) {
+            if (checkDate(chosenDay, CalendarDay.today())) {
+                beginCalendarDay = chosenDay;
+                String dateString = beginCalendarDay.getDay() + "." +
+                        beginCalendarDay.getMonth() + "." +
+                        beginCalendarDay.getYear();
+                beginDateEditText.setText(dateString);
+            } else
+                Toast.makeText(this.getContext(),
+                        "Data rozpoczenia zadania nie może być wcześniej niż dzisiaj!",
+                        Toast.LENGTH_SHORT).show();
+
+        } else
+            Toast.makeText(this.getContext(),
+                    "Data rozpoczenia zadania nie może być wcześniej niż zakończenia!",
+                    Toast.LENGTH_SHORT).show();
+
+
     }
 
     /**
