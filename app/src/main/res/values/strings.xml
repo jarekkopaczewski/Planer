@@ -25,9 +25,9 @@
     <string name="fabContentDescription">Create new task </string>
     <string name="editTextEndDateHint">Data zakończenia zadania</string>
     <string name="textViewImportant">Ważne</string>
-    <string name="TextViewNotImportant">Nie ważne</string>
+    <string name="TextViewNotImportant">Nieważne</string>
     <string name="TextViewUrgent">Pilne</string>
-    <string name="TextViewNotUrgent">Nie pilne</string>
+    <string name="TextViewNotUrgent">Niepilne</string>
     <string name="TextViewWork">Praca</string>
     <string name="TextViewPrivate">Prywatne</string>
     <string name="editTextBeginDate">Data rozpoczęcia zadania</string>
@@ -126,10 +126,10 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="dateInterval">do</string>
-    <string name="work">Work</string>
-    <string name="private_chip">Private</string>
-    <string name="urgent">Urgent</string>
-    <string name="important">Important</string>
-    <string name="not_urgent">Not Urgent</string>
-    <string name="not_important">Not Important</string>
+    <string name="work">Praca</string>
+    <string name="private_chip">Prywatne</string>
+    <string name="urgent">Pilne</string>
+    <string name="important">Ważne</string>
+    <string name="not_urgent">Niepilne</string>
+    <string name="not_important">Nieważne</string>
 </resources>
