@@ -136,42 +136,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="Work" />
+                    android:text="@string/work" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/privateChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="Private" />
+                    android:text="@string/private_chip" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/urgentChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="Urgent" />
+                    android:text="@string/urgent" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/importantChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="Important" />
+                    android:text="@string/important" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/notUrgentChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="Not Urgent" />
+                    android:text="@string/not_urgent" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/notImportantChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checkable="true"
-                    android:text="Not Important" />
+                    android:text="@string/not_important" />
 
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>

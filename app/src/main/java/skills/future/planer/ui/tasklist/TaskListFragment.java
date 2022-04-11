@@ -1,5 +1,6 @@
 package skills.future.planer.ui.tasklist;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +29,9 @@ import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 
 public class TaskListFragment extends Fragment {
@@ -71,7 +75,7 @@ public class TaskListFragment extends Fragment {
 
         ItemTouchHelper helper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(0,
-                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
 
                     @Override
@@ -125,15 +129,15 @@ public class TaskListFragment extends Fragment {
         binding.workChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(binding.privateChip.isChecked())
-                binding.privateChip.setChecked(false);
+                if (binding.privateChip.isChecked())
+                    binding.privateChip.setChecked(false);
             }
         });
 
         binding.privateChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(binding.workChip.isChecked())
+                if (binding.workChip.isChecked())
                     binding.workChip.setChecked(false);
             }
         });
@@ -141,7 +145,7 @@ public class TaskListFragment extends Fragment {
         binding.importantChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(binding.notImportantChip.isChecked())
+                if (binding.notImportantChip.isChecked())
                     binding.notImportantChip.setChecked(false);
             }
         });
@@ -149,7 +153,7 @@ public class TaskListFragment extends Fragment {
         binding.notImportantChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(binding.importantChip.isChecked())
+                if (binding.importantChip.isChecked())
                     binding.importantChip.setChecked(false);
             }
         });
@@ -157,7 +161,7 @@ public class TaskListFragment extends Fragment {
         binding.urgentChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(binding.notUrgentChip.isChecked())
+                if (binding.notUrgentChip.isChecked())
                     binding.notUrgentChip.setChecked(false);
             }
         });
@@ -165,7 +169,7 @@ public class TaskListFragment extends Fragment {
         binding.notUrgentChip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(binding.urgentChip.isChecked())
+                if (binding.urgentChip.isChecked())
                     binding.urgentChip.setChecked(false);
             }
         });
@@ -178,22 +182,34 @@ public class TaskListFragment extends Fragment {
             @SneakyThrows
             @Override
             public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
-                //System.out.println(binding.chipGroup.getCheckedChipIds());
-               List<Integer> checked = binding.chipGroup.getCheckedChipIds();
-               names = new ArrayList<>();
 
-               for (Integer id:checked){
-                    Chip chip = binding.chipGroup.findViewById(id);
-                    names.add((String)chip.getText());
+                List<Integer> checked = binding.chipGroup.getCheckedChipIds();
+                names = new ArrayList<>();
+                int work = binding.workChip.getId();
+                int private_chip = binding.privateChip.getId();
+                int urgent = binding.urgentChip.getId();
+                int not_urgent = binding.notUrgentChip.getId();
+                int important = binding.importantChip.getId();
+                int not_important = binding.notImportantChip.getId();
+               // System.out.println(work+"workId");
+
+                for (Integer id : checked) {
+                   // Chip chip = binding.chipGroup.findViewById(id);
+
+                    if(id.equals(work)) names.add(TaskCategory.Work.toString());
+                    if(id.equals(private_chip)) names.add(TaskCategory.Private.toString());
+                    if(id.equals(urgent)) names.add(TimePriority.Urgent.toString());
+                    if(id.equals(not_urgent)) names.add(TimePriority.NotUrgent.toString());
+                    if(id.equals(important)) names.add(Priorities.Important.toString());
+                    if(id.equals(not_important)) names.add(Priorities.NotImportant.toString());
+
+
                 }
 
-                //todo przesłać listę kategorii do TaskTotalAdapter i tam filtrować po nich
-               // System.out.println(names);
-               taskTotalAdapter.CategoryFilter(names);
+                taskTotalAdapter.CategoryFilter(names);
 
             }
         });
-
 
         return root;
     }

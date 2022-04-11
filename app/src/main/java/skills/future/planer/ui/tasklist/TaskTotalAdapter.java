@@ -153,35 +153,44 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         else return 0;
     }
 
+    /**
+     * Filter for task's category
+     * @param filters list of checked filters names
+     * @throws Exception exception
+     */
     @SuppressLint("NotifyDataSetChanged")
-    public void CategoryFilter(ArrayList<String> names) throws Exception {
+    public void CategoryFilter(ArrayList<String> filters) throws Exception {
 
         TaskCategory category = null;
         Priorities priorities = null;
         TimePriority timePriority = null;
-        for(String name : names) {
-            if (name.equals(TaskCategory.Private.toString())) {
+
+        //checking which filter is checked
+        for(String filter : filters) {
+            if (filter.equals(TaskCategory.Private.toString())) {
                 category = TaskCategory.Private;
             }
-            if (name.equals("Work")) {
+            if (filter.equals(TaskCategory.Work.toString())) {
                 category = TaskCategory.Work;
             }
-            if (name.equals("Urgent")) {
+            if (filter.equals(TimePriority.Urgent.toString())) {
                 timePriority = TimePriority.Urgent;
             }
-            if (name.equals("Not Urgent")) {
+            if (filter.equals(TimePriority.NotUrgent.toString())) {
                 timePriority = TimePriority.NotUrgent;
             }
-            if (name.equals("Important")) {
+            if (filter.equals(Priorities.Important.toString())) {
                 priorities = Priorities.Important;
             }
-            if (name.equals("Not Important")) {
+            if (filter.equals(Priorities.NotImportant.toString())) {
                 priorities = Priorities.NotImportant;
             }
         }
 
+        //list of filtered tasks
         List<TaskData> list = new ArrayList<>();
 
+        //checks which query to execute
         if(category == null && priorities == null && timePriority!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(timePriority);}
         if(category == null && timePriority == null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities);}
         if(timePriority == null && priorities == null && category!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(category);}
@@ -190,6 +199,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         if(priorities == null && timePriority!=null && category!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(category,timePriority);}
         if(category!=null && timePriority!=null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities,timePriority,category);}
         if(category==null && priorities==null && timePriority==null ){list = fullTaskList;}
+
         filteredTaskList=list;
         notifyDataSetChanged();
 
