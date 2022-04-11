@@ -2,6 +2,5 @@
 <resources>
     <style name="ArrowsStyle">
         <item name="mcv_leftArrowMask">@drawable/mcv_action_previous</item>
-        <item name="mcv_rightArrowMask">@drawable/mcv_action_next</item>
     </style>
 </resources>
