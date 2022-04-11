@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import skills.future.planer.databinding.FragmentMatrixBinding;
+import skills.future.planer.db.task.DayCategorizedTaskData;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 
@@ -78,49 +79,15 @@ public class MatrixFragment extends Fragment {
      */
     public void setUpModels() {
         // nie jest w pętli bo lambdy i trzeba zmienić getter dla każdego modelu
-        taskDataViewModels.get(0).getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> {
-            matrixAdapters.get(0).setFilteredTaskList(taskData);
-            progressBars.get(0).setMax(matrixAdapters.get(0).getItemCount());
-            progressBars.get(0).setProgress(matrixAdapters.get(0).getDone());
-        });
+        for (int i = 0; i < 4; i++) {
+            int finalI = i;
+            taskDataViewModels.get(i).getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> {
 
-        taskDataViewModels.get(1).getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> {
-            matrixAdapters.get(1).setFilteredTaskList(taskData);
-            progressBars.get(1).setMax(matrixAdapters.get(1).getItemCount());
-            progressBars.get(1).setProgress(matrixAdapters.get(1).getDone());
-        });
-
-        taskDataViewModels.get(2).getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> {
-            matrixAdapters.get(2).setFilteredTaskList(taskData);
-            progressBars.get(2).setMax(matrixAdapters.get(2).getItemCount());
-            progressBars.get(2).setProgress(matrixAdapters.get(2).getDone());
-        });
-
-        taskDataViewModels.get(3).getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> {
-            matrixAdapters.get(3).setFilteredTaskList(taskData);
-            progressBars.get(3).setMax(matrixAdapters.get(3).getItemCount());
-            progressBars.get(3).setProgress(matrixAdapters.get(3).getDone());
-        });
-
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            TaskData result = bundle.getParcelable("bundleKey");
-            taskDataViewModels.get(0).insert(result);
-        });
-
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            TaskData result = bundle.getParcelable("bundleKey");
-            taskDataViewModels.get(1).insert(result);
-        });
-
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            TaskData result = bundle.getParcelable("bundleKey");
-            taskDataViewModels.get(2).insert(result);
-        });
-
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            TaskData result = bundle.getParcelable("bundleKey");
-            taskDataViewModels.get(3).insert(result);
-        });
+                matrixAdapters.get(finalI).setFilteredTaskList(new DayCategorizedTaskData(taskData).getAllCategorizedDayFromQuarter(finalI));
+                progressBars.get(finalI).setMax(matrixAdapters.get(finalI).getItemCount());
+                progressBars.get(finalI).setProgress(matrixAdapters.get(finalI).getDone());
+            });
+        }
     }
 
     @Override

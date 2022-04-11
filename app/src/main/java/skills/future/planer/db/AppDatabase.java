@@ -58,7 +58,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final TaskDataDao mDao;
-        String[] words = {"dolphin", "crocodile", "cobra", "1", "2", "3"};
+        //String[] words = {"dolphin", "crocodile", "cobra"};
 
         PopulateDbAsync(AppDatabase db) {
             mDao = db.taskDataTabDao();
@@ -76,6 +76,11 @@ public abstract class AppDatabase extends RoomDatabase {
             CalendarDay day4 = CalendarDay.from(2022, 4, 7);
 
 
+            for (int i = 0; i <= 4; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu","",day,day);
+                mDao.insert(word);
+            }
+          
             for (int i = 0; i < 10; i++) {
                 TaskData word = new TaskData(TaskCategory.Work,
                         Priorities.Important,
@@ -93,15 +98,15 @@ public abstract class AppDatabase extends RoomDatabase {
                 mDao.insert(word);
             }
             for (int i = 0; i <= 4; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "2","",day2,day2);
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "2niu","",day2,day2);
                 mDao.insert(word);
             }
-            for (int i = 0; i <=10; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "3","",day3,day3);
+            for (int i = 0; i <=4; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "3inu","",day3,day3);
                 mDao.insert(word);
             }
-            for (int i = 0; i <= 20; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "4","",day4,day4);
+            for (int i = 0; i <= 4; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "4ninu","",day4,day4);
                 mDao.insert(word);
             }*/
             return null;
