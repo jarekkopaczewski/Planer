@@ -130,6 +130,8 @@ public class TaskData implements Parcelable {
     @Ignore
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText, CalendarDay startingDate, CalendarDay endingDate) {
+        this.taskDataId = 0;
+        this.status = false;
         this.category = category;
         this.priorities = priorities;
         this.timePriority = timePriority;

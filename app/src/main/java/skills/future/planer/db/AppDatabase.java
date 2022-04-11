@@ -25,6 +25,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static final String DB_NAME = "planer2.db";
     private static AppDatabase sInstance;
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
+
     public abstract TaskDataDao taskDataTabDao();
 
     public static AppDatabase getInstance(final Context context/*, final AppExecutors executors*/) {
@@ -41,10 +42,11 @@ public abstract class AppDatabase extends RoomDatabase {
         Log.d(LOG_TAG, "Getting the database instance");
         return sInstance;
     }
+
     private static RoomDatabase.Callback sRoomDatabaseCallback =
-            new RoomDatabase.Callback(){
-        
-                public void onOpen ( SupportSQLiteDatabase db){
+            new RoomDatabase.Callback() {
+
+                public void onOpen(SupportSQLiteDatabase db) {
                     super.onOpen(db);
                     new PopulateDbAsync(sInstance).execute();
                 }
@@ -56,7 +58,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final TaskDataDao mDao;
-        String[] words = {"dolphin", "crocodile", "cobra","1","2","3"};
+        String[] words = {"dolphin", "crocodile", "cobra", "1", "2", "3"};
 
         PopulateDbAsync(AppDatabase db) {
             mDao = db.taskDataTabDao();
@@ -69,11 +71,24 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-            CalendarDay day2 = CalendarDay.from(2022,4,5);
-            CalendarDay day3 = CalendarDay.from(2022,4,6);
-            CalendarDay day4 = CalendarDay.from(2022,4,7);
+            CalendarDay day2 = CalendarDay.from(2022, 4, 15);
+            CalendarDay day3 = CalendarDay.from(2022, 4, 6);
+            CalendarDay day4 = CalendarDay.from(2022, 4, 7);
 
-            for (int i = 0; i <= 1; i++) {
+
+            for (int i = 0; i < 10; i++) {
+                TaskData word = new TaskData(TaskCategory.Work,
+                        Priorities.Important,
+                        TimePriority.Urgent,
+                        "Napisać aplikacje opierającą się na Remote Method Invocation",
+                        "Zaimplementuj rozproszony system imitujący działanie sieci " +
+                                "tablic reklamowych, na których cyklicznie wyświetlane są zadane teksty.\n" +
+                                "Wymiana danych pomiędzy elementami systemu powinna odbywać się " +
+                                "poprzez gniazda SSL, z wykorzystaniem menadżera bezpieczeństwa i plików polityki.", day, day2);
+                mDao.insert(word);
+            }
+
+            /*for (int i = 0; i <= 1; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1","",day,day);
                 mDao.insert(word);
             }
@@ -88,7 +103,7 @@ public abstract class AppDatabase extends RoomDatabase {
             for (int i = 0; i <= 20; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "4","",day4,day4);
                 mDao.insert(word);
-            }
+            }*/
             return null;
         }
     }
