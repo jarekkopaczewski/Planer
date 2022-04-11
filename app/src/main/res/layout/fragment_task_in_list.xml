@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:layout_marginTop="10dp"
     android:background="@color/background"
     android:orientation="vertical">
 
@@ -12,6 +11,10 @@
         android:id="@+id/taskCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@color/foreground"
         app:cardBackgroundColor="@color/foreground"
         app:cardCornerRadius="15dp"
@@ -26,17 +29,17 @@
             android:background="@color/foreground">
 
             <TextView
+                android:id="@+id/taskTitleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/taskTitleTextView"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="7dp"
                 android:layout_marginEnd="10dp"
                 android:autoSizeTextType="none"
-                android:fontFamily="@font/signika_regular"
                 android:ellipsize="end"
-                android:maxLines="1"
+                android:fontFamily="@font/signika_regular"
                 android:gravity="center|start"
+                android:maxLines="1"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
                 android:textAlignment="viewStart"
@@ -107,8 +110,8 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/info"
-                tools:layout_editor_absoluteY="7dp"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="7dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

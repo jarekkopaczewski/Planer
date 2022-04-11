@@ -58,7 +58,6 @@
                     android:background="@color/background"
                     android:indeterminateTint="@color/f1"
                     android:progressTint="@color/f1"
-                    android:translationZ="3dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -100,7 +99,6 @@
                     android:background="@color/background"
                     android:indeterminateTint="@color/f4"
                     android:progressTint="@color/f4"
-                    android:translationZ="3dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
