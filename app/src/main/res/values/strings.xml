@@ -126,4 +126,10 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="dateInterval">do</string>
+    <string name="work">Work</string>
+    <string name="private_chip">Private</string>
+    <string name="urgent">Urgent</string>
+    <string name="important">Important</string>
+    <string name="not_urgent">Not Urgent</string>
+    <string name="not_important">Not Important</string>
 </resources>

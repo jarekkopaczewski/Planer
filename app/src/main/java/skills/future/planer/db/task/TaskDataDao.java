@@ -10,6 +10,7 @@ import androidx.room.Update;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.List;
+import java.util.Locale;
 
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.category.TaskCategory;
@@ -48,7 +49,7 @@ public interface TaskDataDao {
      * @throws Exception
      */
     @Query("SELECT * FROM taskData WHERE category = :taskCategory ")
-    LiveData<List<TaskData>> getTaskData(TaskCategory taskCategory) throws Exception;
+    List<TaskData> getTaskData(TaskCategory taskCategory) throws Exception;
 
     /**
      * @param priorities   specified taskCategory
@@ -57,7 +58,22 @@ public interface TaskDataDao {
      * @throws Exception
      */
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority")
-    LiveData<List<TaskData>> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
+   List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
+
+    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND category = :taskCategory")
+    List<TaskData> getTaskData(Priorities priorities, TaskCategory taskCategory) throws Exception;
+
+    @Query("SELECT * FROM taskData WHERE timePriority =:timePriority AND category = :taskCategory")
+    List<TaskData> getTaskData(TaskCategory taskCategory, TimePriority timePriority) throws Exception;
+
+    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority AND category = :category")
+    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority, TaskCategory category) throws Exception;
+
+    @Query("SELECT * FROM taskData WHERE timePriority = :timePriority ")
+    List<TaskData> getTaskData(TimePriority timePriority) throws Exception;
+
+    @Query("SELECT * FROM taskData WHERE priorities = :priorities ")
+    List<TaskData> getTaskData(Priorities priorities) throws Exception;
 
     /**
      * Method delete taskData from database
