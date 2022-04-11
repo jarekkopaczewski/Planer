@@ -25,9 +25,7 @@ public class TaskDataViewModel extends AndroidViewModel {
     /**
      * Up-to-date list of all taskData
      */
-    private final LiveData<List<TaskData>> allTaskData, mImportantUrgentTaskData,
-            mImportantNotUrgentTaskData, mNotImportantUrgentTaskData, mNotImportantNotUrgentTaskData;
-
+    private final LiveData<List<TaskData>> allTaskData;
     /**
      * Constructor require by viewModelProvider
      *
@@ -37,10 +35,6 @@ public class TaskDataViewModel extends AndroidViewModel {
         super(application);
         mRepository = new TaskDataRepository(application);
         allTaskData = mRepository.getListLiveData();
-        mImportantUrgentTaskData = mRepository.getImportantUrgentTask();
-        mImportantNotUrgentTaskData = mRepository.getImportantNotUrgent();
-        mNotImportantUrgentTaskData = mRepository.getNotImportantUrgentTask();
-        mNotImportantNotUrgentTaskData = mRepository.getNotImportantNotUrgent();
     }
 
     /**

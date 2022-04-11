@@ -44,7 +44,6 @@ public class TaskDataRepository {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDataDao = db.taskDataTabDao();
         listLiveData = taskDataDao.getTaskData();
-        new SelectAsyncTask(taskDataDao, this).execute();
     }
 
     /**
@@ -106,34 +105,6 @@ public class TaskDataRepository {
         @Override
         protected Void doInBackground(final TaskData... params) {
             mAsyncTaskDao.deleteOne(params[0]);
-            return null;
-        }
-    }
-
-    /**
-     * Class run asyncTask which select categorized tasks
-     * @author Mikołaj Szymczyk
-     */
-    private static class SelectAsyncTask extends AsyncTask<Void, Void, Void> {
-        private final TaskDataDao asyncTaskDao;
-        private final TaskDataRepository categorisedTaskData;
-
-        SelectAsyncTask(TaskDataDao taskDataDao, TaskDataRepository categorisedTaskData) {
-            super();
-            asyncTaskDao = taskDataDao;
-            this.categorisedTaskData = categorisedTaskData;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                categorisedTaskData.importantNotUrgent = asyncTaskDao.getTaskData(Priorities.Important, TimePriority.NotUrgent);
-                categorisedTaskData.importantUrgentTask = asyncTaskDao.getTaskData(Priorities.Important, TimePriority.Urgent);
-                categorisedTaskData.notImportantUrgentTask = asyncTaskDao.getTaskData(Priorities.NotImportant, TimePriority.Urgent);
-                categorisedTaskData.notImportantNotUrgent = asyncTaskDao.getTaskData(Priorities.NotImportant, TimePriority.NotUrgent);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             return null;
         }
     }
