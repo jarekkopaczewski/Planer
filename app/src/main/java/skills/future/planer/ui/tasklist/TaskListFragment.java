@@ -1,14 +1,11 @@
 package skills.future.planer.ui.tasklist;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,7 +15,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
@@ -40,7 +36,7 @@ public class TaskListFragment extends Fragment {
     private TaskTotalAdapter taskTotalAdapter;
     private FragmentTaskListBinding binding;
     private TaskDataViewModel mWordViewModel;
-    private ArrayList<String> names;
+    private ArrayList<String> filters;
 
     public TaskListFragment() {
     }
@@ -123,91 +119,74 @@ public class TaskListFragment extends Fragment {
             }
         });
 
-        /**
+        /*
          * Chips OnClick Listeners
          */
-        binding.workChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.privateChip.isChecked())
-                    binding.privateChip.setChecked(false);
-            }
+        binding.workChip.setOnClickListener(view -> {
+            if (binding.privateChip.isChecked())
+                binding.privateChip.setChecked(false);
         });
 
-        binding.privateChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.workChip.isChecked())
-                    binding.workChip.setChecked(false);
-            }
+        binding.privateChip.setOnClickListener(view -> {
+            if (binding.workChip.isChecked())
+                binding.workChip.setChecked(false);
         });
 
-        binding.importantChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.notImportantChip.isChecked())
-                    binding.notImportantChip.setChecked(false);
-            }
+        binding.importantChip.setOnClickListener(view -> {
+            if (binding.notImportantChip.isChecked())
+                binding.notImportantChip.setChecked(false);
         });
 
-        binding.notImportantChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.importantChip.isChecked())
-                    binding.importantChip.setChecked(false);
-            }
+        binding.notImportantChip.setOnClickListener(view -> {
+            if (binding.importantChip.isChecked())
+                binding.importantChip.setChecked(false);
         });
 
-        binding.urgentChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.notUrgentChip.isChecked())
-                    binding.notUrgentChip.setChecked(false);
-            }
+        binding.urgentChip.setOnClickListener(view -> {
+            if (binding.notUrgentChip.isChecked())
+                binding.notUrgentChip.setChecked(false);
         });
 
-        binding.notUrgentChip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (binding.urgentChip.isChecked())
-                    binding.urgentChip.setChecked(false);
-            }
+        binding.notUrgentChip.setOnClickListener(view -> {
+            if (binding.urgentChip.isChecked())
+                binding.urgentChip.setChecked(false);
         });
 
-        /**
+        /*
          * Chip Group Listener
          * Searches by iDs and returns list of checked filters
          */
-        binding.chipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
-            @SneakyThrows
-            @Override
-            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+        binding.chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
 
-                List<Integer> checked = binding.chipGroup.getCheckedChipIds();
-                names = new ArrayList<>();
-                int work = binding.workChip.getId();
-                int private_chip = binding.privateChip.getId();
-                int urgent = binding.urgentChip.getId();
-                int not_urgent = binding.notUrgentChip.getId();
-                int important = binding.importantChip.getId();
-                int not_important = binding.notImportantChip.getId();
-               // System.out.println(work+"workId");
+            //list of checked chips ids
+            List<Integer> checked = binding.chipGroup.getCheckedChipIds();
 
-                for (Integer id : checked) {
-                   // Chip chip = binding.chipGroup.findViewById(id);
+            //new list of filters
+            filters = new ArrayList<>();
 
-                    if(id.equals(work)) names.add(TaskCategory.Work.toString());
-                    if(id.equals(private_chip)) names.add(TaskCategory.Private.toString());
-                    if(id.equals(urgent)) names.add(TimePriority.Urgent.toString());
-                    if(id.equals(not_urgent)) names.add(TimePriority.NotUrgent.toString());
-                    if(id.equals(important)) names.add(Priorities.Important.toString());
-                    if(id.equals(not_important)) names.add(Priorities.NotImportant.toString());
+            //getting chips ids
+            int work = binding.workChip.getId();
+            int private_chip = binding.privateChip.getId();
+            int urgent = binding.urgentChip.getId();
+            int not_urgent = binding.notUrgentChip.getId();
+            int important = binding.importantChip.getId();
+            int not_important = binding.notImportantChip.getId();
 
+            //compare them with checked ids
+            for (Integer id : checked) {
+                if (id.equals(work)) filters.add(TaskCategory.Work.toString());
+                if (id.equals(private_chip)) filters.add(TaskCategory.Private.toString());
+                if (id.equals(urgent)) filters.add(TimePriority.Urgent.toString());
+                if (id.equals(not_urgent)) filters.add(TimePriority.NotUrgent.toString());
+                if (id.equals(important)) filters.add(Priorities.Important.toString());
+                if (id.equals(not_important)) filters.add(Priorities.NotImportant.toString());
+            }
 
-                }
-
-                taskTotalAdapter.CategoryFilter(names);
-
+            //give list of filters to CategoryFilter
+            try {
+                taskTotalAdapter.CategoryFilter(filters);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
