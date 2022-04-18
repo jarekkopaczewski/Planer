@@ -34,11 +34,11 @@ import skills.future.planer.ui.AnimateView;
 
 public class TaskListCreatorFragment extends Fragment {
 
+    private final Calendar endingDayCalendar = Calendar.getInstance(), beginDayCalendar = Calendar.getInstance();
     private TaskData editTask;
     private FragmentTaskListCreatorBinding binding;
     private TaskDataDao taskDataDao;
     private FloatingActionButton saveButton;
-    private final Calendar endingDayCalendar = Calendar.getInstance(), beginDayCalendar = Calendar.getInstance();
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingCalendarDay, beginCalendarDay = CalendarDay.today();
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
@@ -170,15 +170,16 @@ public class TaskListCreatorFragment extends Fragment {
      * Changes color of fab button
      */
     private void processFabColor() {
-
         if (!switchPriorities.isChecked() && !switchTimePriorities.isChecked())
-            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.RED.getColor()));
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("urgentImportant", getContext())));
         else if (switchPriorities.isChecked() && !switchTimePriorities.isChecked())
-            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.BLUE.getColor()));
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("urgentNotImportant", getContext())));
         else if (!switchPriorities.isChecked() && switchTimePriorities.isChecked())
-            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.YELLOW.getColor()));
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentImportant", getContext())));
         else if (switchPriorities.isChecked() && switchTimePriorities.isChecked())
-            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.PINK.getColor()));
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentNotImportant", getContext())));
+
+        System.out.println("change");
     }
 
     /**
@@ -197,7 +198,7 @@ public class TaskListCreatorFragment extends Fragment {
                 if (editTask == null)
                     editTask = new TaskData();
                 editTask.setAllDataWithoutDates(
-                        switchCategory.isChecked() ? TaskCategory.Work:TaskCategory.Private,
+                        switchCategory.isChecked() ? TaskCategory.Work : TaskCategory.Private,
                         switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
                         switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
                         taskTitleEditText.getText().toString(),

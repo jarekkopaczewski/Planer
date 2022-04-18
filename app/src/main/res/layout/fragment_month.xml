@@ -35,7 +35,7 @@
             app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
             app:mcv_firstDayOfWeek="monday"
             app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
-            app:mcv_selectionColor="#00F"
+            app:mcv_selectionColor="@color/second_color_30"
             app:mcv_selectionMode="single"
             app:mcv_showOtherDates="all" />
     </androidx.cardview.widget.CardView>

@@ -31,7 +31,7 @@ public class DayTaskListFragment extends Fragment {
     private DayTaskListViewModel dayTaskListViewModel;
     private TaskDataViewModel mWordViewModel;
     private DayTaskListFragmentBinding binding;
-    private MaterialCalendarView materialCalendarView;
+    // private MaterialCalendarView materialCalendarView;
     private FloatingActionButton fabDay;
     private RecyclerView listDay;
     private TaskTotalAdapter taskTotalAdapter;
@@ -53,14 +53,14 @@ public class DayTaskListFragment extends Fragment {
 
         dayNumberView.setText(String.valueOf(dayTaskListViewModel.getToday().getValue().getDay()));
 
-        fabDay.setOnClickListener(v -> dayTaskListViewModel.returnToToday(materialCalendarView, fabDay, dayNumberView));
-
-        materialCalendarView.setOnDateChangedListener((widget, date, selected) -> {
-                    dayTaskListViewModel.checkDateIsToday(date, fabDay, dayNumberView);
-                }
-        );
-
-        dayTaskListViewModel.returnToToday(materialCalendarView, fabDay, dayNumberView);
+//        fabDay.setOnClickListener(v -> dayTaskListViewModel.returnToToday(materialCalendarView, fabDay, dayNumberView));
+//
+//        materialCalendarView.setOnDateChangedListener((widget, date, selected) -> {
+//                    dayTaskListViewModel.checkDateIsToday(date, fabDay, dayNumberView);
+//                }
+//        );
+//
+//        dayTaskListViewModel.returnToToday(materialCalendarView, fabDay, dayNumberView);
 
         createList();
 
@@ -118,7 +118,7 @@ public class DayTaskListFragment extends Fragment {
      * Creates bindings on components
      */
     private void componentBindings() {
-        materialCalendarView = binding.calendarView;
+        //materialCalendarView = binding.calendarView;
         fabDay = binding.dayFab;
         dayNumberView = binding.dayNumber;
     }

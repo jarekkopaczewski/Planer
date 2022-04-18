@@ -10,4 +10,25 @@
         app:title="@string/theme_title"
         app:useSimpleSummaryProvider="true" />
 
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        android:id="@+id/urgentImportantColorPicker"
+        android:defaultValue="0xFF41E1D6"
+        app:key="urgentImportant"
+        app:title="Ważne pilne" />
+
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        app:title="Ważne niepilne"
+        app:key="urgentNotImportant"
+        android:defaultValue="0xFF007E8F"/>
+
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        app:title="Nieważne pilne"
+        app:key="notUrgentImportant"
+        android:defaultValue="0xFFC6A2CA" />
+
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        app:title="Nieważne niepilne"
+        app:key="notUrgentNotImportant"
+        android:defaultValue="0xFF715397"/>
+
 </PreferenceScreen>

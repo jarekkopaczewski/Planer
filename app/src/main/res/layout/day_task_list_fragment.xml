@@ -40,7 +40,7 @@
         android:contentDescription="@string/fabContentDescription"
         android:paddingBottom="70dp"
         android:scaleType="center"
-        app:backgroundTint="@color/todayChooseColor"
+        app:backgroundTint="@color/second_color_30"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/fab"
         app:layout_constraintHorizontal_bias="1.0"
@@ -56,27 +56,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/foreground"
-            android:backgroundTint="@color/foreground"
-            android:fontFamily="@font/signika_regular"
-            android:theme="@style/ArrowsStyle"
-            android:translationZ="0dp"
-            app:mcv_calendarMode="week"
-            app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:mcv_firstDayOfWeek="monday"
-            app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
-            app:mcv_selectionColor="@color/todayChooseColor"
-            app:mcv_selectionMode="single"
-            app:mcv_showOtherDates="all"
-            app:mcv_showWeekDays="true"
-            app:mcv_tileSize="0dp" />
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listTotalView"

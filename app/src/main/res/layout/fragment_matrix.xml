@@ -58,6 +58,7 @@
                     android:background="@color/background"
                     android:indeterminateTint="@color/f1"
                     android:progressTint="@color/f1"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -99,6 +100,7 @@
                     android:background="@color/background"
                     android:indeterminateTint="@color/f4"
                     android:progressTint="@color/f4"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -149,6 +151,7 @@
                     android:indeterminateTint="@color/f3"
                     android:progressTint="@color/f3"
                     android:translationZ="3dp"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -207,6 +210,7 @@
                     android:indeterminateTint="@color/f2"
                     android:progressTint="@color/f2"
                     android:translationZ="3dp"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
