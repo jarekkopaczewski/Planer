@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,9 +14,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskData;
@@ -31,15 +27,8 @@ public class DayTaskListFragment extends Fragment {
     private DayTaskListViewModel dayTaskListViewModel;
     private TaskDataViewModel mWordViewModel;
     private DayTaskListFragmentBinding binding;
-    private MaterialCalendarView calendarView;
-    private FloatingActionButton fabDay;
     private RecyclerView listDay;
     private TaskTotalAdapter taskTotalAdapter;
-    private TextView dayNumberView;
-
-    public DayTaskListFragment(MaterialCalendarView calendarView) {
-        this.calendarView = calendarView;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -48,21 +37,9 @@ public class DayTaskListFragment extends Fragment {
         dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
         View root = binding.getRoot();
 
-        componentBindings();
         createList();
 
-        dateJumper();
-
         return root;
-    }
-
-    private void dateJumper() {
-        dayNumberView.setText(String.valueOf(dayTaskListViewModel.getToday().getValue().getDay()));
-        fabDay.setOnClickListener(v -> dayTaskListViewModel.returnToToday(calendarView, fabDay, dayNumberView));
-        calendarView.setOnDateChangedListener(
-                (widget, date, selected) ->
-                        dayTaskListViewModel.checkDateIsToday(date, fabDay, dayNumberView));
-        dayTaskListViewModel.returnToToday(calendarView, fabDay, dayNumberView);
     }
 
 
@@ -111,13 +88,6 @@ public class DayTaskListFragment extends Fragment {
         helper.attachToRecyclerView(listDay);
     }
 
-    /**
-     * Creates bindings on components
-     */
-    private void componentBindings() {
-        fabDay = binding.dayFab;
-        dayNumberView = binding.dayNumber;
-    }
 
     @Override
     public void onDestroyView() {

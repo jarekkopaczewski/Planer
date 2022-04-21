@@ -30,25 +30,6 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/dayFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginEnd="10dp"
-        android:clickable="true"
-        android:contentDescription="@string/fabContentDescription"
-        android:paddingBottom="70dp"
-        android:scaleType="center"
-        app:backgroundTint="@color/second_color_30"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/fab"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"
-        tools:ignore="SpeakableTextPresentCheck" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/monthCard"
         android:layout_width="0dp"
@@ -56,7 +37,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listTotalView"
@@ -85,20 +66,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/monthCard"
         app:tint="@color/shadow" />
-
-    <TextView
-        android:id="@+id/dayNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="7dp"
-        android:text=""
-        android:textColor="#FFFFFF"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/dayFab"
-        app:layout_constraintEnd_toEndOf="@+id/dayFab"
-        app:layout_constraintStart_toStartOf="@+id/dayFab"
-        app:layout_constraintTop_toTopOf="@+id/dayFab" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
