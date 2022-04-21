@@ -4,19 +4,21 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import skills.future.planer.ui.day.views.ScrollingFragment;
 import skills.future.planer.ui.day.views.daylist.DayTaskListFragment;
 import skills.future.planer.ui.day.views.matrix.MatrixFragment;
-import skills.future.planer.ui.day.views.ScrollingFragment;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
     private static final int NUM_ITEMS = 3;
-    private final DayTaskListFragment taskListFragment = new DayTaskListFragment();
+    private final DayTaskListFragment taskListFragment;
     private final MatrixFragment matrixFragment = new MatrixFragment();
     private final ScrollingFragment scrollingFragment = new ScrollingFragment();
 
-    public MyPagerAdapter(FragmentManager fragmentManager) {
+    public MyPagerAdapter(FragmentManager fragmentManager, MaterialCalendarView calendarView) {
         super(fragmentManager);
-
+        taskListFragment = new DayTaskListFragment(calendarView);
     }
 
     @Override

@@ -31,14 +31,14 @@ public class DayTaskListFragment extends Fragment {
     private DayTaskListViewModel dayTaskListViewModel;
     private TaskDataViewModel mWordViewModel;
     private DayTaskListFragmentBinding binding;
-    // private MaterialCalendarView materialCalendarView;
+    private MaterialCalendarView calendarView;
     private FloatingActionButton fabDay;
     private RecyclerView listDay;
     private TaskTotalAdapter taskTotalAdapter;
     private TextView dayNumberView;
 
-    public DayTaskListFragment() {
-
+    public DayTaskListFragment(MaterialCalendarView calendarView) {
+        this.calendarView = calendarView;
     }
 
     @Override
@@ -49,23 +49,20 @@ public class DayTaskListFragment extends Fragment {
         View root = binding.getRoot();
 
         componentBindings();
-
-
-        dayNumberView.setText(String.valueOf(dayTaskListViewModel.getToday().getValue().getDay()));
-
-//        fabDay.setOnClickListener(v -> dayTaskListViewModel.returnToToday(materialCalendarView, fabDay, dayNumberView));
-//
-//        materialCalendarView.setOnDateChangedListener((widget, date, selected) -> {
-//                    dayTaskListViewModel.checkDateIsToday(date, fabDay, dayNumberView);
-//                }
-//        );
-//
-//        dayTaskListViewModel.returnToToday(materialCalendarView, fabDay, dayNumberView);
-
         createList();
 
+        dateJumper();
 
         return root;
+    }
+
+    private void dateJumper() {
+        dayNumberView.setText(String.valueOf(dayTaskListViewModel.getToday().getValue().getDay()));
+        fabDay.setOnClickListener(v -> dayTaskListViewModel.returnToToday(calendarView, fabDay, dayNumberView));
+        calendarView.setOnDateChangedListener(
+                (widget, date, selected) ->
+                        dayTaskListViewModel.checkDateIsToday(date, fabDay, dayNumberView));
+        dayTaskListViewModel.returnToToday(calendarView, fabDay, dayNumberView);
     }
 
 
@@ -118,7 +115,6 @@ public class DayTaskListFragment extends Fragment {
      * Creates bindings on components
      */
     private void componentBindings() {
-        //materialCalendarView = binding.calendarView;
         fabDay = binding.dayFab;
         dayNumberView = binding.dayNumber;
     }

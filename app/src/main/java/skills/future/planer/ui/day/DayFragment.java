@@ -1,7 +1,5 @@
 package skills.future.planer.ui.day;
 
-import static androidx.viewpager.widget.PagerAdapter.POSITION_NONE;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +10,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
 import skills.future.planer.databinding.FragmentDayBinding;
-import skills.future.planer.ui.tasklist.TaskListFragment;
+import skills.future.planer.ui.day.views.daylist.DayTaskListFragment;
 
 public class DayFragment extends Fragment {
 
     private DayViewModel dayViewModel;
     private FragmentDayBinding binding;
     private MyPagerAdapter myPagerAdapter;
-
-    public DayFragment() {
-
-    }
+    private MaterialCalendarView calendarView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,9 +28,11 @@ public class DayFragment extends Fragment {
         binding = FragmentDayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        calendarView = binding.calendarView;
+
         ViewPager vpPager = binding.dayViewPager;
-        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
-        myPagerAdapter.setPrimaryItem(container, 1, new TaskListFragment());
+        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager(), calendarView);
+        myPagerAdapter.setPrimaryItem(container, 1, new DayTaskListFragment(calendarView));
         vpPager.setAdapter(myPagerAdapter);
 
         return root;

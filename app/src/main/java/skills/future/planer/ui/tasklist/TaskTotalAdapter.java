@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,8 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
-import skills.future.planer.db.task.enums.priority.Priorities;
-import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -138,7 +135,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setFilteredTaskList(List<TaskData> words){
+    public void setFilteredTaskList(List<TaskData> words) {
         filteredTaskList = words;
         fullTaskList = new ArrayList<>(filteredTaskList);
         notifyDataSetChanged();
@@ -157,6 +154,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
     /**
      * Filter for task's category
+     *
      * @param filters list of checked filters names
      * @throws Exception exception
      */
@@ -168,7 +166,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         TimePriority timePriority = null;
 
         //checking which filter is checked
-        for(String filter : filters) {
+        for (String filter : filters) {
             if (filter.equals(TaskCategory.Private.toString())) {
                 category = TaskCategory.Private;
             }
@@ -193,16 +191,32 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         List<TaskData> list = new ArrayList<>();
 
         //checks which query to execute
-        if(category == null && priorities == null && timePriority!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(timePriority);}
-        if(category == null && timePriority == null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities);}
-        if(timePriority == null && priorities == null && category!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(category);}
-        if(category == null && timePriority!=null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities,timePriority);}
-        if(timePriority == null && category!=null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities,category);}
-        if(priorities == null && timePriority!=null && category!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(category,timePriority);}
-        if(category!=null && timePriority!=null && priorities!=null){list=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities,timePriority,category);}
-        if(category==null && priorities==null && timePriority==null ){list = fullTaskList;}
+        if (category == null && priorities == null && timePriority != null) {
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(timePriority);
+        }
+        if (category == null && timePriority == null && priorities != null) {
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities);
+        }
+        if (timePriority == null && priorities == null && category != null) {
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(category);
+        }
+        if (category == null && timePriority != null && priorities != null) {
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities, timePriority);
+        }
+        if (timePriority == null && category != null && priorities != null) {
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities, category);
+        }
+        if (priorities == null && timePriority != null && category != null) {
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(category, timePriority);
+        }
+        if (category != null && timePriority != null && priorities != null) {
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities, timePriority, category);
+        }
+        if (category == null && priorities == null && timePriority == null) {
+            list = fullTaskList;
+        }
 
-        filteredTaskList=list;
+        filteredTaskList = list;
         notifyDataSetChanged();
 
     }
