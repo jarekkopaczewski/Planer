@@ -17,16 +17,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Objects;
 
-import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMatrixBinding;
-import skills.future.planer.db.task.DayCategorizedTaskData;
-import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.tasklist.Colors;
 
@@ -39,11 +32,7 @@ public class MatrixFragment extends Fragment {
     private ArrayList<TaskDataViewModel> taskDataViewModels;
     private ArrayList<ProgressBar> progressBars;
     private ArrayList<ConstraintLayout> backgroundConstrains;
-    private final MaterialCalendarView calendarView;
 
-    public MatrixFragment(MaterialCalendarView calendarView) {
-        this.calendarView = calendarView;
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -139,12 +128,12 @@ public class MatrixFragment extends Fragment {
      * Adds live data observers & fragmentResultsListeners
      */
     public void setUpModels() {
-        for (int i = 0; i < 4; i++) {
+        /*for (int i = 0; i < 4; i++) {
             try {
             int finalI = i;
-            var date = Calendar.getInstance();
-            date.set(Objects.requireNonNull(calendarView.getSelectedDate()).getYear(), calendarView.getSelectedDate().getMonth(), calendarView.getSelectedDate().getDay());
-            var dateLong = date.getTimeInMillis();
+            //var date = Calendar.getInstance();
+            //date.set(Objects.requireNonNull(calendarView.getSelectedDate()).getYear(), calendarView.getSelectedDate().getMonth(), calendarView.getSelectedDate().getDay());
+            //var dateLong = date.getTimeInMillis();
 
                 taskDataViewModels.get(i)
                         .getCategorizedTaskDataFromDay(finalI,dateLong)
@@ -156,7 +145,7 @@ public class MatrixFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Override

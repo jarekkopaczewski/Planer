@@ -14,6 +14,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import org.threeten.bp.LocalDate;
+
 import skills.future.planer.databinding.FragmentDayBinding;
 
 public class DayFragment extends Fragment {
@@ -37,7 +39,8 @@ public class DayFragment extends Fragment {
         dayNumberView = binding.dayNumber;
 
         vpPager = binding.dayViewPager;
-        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager(),calendarView);
+        calendarView.setSelectedDate(LocalDate.of(2022, 4, 22));
+        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager(), calendarView);
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
         vpPager.setCurrentItem(2);
@@ -78,8 +81,10 @@ public class DayFragment extends Fragment {
         fabDay.setOnClickListener(v -> dayViewModel.returnToToday(calendarView, fabDay, dayNumberView));
         calendarView.setOnDateChangedListener(
                 (widget, date, selected) -> {
+                    myPagerAdapter.updateTaskListDay(date.getDay(), date.getMonth(), date.getYear());
                     if (dayViewModel.checkIsTaskListView(vpPager))
                         dayViewModel.checkDateIsToday(date, fabDay, dayNumberView);
+
                 });
 
         dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);

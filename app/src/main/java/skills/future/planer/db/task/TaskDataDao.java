@@ -53,13 +53,13 @@ public interface TaskDataDao {
      */
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority " +
             "AND startingDate >= :date AND endingDate <= :date")
-    LiveData<List<TaskData>> getTaskData(Priorities priorities, TimePriority timePriority,long date);
+    LiveData<List<TaskData>> getTaskData(Priorities priorities, TimePriority timePriority, long date);
 
     /**
      * @param date date in long format
      * @return all taskData with specified date
      */
-    @Query("SELECT * FROM taskData WHERE startingDate >= :date AND endingDate <= :date")
+    @Query("SELECT * FROM taskData WHERE :date >= startingDate AND :date <= endingDate")
     LiveData<List<TaskData>> getTaskDataByDate(long date);
 
     /**

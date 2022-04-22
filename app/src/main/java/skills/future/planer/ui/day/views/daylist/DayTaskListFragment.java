@@ -15,10 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-
 import java.util.Calendar;
-import java.util.Objects;
 
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskData;
@@ -34,11 +31,8 @@ public class DayTaskListFragment extends Fragment {
     private DayTaskListFragmentBinding binding;
     private RecyclerView listDay;
     private TaskTotalAdapter taskTotalAdapter;
-    private final MaterialCalendarView calendarView;
+    private int day, month, year;
 
-    public DayTaskListFragment(MaterialCalendarView calendarView) {
-        this.calendarView = calendarView;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -46,10 +40,23 @@ public class DayTaskListFragment extends Fragment {
         binding = DayTaskListFragmentBinding.inflate(inflater, container, false);
         dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
         View root = binding.getRoot();
-
+        day = getArguments().getInt("day", 1);
+        month = getArguments().getInt("month", 1);
+        year = getArguments().getInt("year", 1);
         createList();
 
         return root;
+    }
+
+    public static DayTaskListFragment newInstance(int day, int month, int year) {
+        DayTaskListFragment fragment = new DayTaskListFragment();
+
+        Bundle args = new Bundle();
+        args.putInt("day", day);
+        args.putInt("month", month);
+        args.putInt("year", year);
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
@@ -65,7 +72,7 @@ public class DayTaskListFragment extends Fragment {
 
 
         var date = Calendar.getInstance();
-        date.set(Objects.requireNonNull(calendarView.getSelectedDate()).getYear(), calendarView.getSelectedDate().getMonth(), calendarView.getSelectedDate().getDay());
+        date.set(year, month, day);
         var dateLong = date.getTimeInMillis();
         mWordViewModel.getAllTaskDataFromDay(dateLong).observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
