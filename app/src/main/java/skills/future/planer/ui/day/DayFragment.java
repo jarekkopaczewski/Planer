@@ -24,6 +24,7 @@ public class DayFragment extends Fragment {
     private MaterialCalendarView calendarView;
     private FloatingActionButton fabDay;
     private TextView dayNumberView;
+    private ViewPager vpPager;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,21 +36,29 @@ public class DayFragment extends Fragment {
         fabDay = binding.dayFab;
         dayNumberView = binding.dayNumber;
 
-        ViewPager vpPager = binding.dayViewPager;
+        vpPager = binding.dayViewPager;
         myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
         vpPager.setCurrentItem(2);
 
-        dateJumper(vpPager);
+        dateJumper();
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        var selectedDay = calendarView.getSelectedDate();
+        if (dayViewModel.checkIsTaskListView(vpPager) && selectedDay != null)
+            dayViewModel.checkDateIsToday(selectedDay, fabDay, dayNumberView);
     }
 
     /**
      * Responsible for jump to today
      */
-    private void dateJumper(ViewPager vpPager) {
+    private void dateJumper() {
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -57,7 +66,7 @@ public class DayFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                dayViewModel.checkPagerChange(position, calendarView.getSelectedDate(), fabDay, dayNumberView);
+                dayViewModel.checkPagerChange(position, vpPager, calendarView.getSelectedDate(), fabDay, dayNumberView);
             }
 
             @Override

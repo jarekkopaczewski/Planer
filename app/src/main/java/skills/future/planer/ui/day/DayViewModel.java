@@ -30,10 +30,10 @@ public class DayViewModel extends ViewModel {
     }
 
     /**
-     * Return true if current pager position is 0
+     * Return true if current pager position is on task list view
      */
     public boolean checkIsTaskListView(@NonNull ViewPager viewPager) {
-        return viewPager.getCurrentItem() == 0;
+        return viewPager.getAdapter().getPageTitle(viewPager.getCurrentItem()).equals("Lista zadań");
     }
 
     /**
@@ -54,8 +54,8 @@ public class DayViewModel extends ViewModel {
     /**
      * Checks is needed to change visibility of fab when page is changed
      */
-    public void checkPagerChange(int position, CalendarDay date, FloatingActionButton fabDay, TextView dayNumberView) {
-        if (position != 0)
+    public void checkPagerChange(int position, ViewPager viewPager, CalendarDay date, FloatingActionButton fabDay, TextView dayNumberView) {
+        if (viewPager.getAdapter().getPageTitle(position).equals("Lista zadań"))
             changeVisibility(fabDay, dayNumberView, View.INVISIBLE);
         else
             checkDateIsToday(date, fabDay, dayNumberView);
