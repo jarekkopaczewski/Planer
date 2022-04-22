@@ -6,19 +6,19 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.Properties;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 
 
 /**
  * Class implement separation of concerns
- *
  */
-@Getter
 public class TaskDataRepository {
     /**
      * Reference to taskDataDao
@@ -28,12 +28,8 @@ public class TaskDataRepository {
     /**
      * List od all taskData
      */
-    private final LiveData<List<TaskData>> listLiveData;
-    /**
-     * Categorized taskData
-     */
-    protected LiveData<List<TaskData>> importantUrgentTask, importantNotUrgent,
-            notImportantUrgentTask, notImportantNotUrgent;
+    private LiveData<List<TaskData>> listLiveData, importantUrgentTaskFromDay,
+            importantNotUrgentTaskFromDay,notImportantUrgentTaskFromDay,notImportantNotUrgentTaskFromDay;
 
     /**
      * Constructor of TaskDataRepository
@@ -43,7 +39,6 @@ public class TaskDataRepository {
     TaskDataRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDataDao = db.taskDataTabDao();
-        listLiveData = taskDataDao.getTaskData();
     }
 
     /**
@@ -59,7 +54,19 @@ public class TaskDataRepository {
      * @return reference to list of all taskData
      */
     LiveData<List<TaskData>> getAllTaskData() {
+        if (listLiveData == null)
+            listLiveData = taskDataDao.getTaskData();
         return listLiveData;
+    }
+
+    public LiveData<List<TaskData>> getCategorizedListLiveDataFromDay(int quarter, long date) throws Exception {
+        return switch (quarter){
+            case 0 -> taskDataDao.getTaskData(Priorities.Important,TimePriority.Urgent,date);
+            case 1 -> taskDataDao.getTaskData(Priorities.Important,TimePriority.NotUrgent,date);
+            case 2 -> taskDataDao.getTaskData(Priorities.NotImportant,TimePriority.Urgent,date);
+            case 3 -> taskDataDao.getTaskData(Priorities.NotImportant,TimePriority.NotUrgent,date);
+            default -> throw new Exception("No such quarter: " + quarter);
+        };
     }
 
     /**
@@ -71,8 +78,13 @@ public class TaskDataRepository {
         new deleteTaskDataAsyncTask(taskDataDao).execute(taskData);
     }
 
+    public LiveData<List<TaskData>> getAllTaskDataFromDay(long date) {
+        return taskDataDao.getTaskDataByDate(date);
+    }
+
     /**
      * Class run asyncTask to insert taskData
+     *
      * @author Mikołaj Szymczyk
      */
     private static class InsertAsyncTask extends AsyncTask<TaskData, Void, Void> {
@@ -92,6 +104,7 @@ public class TaskDataRepository {
 
     /**
      * Class run asyncTask to delete taskData from database
+     *
      * @author Mikołaj Szymczyk
      */
     private static class deleteTaskDataAsyncTask extends AsyncTask<TaskData, Void, Void> {

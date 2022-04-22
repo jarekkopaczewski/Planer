@@ -37,7 +37,7 @@ public class DayFragment extends Fragment {
         dayNumberView = binding.dayNumber;
 
         vpPager = binding.dayViewPager;
-        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
+        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager(),calendarView);
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
         vpPager.setCurrentItem(2);

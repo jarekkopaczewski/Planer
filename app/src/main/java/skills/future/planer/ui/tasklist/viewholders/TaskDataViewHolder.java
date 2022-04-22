@@ -92,8 +92,8 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
     // delete "/n"
     private String setDateTextView(TaskData task) {
         String dateView = "";
-        if (task.getEndingDate() != null) {
-            if (task.getStartingDate() != null)
+        if (task.getEndingDate() != 0) {
+            if (task.getStartingDate() != 0)
                 dateView = task.getStartingDate() + " - ";
             dateView += task.getEndingDate();
         }

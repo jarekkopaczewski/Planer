@@ -15,6 +15,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import java.util.Calendar;
+import java.util.Objects;
+
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
@@ -29,6 +34,11 @@ public class DayTaskListFragment extends Fragment {
     private DayTaskListFragmentBinding binding;
     private RecyclerView listDay;
     private TaskTotalAdapter taskTotalAdapter;
+    private final MaterialCalendarView calendarView;
+
+    public DayTaskListFragment(MaterialCalendarView calendarView) {
+        this.calendarView = calendarView;
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -52,7 +62,12 @@ public class DayTaskListFragment extends Fragment {
         //taskTotalAdapter.getFilter().filter("");
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
-        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+
+
+        var date = Calendar.getInstance();
+        date.set(Objects.requireNonNull(calendarView.getSelectedDate()).getYear(), calendarView.getSelectedDate().getMonth(), calendarView.getSelectedDate().getDay());
+        var dateLong = date.getTimeInMillis();
+        mWordViewModel.getAllTaskDataFromDay(dateLong).observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {

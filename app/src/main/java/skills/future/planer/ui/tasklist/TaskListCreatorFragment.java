@@ -157,9 +157,9 @@ public class TaskListCreatorFragment extends Fragment {
                 switchCategory.setChecked(true);
 
             //dates
-            if (editTask.getStartingDate() != null) {
+            if (editTask.getStartingDate() != 0) {
                 switchDate.setChecked(true);
-                beginDateEditText.setText(editTask.getStartingDate());
+                beginDateEditText.setText(editTask.getStartingCalendarDate().toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -209,8 +209,8 @@ public class TaskListCreatorFragment extends Fragment {
                     editTask.setEndingCalendarDate(endingCalendarDay);
                     editTask.setStartingCalendarDate(beginCalendarDay);
                 } else {
-                    editTask.setEndingDate(null);
-                    editTask.setStartingDate(null);
+                    editTask.setEndingDate(0);
+                    editTask.setStartingDate(0);
                 }
                 //If the task is edited
                 if (taskID != -1)

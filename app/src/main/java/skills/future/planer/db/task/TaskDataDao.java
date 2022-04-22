@@ -48,12 +48,19 @@ public interface TaskDataDao {
     List<TaskData> getTaskData(TaskCategory taskCategory) throws Exception;
 
     /**
+     * @param date specified date
+     * @return all taskData with specified taskCategory from specified day
+     */
+    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority " +
+            "AND startingDate >= :date AND endingDate <= :date")
+    LiveData<List<TaskData>> getTaskData(Priorities priorities, TimePriority timePriority,long date);
+
+    /**
      * @param date date in long format
      * @return all taskData with specified date
-     * @throws Exception
      */
-    @Query("SELECT * FROM taskData WHERE startingDateNumber >= :date AND endingDateNumber <= :date")
-    List<TaskData> getTaskDataByDate(long date) throws Exception;
+    @Query("SELECT * FROM taskData WHERE startingDate >= :date AND endingDate <= :date")
+    LiveData<List<TaskData>> getTaskDataByDate(long date);
 
     /**
      * @param priorities   specified taskCategory

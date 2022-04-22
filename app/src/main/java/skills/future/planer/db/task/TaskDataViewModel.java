@@ -7,25 +7,29 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
+import java.util.Properties;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 
 /**
  * View Model to keep a reference to the taskDataRepository and
  * an up-to-date list of all taskData.
  */
-@Getter
 public class TaskDataViewModel extends AndroidViewModel {
     /**
      * Reference to taskDataRepository
      */
-    @Getter(AccessLevel.NONE)
+
     private final TaskDataRepository mRepository;
     /**
      * Up-to-date list of all taskData
      */
     private final LiveData<List<TaskData>> allTaskData;
+    private LiveData<List<TaskData>> categorizedTaskDataFromDay;
+
     /**
      * Constructor require by viewModelProvider
      *
@@ -34,7 +38,22 @@ public class TaskDataViewModel extends AndroidViewModel {
     public TaskDataViewModel(Application application) {
         super(application);
         mRepository = new TaskDataRepository(application);
-        allTaskData = mRepository.getListLiveData();
+        allTaskData = mRepository.getAllTaskData();
+    }
+
+    public LiveData<List<TaskData>> getAllTaskData() {
+        return allTaskData;
+    }
+
+    public LiveData<List<TaskData>> getCategorizedTaskDataFromDay(
+            int quarter, long date) throws Exception {
+        if(categorizedTaskDataFromDay == null)
+            categorizedTaskDataFromDay = mRepository.getCategorizedListLiveDataFromDay(
+                    quarter,date);
+        return categorizedTaskDataFromDay;
+    }
+    public LiveData<List<TaskData>> getAllTaskDataFromDay(long date){
+        return mRepository.getAllTaskDataFromDay(date);
     }
 
     /**
