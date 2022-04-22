@@ -41,10 +41,11 @@
             android:orientation="horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constrainUrgentImportant"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:alpha="0.7"
+                android:alpha="1"
                 android:background="@drawable/gradient_background">
 
                 <ProgressBar
@@ -58,6 +59,7 @@
                     android:background="@color/background"
                     android:indeterminateTint="@color/f1"
                     android:progressTint="@color/f1"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -81,6 +83,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constrainUrgentNotImportant"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -99,6 +102,7 @@
                     android:background="@color/background"
                     android:indeterminateTint="@color/f4"
                     android:progressTint="@color/f4"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -131,6 +135,7 @@
             android:orientation="horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constrainNotUrgentImportant"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -149,6 +154,7 @@
                     android:indeterminateTint="@color/f3"
                     android:progressTint="@color/f3"
                     android:translationZ="3dp"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -174,6 +180,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constrainNotUrgentNotImportant"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -207,6 +214,7 @@
                     android:indeterminateTint="@color/f2"
                     android:progressTint="@color/f2"
                     android:translationZ="3dp"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

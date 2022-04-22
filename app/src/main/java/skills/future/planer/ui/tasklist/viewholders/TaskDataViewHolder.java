@@ -1,7 +1,11 @@
 package skills.future.planer.ui.tasklist.viewholders;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -10,10 +14,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import lombok.Getter;
 import skills.future.planer.R;
+import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -43,6 +49,13 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
         setColor(taskData);
         setTextTitle(taskData);
         setIconCategory(taskData);
+        checkBox.setChecked(taskData.getStatus());
+
+        checkBox.setOnClickListener(e->{
+            taskData.setStatus(checkBox.isChecked());
+            var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
+            taskDataDao.editOne(taskData);
+        });
     }
 
     /**
@@ -51,30 +64,18 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
      * @param taskData current task
      */
     protected void setColor(TaskData taskData) {
-        // urgent & important
-        if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.Important) {
-            cardView.setCardBackgroundColor(Colors.RED.getColor());
-            detailImageView.setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
-            iconTaskCategory.setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
-        }
-        // urgent & not important
-        else if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant) {
-            cardView.setCardBackgroundColor(Colors.BLUE.getColor());
-            detailImageView.setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
-            iconTaskCategory.setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
-        }
-        // not urgent & important
-        else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important) {
-            cardView.setCardBackgroundColor(Colors.YELLOW.getColor());
-            detailImageView.setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
-            iconTaskCategory.setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
-        }
-        // not urgent & not important
-        else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant) {
-            cardView.setCardBackgroundColor(Colors.PINK.getColor());
-            detailImageView.setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
-            iconTaskCategory.setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
-        }
+        int color = Colors.getColorFromPreferences("urgentImportant", getContext());
+
+        if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant)
+            color = Colors.getColorFromPreferences("urgentNotImportant", getContext());
+        else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important)
+            color = Colors.getColorFromPreferences("notUrgentImportant", getContext());
+        else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant)
+            color = Colors.getColorFromPreferences("notUrgentNotImportant", getContext());
+
+        cardView.setCardBackgroundColor(color);
+        detailImageView.setImageTintList(ColorStateList.valueOf(color));
+        iconTaskCategory.setImageTintList(ColorStateList.valueOf(color));
     }
 
     /**

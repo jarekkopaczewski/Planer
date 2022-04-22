@@ -16,7 +16,7 @@
     <color name="textColor_2">#BFBFBF</color>
     <color name="todayChooseColor">#00F</color>
     <color name="f1">#E141E1D6</color>
-    <color name="f3">#007E8F</color>
-    <color name="f4">#C6A2CA</color>
-    <color name="f2">#715397</color>
+    <color name="f3">#FF007E8F</color>
+    <color name="f4">#FFC6A2CA</color>
+    <color name="f2">#FF715397</color>
 </resources>

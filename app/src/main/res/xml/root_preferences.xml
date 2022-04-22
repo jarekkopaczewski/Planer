@@ -1,5 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background">
 
     <ListPreference
         android:id="@+id/choose_theme_list"
@@ -9,5 +10,32 @@
         app:key="themes"
         app:title="@string/theme_title"
         app:useSimpleSummaryProvider="true" />
+
+    <Preference
+        android:layout_marginTop="10dp"
+        android:enabled="true"
+        android:selectable="false"
+        android:title="Kolor typów zadań:" />
+
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        android:id="@+id/urgentImportantColorPicker"
+        android:defaultValue="0xFF41E1D6"
+        app:key="urgentImportant"
+        app:title="Ważne pilne" />
+
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        android:defaultValue="0xFF007E8F"
+        app:key="urgentNotImportant"
+        app:title="Ważne niepilne" />
+
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        android:defaultValue="0xFFC6A2CA"
+        app:key="notUrgentImportant"
+        app:title="Nieważne pilne" />
+
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        android:defaultValue="0xFF715397"
+        app:key="notUrgentNotImportant"
+        app:title="Nieważne niepilne" />
 
 </PreferenceScreen>

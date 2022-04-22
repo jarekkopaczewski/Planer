@@ -1,5 +1,6 @@
 package skills.future.planer.ui.tasklist;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;

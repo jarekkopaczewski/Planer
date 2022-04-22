@@ -1,24 +1,14 @@
 package skills.future.planer.ui.tasklist;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.content.SharedPreferences;
 
-public enum Colors {
-    RED(81, 205, 197),
-    BLUE(0, 126, 143),
-    YELLOW(198, 162, 202),
-    PINK(113, 83, 151);
+import androidx.preference.PreferenceManager;
 
-    private final int r;
-    private final int g;
-    private final int b;
+public class Colors {
 
-    Colors(final int r, final int g, final int b) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-    }
-
-    public int getColor(){
-        return Color.rgb(r,g,b);
+    public static int getColorFromPreferences(String name, Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt(name, 0);
     }
 }
