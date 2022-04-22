@@ -62,10 +62,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         View itemView;
         itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
-        itemView.setOnClickListener(e -> {
-            CheckBox checkBox = itemView.findViewById(R.id.checkBoxTask);
-            checkBox.setChecked(!checkBox.isChecked());
-        });
         return itemView;
     }
 
@@ -84,8 +80,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
         createListenerToExtendView(holder);
         createListenerToEditButton(holder, position);
-
-
     }
 
     /**

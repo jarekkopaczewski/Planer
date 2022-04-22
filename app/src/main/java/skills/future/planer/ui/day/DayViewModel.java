@@ -56,7 +56,7 @@ public class DayViewModel extends ViewModel {
      */
     public void checkPagerChange(int position, ViewPager viewPager, CalendarDay date, FloatingActionButton fabDay, TextView dayNumberView) {
         if (viewPager.getAdapter().getPageTitle(position).equals("Lista zadań"))
-            changeVisibility(fabDay, dayNumberView, View.INVISIBLE);
+            changeVisibility(fabDay, dayNumberView, View.VISIBLE);
         else
             checkDateIsToday(date, fabDay, dayNumberView);
     }

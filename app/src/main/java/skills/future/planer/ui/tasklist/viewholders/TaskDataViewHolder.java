@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import lombok.Getter;
 import skills.future.planer.R;
+import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -48,6 +49,13 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
         setColor(taskData);
         setTextTitle(taskData);
         setIconCategory(taskData);
+        checkBox.setChecked(taskData.getStatus());
+
+        checkBox.setOnClickListener(e->{
+            taskData.setStatus(checkBox.isChecked());
+            var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
+            taskDataDao.editOne(taskData);
+        });
     }
 
     /**

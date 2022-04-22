@@ -62,6 +62,7 @@ public class DayFragment extends Fragment {
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                dayViewModel.checkPagerChange(position, vpPager, calendarView.getSelectedDate(), fabDay, dayNumberView);
             }
 
             @Override
@@ -71,7 +72,6 @@ public class DayFragment extends Fragment {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
         dayNumberView.setText(String.valueOf(dayViewModel.getToday().getValue().getDay()));
