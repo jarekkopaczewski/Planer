@@ -39,6 +39,7 @@ public class DayFragment extends Fragment {
         myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
+        vpPager.setCurrentItem(2);
 
         dateJumper(vpPager);
 
