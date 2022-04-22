@@ -73,6 +73,9 @@ public class TaskData implements Parcelable {
 
     @ColumnInfo(name = "endingDateNumber")
     private long endingDateNumber = 0;
+
+    @ColumnInfo(name = "startingDateNumber")
+    private long startingDateNumber = 0;
     /**
      * Field used to pack taskData to bundle it isn't save in database
      */

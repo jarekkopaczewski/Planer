@@ -7,12 +7,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-
 import java.util.List;
-import java.util.Locale;
 
-import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -52,13 +48,21 @@ public interface TaskDataDao {
     List<TaskData> getTaskData(TaskCategory taskCategory) throws Exception;
 
     /**
+     * @param date date in long format
+     * @return all taskData with specified date
+     * @throws Exception
+     */
+    @Query("SELECT * FROM taskData WHERE startingDateNumber >= :date AND endingDateNumber <= :date")
+    List<TaskData> getTaskDataByDate(long date) throws Exception;
+
+    /**
      * @param priorities   specified taskCategory
      * @param timePriority specified timePriority
      * @return all taskData with specified priorities and timePriority
      * @throws Exception
      */
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority")
-   List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
+    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
 
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND category = :taskCategory")
     List<TaskData> getTaskData(Priorities priorities, TaskCategory taskCategory) throws Exception;
