@@ -10,6 +10,8 @@ import androidx.room.PrimaryKey;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.util.Calendar;
+
 import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.task.enums.category.TaskCategory;
@@ -68,6 +70,9 @@ public class TaskData implements Parcelable {
      */
     @ColumnInfo(name = "endingDate")
     private String endingDate = null;
+
+    @ColumnInfo(name = "endingDateNumber")
+    private long endingDateNumber = 0;
     /**
      * Field used to pack taskData to bundle it isn't save in database
      */
@@ -165,6 +170,9 @@ public class TaskData implements Parcelable {
      */
     @Ignore
     public void setEndingCalendarDate(CalendarDay endingCalendarDay) {
+        var date = Calendar.getInstance();
+        date.set(endingCalendarDay.getYear(), endingCalendarDay.getMonth(), endingCalendarDay.getDay());
+        endingDateNumber = date.getTimeInMillis();
         endingDate = endingCalendarDay.getDay() + "." + endingCalendarDay.getMonth() + "."
                 + endingCalendarDay.getYear();
     }
