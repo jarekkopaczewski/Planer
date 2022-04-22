@@ -23,14 +23,14 @@
     <string name="imageViewTaskDateDescription">TODO</string>
     <string name="SwitchDatePickerText">Ustaw czas trwania zadania</string>
     <string name="fabContentDescription">Create new task </string>
-    <string name="editTextEndDateHint">Data zakończenia zadania</string>
+    <string name="editTextEndDateHint">Data zakończenia</string>
     <string name="textViewImportant">Ważne</string>
     <string name="TextViewNotImportant">Nieważne</string>
     <string name="TextViewUrgent">Pilne</string>
     <string name="TextViewNotUrgent">Niepilne</string>
     <string name="TextViewWork">Praca</string>
     <string name="TextViewPrivate">Prywatne</string>
-    <string name="editTextBeginDate">Data rozpoczęcia zadania</string>
+    <string name="editTextBeginDate">Data rozpoczęcia</string>
     <string name="SearchMessage">Czego szukasz?</string>
     <string name="title_activity_settings">Ustawienia</string>
     <string name="theme_title">Domyślny motyw aplikacji</string>
