@@ -19,6 +19,10 @@ public class DayViewModel extends ViewModel {
 
     private final MutableLiveData<CalendarDay> today = new MutableLiveData<>(CalendarDay.today());
     private static final MutableLiveData<MaterialCalendarView> refToCalendar = new MutableLiveData<>();
+    private static final MutableLiveData<ViewPager> refToVpPager = new MutableLiveData<>();
+    private static final MutableLiveData<FloatingActionButton> refToFabDay = new MutableLiveData<>();
+    private static final MutableLiveData<TextView> refToDayNumberView = new MutableLiveData<>();
+
     /**
      * Moves cursor to today's date
      */
@@ -29,12 +33,36 @@ public class DayViewModel extends ViewModel {
         changeVisibility(fab, text, View.INVISIBLE);
     }
 
-    void setRefToCalendar(MaterialCalendarView calendarView){
+    public void setRefToVpPager(ViewPager vpPager) {
+        refToVpPager.setValue(vpPager);
+    }
+
+    public void setRefToCalendar(MaterialCalendarView calendarView) {
         refToCalendar.setValue(calendarView);
     }
 
-    public MutableLiveData<MaterialCalendarView> getRefToCalendar() {
+    public void setRefToFab(FloatingActionButton fabDay) {
+        refToFabDay.setValue(fabDay);
+    }
+
+    public void setRefToDayNumberView(TextView dayNumberView) {
+        refToDayNumberView.setValue(dayNumberView);
+    }
+
+    public static MutableLiveData<MaterialCalendarView> getRefToCalendar() {
         return refToCalendar;
+    }
+
+    public static MutableLiveData<ViewPager> getRefToVpPager() {
+        return refToVpPager;
+    }
+
+    public static MutableLiveData<FloatingActionButton> getRefToFabDay() {
+        return refToFabDay;
+    }
+
+    public static MutableLiveData<TextView> getRefToDayNumberView() {
+        return refToDayNumberView;
     }
 
     /**
@@ -64,9 +92,9 @@ public class DayViewModel extends ViewModel {
      */
     public void checkPagerChange(int position, ViewPager viewPager, CalendarDay date, FloatingActionButton fabDay, TextView dayNumberView) {
         if (viewPager.getAdapter().getPageTitle(position).equals("Lista zadań"))
-            changeVisibility(fabDay, dayNumberView, View.VISIBLE);
-        else
             checkDateIsToday(date, fabDay, dayNumberView);
+        else
+            changeVisibility(fabDay, dayNumberView, View.INVISIBLE);
     }
 }
 

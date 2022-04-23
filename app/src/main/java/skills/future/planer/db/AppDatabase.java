@@ -18,14 +18,13 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 
-@Database(entities = {TaskData.class}, exportSchema = false, version = 3)
+@Database(entities = {TaskData.class}, exportSchema = false, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
     private static final String DB_NAME = "planer2.db";
     private static AppDatabase sInstance;
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
-
 
     public abstract TaskDataDao taskDataTabDao();
 
@@ -72,25 +71,26 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-            CalendarDay day2 = CalendarDay.from(2022, 4, 20);
-            CalendarDay day3 = CalendarDay.from(2022, 4, 30);
-            CalendarDay day4 = CalendarDay.from(2022, 4, 24);
+            CalendarDay day2 = CalendarDay.from(2022, 4, 21);
+            CalendarDay day3 = CalendarDay.from(2022, 4, 23);
+            CalendarDay day4 = CalendarDay.from(2022, 4, 7);
+            CalendarDay day5 = CalendarDay.from(2022, 4, 9);
 
 
             for (int i = 0; i <= 4; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu","",day2,day3);
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu", "", day2, day3);
                 mDao.insert(word);
             }
             for (int i = 0; i <= 4; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "2niu","",day2,day2);
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "2niu", "", day2, day3);
                 mDao.insert(word);
             }
             for (int i = 0; i <=4; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "3inu","",day3,day3);
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "3inu", "", day4, day2);
                 mDao.insert(word);
             }
             for (int i = 0; i <= 4; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "4ninu", "", day4, day4);
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "4ninu", "", day4, day5);
                 mDao.insert(word);
             }
             for (int i = 0; i < 10; i++) {

@@ -16,11 +16,15 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import org.threeten.bp.LocalDate;
 
+import lombok.Getter;
 import skills.future.planer.databinding.FragmentDayBinding;
+import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
 
+@Getter
 public class DayFragment extends Fragment {
 
     private DayViewModel dayViewModel;
+    private DayTaskListViewModel dayTaskListViewModel;
     private FragmentDayBinding binding;
     private MyPagerAdapter myPagerAdapter;
     private MaterialCalendarView calendarView;
@@ -31,22 +35,27 @@ public class DayFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dayViewModel = new ViewModelProvider(this).get(DayViewModel.class);
+        dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
         binding = FragmentDayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         calendarView = binding.calendarView;
-        dayViewModel.setRefToCalendar(calendarView);
         fabDay = binding.dayFab;
         dayNumberView = binding.dayNumber;
 
         vpPager = binding.dayViewPager;
-        calendarView.setSelectedDate(LocalDate.of(2022, 4, 22));
-        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager(), calendarView);
+        calendarView.setSelectedDate(LocalDate.now());
+        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
         vpPager.setCurrentItem(2);
 
         dateJumper();
+
+        dayViewModel.setRefToCalendar(calendarView);
+        dayViewModel.setRefToVpPager(vpPager);
+        dayViewModel.setRefToFab(fabDay);
+        dayViewModel.setRefToDayNumberView(dayNumberView);
 
         return root;
     }
@@ -66,7 +75,6 @@ public class DayFragment extends Fragment {
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                dayViewModel.checkPagerChange(position, vpPager, calendarView.getSelectedDate(), fabDay, dayNumberView);
             }
 
             @Override
@@ -80,16 +88,20 @@ public class DayFragment extends Fragment {
         });
         dayNumberView.setText(String.valueOf(dayViewModel.getToday().getValue().getDay()));
         fabDay.setOnClickListener(v -> dayViewModel.returnToToday(calendarView, fabDay, dayNumberView));
-        calendarView.setOnDateChangedListener(
-                (widget, date, selected) -> {
-                    myPagerAdapter.updateTaskListDay(date.getDay(), date.getMonth(), date.getYear());
-                    if (dayViewModel.checkIsTaskListView(vpPager))
-                        dayViewModel.checkDateIsToday(date, fabDay, dayNumberView);
-
-                });
-
         dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);
+        //updateList(calendarView);
     }
+
+    /*private void updateList(MaterialCalendarView calendar) {
+        calendar.setOnDateChangedListener((widget, date, selected) -> {
+            if (dayViewModel.checkIsTaskListView(vpPager))
+                dayViewModel.checkDateIsToday(date,
+                        fabDay,
+                        dayNumberView);
+            if (dayViewModel.checkIsTaskListView(vpPager))
+                dayTaskListViewModel.updateDate(date);
+        });
+    }*/
 
     @Override
     public void onDestroyView() {

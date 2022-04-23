@@ -1,21 +1,19 @@
 package skills.future.planer.ui.tasklist.viewholders;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.Date;
 
 import lombok.Getter;
 import skills.future.planer.R;
@@ -51,7 +49,7 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
         setIconCategory(taskData);
         checkBox.setChecked(taskData.getStatus());
 
-        checkBox.setOnClickListener(e->{
+        checkBox.setOnClickListener(e -> {
             taskData.setStatus(checkBox.isChecked());
             var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
             taskDataDao.editOne(taskData);
@@ -89,15 +87,30 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
     /**
      * Merges date strings
      */
-    // delete "/n"
     private String setDateTextView(TaskData task) {
+        Calendar calendar = Calendar.getInstance();
+
         String dateView = "";
         if (task.getEndingDate() != 0) {
-            if (task.getStartingDate() != 0)
-                dateView = task.getStartingDate() + " - ";
-            dateView += task.getEndingDate();
+            if (task.getStartingDate() != 0) {
+                calendar.setTime(Date.from(Instant.ofEpochMilli(task.getStartingDate())));
+                dateView = generateDayInString(calendar) + " - ";
+            }
+            calendar.setTime(Date.from(Instant.ofEpochMilli(task.getEndingDate())));
+            dateView += generateDayInString(calendar);
         }
         return dateView;
+    }
+
+    /**
+     * Generate date string from calendar format
+     */
+    private String generateDayInString(Calendar calendar) {
+        return calendar.get(Calendar.DAY_OF_MONTH)
+                + "."
+                + calendar.get(Calendar.MONTH)
+                + "."
+                + calendar.get(Calendar.YEAR);
     }
 
     /**

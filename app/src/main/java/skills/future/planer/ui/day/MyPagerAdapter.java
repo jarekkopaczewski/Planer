@@ -4,8 +4,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-
 import lombok.Getter;
 import skills.future.planer.ui.day.views.daylist.DayTaskListFragment;
 import skills.future.planer.ui.day.views.habits.HabitFragment;
@@ -15,27 +13,16 @@ import skills.future.planer.ui.day.views.notepad.ScrollingFragment;
 @Getter
 public class MyPagerAdapter extends FragmentPagerAdapter {
     private static final int NUM_ITEMS = 5;
-    private DayTaskListFragment taskListFragment = null;
-    private final MatrixFragment matrixFragment;
+    private final DayTaskListFragment taskListFragment = new DayTaskListFragment();
+    private final MatrixFragment matrixFragment = new MatrixFragment();
     private final ScrollingFragment scrollingFragment = new ScrollingFragment();
     private final ScrollingFragment scrollingFragment2 = new ScrollingFragment();
     private final HabitFragment habitFragment = new HabitFragment();
-    private final MaterialCalendarView calendarView;
 
-    public MyPagerAdapter(FragmentManager fragmentManager, MaterialCalendarView calendarView) {
+    public MyPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
-        this.calendarView = calendarView;
-        updateTaskListDay(calendarView.getSelectedDate().getDay(),
-                calendarView.getSelectedDate().getMonth(),
-                calendarView.getSelectedDate().getYear());
-        matrixFragment = new MatrixFragment();
     }
 
-    public void updateTaskListDay(int day, int month, int year) {
-        if (taskListFragment != null)
-            taskListFragment.onDestroyView();
-        taskListFragment = DayTaskListFragment.newInstance(day, month, year);
-    }
 
     @Override
     public int getCount() {

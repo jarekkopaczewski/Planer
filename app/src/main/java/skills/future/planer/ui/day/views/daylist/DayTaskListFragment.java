@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
 import java.util.Calendar;
 
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
@@ -27,60 +30,43 @@ import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 public class DayTaskListFragment extends Fragment {
 
-    private DayTaskListViewModel dayTaskListViewModel;
+    private DayTaskListViewModel dayListViewModel;
     private TaskDataViewModel mWordViewModel;
     private DayViewModel dayViewModel;
     private DayTaskListFragmentBinding binding;
     private RecyclerView listDay;
-    private TaskTotalAdapter taskTotalAdapter;
-    private int day, month, year;
+    private TaskTotalAdapter taskDayAdapter;
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = DayTaskListFragmentBinding.inflate(inflater, container, false);
-        dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
         dayViewModel = new ViewModelProvider(this).get(DayViewModel.class);
+        dayListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
         View root = binding.getRoot();
-        day = getArguments().getInt("day", 1);
-        month = getArguments().getInt("month", 1);
-        year = getArguments().getInt("year", 1);
         createList();
 
         return root;
     }
 
-    public static DayTaskListFragment newInstance(int day, int month, int year) {
-        DayTaskListFragment fragment = new DayTaskListFragment();
-
-        Bundle args = new Bundle();
-        args.putInt("day", day);
-        args.putInt("month", month);
-        args.putInt("year", year);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
     //TODO Zrobić to dla widoku dnia
     private void createList() {
         listDay = binding.listTotalView;
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext());
-        listDay.setAdapter(taskTotalAdapter);
-        //listTotal.setTextFilterEnabled(true);
-        //taskTotalAdapter.getFilter().filter("");
+        taskDayAdapter = new TaskTotalAdapter(this.getContext());
+        listDay.setAdapter(taskDayAdapter);
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
-        var calendar = dayViewModel.getRefToCalendar();
 
-        if(calendar.getValue()!=null) {
-            var calendarDay = calendar.getValue().getSelectedDate();
+        //dayListViewModel.setWordViewModel(mWordViewModel);
+        // dayListViewModel.setTaskDayAdapter(taskDayAdapter);
+        //dayListViewModel.setLifecycleOwner(this.getViewLifecycleOwner());
 
-            var date = Calendar.getInstance();
-            date.set(calendarDay.getYear(), calendarDay.getMonth(), calendarDay.getDay());
-            mWordViewModel.getAllTaskDataFromDay(date.getTimeInMillis()).observe(this.getViewLifecycleOwner(),
-                    taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+        var calendar = DayViewModel.getRefToCalendar().getValue();
+
+        if (calendar != null) {
+            updateList(calendar);
+            updateDate(calendar.getSelectedDate());
         }
 
 
@@ -91,6 +77,7 @@ public class DayTaskListFragment extends Fragment {
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
             Navigation.findNavController(view).navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
+
         });
 
         ItemTouchHelper helper = new ItemTouchHelper(
@@ -109,12 +96,30 @@ public class DayTaskListFragment extends Fragment {
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
                                          int direction) {
                         int position = viewHolder.getAdapterPosition();
-                        TaskData myTaskData = taskTotalAdapter.getTaskDataAtPosition(position);
+                        TaskData myTaskData = taskDayAdapter.getTaskDataAtPosition(position);
                         mWordViewModel.deleteTaskData(myTaskData);
                     }
                 });
 
         helper.attachToRecyclerView(listDay);
+    }
+
+    private void updateList(MaterialCalendarView calendar) {
+        calendar.setOnDateChangedListener((widget, date, selected) -> {
+            if (dayViewModel.checkIsTaskListView(DayViewModel.getRefToVpPager().getValue()))
+                dayViewModel.checkDateIsToday(date,
+                        DayViewModel.getRefToFabDay().getValue(),
+                        DayViewModel.getRefToDayNumberView().getValue());
+            updateDate(date);
+        });
+    }
+
+    public void updateDate(CalendarDay date) {
+        var calendarDate = Calendar.getInstance();
+        calendarDate.set(date.getYear(), date.getMonth(), date.getDay());
+        mWordViewModel.getAllTaskDataFromDay(calendarDate.getTimeInMillis())
+                .observe(this.getViewLifecycleOwner(),
+                        taskData -> taskDayAdapter.setFilteredTaskList(taskData));
     }
 
 

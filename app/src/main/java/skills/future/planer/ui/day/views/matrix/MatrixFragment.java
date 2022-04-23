@@ -21,10 +21,12 @@ import java.util.ArrayList;
 
 import skills.future.planer.databinding.FragmentMatrixBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
+import skills.future.planer.ui.day.DayViewModel;
 import skills.future.planer.ui.tasklist.Colors;
 
 public class MatrixFragment extends Fragment {
 
+    private DayViewModel dayViewModel;
     private FragmentMatrixBinding binding;
     private MatrixModelView matrixModelView;
     private ArrayList<RecyclerView> recyclerViews;
@@ -32,6 +34,7 @@ public class MatrixFragment extends Fragment {
     private ArrayList<TaskDataViewModel> taskDataViewModels;
     private ArrayList<ProgressBar> progressBars;
     private ArrayList<ConstraintLayout> backgroundConstrains;
+    /*private MaterialCalendarView materialCalendarView =*/
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -131,12 +134,12 @@ public class MatrixFragment extends Fragment {
         /*for (int i = 0; i < 4; i++) {
             try {
             int finalI = i;
-            //var date = Calendar.getInstance();
-            //date.set(Objects.requireNonNull(calendarView.getSelectedDate()).getYear(), calendarView.getSelectedDate().getMonth(), calendarView.getSelectedDate().getDay());
-            //var dateLong = date.getTimeInMillis();
+            var date = Calendar.getInstance();
+            date.set(Objects.requireNonNull(calendarView.getSelectedDate()).getYear(), calendarView.getSelectedDate().getMonth(), calendarView.getSelectedDate().getDay());
+            var dateLong = date.getTimeInMillis();
 
                 taskDataViewModels.get(i)
-                        .getCategorizedTaskDataFromDay(finalI,dateLong)
+                        .getCategorizedTaskDataFromDay(finalI, dateLong)
                         .observe(this.getViewLifecycleOwner(), taskData -> {
                     matrixAdapters.get(finalI).setFilteredTaskList(new DayCategorizedTaskData(taskData).getAllCategorizedDayFromQuarter(finalI));
                     progressBars.get(finalI).setMax(matrixAdapters.get(finalI).getItemCount());
