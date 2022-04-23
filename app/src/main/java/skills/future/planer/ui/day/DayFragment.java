@@ -35,6 +35,7 @@ public class DayFragment extends Fragment {
         View root = binding.getRoot();
 
         calendarView = binding.calendarView;
+        dayViewModel.setRefToCalendar(calendarView);
         fabDay = binding.dayFab;
         dayNumberView = binding.dayNumber;
 

@@ -22,12 +22,14 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.DayFragmentDirections;
+import skills.future.planer.ui.day.DayViewModel;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 public class DayTaskListFragment extends Fragment {
 
     private DayTaskListViewModel dayTaskListViewModel;
     private TaskDataViewModel mWordViewModel;
+    private DayViewModel dayViewModel;
     private DayTaskListFragmentBinding binding;
     private RecyclerView listDay;
     private TaskTotalAdapter taskTotalAdapter;
@@ -39,6 +41,7 @@ public class DayTaskListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = DayTaskListFragmentBinding.inflate(inflater, container, false);
         dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
+        dayViewModel = new ViewModelProvider(this).get(DayViewModel.class);
         View root = binding.getRoot();
         day = getArguments().getInt("day", 1);
         month = getArguments().getInt("month", 1);
@@ -69,12 +72,16 @@ public class DayTaskListFragment extends Fragment {
         //taskTotalAdapter.getFilter().filter("");
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
+        var calendar = dayViewModel.getRefToCalendar();
 
+        if(calendar.getValue()!=null) {
+            var calendarDay = calendar.getValue().getSelectedDate();
 
-        var date = Calendar.getInstance();
-        date.set(year, month, day);
-        var dateLong = date.getTimeInMillis();
-        mWordViewModel.getAllTaskDataFromDay(dateLong).observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+            var date = Calendar.getInstance();
+            date.set(calendarDay.getYear(), calendarDay.getMonth(), calendarDay.getDay());
+            mWordViewModel.getAllTaskDataFromDay(date.getTimeInMillis()).observe(this.getViewLifecycleOwner(),
+                    taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+        }
 
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {

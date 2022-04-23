@@ -18,7 +18,7 @@ import lombok.Getter;
 public class DayViewModel extends ViewModel {
 
     private final MutableLiveData<CalendarDay> today = new MutableLiveData<>(CalendarDay.today());
-
+    private static final MutableLiveData<MaterialCalendarView> refToCalendar = new MutableLiveData<>();
     /**
      * Moves cursor to today's date
      */
@@ -27,6 +27,14 @@ public class DayViewModel extends ViewModel {
         materialCalendarView.setDateSelected(materialCalendarView.getSelectedDate(), false);
         materialCalendarView.setDateSelected(today.getValue(), true);
         changeVisibility(fab, text, View.INVISIBLE);
+    }
+
+    void setRefToCalendar(MaterialCalendarView calendarView){
+        refToCalendar.setValue(calendarView);
+    }
+
+    public MutableLiveData<MaterialCalendarView> getRefToCalendar() {
+        return refToCalendar;
     }
 
     /**

@@ -26,6 +26,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase sInstance;
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
 
+
     public abstract TaskDataDao taskDataTabDao();
 
     public static AppDatabase getInstance(final Context context/*, final AppExecutors executors*/) {
@@ -35,7 +36,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     Log.d(LOG_TAG, "Creating new database instance");
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration().allowMainThreadQueries()
-                            /*.addCallback(sRoomDatabaseCallback)*/.build();
+                            .addCallback(sRoomDatabaseCallback).build();
                 }
             }
         }
