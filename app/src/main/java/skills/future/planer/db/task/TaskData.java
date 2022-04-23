@@ -168,7 +168,12 @@ public class TaskData implements Parcelable {
     @Ignore
     public void setEndingCalendarDate(CalendarDay endingCalendarDay) {
         var date = Calendar.getInstance();
-        date.set(endingCalendarDay.getYear(), endingCalendarDay.getMonth(), endingCalendarDay.getDay());
+        date.set(endingCalendarDay.getYear(),
+                endingCalendarDay.getMonth(),
+                endingCalendarDay.getDay(),
+                23,
+                59,
+                59);
         endingDate = date.getTimeInMillis();
     }
 
@@ -180,7 +185,12 @@ public class TaskData implements Parcelable {
     @Ignore
     public void setStartingCalendarDate(CalendarDay startingCalendarDay) {
         var date = Calendar.getInstance();
-        date.set(startingCalendarDay.getYear(), startingCalendarDay.getMonth(), startingCalendarDay.getDay());
+        date.set(startingCalendarDay.getYear(),
+                startingCalendarDay.getMonth(),
+                startingCalendarDay.getDay(),
+                0,
+                0,
+                0);
         startingDate = date.getTimeInMillis();
     }
 

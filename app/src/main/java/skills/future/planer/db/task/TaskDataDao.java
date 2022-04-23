@@ -52,7 +52,7 @@ public interface TaskDataDao {
      * @return all taskData with specified taskCategory from specified day
      */
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority " +
-            "AND startingDate >= :date AND endingDate <= :date")
+            "AND :date >= startingDate AND :date <= endingDate")
     LiveData<List<TaskData>> getTaskData(Priorities priorities, TimePriority timePriority, long date);
 
     /**

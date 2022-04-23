@@ -4,15 +4,8 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
-import java.util.Properties;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import skills.future.planer.db.task.enums.category.TaskCategory;
-import skills.future.planer.db.task.enums.priority.TimePriority;
 
 /**
  * View Model to keep a reference to the taskDataRepository and
@@ -45,14 +38,12 @@ public class TaskDataViewModel extends AndroidViewModel {
         return allTaskData;
     }
 
-    public LiveData<List<TaskData>> getCategorizedTaskDataFromDay(
-            int quarter, long date) throws Exception {
-        if(categorizedTaskDataFromDay == null)
-            categorizedTaskDataFromDay = mRepository.getCategorizedListLiveDataFromDay(
-                    quarter,date);
-        return categorizedTaskDataFromDay;
+    public LiveData<List<TaskData>> getCategorizedTaskDataFromDay(int quarter, long date)
+            throws Exception {
+        return mRepository.getCategorizedListLiveDataFromDay(quarter, date);
     }
-    public LiveData<List<TaskData>> getAllTaskDataFromDay(long date){
+
+    public LiveData<List<TaskData>> getAllTaskDataFromDay(long date) {
         return mRepository.getAllTaskDataFromDay(date);
     }
 

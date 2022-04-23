@@ -20,12 +20,14 @@ import lombok.Getter;
 import skills.future.planer.databinding.FragmentDayBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
+import skills.future.planer.ui.day.views.matrix.MatrixModelView;
 
 @Getter
 public class DayFragment extends Fragment {
 
     private DayViewModel dayViewModel;
     private DayTaskListViewModel dayTaskListViewModel;
+    private MatrixModelView matrixModelView;
     private FragmentDayBinding binding;
     private MyPagerAdapter myPagerAdapter;
     private MaterialCalendarView calendarView;
@@ -37,6 +39,8 @@ public class DayFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dayViewModel = new ViewModelProvider(this).get(DayViewModel.class);
         dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
+        matrixModelView = new ViewModelProvider(this).get(MatrixModelView.class);
+
         binding = FragmentDayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -58,11 +62,6 @@ public class DayFragment extends Fragment {
 
         dateJumper();
 
-        dayViewModel.setRefToCalendar(calendarView);
-        dayViewModel.setRefToVpPager(vpPager);
-        dayViewModel.setRefToFab(fabDay);
-        dayViewModel.setRefToDayNumberView(dayNumberView);
-
         return root;
     }
 
@@ -70,8 +69,12 @@ public class DayFragment extends Fragment {
     public void onResume() {
         super.onResume();
         var selectedDay = calendarView.getSelectedDate();
-        if (dayViewModel.checkIsTaskListView(vpPager) && selectedDay != null)
+        if (dayViewModel.checkIsTaskListView(vpPager) && selectedDay != null) {
             dayViewModel.checkDateIsToday(selectedDay, fabDay, dayNumberView);
+            dayTaskListViewModel.updateDate(selectedDay);
+        }
+        if (dayViewModel.checkIsMatrixView(vpPager))
+            matrixModelView.setUpModels(selectedDay);
     }
 
     /**
@@ -85,7 +88,13 @@ public class DayFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                dayViewModel.checkPagerChange(position, vpPager, calendarView.getSelectedDate(), fabDay, dayNumberView);
+                dayViewModel.checkPagerChange(position,
+                        vpPager,
+                        calendarView.getSelectedDate(),
+                        fabDay,
+                        dayNumberView,
+                        matrixModelView,
+                        dayTaskListViewModel);
             }
 
             @Override
@@ -93,21 +102,27 @@ public class DayFragment extends Fragment {
             }
         });
         dayNumberView.setText(String.valueOf(dayViewModel.getToday().getValue().getDay()));
-        fabDay.setOnClickListener(v -> dayViewModel.returnToToday(calendarView, fabDay, dayNumberView));
+        fabDay.setOnClickListener(v -> {
+            dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);
+            dayTaskListViewModel.updateDate(dayViewModel.getToday().getValue());
+        });
         dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);
         updateList(calendarView);
     }
 
     private void updateList(MaterialCalendarView calendar) {
         calendar.setOnDateChangedListener((widget, date, selected) -> {
-            if (dayViewModel.checkIsTaskListView(vpPager))
+            if (dayViewModel.checkIsTaskListView(vpPager)) {
                 dayViewModel.checkDateIsToday(date,
                         fabDay,
                         dayNumberView);
-            if (dayViewModel.checkIsTaskListView(vpPager))
                 dayTaskListViewModel.updateDate(date);
+            }
+            if (dayViewModel.checkIsMatrixView(vpPager))
+                matrixModelView.setUpModels(date);
         });
     }
+
 
     @Override
     public void onDestroyView() {
