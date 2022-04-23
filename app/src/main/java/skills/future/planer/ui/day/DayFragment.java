@@ -18,6 +18,7 @@ import org.threeten.bp.LocalDate;
 
 import lombok.Getter;
 import skills.future.planer.databinding.FragmentDayBinding;
+import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
 
 @Getter
@@ -49,6 +50,11 @@ public class DayFragment extends Fragment {
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
         vpPager.setCurrentItem(2);
+
+        getParentFragmentManager().setFragmentResultListener("requestKey", this.getViewLifecycleOwner(), (requestKey, bundle) -> {
+            TaskData result = bundle.getParcelable("bundleKey");
+            DayTaskListViewModel.getMWordViewModel().insert(result);
+        });
 
         dateJumper();
 
@@ -89,10 +95,10 @@ public class DayFragment extends Fragment {
         dayNumberView.setText(String.valueOf(dayViewModel.getToday().getValue().getDay()));
         fabDay.setOnClickListener(v -> dayViewModel.returnToToday(calendarView, fabDay, dayNumberView));
         dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);
-        //updateList(calendarView);
+        updateList(calendarView);
     }
 
-    /*private void updateList(MaterialCalendarView calendar) {
+    private void updateList(MaterialCalendarView calendar) {
         calendar.setOnDateChangedListener((widget, date, selected) -> {
             if (dayViewModel.checkIsTaskListView(vpPager))
                 dayViewModel.checkDateIsToday(date,
@@ -101,7 +107,7 @@ public class DayFragment extends Fragment {
             if (dayViewModel.checkIsTaskListView(vpPager))
                 dayTaskListViewModel.updateDate(date);
         });
-    }*/
+    }
 
     @Override
     public void onDestroyView() {

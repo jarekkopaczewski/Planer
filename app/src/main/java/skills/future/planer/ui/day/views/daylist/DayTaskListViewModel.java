@@ -1,12 +1,20 @@
 package skills.future.planer.ui.day.views.daylist;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
+
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.util.Calendar;
+
+import skills.future.planer.db.task.TaskDataViewModel;
+import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 public class DayTaskListViewModel extends ViewModel {
 
-    /*//private final MutableLiveData<TaskDataViewModel> mWordViewModel;
-    private TaskTotalAdapter taskDayAdapter;
-    private LifecycleOwner viewLifecycleOwner;
+    private static TaskDataViewModel mWordViewModel;
+    private static TaskTotalAdapter taskDayAdapter;
+    private static LifecycleOwner viewLifecycleOwner;
 
     public void updateDate(CalendarDay date) {
         var calendarDate = Calendar.getInstance();
@@ -17,14 +25,26 @@ public class DayTaskListViewModel extends ViewModel {
     }
 
     public void setWordViewModel(TaskDataViewModel mWordViewModel) {
-        this.mWordViewModel = mWordViewModel;
+        DayTaskListViewModel.mWordViewModel = mWordViewModel;
     }
 
     public void setTaskDayAdapter(TaskTotalAdapter taskDayAdapter) {
-        this.taskDayAdapter = taskDayAdapter;
+        DayTaskListViewModel.taskDayAdapter = taskDayAdapter;
     }
 
     public void setLifecycleOwner(LifecycleOwner viewLifecycleOwner) {
-    this.viewLifecycleOwner = viewLifecycleOwner;
-    }*/
+        DayTaskListViewModel.viewLifecycleOwner = viewLifecycleOwner;
+    }
+
+    public static TaskDataViewModel getMWordViewModel() {
+        return mWordViewModel;
+    }
+
+    public static TaskTotalAdapter getTaskDayAdapter() {
+        return taskDayAdapter;
+    }
+
+    public static LifecycleOwner getViewLifecycleOwner() {
+        return viewLifecycleOwner;
+    }
 }

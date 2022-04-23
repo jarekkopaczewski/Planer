@@ -58,9 +58,9 @@ public class DayTaskListFragment extends Fragment {
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
 
-        //dayListViewModel.setWordViewModel(mWordViewModel);
-        // dayListViewModel.setTaskDayAdapter(taskDayAdapter);
-        //dayListViewModel.setLifecycleOwner(this.getViewLifecycleOwner());
+        dayListViewModel.setWordViewModel(mWordViewModel);
+        dayListViewModel.setTaskDayAdapter(taskDayAdapter);
+        dayListViewModel.setLifecycleOwner(this.getViewLifecycleOwner());
 
         var calendar = DayViewModel.getRefToCalendar().getValue();
 
@@ -69,11 +69,6 @@ public class DayTaskListFragment extends Fragment {
             updateDate(calendar.getSelectedDate());
         }
 
-
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            TaskData result = bundle.getParcelable("bundleKey");
-            mWordViewModel.insert(result);
-        });
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
             Navigation.findNavController(view).navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
