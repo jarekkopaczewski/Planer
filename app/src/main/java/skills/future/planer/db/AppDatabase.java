@@ -71,16 +71,27 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-            CalendarDay day2 = CalendarDay.from(2022, 4, 15);
-            CalendarDay day3 = CalendarDay.from(2022, 4, 6);
-            CalendarDay day4 = CalendarDay.from(2022, 4, 7);
+            CalendarDay day2 = CalendarDay.from(2022, 4, 20);
+            CalendarDay day3 = CalendarDay.from(2022, 4, 30);
+            CalendarDay day4 = CalendarDay.from(2022, 4, 24);
 
 
             for (int i = 0; i <= 4; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu","",day,day);
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu","",day2,day3);
                 mDao.insert(word);
             }
-          
+            for (int i = 0; i <= 4; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "2niu","",day2,day2);
+                mDao.insert(word);
+            }
+            for (int i = 0; i <=4; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "3inu","",day3,day3);
+                mDao.insert(word);
+            }
+            for (int i = 0; i <= 4; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "4ninu", "", day4, day4);
+                mDao.insert(word);
+            }
             for (int i = 0; i < 10; i++) {
                 TaskData word = new TaskData(TaskCategory.Work,
                         Priorities.Important,
