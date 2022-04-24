@@ -13,6 +13,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import lombok.Getter;
+import skills.future.planer.R;
+import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
 import skills.future.planer.ui.day.views.matrix.MatrixModelView;
 
@@ -58,6 +60,13 @@ public class DayViewModel extends ViewModel {
      * Sets visibility of fab and texView
      */
     public void changeVisibility(@NonNull FloatingActionButton fab, @NonNull TextView text, int visibility) {
+        if (visibility == View.VISIBLE) {
+            AnimateView.singleAnimation(fab, fab.getContext(), R.anim.downup);
+            AnimateView.singleAnimation(text, text.getContext(), R.anim.downup);
+        } else if (fab.getVisibility() == View.VISIBLE) {
+            AnimateView.singleAnimation(fab, fab.getContext(), R.anim.updown);
+            AnimateView.singleAnimation(text, text.getContext(), R.anim.updown);
+        }
         fab.setVisibility(visibility);
         text.setVisibility(visibility);
     }
@@ -76,8 +85,9 @@ public class DayViewModel extends ViewModel {
         if (viewPager.getAdapter().getPageTitle(position).equals("Lista zadań")) {
             updateTaskList(date, dayTaskListViewModel);
             checkDateIsToday(date, fabDay, dayNumberView);
-        } else
+        } else {
             changeVisibility(fabDay, dayNumberView, View.INVISIBLE);
+        }
 
         if (viewPager.getAdapter().getPageTitle(position).equals("Macierz"))
             updateMatrix(date, matrixModelView);

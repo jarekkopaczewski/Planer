@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:fitsSystemWindows="true"
-    tools:context=".ui.day.views.daylist.DayTaskListFragment">
+    tools:context=".ui.habit.HabitBrowserFragment">
+
+    <!-- TODO: Update blank fragment layout -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:id="@+id/addHabitFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="4dp"
         android:clickable="true"
         android:contentDescription="@string/fabContentDescription"
         android:foreground="@drawable/plus"
@@ -30,43 +30,16 @@
         app:layout_constraintVertical_bias="0.98"
         tools:ignore="SpeakableTextPresentCheck" />
 
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/monthCard"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listTotalView"
+        android:id="@+id/totalHabitList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
-        android:background="@color/background"
-        android:textAlignment="center"
+        android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.777" />
+        app:layout_constraintTop_toTopOf="parent" >
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="0dp"
-        android:layout_height="7dp"
-        android:alpha="0.7"
-        android:rotation="180"
-        android:scaleType="fitXY"
-        android:src="@drawable/shadow"
-        android:translationZ="-1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/monthCard"
-        app:tint="@color/shadow" />
-
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

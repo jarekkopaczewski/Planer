@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
@@ -39,6 +40,8 @@ public class DayTaskListFragment extends Fragment {
         View root = binding.getRoot();
 
         createList();
+
+        AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
 
         dayListViewModel.setWordViewModel(mTaskViewModel);
         dayListViewModel.setTaskDayAdapter(taskDayAdapter);

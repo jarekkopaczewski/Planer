@@ -105,7 +105,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
                 positionToChange.set(holder.getAdapterPosition());
                 this.notifyItemChanged(holder.getAdapterPosition());
             } else {
-
                 int adapterPosition = holder.getAdapterPosition();
                 this.notifyItemChanged(positionAtomic);
 
@@ -137,10 +136,25 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     protected void createListenerToTrashButton(@NonNull TaskDataViewHolder holder, int position) {
         if (holder.itemView.findViewById(R.id.trashImageView) != null)
             holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
-                AnimationUtils.loadAnimation(context, R.anim.slide_out).startNow();
-                var task = fullTaskList.get(position);
-                mTaskViewModel.deleteTaskData(task);
+                Animation animation  = AnimationUtils.loadAnimation(context, R.anim.removetask);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                                                   @Override
+                                                   public void onAnimationStart(Animation animation) {
 
+                                                   }
+
+                                                   @Override
+                                                   public void onAnimationEnd(Animation animation) {
+                                                       var task = fullTaskList.get(position);
+                                                       mTaskViewModel.deleteTaskData(task);
+                                                   }
+
+                                                   @Override
+                                                   public void onAnimationRepeat(Animation animation) {
+
+                                                   }
+                                               });
+                holder.itemView.startAnimation(animation);
             });
     }
 

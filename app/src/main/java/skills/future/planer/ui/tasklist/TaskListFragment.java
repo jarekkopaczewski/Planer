@@ -59,9 +59,7 @@ public class TaskListFragment extends Fragment {
 //        taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-
-
-        // animation test
+        // fab enter animation
         AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {

@@ -18,7 +18,7 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 
-@Database(entities = {TaskData.class}, exportSchema = false, version = 1)
+@Database(entities = {TaskData.class}, exportSchema = false, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting

@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentHabitBinding;
+import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 
@@ -40,6 +42,8 @@ public class HabitFragment extends Fragment {
         habitTotalAdapter = new HabitTotalAdapter(this.getContext());
         habitList.setAdapter(habitTotalAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
+        AnimateView.singleAnimation(binding.circularProgressIndicator, getContext(), R.anim.scalezoom2);
 
         circularProgressIndicator.setProgress(36.0f, 100.0f);
         circularProgressIndicator.animate();
