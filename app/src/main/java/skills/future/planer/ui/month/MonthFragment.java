@@ -15,9 +15,13 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -70,18 +74,21 @@ public class MonthFragment extends Fragment {
     private HashSet<CalendarDay> category2;
     private HashSet<CalendarDay> category3;
     private HashSet<CalendarDay> category4;
+    private List<CalendarDay> days;
+    private HashMap<CalendarDay,Integer> dayTasks2;
 
     /**
      * Initialization of HashMap and HashSets
      */
     public MonthFragment() {
         dayTasks = new HashMap<>();
+        dayTasks2 = new HashMap<>();
         category1 = new HashSet<>();
         category2 = new HashSet<>();
         category3 = new HashSet<>();
         category4 = new HashSet<>();
+        days = new ArrayList<>();
     }
-
     /**
      * Initial creation of the fragment
      *
@@ -112,9 +119,41 @@ public class MonthFragment extends Fragment {
         //setting current day as selected
         materialCalendarView.setDateSelected(CalendarDay.today(), true);
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
+        CalendarDay today = CalendarDay.today();
+        test_dots(today);
 
         //observes TaskDataViewModel, runs setDots method
-        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskNumber(taskData));
+       // mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskNumber(taskData));
+
+        materialCalendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+//                System.out.println();
+//                int day = date.getDay();
+//                int month = date.getMonth();
+//                int year = date.getYear();
+//
+//
+//                CalendarDay next = CalendarDay.from(year,month+1,day);
+//                CalendarDay previous = CalendarDay.from(year,month-1,day);
+//                CalendarDay selected =  materialCalendarView.getSelectedDate();
+//                materialCalendarView.setSelectionColor(255);
+//                materialCalendarView.selectRange(previous,next);
+//                days = materialCalendarView.getSelectedDates();
+//                System.out.println(days);
+//                materialCalendarView.clearSelection();
+//                materialCalendarView.setSelectionColor(-16744817);
+//                materialCalendarView.setDateSelected(selected,true);
+                 test_dots(date);
+
+
+
+
+
+            }
+        });
+
+
 
 
         //TODO metoda do pobierania liczby zadań dla @Paweł Helisz
@@ -227,6 +266,69 @@ public class MonthFragment extends Fragment {
         }}
         materialCalendarView.addDecorator(new EventDecorator(category1, 1));
     }
+
+    public void test_dots(CalendarDay date){
+
+        int day = date.getDay();
+        int month = date.getMonth();
+        int year = date.getYear();
+
+        CalendarDay next = CalendarDay.from(year,month+1,day);
+        CalendarDay previous = CalendarDay.from(year,month-1,day);
+        CalendarDay selected =  materialCalendarView.getSelectedDate();
+        materialCalendarView.setSelectionColor(255);
+        materialCalendarView.selectRange(date,next);
+        days = materialCalendarView.getSelectedDates();
+        ArrayList days2 = new ArrayList();
+        for (CalendarDay calendarDay : days) {
+            days2.add(CalendarDay.from(calendarDay.getYear(),calendarDay.getMonth(),calendarDay.getDay()));
+        }
+        //System.out.println(days);
+        materialCalendarView.clearSelection();
+        materialCalendarView.setSelectionColor(-16744817);
+        materialCalendarView.setDateSelected(selected,true);
+        addDots(days2);
+
+    }
+
+    public void addDots(List<CalendarDay> days){
+        int numberOfTasks = 0;
+
+        dayTasks2.clear();
+        category1.clear();
+        category2.clear();
+        category3.clear();
+        category4.clear();
+
+        for(CalendarDay day : days){
+            numberOfTasks = mWordViewModel.getNumberOfTaskByDate(day);
+            if(numberOfTasks>0){
+                dayTasks2.put(day,numberOfTasks);
+            }
+            //numberOfTasks=0;
+        }
+
+        for (Map.Entry<CalendarDay, Integer> entry : dayTasks2.entrySet()) {
+            CalendarDay key = entry.getKey();
+            Integer value = entry.getValue();
+            //System.out.println(key+" "+value);
+
+            if (value > 0 && value < 4) {
+                category1.add(key);
+            } else if (value > 4 && value < 10) {
+                category2.add(key);
+            } else if (value > 10 && value < 15) {
+                category3.add(key);
+            } else if (value > 15) {
+                category4.add(key);
+            }
+
+            materialCalendarView.addDecorator(new EventDecorator(category1, 1));
+            materialCalendarView.addDecorator(new EventDecorator(category2, 2));
+            materialCalendarView.addDecorator(new EventDecorator(category3, 3));
+            materialCalendarView.addDecorator(new EventDecorator(category4, 4));
+
+    }}
 
 
 }
