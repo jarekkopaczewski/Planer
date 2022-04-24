@@ -56,7 +56,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     }
 
     @NonNull
-    private View createViewOfItem(@NonNull ViewGroup parent, int layoutType) {
+    protected View createViewOfItem(@NonNull ViewGroup parent, int layoutType) {
         View itemView;
         itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
@@ -84,7 +84,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
      * Creates listener to taskView in list
      * When someone presses on a taskView it will expand or close
      */
-    private void createListenerToExtendView(@NonNull TaskDataViewHolder holder) {
+    protected void createListenerToExtendView(@NonNull TaskDataViewHolder holder) {
         holder.itemView.setOnClickListener(v -> {
 
             int positionAtomic = positionToChange.get();
@@ -112,7 +112,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     /**
      * Creates listener to edit button which starts a TaskListCreatorFragment
      */
-    private void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
+    protected void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
         holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
                 Navigation.findNavController(holder.itemView)
                         .navigate(TaskListFragmentDirections
@@ -142,6 +142,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         if (filteredTaskList != null)
             return filteredTaskList.size();
         else return 0;
+    }
+
+    public List<TaskData> getFullTaskList() {
+        return fullTaskList;
     }
 
     /**
@@ -225,6 +229,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
     //todo Trzeba zrobić synchronizacje po filtrze jezeli będą zmiany
 
+
     /**
      * Filter class
      * Searches for string match in task titles
@@ -261,5 +266,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             notifyDataSetChanged();
         }
     }
+
 
 }

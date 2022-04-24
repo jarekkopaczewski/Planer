@@ -20,14 +20,13 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.DayFragmentDirections;
-import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 public class DayTaskListFragment extends Fragment {
 
     private DayTaskListViewModel dayListViewModel;
     private TaskDataViewModel mWordViewModel;
     private DayTaskListFragmentBinding binding;
-    private TaskTotalAdapter taskDayAdapter;
+    private TaskDayAdapter taskDayAdapter;
 
 
     @Override
@@ -54,7 +53,7 @@ public class DayTaskListFragment extends Fragment {
      */
     private void createList() {
         RecyclerView listDay = binding.listTotalView;
-        taskDayAdapter = new TaskTotalAdapter(this.getContext());
+        taskDayAdapter = new TaskDayAdapter(this.getContext());
         listDay.setAdapter(taskDayAdapter);
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
