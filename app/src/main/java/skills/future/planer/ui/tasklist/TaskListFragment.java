@@ -49,14 +49,16 @@ public class TaskListFragment extends Fragment {
         binding = FragmentTaskListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        listTotal = binding.listTotalView;
+        mWordViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
         taskTotalAdapter = new TaskTotalAdapter(this.getContext(), mWordViewModel);
+        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+
+        listTotal = binding.listTotalView;
         listTotal.setAdapter(taskTotalAdapter);
         //listTotal.setTextFilterEnabled(true);
 //        taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mWordViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
-        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+
 
 
         // animation test
@@ -70,29 +72,6 @@ public class TaskListFragment extends Fragment {
             AnimateView.animateInOut(binding.fab, getContext());
             Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment(-1));
         });
-
-        ItemTouchHelper helper = new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(0,
-                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                  
-                    @Override
-                    public boolean onMove(@NonNull RecyclerView recyclerView,
-                                          @NonNull RecyclerView.ViewHolder viewHolder,
-                                          @NonNull RecyclerView.ViewHolder target) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
-                                         int direction) {
-                        int position = viewHolder.getAdapterPosition();
-                        TaskData myTaskData = taskTotalAdapter.getTaskDataAtPosition(position);
-                        mWordViewModel.deleteTaskData(myTaskData);
-                    }
-                });
-
-        helper.attachToRecyclerView(listTotal);
-
 
         binding.searchImageView.setOnClickListener(e -> {
             AnimateView.animateInOut(binding.searchImageView, this.getContext());

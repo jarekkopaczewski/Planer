@@ -58,7 +58,6 @@ public class DayTaskListFragment extends Fragment {
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         createListenerForFab();
-        createItemTouchHelper(listDay);
     }
 
     /**
@@ -72,31 +71,6 @@ public class DayTaskListFragment extends Fragment {
 
         });
     }
-
-    /**
-     * Creates item touch helper
-     */
-    private void createItemTouchHelper(RecyclerView listDay) {
-        new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(0,
-                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                    @Override
-                    public boolean onMove(@NonNull RecyclerView recyclerView,
-                                          @NonNull RecyclerView.ViewHolder viewHolder,
-                                          @NonNull RecyclerView.ViewHolder target) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
-                                         int direction) {
-                        int position = viewHolder.getAdapterPosition();
-                        TaskData myTaskData = taskDayAdapter.getTaskDataAtPosition(position);
-                        mTaskViewModel.deleteTaskData(myTaskData);
-                    }
-                }).attachToRecyclerView(listDay);
-    }
-
 
     @Override
     public void onDestroyView() {

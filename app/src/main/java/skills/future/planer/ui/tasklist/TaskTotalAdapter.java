@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 
@@ -135,7 +137,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     protected void createListenerToTrashButton(@NonNull TaskDataViewHolder holder, int position) {
         if (holder.itemView.findViewById(R.id.trashImageView) != null)
             holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
-                mTaskViewModel.deleteTaskData(fullTaskList.get(position));
+                AnimationUtils.loadAnimation(context, R.anim.slide_out).startNow();
+                var task = fullTaskList.get(position);
+                mTaskViewModel.deleteTaskData(task);
+
             });
     }
 
