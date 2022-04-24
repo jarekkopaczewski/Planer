@@ -20,55 +20,66 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.DayFragmentDirections;
-import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 public class DayTaskListFragment extends Fragment {
 
-    private DayTaskListViewModel dayTaskListViewModel;
+    private DayTaskListViewModel dayListViewModel;
     private TaskDataViewModel mWordViewModel;
     private DayTaskListFragmentBinding binding;
-    private RecyclerView listDay;
-    private TaskTotalAdapter taskTotalAdapter;
+    private TaskDayAdapter taskDayAdapter;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = DayTaskListFragmentBinding.inflate(inflater, container, false);
-        dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
+        dayListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
+        mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
+
         View root = binding.getRoot();
 
         createList();
+
+        dayListViewModel.setWordViewModel(mWordViewModel);
+        dayListViewModel.setTaskDayAdapter(taskDayAdapter);
+        dayListViewModel.setLifecycleOwner(this.getViewLifecycleOwner());
 
         return root;
     }
 
 
-    //TODO Zrobić to dla widoku dnia
+    /**
+     * Creates list of tasks
+     */
     private void createList() {
-        listDay = binding.listTotalView;
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext());
-        listDay.setAdapter(taskTotalAdapter);
-        //listTotal.setTextFilterEnabled(true);
-        //taskTotalAdapter.getFilter().filter("");
+        RecyclerView listDay = binding.listTotalView;
+        taskDayAdapter = new TaskDayAdapter(this.getContext());
+        listDay.setAdapter(taskDayAdapter);
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
-        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
+        createListenerForFab();
+        createItemTouchHelper(listDay);
+    }
 
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            TaskData result = bundle.getParcelable("bundleKey");
-            mWordViewModel.insert(result);
-        });
+    /**
+     * Creates listener for new task creator fab button
+     */
+    private void createListenerForFab() {
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            Navigation.findNavController(view).navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
-        });
+            Navigation.findNavController(view)
+                    .navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
 
-        ItemTouchHelper helper = new ItemTouchHelper(
+        });
+    }
+
+    /**
+     * Creates item touch helper
+     */
+    private void createItemTouchHelper(RecyclerView listDay) {
+        new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(0,
                         ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
-
                     @Override
                     public boolean onMove(@NonNull RecyclerView recyclerView,
                                           @NonNull RecyclerView.ViewHolder viewHolder,
@@ -80,12 +91,10 @@ public class DayTaskListFragment extends Fragment {
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
                                          int direction) {
                         int position = viewHolder.getAdapterPosition();
-                        TaskData myTaskData = taskTotalAdapter.getTaskDataAtPosition(position);
+                        TaskData myTaskData = taskDayAdapter.getTaskDataAtPosition(position);
                         mWordViewModel.deleteTaskData(myTaskData);
                     }
-                });
-
-        helper.attachToRecyclerView(listDay);
+                }).attachToRecyclerView(listDay);
     }
 
 

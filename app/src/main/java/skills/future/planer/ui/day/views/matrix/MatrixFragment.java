@@ -19,15 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMatrixBinding;
-import skills.future.planer.db.task.DayCategorizedTaskData;
-import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
+import skills.future.planer.ui.day.DayViewModel;
 import skills.future.planer.ui.tasklist.Colors;
 
 public class MatrixFragment extends Fragment {
 
+    private DayViewModel dayViewModel;
     private FragmentMatrixBinding binding;
     private MatrixModelView matrixModelView;
     private ArrayList<RecyclerView> recyclerViews;
@@ -36,8 +35,6 @@ public class MatrixFragment extends Fragment {
     private ArrayList<ProgressBar> progressBars;
     private ArrayList<ConstraintLayout> backgroundConstrains;
 
-    public MatrixFragment() {
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,20 +68,23 @@ public class MatrixFragment extends Fragment {
         backgroundConstrains.add(binding.constrainNotUrgentNotImportant);
 
         setUpAdapters();
-        setUpModels();
         setUpBackground();
+
+        MatrixModelView.setMatrixAdapters(matrixAdapters);
+        MatrixModelView.setTaskDataViewModels(taskDataViewModels);
+        MatrixModelView.setViewLifecycleOwner(this.getViewLifecycleOwner());
+        MatrixModelView.setProgressBars(progressBars);
 
         return root;
     }
 
-    private void setUpBackground()
-    {
+    private void setUpBackground() {
         int colors[] = {Colors.getColorFromPreferences("urgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
         GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.BR_TL, colors);
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
         gd.setShape(RECTANGLE);
-        gd.setGradientCenter(1.0f,1.0f);
+        gd.setGradientCenter(1.0f, 1.0f);
         gd.setAlpha(255);
         backgroundConstrains.get(0).setBackgroundDrawable(gd);
 
@@ -93,7 +93,7 @@ public class MatrixFragment extends Fragment {
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
         gd.setShape(RECTANGLE);
-        gd.setGradientCenter(0.0f,1.0f);
+        gd.setGradientCenter(0.0f, 1.0f);
         gd.setAlpha(255);
         backgroundConstrains.get(1).setBackgroundDrawable(gd);
 
@@ -102,7 +102,7 @@ public class MatrixFragment extends Fragment {
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
         gd.setShape(RECTANGLE);
-        gd.setGradientCenter(1.0f,0.0f);
+        gd.setGradientCenter(1.0f, 0.0f);
         gd.setAlpha(255);
         backgroundConstrains.get(2).setBackgroundDrawable(gd);
 
@@ -111,7 +111,7 @@ public class MatrixFragment extends Fragment {
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
         gd.setShape(RECTANGLE);
-        gd.setGradientCenter(0.0f,0.0f);
+        gd.setGradientCenter(0.0f, 0.0f);
         gd.setAlpha(255);
         backgroundConstrains.get(3).setBackgroundDrawable(gd);
     }
@@ -128,20 +128,30 @@ public class MatrixFragment extends Fragment {
             taskDataViewModels.add(new ViewModelProvider(this).get(TaskDataViewModel.class));
         }
     }
+    /*
+     */
 
     /**
      * Adds live data observers & fragmentResultsListeners
-     */
-    public void setUpModels() {
+     *//*
+    public void setUpModels(Calendar date) {
         for (int i = 0; i < 4; i++) {
-            int finalI = i;
-            taskDataViewModels.get(i).getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> {
-                matrixAdapters.get(finalI).setFilteredTaskList(new DayCategorizedTaskData(taskData).getAllCategorizedDayFromQuarter(finalI));
-                progressBars.get(finalI).setMax(matrixAdapters.get(finalI).getItemCount());
-                progressBars.get(finalI).setProgress(matrixAdapters.get(finalI).getDone());
-            });
+            try {
+                int finalI = i;
+                var dateLong = date.getTimeInMillis();
+
+                taskDataViewModels.get(i)
+                        .getCategorizedTaskDataFromDay(finalI, dateLong)
+                        .observe(this.getViewLifecycleOwner(), taskData -> {
+                            matrixAdapters.get(finalI).setFilteredTaskList(new DayCategorizedTaskData(taskData).getAllCategorizedDayFromQuarter(finalI));
+                            progressBars.get(finalI).setMax(matrixAdapters.get(finalI).getItemCount());
+                            progressBars.get(finalI).setProgress(matrixAdapters.get(finalI).getDone());
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-    }
+    }*/
 
     @Override
     public void onResume() {

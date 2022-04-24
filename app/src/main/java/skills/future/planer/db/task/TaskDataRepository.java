@@ -16,9 +16,7 @@ import skills.future.planer.db.task.enums.priority.TimePriority;
 
 /**
  * Class implement separation of concerns
- *
  */
-@Getter
 public class TaskDataRepository {
     /**
      * Reference to taskDataDao
@@ -28,12 +26,7 @@ public class TaskDataRepository {
     /**
      * List od all taskData
      */
-    private final LiveData<List<TaskData>> listLiveData;
-    /**
-     * Categorized taskData
-     */
-    protected LiveData<List<TaskData>> importantUrgentTask, importantNotUrgent,
-            notImportantUrgentTask, notImportantNotUrgent;
+    private LiveData<List<TaskData>> listLiveData;
 
     /**
      * Constructor of TaskDataRepository
@@ -43,7 +36,6 @@ public class TaskDataRepository {
     TaskDataRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDataDao = db.taskDataTabDao();
-        listLiveData = taskDataDao.getTaskData();
     }
 
     /**
@@ -59,7 +51,36 @@ public class TaskDataRepository {
      * @return reference to list of all taskData
      */
     LiveData<List<TaskData>> getAllTaskData() {
+        if (listLiveData == null)
+            listLiveData = taskDataDao.getTaskData();
         return listLiveData;
+    }
+
+    /**
+     * @return references to the task list based on quarter and day
+     */
+    public LiveData<List<TaskData>> getCategorizedListLiveDataFromDay(int quarter, long date) throws Exception {
+        return switch (quarter) {
+            case 0 -> taskDataDao.getTaskData(Priorities.Important, TimePriority.Urgent, date);
+            case 1 -> taskDataDao.getTaskData(Priorities.Important, TimePriority.NotUrgent, date);
+            case 2 -> taskDataDao.getTaskData(Priorities.NotImportant, TimePriority.Urgent, date);
+            case 3 -> taskDataDao.getTaskData(Priorities.NotImportant, TimePriority.NotUrgent, date);
+            default -> throw new Exception("No such quarter: " + quarter);
+        };
+    }
+
+    /**
+     * @return references to the task list based on day
+     */
+    public LiveData<List<TaskData>> getAllTaskDataFromDay(long date) {
+        return taskDataDao.getTaskDataByDate(date);
+    }
+
+    /**
+     * @return number of tasks from a particular day
+     */
+    public int getNumberOfTaskByDate(long date) {
+        return taskDataDao.getNumberOfTaskByDate(date);
     }
 
     /**
@@ -73,7 +94,6 @@ public class TaskDataRepository {
 
     /**
      * Class run asyncTask to insert taskData
-     * @author Mikołaj Szymczyk
      */
     private static class InsertAsyncTask extends AsyncTask<TaskData, Void, Void> {
         private final TaskDataDao asyncTaskDao;
@@ -92,7 +112,6 @@ public class TaskDataRepository {
 
     /**
      * Class run asyncTask to delete taskData from database
-     * @author Mikołaj Szymczyk
      */
     private static class deleteTaskDataAsyncTask extends AsyncTask<TaskData, Void, Void> {
         private final TaskDataDao mAsyncTaskDao;

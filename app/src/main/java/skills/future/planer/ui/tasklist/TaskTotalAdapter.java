@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 
@@ -47,18 +46,17 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     @Override
     public TaskDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return switch (viewType) {
-            case LAYOUT_SMALL -> new TaskDataViewHolder(
-                    createViewOfItem(parent,
-                            R.layout.fragment_task_in_list), context);
             case LAYOUT_BIG -> new TaskDataViewHolderExtended(
                     createViewOfItem(parent,
                             R.layout.fragment_task_in_list_extended), context);
-            default -> new TaskDataViewHolder(null, context);
+            default -> new TaskDataViewHolder(
+                    createViewOfItem(parent,
+                            R.layout.fragment_task_in_list), context);
         };
     }
 
     @NonNull
-    private View createViewOfItem(@NonNull ViewGroup parent, int layoutType) {
+    protected View createViewOfItem(@NonNull ViewGroup parent, int layoutType) {
         View itemView;
         itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
@@ -86,7 +84,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
      * Creates listener to taskView in list
      * When someone presses on a taskView it will expand or close
      */
-    private void createListenerToExtendView(@NonNull TaskDataViewHolder holder) {
+    protected void createListenerToExtendView(@NonNull TaskDataViewHolder holder) {
         holder.itemView.setOnClickListener(v -> {
 
             int positionAtomic = positionToChange.get();
@@ -114,7 +112,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     /**
      * Creates listener to edit button which starts a TaskListCreatorFragment
      */
-    private void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
+    protected void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
         holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
                 Navigation.findNavController(holder.itemView)
                         .navigate(TaskListFragmentDirections
@@ -144,6 +142,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         if (filteredTaskList != null)
             return filteredTaskList.size();
         else return 0;
+    }
+
+    public List<TaskData> getFullTaskList() {
+        return fullTaskList;
     }
 
     /**
@@ -227,6 +229,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
     //todo Trzeba zrobić synchronizacje po filtrze jezeli będą zmiany
 
+
     /**
      * Filter class
      * Searches for string match in task titles
@@ -263,5 +266,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             notifyDataSetChanged();
         }
     }
+
 
 }
