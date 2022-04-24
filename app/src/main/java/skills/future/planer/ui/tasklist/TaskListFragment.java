@@ -50,7 +50,7 @@ public class TaskListFragment extends Fragment {
         View root = binding.getRoot();
 
         listTotal = binding.listTotalView;
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext());
+        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), mWordViewModel);
         listTotal.setAdapter(taskTotalAdapter);
         //listTotal.setTextFilterEnabled(true);
 //        taskTotalAdapter.getFilter().filter("");

@@ -24,7 +24,7 @@ import skills.future.planer.ui.day.DayFragmentDirections;
 public class DayTaskListFragment extends Fragment {
 
     private DayTaskListViewModel dayListViewModel;
-    private TaskDataViewModel mWordViewModel;
+    private TaskDataViewModel mTaskViewModel;
     private DayTaskListFragmentBinding binding;
     private TaskDayAdapter taskDayAdapter;
 
@@ -34,13 +34,13 @@ public class DayTaskListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = DayTaskListFragmentBinding.inflate(inflater, container, false);
         dayListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
-        mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
+        mTaskViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
 
         View root = binding.getRoot();
 
         createList();
 
-        dayListViewModel.setWordViewModel(mWordViewModel);
+        dayListViewModel.setWordViewModel(mTaskViewModel);
         dayListViewModel.setTaskDayAdapter(taskDayAdapter);
         dayListViewModel.setLifecycleOwner(this.getViewLifecycleOwner());
 
@@ -53,7 +53,7 @@ public class DayTaskListFragment extends Fragment {
      */
     private void createList() {
         RecyclerView listDay = binding.listTotalView;
-        taskDayAdapter = new TaskDayAdapter(this.getContext());
+        taskDayAdapter = new TaskDayAdapter(this.getContext(),mTaskViewModel);
         listDay.setAdapter(taskDayAdapter);
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -92,7 +92,7 @@ public class DayTaskListFragment extends Fragment {
                                          int direction) {
                         int position = viewHolder.getAdapterPosition();
                         TaskData myTaskData = taskDayAdapter.getTaskDataAtPosition(position);
-                        mWordViewModel.deleteTaskData(myTaskData);
+                        mTaskViewModel.deleteTaskData(myTaskData);
                     }
                 }).attachToRecyclerView(listDay);
     }
