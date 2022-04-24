@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.util.Calendar;
-
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
@@ -16,10 +14,11 @@ public class DayTaskListViewModel extends ViewModel {
     private static TaskTotalAdapter taskDayAdapter;
     private static LifecycleOwner viewLifecycleOwner;
 
+    /**
+     * Sets observer for list for concrete day
+     */
     public void updateDate(CalendarDay date) {
-        var calendarDate = Calendar.getInstance();
-        calendarDate.set(date.getYear(), date.getMonth(), date.getDay());
-        mWordViewModel.getAllTaskDataFromDay(calendarDate.getTimeInMillis())
+        mWordViewModel.getAllTaskDataFromDay(date)
                 .observe(viewLifecycleOwner,
                         taskData -> taskDayAdapter.setFilteredTaskList(taskData));
     }

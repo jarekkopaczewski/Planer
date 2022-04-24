@@ -23,12 +23,13 @@ public class MatrixModelView extends ViewModel {
     public void setUpModels(CalendarDay date) {
         var calendarDate = Calendar.getInstance();
         calendarDate.set(date.getYear(), date.getMonth(), date.getDay());
+        long dateInLong = calendarDate.getTimeInMillis();
         for (int i = 0; i < 4; i++) {
             try {
                 int finalI = i;
 
                 taskDataViewModels.get(i)
-                        .getCategorizedTaskDataFromDay(i, calendarDate.getTimeInMillis())
+                        .getCategorizedTaskDataFromDay(i, dateInLong)
                         .observe(viewLifecycleOwner, taskData -> {
                             matrixAdapters.get(finalI).setFilteredTaskList(taskData);
                             progressBars.get(finalI).setMax(matrixAdapters.get(finalI).getItemCount());
@@ -40,32 +41,16 @@ public class MatrixModelView extends ViewModel {
         }
     }
 
-    public static ArrayList<TaskDataViewModel> getTaskDataViewModels() {
-        return taskDataViewModels;
-    }
-
     public static void setTaskDataViewModels(ArrayList<TaskDataViewModel> taskDataViewModels) {
         MatrixModelView.taskDataViewModels = taskDataViewModels;
-    }
-
-    public static LifecycleOwner getViewLifecycleOwner() {
-        return viewLifecycleOwner;
     }
 
     public static void setViewLifecycleOwner(LifecycleOwner viewLifecycleOwner) {
         MatrixModelView.viewLifecycleOwner = viewLifecycleOwner;
     }
 
-    public static ArrayList<MatrixListTotalAdapter> getMatrixAdapters() {
-        return matrixAdapters;
-    }
-
     public static void setMatrixAdapters(ArrayList<MatrixListTotalAdapter> matrixAdapters) {
         MatrixModelView.matrixAdapters = matrixAdapters;
-    }
-
-    public static ArrayList<ProgressBar> getProgressBars() {
-        return progressBars;
     }
 
     public static void setProgressBars(ArrayList<ProgressBar> progressBars) {

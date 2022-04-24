@@ -38,6 +38,7 @@ public class DayTaskListFragment extends Fragment {
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
 
         View root = binding.getRoot();
+
         createList();
 
         dayListViewModel.setWordViewModel(mWordViewModel);
@@ -48,19 +49,36 @@ public class DayTaskListFragment extends Fragment {
     }
 
 
+    /**
+     * Creates list of tasks
+     */
     private void createList() {
         RecyclerView listDay = binding.listTotalView;
         taskDayAdapter = new TaskTotalAdapter(this.getContext());
         listDay.setAdapter(taskDayAdapter);
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
+        createListenerForFab();
+        createItemTouchHelper(listDay);
+    }
+
+    /**
+     * Creates listener for new task creator fab button
+     */
+    private void createListenerForFab() {
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            Navigation.findNavController(view).navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
+            Navigation.findNavController(view)
+                    .navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
 
         });
+    }
 
-        ItemTouchHelper helper = new ItemTouchHelper(
+    /**
+     * Creates item touch helper
+     */
+    private void createItemTouchHelper(RecyclerView listDay) {
+        new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(0,
                         ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
                     @Override
@@ -69,6 +87,7 @@ public class DayTaskListFragment extends Fragment {
                                           @NonNull RecyclerView.ViewHolder target) {
                         return false;
                     }
+
                     @Override
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
                                          int direction) {
@@ -76,11 +95,8 @@ public class DayTaskListFragment extends Fragment {
                         TaskData myTaskData = taskDayAdapter.getTaskDataAtPosition(position);
                         mWordViewModel.deleteTaskData(myTaskData);
                     }
-                });
-
-        helper.attachToRecyclerView(listDay);
+                }).attachToRecyclerView(listDay);
     }
-
 
 
     @Override

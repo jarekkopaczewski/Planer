@@ -26,8 +26,7 @@ public class TaskDataRepository {
     /**
      * List od all taskData
      */
-    private LiveData<List<TaskData>> listLiveData, importantUrgentTaskFromDay,
-            importantNotUrgentTaskFromDay, notImportantUrgentTaskFromDay, notImportantNotUrgentTaskFromDay;
+    private LiveData<List<TaskData>> listLiveData;
 
     /**
      * Constructor of TaskDataRepository
@@ -57,6 +56,9 @@ public class TaskDataRepository {
         return listLiveData;
     }
 
+    /**
+     * @return references to the task list based on quarter and day
+     */
     public LiveData<List<TaskData>> getCategorizedListLiveDataFromDay(int quarter, long date) throws Exception {
         return switch (quarter) {
             case 0 -> taskDataDao.getTaskData(Priorities.Important, TimePriority.Urgent, date);
@@ -68,6 +70,20 @@ public class TaskDataRepository {
     }
 
     /**
+     * @return references to the task list based on day
+     */
+    public LiveData<List<TaskData>> getAllTaskDataFromDay(long date) {
+        return taskDataDao.getTaskDataByDate(date);
+    }
+
+    /**
+     * @return number of tasks from a particular day
+     */
+    public int getNumberOfTaskByDate(long date) {
+        return taskDataDao.getNumberOfTaskByDate(date);
+    }
+
+    /**
      * Method start new asyncTask which delete taskData from database
      *
      * @param taskData which will be inserted
@@ -76,14 +92,8 @@ public class TaskDataRepository {
         new deleteTaskDataAsyncTask(taskDataDao).execute(taskData);
     }
 
-    public LiveData<List<TaskData>> getAllTaskDataFromDay(long date) {
-        return taskDataDao.getTaskDataByDate(date);
-    }
-
     /**
      * Class run asyncTask to insert taskData
-     *
-     * @author Mikołaj Szymczyk
      */
     private static class InsertAsyncTask extends AsyncTask<TaskData, Void, Void> {
         private final TaskDataDao asyncTaskDao;
@@ -102,8 +112,6 @@ public class TaskDataRepository {
 
     /**
      * Class run asyncTask to delete taskData from database
-     *
-     * @author Mikołaj Szymczyk
      */
     private static class deleteTaskDataAsyncTask extends AsyncTask<TaskData, Void, Void> {
         private final TaskDataDao mAsyncTaskDao;

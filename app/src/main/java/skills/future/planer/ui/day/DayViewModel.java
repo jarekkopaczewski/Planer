@@ -64,6 +64,7 @@ public class DayViewModel extends ViewModel {
 
     /**
      * Checks is needed to change visibility of fab when page is changed
+     * Updates TaskList or Matrix depending on the card selected
      */
     public void checkPagerChange(int position,
                                  ViewPager viewPager,
@@ -82,10 +83,16 @@ public class DayViewModel extends ViewModel {
             updateMatrix(date, matrixModelView);
     }
 
+    /**
+     * Updates matrix lists
+     */
     private void updateMatrix(CalendarDay date, MatrixModelView matrixModelView) {
         matrixModelView.setUpModels(date);
     }
 
+    /**
+     * Updates TaskList lists
+     */
     private void updateTaskList(CalendarDay date, DayTaskListViewModel dayTaskListViewModel) {
         dayTaskListViewModel.updateDate(date);
     }

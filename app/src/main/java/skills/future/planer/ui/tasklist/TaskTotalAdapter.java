@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 
@@ -47,13 +46,12 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     @Override
     public TaskDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return switch (viewType) {
-            case LAYOUT_SMALL -> new TaskDataViewHolder(
-                    createViewOfItem(parent,
-                            R.layout.fragment_task_in_list), context);
             case LAYOUT_BIG -> new TaskDataViewHolderExtended(
                     createViewOfItem(parent,
                             R.layout.fragment_task_in_list_extended), context);
-            default -> new TaskDataViewHolder(null, context);
+            default -> new TaskDataViewHolder(
+                    createViewOfItem(parent,
+                            R.layout.fragment_task_in_list), context);
         };
     }
 

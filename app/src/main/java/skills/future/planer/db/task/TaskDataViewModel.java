@@ -5,6 +5,9 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -22,6 +25,7 @@ public class TaskDataViewModel extends AndroidViewModel {
      */
     private final LiveData<List<TaskData>> allTaskData;
     private LiveData<List<TaskData>> categorizedTaskDataFromDay;
+    private final Calendar calendarDate;
 
     /**
      * Constructor require by viewModelProvider
@@ -32,23 +36,47 @@ public class TaskDataViewModel extends AndroidViewModel {
         super(application);
         mRepository = new TaskDataRepository(application);
         allTaskData = mRepository.getAllTaskData();
+        calendarDate = Calendar.getInstance();
     }
 
     public LiveData<List<TaskData>> getAllTaskData() {
         return allTaskData;
     }
 
+    /**
+     * Delegates getting tasks to TaskDataRepository
+     *
+     * @param quarter quarter number
+     * @param date    date for which we want to get data
+     */
     public LiveData<List<TaskData>> getCategorizedTaskDataFromDay(int quarter, long date)
             throws Exception {
         return mRepository.getCategorizedListLiveDataFromDay(quarter, date);
     }
 
-    public LiveData<List<TaskData>> getAllTaskDataFromDay(long date) {
-        return mRepository.getAllTaskDataFromDay(date);
+    public LiveData<List<TaskData>> getAllTaskDataFromDay(CalendarDay date) {
+        return mRepository.getAllTaskDataFromDay(convertCalendarDayToLong(date));
     }
 
     /**
-     * Method delegate insertion to TaskDataRepository
+     * Delegates getting number of tasks to TaskDataRepository
+     *
+     * @param date date for which we want to get data
+     */
+    public int getNumberOfTaskByDate(CalendarDay date) {
+        return mRepository.getNumberOfTaskByDate(convertCalendarDayToLong(date));
+    }
+
+    /**
+     * Converts date to long value
+     */
+    private long convertCalendarDayToLong(CalendarDay date) {
+        calendarDate.set(date.getYear(), date.getMonth(), date.getDay());
+        return calendarDate.getTimeInMillis();
+    }
+
+    /**
+     * Delegates insertion to TaskDataRepository
      *
      * @param taskData which will be inserted
      */
@@ -57,7 +85,7 @@ public class TaskDataViewModel extends AndroidViewModel {
     }
 
     /**
-     * Method delegate deletion to TaskDataRepository
+     * Delegates deletion to TaskDataRepository
      *
      * @param taskData which will be deleted
      */

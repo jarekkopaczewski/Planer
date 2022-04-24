@@ -111,4 +111,7 @@ public interface TaskDataDao {
      */
     @Query("SELECT MAX(taskDataId) FROM taskData")
     int getIdOfLastAddedTask();
+
+    @Query("SELECT COUNT(*) FROM TASKDATA WHERE :date >= startingDate AND :date <= endingDate")
+    int getNumberOfTaskByDate(long date);
 }
