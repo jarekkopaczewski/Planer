@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import lombok.Getter;
-import lombok.Setter;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMonthBinding;
 import skills.future.planer.db.task.TaskData;
@@ -117,6 +115,10 @@ public class MonthFragment extends Fragment {
 
         //observes TaskDataViewModel, runs setDots method
         mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskNumber(taskData));
+
+
+        //TODO metoda do pobierania liczby zadań dla @Paweł Helisz
+        // System.out.println(mWordViewModel.getNumberOfTaskByDate(Calendar.today()));
 
         //todo - add choice for dots view - number of task/only Urgent/Important task
         // mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskCategory(taskData));

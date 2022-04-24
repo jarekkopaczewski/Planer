@@ -35,7 +35,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     Log.d(LOG_TAG, "Creating new database instance");
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration().allowMainThreadQueries()
-                            /*.addCallback(sRoomDatabaseCallback)*/.build();
+                            .addCallback(sRoomDatabaseCallback).build();
                 }
             }
         }
@@ -45,7 +45,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static RoomDatabase.Callback sRoomDatabaseCallback =
             new RoomDatabase.Callback() {
-
                 public void onOpen(SupportSQLiteDatabase db) {
                     super.onOpen(db);
                     new PopulateDbAsync(sInstance).execute();
@@ -71,16 +70,32 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-            CalendarDay day2 = CalendarDay.from(2022, 4, 15);
-            CalendarDay day3 = CalendarDay.from(2022, 4, 6);
+            CalendarDay day2 = CalendarDay.from(2022, 4, 21);
+            CalendarDay day3 = CalendarDay.from(2022, 4, 23);
             CalendarDay day4 = CalendarDay.from(2022, 4, 7);
-
+            CalendarDay day5 = CalendarDay.from(2022, 4, 9);
+            CalendarDay day6 = CalendarDay.from(2022, 4, 26);
 
             for (int i = 0; i <= 4; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu","",day,day);
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu", "", day2, day3);
                 mDao.insert(word);
             }
-          
+            for (int i = 0; i <= 4; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu", "", day3, day6);
+                mDao.insert(word);
+            }
+            for (int i = 0; i <= 4; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "2niu", "", day2, day3);
+                mDao.insert(word);
+            }
+            for (int i = 0; i <= 4; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "3inu", "", day4, day2);
+                mDao.insert(word);
+            }
+            for (int i = 0; i <= 4; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "4ninu", "", day4, day5);
+                mDao.insert(word);
+            }
             for (int i = 0; i < 10; i++) {
                 TaskData word = new TaskData(TaskCategory.Work,
                         Priorities.Important,

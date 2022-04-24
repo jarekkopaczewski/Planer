@@ -40,7 +40,7 @@ public class TaskListCreatorFragment extends Fragment {
     private TaskDataDao taskDataDao;
     private FloatingActionButton saveButton;
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
-    private CalendarDay endingCalendarDay, beginCalendarDay = CalendarDay.today();
+    private CalendarDay endingDay, beginDay;
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
 
     @Override
@@ -78,8 +78,6 @@ public class TaskListCreatorFragment extends Fragment {
         endingDateEditText = binding.editTextEndDate;
         endingDateEditText.setVisibility(View.INVISIBLE);
 
-        updateEndingDateEditText();
-        updateBeginDateEditText();
         datePickers();
     }
 
@@ -157,9 +155,14 @@ public class TaskListCreatorFragment extends Fragment {
                 switchCategory.setChecked(true);
 
             //dates
-            if (editTask.getStartingDate() != null) {
+            if (editTask.getStartingDate() != 0) {
                 switchDate.setChecked(true);
-                beginDateEditText.setText(editTask.getStartingDate());
+                var beginDate = editTask.getStartingCalendarDate();
+                var endingDate = editTask.getEndingCalendarDate();
+                beginDayCalendar.set(beginDate.getYear(), beginDate.getMonth() - 1, beginDate.getDay());
+                endingDayCalendar.set(endingDate.getYear(), endingDate.getMonth() - 1, endingDate.getDay());
+                updateBeginDateEditText();
+                updateEndingDateEditText();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,8 +181,6 @@ public class TaskListCreatorFragment extends Fragment {
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentImportant", getContext())));
         else if (switchPriorities.isChecked() && switchTimePriorities.isChecked())
             saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentNotImportant", getContext())));
-
-        System.out.println("change");
     }
 
     /**
@@ -195,34 +196,50 @@ public class TaskListCreatorFragment extends Fragment {
             AnimateView.animateInOut(saveButton, getContext());
 
             if (checkTitle(saveButton)) {
-                if (editTask == null)
-                    editTask = new TaskData();
-                editTask.setAllDataWithoutDates(
-                        switchCategory.isChecked() ? TaskCategory.Work : TaskCategory.Private,
-                        switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
-                        switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
-                        taskTitleEditText.getText().toString(),
-                        taskDetailsEditText.getText().toString());
-
-                //if user want to add dates
                 if (switchDate.isChecked()) {
-                    editTask.setEndingCalendarDate(endingCalendarDay);
-                    editTask.setStartingCalendarDate(beginCalendarDay);
+                    if (checkDateDependency()) {
+                        setTaskData();
+                        editTask.setEndingCalendarDate(endingDay);
+                        editTask.setStartingCalendarDate(beginDay);
+                        sendTaskToDataBase(taskID, view1);
+                    }
                 } else {
-                    editTask.setEndingDate(null);
-                    editTask.setStartingDate(null);
+                    setTaskData();
+                    editTask.setEndingDate(0);
+                    editTask.setStartingDate(0);
+                    sendTaskToDataBase(taskID, view1);
                 }
-                //If the task is edited
-                if (taskID != -1)
-                    taskDataDao.editOne(editTask);
-                else { //If the task is created
-                    Bundle result = new Bundle();
-                    result.putParcelable("bundleKey", editTask);
-                    getParentFragmentManager().setFragmentResult("requestKey", result);
-                }
-                Navigation.findNavController(view1).navigateUp();
             }
         });
+    }
+
+    /**
+     * Gets data from creator components and sets to task
+     */
+    private void setTaskData() {
+        if (editTask == null)
+            editTask = new TaskData();
+        editTask.setAllDataWithoutDates(
+                switchCategory.isChecked() ? TaskCategory.Work : TaskCategory.Private,
+                switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
+                switchTimePriorities.isChecked() ? TimePriority.NotUrgent : TimePriority.Urgent,
+                taskTitleEditText.getText().toString(),
+                taskDetailsEditText.getText().toString());
+    }
+
+    /**
+     * Sends task to database depending on the creator type
+     */
+    private void sendTaskToDataBase(Integer taskID, View view1) {
+        //If the task is edited
+        if (taskID != -1)
+            taskDataDao.editOne(editTask);
+        else { //If the task is created
+            Bundle result = new Bundle();
+            result.putParcelable("bundleKey", editTask);
+            getParentFragmentManager().setFragmentResult("requestKey", result);
+        }
+        Navigation.findNavController(view1).navigateUp();
     }
 
 
@@ -277,77 +294,77 @@ public class TaskListCreatorFragment extends Fragment {
     }
 
     /**
-     * Method update EndDateEditText
-     * after check if date isn't earlier than endingCalendarDay it will set new date
-     * if date isn't correct there will be generate toast with information that date is wrong
+     * Updates EndDateEditText
      */
     private void updateEndingDateEditText() {
         LocalDate date = endingDayCalendar.getTime().toInstant()
                 .atZone(ZoneId.systemDefault()).toLocalDate();
-        int day = date.getDayOfMonth(), month = date.getMonthValue(),
-                year = date.getYear();
-        CalendarDay chosenDay = CalendarDay.from(year, month, day);
+        endingDay = CalendarDay.from(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        String dateString = endingDay.getDay() + "." +
+                endingDay.getMonth() + "." +
+                endingDay.getYear();
+        endingDateEditText.setText(dateString);
+    }
 
-        if (checkDate(chosenDay, beginCalendarDay)) {
-            endingCalendarDay = chosenDay;
-            String dateString = endingCalendarDay.getDay() + "." +
-                    endingCalendarDay.getMonth() + "." +
-                    endingCalendarDay.getYear();
-            endingDateEditText.setText(dateString);
-        } else
+    /**
+     * Updates BeginDateEditText
+     */
+    private void updateBeginDateEditText() {
+        LocalDate date = beginDayCalendar.getTime().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDate();
+        beginDay = CalendarDay.from(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        String dateString = beginDay.getDay() + "." +
+                beginDay.getMonth() + "." +
+                beginDay.getYear();
+        beginDateEditText.setText(dateString);
+    }
+
+    /**
+     * Checks is starting and ending dates are correct
+     *
+     * @return true if dates are correct
+     */
+    private boolean checkDateDependency() {
+
+        if (beginDay == null) {
+            Toast.makeText(this.getContext(),
+                    "Data rozpoczęcia zadania nie może być pusta",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (endingDay == null) {
+            Toast.makeText(this.getContext(),
+                    "Data zakończenia zadania nie może być pusta",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (checkDate(endingDay, beginDay)) {
             Toast.makeText(this.getContext(),
                     "Data zakończenia zadania nie może być wcześniej niż data jego rozpoczęcia!",
                     Toast.LENGTH_SHORT).show();
-
-    }
-
-    /**
-     * Method update BeginDateEditText
-     * after check if date isn't earlier than today it will set new date
-     * if date isn't correct there will be generate toast with information that date is wrong
-     */
-    private void updateBeginDateEditText() {
-
-        LocalDate date = beginDayCalendar.getTime().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
-        int day = date.getDayOfMonth(), month = date.getMonthValue(),
-                year = date.getYear();
-        CalendarDay chosenDay = CalendarDay.from(year, month, day);
-        if (checkDate(endingCalendarDay, chosenDay)) {
-            if (checkDate(chosenDay, CalendarDay.today())) {
-                beginCalendarDay = chosenDay;
-                String dateString = beginCalendarDay.getDay() + "." +
-                        beginCalendarDay.getMonth() + "." +
-                        beginCalendarDay.getYear();
-                beginDateEditText.setText(dateString);
-            } else
-                Toast.makeText(this.getContext(),
-                        "Data rozpoczenia zadania nie może być wcześniej niż dzisiaj!",
-                        Toast.LENGTH_SHORT).show();
-
-        } else
+            return false;
+        }
+        if (checkDate(endingDay, CalendarDay.today())) {
             Toast.makeText(this.getContext(),
-                    "Data rozpoczenia zadania nie może być wcześniej niż zakończenia!",
+                    "Data zakończenia zadania nie może być wcześniej niż dzisiaj!",
                     Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (checkDate(beginDay, CalendarDay.today())) {
+            Toast.makeText(this.getContext(),
+                    "Data rozpoczęcia zadania nie może być wcześniej niż dzisiaj!",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-
+        return true;
     }
 
     /**
-     * @return true if beginCalendarDay is later then today or is today
+     * @return true if firstDate is equal or before secondDate, false if after
      */
-    private boolean checkDate(CalendarDay day, CalendarDay dayLandmark) {
-        if (day.equals(dayLandmark))
-            return true;
-        if (day.getYear() > dayLandmark.getYear())
-            return true;
-        if (day.getYear() < dayLandmark.getYear())
-            return false;
-        if (day.getMonth() > dayLandmark.getMonth())
-            return true;
-        if (day.getMonth() < dayLandmark.getMonth())
-            return false;
-        return day.getDay() >= dayLandmark.getDay();
+    private boolean checkDate(CalendarDay firstDate, CalendarDay secondDate) {
+        return firstDate.isBefore(secondDate);
     }
 
     @Override

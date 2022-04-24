@@ -13,6 +13,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import lombok.Getter;
+import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
+import skills.future.planer.ui.day.views.matrix.MatrixModelView;
 
 @Getter
 public class DayViewModel extends ViewModel {
@@ -22,7 +24,9 @@ public class DayViewModel extends ViewModel {
     /**
      * Moves cursor to today's date
      */
-    public void returnToToday(@NonNull MaterialCalendarView materialCalendarView, @NonNull FloatingActionButton fab, @NonNull TextView text) {
+    public void returnToToday(@NonNull MaterialCalendarView materialCalendarView,
+                              @NonNull FloatingActionButton fab,
+                              @NonNull TextView text) {
         materialCalendarView.setCurrentDate(today.getValue(), true);
         materialCalendarView.setDateSelected(materialCalendarView.getSelectedDate(), false);
         materialCalendarView.setDateSelected(today.getValue(), true);
@@ -34,6 +38,13 @@ public class DayViewModel extends ViewModel {
      */
     public boolean checkIsTaskListView(@NonNull ViewPager viewPager) {
         return viewPager.getAdapter().getPageTitle(viewPager.getCurrentItem()).equals("Lista zadań");
+    }
+
+    /**
+     * Return true if current pager position is on matrix view
+     */
+    public boolean checkIsMatrixView(@NonNull ViewPager vpPager) {
+        return vpPager.getAdapter().getPageTitle(vpPager.getCurrentItem()).equals("Macierz");
     }
 
     /**
@@ -53,12 +64,37 @@ public class DayViewModel extends ViewModel {
 
     /**
      * Checks is needed to change visibility of fab when page is changed
+     * Updates TaskList or Matrix depending on the card selected
      */
-    public void checkPagerChange(int position, ViewPager viewPager, CalendarDay date, FloatingActionButton fabDay, TextView dayNumberView) {
-        if (viewPager.getAdapter().getPageTitle(position).equals("Lista zadań"))
-            changeVisibility(fabDay, dayNumberView, View.VISIBLE);
-        else
+    public void checkPagerChange(int position,
+                                 ViewPager viewPager,
+                                 CalendarDay date,
+                                 FloatingActionButton fabDay,
+                                 TextView dayNumberView,
+                                 MatrixModelView matrixModelView,
+                                 DayTaskListViewModel dayTaskListViewModel) {
+        if (viewPager.getAdapter().getPageTitle(position).equals("Lista zadań")) {
+            updateTaskList(date, dayTaskListViewModel);
             checkDateIsToday(date, fabDay, dayNumberView);
+        } else
+            changeVisibility(fabDay, dayNumberView, View.INVISIBLE);
+
+        if (viewPager.getAdapter().getPageTitle(position).equals("Macierz"))
+            updateMatrix(date, matrixModelView);
+    }
+
+    /**
+     * Updates matrix lists
+     */
+    private void updateMatrix(CalendarDay date, MatrixModelView matrixModelView) {
+        matrixModelView.setUpModels(date);
+    }
+
+    /**
+     * Updates TaskList lists
+     */
+    private void updateTaskList(CalendarDay date, DayTaskListViewModel dayTaskListViewModel) {
+        dayTaskListViewModel.updateDate(date);
     }
 }
 
