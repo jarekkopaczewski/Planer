@@ -15,8 +15,8 @@ import skills.future.planer.databinding.SettingsActivityBinding;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private SettingsActivityBinding binding;
     public static final String KEY_PREF_THEME = "themes";
+    private SettingsActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
                     .replace(R.id.settings, new SettingsFragment())
                     .commit();
         }
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -38,15 +39,11 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-
     public static class SettingsFragment extends PreferenceFragmentCompat {
-
-
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-
             setTheme();
         }
 
@@ -54,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
          * Finds preference responsible for themes
          * gets value and sets theme value
          */
-        private void setTheme(){
+        private void setTheme() {
             ListPreference listPreference = findPreference("themes");
             Objects.requireNonNull(listPreference).setOnPreferenceChangeListener((preference, newValue) -> {
                 AppCompatDelegate.setDefaultNightMode(Integer.parseInt((String) newValue));
@@ -62,5 +59,4 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
     }
-
 }

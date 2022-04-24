@@ -60,26 +60,17 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     @Override
     protected void setColor(TaskData taskData) {
         super.setColor(taskData);
-        // urgent & important
-        if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.Important) {
-            iconTimePriority.setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
-            iconPriorities.setImageTintList(ColorStateList.valueOf((Colors.RED.getColor())));
-        }
-        // urgent & not important
-        else if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant) {
-            iconPriorities.setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
-            iconTimePriority.setImageTintList(ColorStateList.valueOf((Colors.BLUE.getColor())));
-        }
-        // not urgent & important
-        else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important) {
-            iconPriorities.setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
-            iconTimePriority.setImageTintList(ColorStateList.valueOf((Colors.YELLOW.getColor())));
-        }
-        // not urgent & not important
-        else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant) {
-            iconPriorities.setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
-            iconTimePriority.setImageTintList(ColorStateList.valueOf((Colors.PINK.getColor())));
-        }
+        ColorStateList color = ColorStateList.valueOf(Colors.getColorFromPreferences("urgentImportant", getContext()));
+
+        if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant)
+            color = ColorStateList.valueOf(Colors.getColorFromPreferences("urgentNotImportant", getContext()));
+        else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.Important)
+            color = ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentImportant", getContext()));
+        else if (taskData.getTimePriority() == TimePriority.NotUrgent && taskData.getPriorities() == Priorities.NotImportant)
+            color = ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentNotImportant", getContext()));
+
+        iconTimePriority.setImageTintList(color);
+        iconPriorities.setImageTintList(color);
     }
 
     /**

@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.style.LineBackgroundSpan;
 
+import skills.future.planer.ui.tasklist.Colors;
+
 /**
  * Class implements LineBackgroundSpan and draws dots under dates
  *
@@ -26,10 +28,10 @@ public class CustomMultipleDotSpan implements LineBackgroundSpan {
      * colors of dots
      */
     int[] color = {
-            Color.rgb(0, 0, 255),
-            Color.rgb(0, 255, 0),
-            Color.rgb(255, 0, 0),
-            Color.rgb(255, 0, 255),
+            Color.rgb(0, 126, 143),
+            Color.rgb(0, 126, 143),
+            Color.rgb(198, 162, 202),
+            Color.rgb(113, 83, 151),
     };
 
     /**

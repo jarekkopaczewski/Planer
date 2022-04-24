@@ -3,8 +3,11 @@ package skills.future.planer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomView = binding.appBarMain.bottomBar;
         MaterialToolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // set up corner menu
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow).setOpenableLayout(drawer).build();
@@ -61,6 +68,15 @@ public class MainActivity extends AppCompatActivity {
 
         // change navigation bar color
         getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));
+
+        // sets up menu button
+        ImageView button = binding.appBarMain.testButton;
+        DrawerLayout navDrawer = binding.drawerLayout;
+
+        button.setOnClickListener(e->{
+            if(!navDrawer.isDrawerOpen(Gravity.LEFT)) navDrawer.openDrawer(Gravity.LEFT);
+            else navDrawer.closeDrawer(Gravity.RIGHT);
+        });
     }
 
     // set/read settings

@@ -1,4 +1,4 @@
-package skills.future.planer.ui.day.views;
+package skills.future.planer.ui.day.views.notepad;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
