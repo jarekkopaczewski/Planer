@@ -82,7 +82,7 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
             color = Colors.getColorFromPreferences("notUrgentNotImportant", getContext());
 
         cardView.setCardBackgroundColor(color);
-        detailImageView.setImageTintList(ColorStateList.valueOf(color));
+//        detailImageView.setImageTintList(ColorStateList.valueOf(color));
         iconTaskCategory.setImageTintList(ColorStateList.valueOf(color));
     }
 
