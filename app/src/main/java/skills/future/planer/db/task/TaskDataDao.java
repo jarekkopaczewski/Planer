@@ -7,12 +7,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-
 import java.util.List;
-import java.util.Locale;
 
-import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -52,13 +48,28 @@ public interface TaskDataDao {
     List<TaskData> getTaskData(TaskCategory taskCategory) throws Exception;
 
     /**
+     * @param date specified date
+     * @return all taskData with specified taskCategory from specified day
+     */
+    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority " +
+            "AND :date >= startingDate AND :date <= endingDate")
+    LiveData<List<TaskData>> getTaskData(Priorities priorities, TimePriority timePriority, long date);
+
+    /**
+     * @param date date in long format
+     * @return all taskData with specified date
+     */
+    @Query("SELECT * FROM taskData WHERE :date >= startingDate AND :date <= endingDate")
+    LiveData<List<TaskData>> getTaskDataByDate(long date);
+
+    /**
      * @param priorities   specified taskCategory
      * @param timePriority specified timePriority
      * @return all taskData with specified priorities and timePriority
      * @throws Exception
      */
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority")
-   List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
+    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
 
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND category = :taskCategory")
     List<TaskData> getTaskData(Priorities priorities, TaskCategory taskCategory) throws Exception;
@@ -100,4 +111,7 @@ public interface TaskDataDao {
      */
     @Query("SELECT MAX(taskDataId) FROM taskData")
     int getIdOfLastAddedTask();
+
+    @Query("SELECT COUNT(*) FROM TASKDATA WHERE :date >= startingDate AND :date <= endingDate")
+    int getNumberOfTaskByDate(long date);
 }

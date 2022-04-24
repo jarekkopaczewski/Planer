@@ -5,10 +5,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import lombok.Getter;
-import skills.future.planer.ui.day.views.habits.HabitFragment;
-import skills.future.planer.ui.day.views.notepad.ScrollingFragment;
 import skills.future.planer.ui.day.views.daylist.DayTaskListFragment;
+import skills.future.planer.ui.day.views.habits.HabitFragment;
 import skills.future.planer.ui.day.views.matrix.MatrixFragment;
+import skills.future.planer.ui.day.views.notepad.ScrollingFragment;
 
 @Getter
 public class MyPagerAdapter extends FragmentPagerAdapter {
@@ -19,7 +19,10 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     private final ScrollingFragment scrollingFragment2 = new ScrollingFragment();
     private final HabitFragment habitFragment = new HabitFragment();
 
-    public MyPagerAdapter(FragmentManager fragmentManager) { super(fragmentManager); }
+    public MyPagerAdapter(FragmentManager fragmentManager) {
+        super(fragmentManager);
+    }
+
 
     @Override
     public int getCount() {

@@ -58,7 +58,7 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
      * @param taskData current task
      */
     @Override
-    protected void setColor(TaskData taskData) {
+    protected void setColor(@NonNull TaskData taskData) {
         super.setColor(taskData);
         ColorStateList color = ColorStateList.valueOf(Colors.getColorFromPreferences("urgentImportant", getContext()));
 
@@ -76,7 +76,7 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     /**
      * Sets icon of priority
      */
-    private void setIconPriority(TaskData task) {
+    private void setIconPriority(@NonNull TaskData task) {
         if (task.getPriorities() != null) {
             switch (task.getPriorities()) {
                 case Important -> iconPriorities.setImageDrawable(ResourcesCompat.getDrawable(
@@ -90,7 +90,7 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     /**
      * Sets icon of time priority
      */
-    private void setIconTimePriority(TaskData task) {
+    private void setIconTimePriority(@NonNull TaskData task) {
         if (task.getTimePriority() != null) {
             switch (task.getTimePriority()) {
                 case Urgent -> iconTimePriority.setImageDrawable(ResourcesCompat.getDrawable(

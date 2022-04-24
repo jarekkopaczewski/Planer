@@ -1,11 +1,7 @@
 package skills.future.planer.ui.tasklist.viewholders;
 
-import static android.content.Context.MODE_PRIVATE;
-
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -14,8 +10,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.Date;
 
 import lombok.Getter;
 import skills.future.planer.R;
@@ -31,7 +30,7 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
     private final CheckBox checkBox;
     private final ImageView iconTaskCategory, detailImageView;
     private final CardView cardView;
-    private Context context;
+    private final Context context;
 
 
     public TaskDataViewHolder(View itemView, Context context) {
@@ -49,9 +48,18 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
         setColor(taskData);
         setTextTitle(taskData);
         setIconCategory(taskData);
+        setCheckBoxListener(taskData);
+    }
+
+    /**
+     * Sets listener for done/not done checkBox
+     *
+     * @param taskData
+     */
+    private void setCheckBoxListener(TaskData taskData) {
         checkBox.setChecked(taskData.getStatus());
 
-        checkBox.setOnClickListener(e->{
+        checkBox.setOnClickListener(e -> {
             taskData.setStatus(checkBox.isChecked());
             var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
             taskDataDao.editOne(taskData);
@@ -63,7 +71,7 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
      *
      * @param taskData current task
      */
-    protected void setColor(TaskData taskData) {
+    protected void setColor(@NonNull TaskData taskData) {
         int color = Colors.getColorFromPreferences("urgentImportant", getContext());
 
         if (taskData.getTimePriority() == TimePriority.Urgent && taskData.getPriorities() == Priorities.NotImportant)
@@ -81,29 +89,45 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
     /**
      * Sets title of tasks
      */
-    private void setTextTitle(TaskData task) {
+    private void setTextTitle(@NonNull TaskData task) {
         title.setText(task.getTaskTitleText());
         date.setText(setDateTextView(task));
     }
 
     /**
-     * Merges date strings
+     * Convert dates in long to string
      */
-    // delete "/n"
-    private String setDateTextView(TaskData task) {
+    private String setDateTextView(@NonNull TaskData task) {
+        Calendar calendar = Calendar.getInstance();
+
         String dateView = "";
-        if (task.getEndingDate() != null) {
-            if (task.getStartingDate() != null)
-                dateView = task.getStartingDate() + " - ";
-            dateView += task.getEndingDate();
+        if (task.getEndingDate() != 0) {
+            if (task.getStartingDate() != 0) {
+                calendar.setTime(Date.from(Instant.ofEpochMilli(task.getStartingDate())));
+                dateView = generateDayInString(calendar) + " - ";
+            }
+            calendar.setTime(Date.from(Instant.ofEpochMilli(task.getEndingDate())));
+            dateView += generateDayInString(calendar);
         }
         return dateView;
     }
 
     /**
+     * Generate date string from calendar format
+     */
+    @NonNull
+    private String generateDayInString(@NonNull Calendar calendar) {
+        return calendar.get(Calendar.DAY_OF_MONTH)
+                + "."
+                + calendar.get(Calendar.MONTH)
+                + "."
+                + calendar.get(Calendar.YEAR);
+    }
+
+    /**
      * Sets icon of category
      */
-    private void setIconCategory(TaskData task) {
+    private void setIconCategory(@NonNull TaskData task) {
         if (task.getCategory() != null) {
             switch (task.getCategory()) {
                 case Private -> iconTaskCategory.setImageDrawable(ResourcesCompat.getDrawable(

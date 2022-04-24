@@ -14,11 +14,20 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
-import skills.future.planer.databinding.FragmentDayBinding;
+import org.threeten.bp.LocalDate;
 
+import lombok.Getter;
+import skills.future.planer.databinding.FragmentDayBinding;
+import skills.future.planer.db.task.TaskData;
+import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
+import skills.future.planer.ui.day.views.matrix.MatrixModelView;
+
+@Getter
 public class DayFragment extends Fragment {
 
     private DayViewModel dayViewModel;
+    private DayTaskListViewModel dayTaskListViewModel;
+    private MatrixModelView matrixModelView;
     private FragmentDayBinding binding;
     private MyPagerAdapter myPagerAdapter;
     private MaterialCalendarView calendarView;
@@ -29,61 +38,124 @@ public class DayFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dayViewModel = new ViewModelProvider(this).get(DayViewModel.class);
+        dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
+        matrixModelView = new ViewModelProvider(this).get(MatrixModelView.class);
+
         binding = FragmentDayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        bindingElements();
+
+        calendarView.setSelectedDate(LocalDate.now());
+
+        createViewPager(container);
+
+        setListenerForCreateTask();
+        createPagerListener();
+        dateJumper();
+        updateDayViewComponents();
+
+        return root;
+    }
+
+    /**
+     * Binds components of view
+     */
+    private void bindingElements() {
         calendarView = binding.calendarView;
         fabDay = binding.dayFab;
         dayNumberView = binding.dayNumber;
-
         vpPager = binding.dayViewPager;
+    }
+
+    /**
+     * Creates view pager
+     */
+    private void createViewPager(ViewGroup container) {
         myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
         vpPager.setCurrentItem(2);
+    }
 
-        dateJumper();
-
-        return root;
+    /**
+     * Sets a listener that receives data from a TaskListCreatorFragment
+     */
+    private void setListenerForCreateTask() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this.getViewLifecycleOwner(), (requestKey, bundle) -> {
+            TaskData result = bundle.getParcelable("bundleKey");
+            DayTaskListViewModel.getMWordViewModel().insert(result);
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         var selectedDay = calendarView.getSelectedDate();
-        if (dayViewModel.checkIsTaskListView(vpPager) && selectedDay != null)
+        if (dayViewModel.checkIsTaskListView(vpPager) && selectedDay != null) {
             dayViewModel.checkDateIsToday(selectedDay, fabDay, dayNumberView);
+            dayTaskListViewModel.updateDate(selectedDay);
+        }
+        if (dayViewModel.checkIsMatrixView(vpPager) && selectedDay != null)
+            matrixModelView.setUpModels(selectedDay);
     }
 
     /**
-     * Responsible for jump to today
+     * Creates listener for ViewPager
      */
-    private void dateJumper() {
+    private void createPagerListener() {
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                dayViewModel.checkPagerChange(position, vpPager, calendarView.getSelectedDate(), fabDay, dayNumberView);
             }
 
             @Override
             public void onPageSelected(int position) {
-                dayViewModel.checkPagerChange(position, vpPager, calendarView.getSelectedDate(), fabDay, dayNumberView);
+                dayViewModel.checkPagerChange(position,
+                        vpPager,
+                        calendarView.getSelectedDate(),
+                        fabDay,
+                        dayNumberView,
+                        matrixModelView,
+                        dayTaskListViewModel);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
-        dayNumberView.setText(String.valueOf(dayViewModel.getToday().getValue().getDay()));
-        fabDay.setOnClickListener(v -> dayViewModel.returnToToday(calendarView, fabDay, dayNumberView));
-        calendarView.setOnDateChangedListener(
-                (widget, date, selected) -> {
-                    if (dayViewModel.checkIsTaskListView(vpPager))
-                        dayViewModel.checkDateIsToday(date, fabDay, dayNumberView);
-                });
+    }
 
+    /**
+     * Responsible for jump to today
+     */
+    private void dateJumper() {
+        dayNumberView.setText(String.valueOf(dayViewModel.getToday().getValue().getDay()));
+        fabDay.setOnClickListener(v -> {
+            dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);
+            dayTaskListViewModel.updateDate(dayViewModel.getToday().getValue());
+        });
         dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);
     }
+
+    /**
+     * Checks to change visibility of the fab button
+     * Checks to update Matrix view
+     * Checks to update TaskList view
+     */
+    private void updateDayViewComponents() {
+        calendarView.setOnDateChangedListener((widget, date, selected) -> {
+            if (dayViewModel.checkIsTaskListView(vpPager)) {
+                dayViewModel.checkDateIsToday(date,
+                        fabDay,
+                        dayNumberView);
+                dayTaskListViewModel.updateDate(date);
+            }
+            if (dayViewModel.checkIsMatrixView(vpPager))
+                matrixModelView.setUpModels(date);
+        });
+    }
+
 
     @Override
     public void onDestroyView() {
