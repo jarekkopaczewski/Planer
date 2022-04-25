@@ -15,13 +15,10 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -46,11 +43,6 @@ public class MonthFragment extends Fragment {
     private MaterialCalendarView materialCalendarView;
 
     /**
-     * Month view model - extends ViewModel
-     */
-    private MonthViewModel monthViewModel;
-
-    /**
      * Databinding object
      */
     private FragmentMonthBinding binding;
@@ -65,17 +57,17 @@ public class MonthFragment extends Fragment {
      * Key - CalendarDay - day of a task
      * Value - Integer - number of tasks in that day
      */
-    private HashMap<CalendarDay, Integer> dayTasks;
+    private final HashMap<CalendarDay, Integer> dayTasks;
 
     /**
      * Hash set of CalendarDay which fits into given category
      */
-    private HashSet<CalendarDay> category1;
-    private HashSet<CalendarDay> category2;
-    private HashSet<CalendarDay> category3;
-    private HashSet<CalendarDay> category4;
+    private final HashSet<CalendarDay> category1;
+    private final HashSet<CalendarDay> category2;
+    private final HashSet<CalendarDay> category3;
+    private final HashSet<CalendarDay> category4;
     private List<CalendarDay> days;
-    private HashMap<CalendarDay,Integer> dayTasks2;
+    private final HashMap<CalendarDay,Integer> dayTasks2;
 
     /**
      * Initialization of HashMap and HashSets
@@ -111,7 +103,7 @@ public class MonthFragment extends Fragment {
      */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        monthViewModel = new ViewModelProvider(this).get(MonthViewModel.class);
+        MonthViewModel monthViewModel = new ViewModelProvider(this).get(MonthViewModel.class);
         binding = FragmentMonthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         materialCalendarView = binding.calendarView;
@@ -120,45 +112,16 @@ public class MonthFragment extends Fragment {
         materialCalendarView.setDateSelected(CalendarDay.today(), true);
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
         CalendarDay today = CalendarDay.today();
-        test_dots(today);
+        getDaysToDraw(today);
 
+        //deprecated
         //observes TaskDataViewModel, runs setDots method
-       // mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskNumber(taskData));
+        // mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskNumber(taskData));
 
-        materialCalendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
-            @Override
-            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
-//                System.out.println();
-//                int day = date.getDay();
-//                int month = date.getMonth();
-//                int year = date.getYear();
-//
-//
-//                CalendarDay next = CalendarDay.from(year,month+1,day);
-//                CalendarDay previous = CalendarDay.from(year,month-1,day);
-//                CalendarDay selected =  materialCalendarView.getSelectedDate();
-//                materialCalendarView.setSelectionColor(255);
-//                materialCalendarView.selectRange(previous,next);
-//                days = materialCalendarView.getSelectedDates();
-//                System.out.println(days);
-//                materialCalendarView.clearSelection();
-//                materialCalendarView.setSelectionColor(-16744817);
-//                materialCalendarView.setDateSelected(selected,true);
-                 test_dots(date);
+        //month change listener
+        materialCalendarView.setOnMonthChangedListener((widget, date) -> getDaysToDraw(date));
 
-
-
-
-
-            }
-        });
-
-
-
-
-        //TODO metoda do pobierania liczby zadań dla @Paweł Helisz
-        // System.out.println(mWordViewModel.getNumberOfTaskByDate(Calendar.today()));
-
+        //deprecated
         //todo - add choice for dots view - number of task/only Urgent/Important task
         // mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> this.setDotsTaskCategory(taskData));
 
@@ -267,30 +230,47 @@ public class MonthFragment extends Fragment {
         materialCalendarView.addDecorator(new EventDecorator(category1, 1));
     }
 
-    public void test_dots(CalendarDay date){
+    /**
+     * Takes CalendarDay and calculates days in previous,
+     * current and next month.
+     * This is test version!
+     * @param date date to be decorated (month)
+     */
+    public void getDaysToDraw(CalendarDay date){
 
         int day = date.getDay();
         int month = date.getMonth();
         int year = date.getYear();
 
+        //next month
         CalendarDay next = CalendarDay.from(year,month+1,day);
+        //previous month
         CalendarDay previous = CalendarDay.from(year,month-1,day);
+        //selected date
         CalendarDay selected =  materialCalendarView.getSelectedDate();
         materialCalendarView.setSelectionColor(255);
+        //getting days in range
         materialCalendarView.selectRange(date,next);
         days = materialCalendarView.getSelectedDates();
+        //copying days to a new array
         ArrayList days2 = new ArrayList();
         for (CalendarDay calendarDay : days) {
             days2.add(CalendarDay.from(calendarDay.getYear(),calendarDay.getMonth(),calendarDay.getDay()));
         }
-        //System.out.println(days);
         materialCalendarView.clearSelection();
         materialCalendarView.setSelectionColor(-16744817);
         materialCalendarView.setDateSelected(selected,true);
+
+        //adding dots to calculated days
         addDots(days2);
 
     }
 
+    /**
+     * Adding dots under date based on number of tasks.
+     * This is new version of adding dots.
+     * @param days days to be decorated
+     */
     public void addDots(List<CalendarDay> days){
         int numberOfTasks = 0;
 
@@ -305,13 +285,11 @@ public class MonthFragment extends Fragment {
             if(numberOfTasks>0){
                 dayTasks2.put(day,numberOfTasks);
             }
-            //numberOfTasks=0;
         }
 
         for (Map.Entry<CalendarDay, Integer> entry : dayTasks2.entrySet()) {
             CalendarDay key = entry.getKey();
             Integer value = entry.getValue();
-            //System.out.println(key+" "+value);
 
             if (value > 0 && value < 4) {
                 category1.add(key);
