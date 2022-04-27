@@ -3,6 +3,7 @@
 * [Widoki listy zadań ](#widoki-listy-zadań)
 * [Widok macierzy oraz nawyków](#widok-macierzy-oraz-nawyków)
 * [Technologie i narzędzia](#technologie-i-narzędzia)
+* [Ustawienia oraz nawigacja](#ustawienia-oraz-nawigacja)
 
 # O projekcie
 
@@ -42,3 +43,8 @@ Aplikacja rozwojowa dla tzw Jana Kowalskiego który chce podnieść efektywnoś�
 * [Java](https://www.java.com/pl/)
 * [Gradle](https://gradle.org/)
 * [Android Studio](https://developer.android.com/studio)
+* [Lombok](https://github.com/projectlombok/lombok)
+* [Guava](https://github.com/google/guava)
+* [JUnit](https://junit.org/junit5/)
+* [Mockito](https://site.mockito.org/)
+* [MaterialCalendar](https://github.com/prolificinteractive/material-calendarview)
