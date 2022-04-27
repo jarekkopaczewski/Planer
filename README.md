@@ -26,14 +26,14 @@ Aplikacja rozwojowa dla tzw Jana Kowalskiego który chce podnieść efektywnoś�
 ## Widok macierzy oraz nawyków
 
 <p float="left">
-  <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/matrix_view.jpg" height="450" hspace="140"/>
+  <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/matrix_view.jpg" height="450" hspace="100"/>
   <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/habits.jpg" height="450" hspace="20"/>
 </p>
 
 ## Ustawienia oraz nawigacja
 
 <p float="left">
-  <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/settings.jpg" height="450" hspace="140"/>
+  <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/settings.jpg" height="450" hspace="100"/>
   <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/app_bar.jpg" height="450" hspace="20"/>
 </p>
 
