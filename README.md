@@ -8,13 +8,12 @@
 # O projekcie
 
 ## Opis projeku
-Stworzenie aplikacji do organizacji czasu i energii osobistej. Połączenie kalendarza z planowaniem i wypracowaniem nawyku. Aplikacja mobilna na telefon połączona z już istniejącą platformą szkoleniową. Aplikacja na bazie fizycznego plannera który istnieje w formie fizyczno - papierowej.
+Aplikacji do organizacji czasu i energii osobistej. Jej zadaniem jest połączenie kalendarza z planowaniem zadań oraz pomoc w wypracowaniu nawyków. Aplikacja bazuje na istniejącym w formie fizyczno - papierowej plannerze firmy Future Skills.
 
-Aplikacja rozwojowa dla tzw Jana Kowalskiego który chce podnieść efektywność swojego życia łącząc w niej funkcje:
- - Planowanie działań codziennych z "przypominajkami-" powiadomienia.
- - Poranne rytuały - funkcja informująca co powinien zrobić np. medytacja z kursu moduł 6
- - Kalendarz z funkcją planowania.
- - Nawigator po aplikacji i wiele więcej
+Główne realizowane funkcje:
+ - planowanie działań codziennych
+ - system wyrabiania nawyków
+ - wyznaczanie i realizacja celów
  
 ## Widoki listy zadań 
 
@@ -47,4 +46,6 @@ Aplikacja rozwojowa dla tzw Jana Kowalskiego który chce podnieść efektywnoś�
 * [Guava](https://github.com/google/guava)
 * [JUnit](https://junit.org/junit5/)
 * [Mockito](https://site.mockito.org/)
+* [SQLite](https://www.sqlite.org/index.html)
+* [Room](https://developer.android.com/training/data-storage/room)
 * [MaterialCalendar](https://github.com/prolificinteractive/material-calendarview)
