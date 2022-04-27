@@ -17,7 +17,7 @@ Główne realizowane funkcje:
  
 ## Widoki listy zadań 
 
-Aplikacja umożliwia dodawanie, usuwanie oraz edycję zadań. Zadania kategoryzowane są pod względem pilności oraz wagi zadania - każdy z wariantów specyfikowany jest przez inny kolor personalizowany w ustawieniach. Koncept zobrazowany jest na widoku macierzy widocznym niżej. 
+Aplikacja umożliwia dodawanie, usuwanie oraz edycję zadań. Zadania kategoryzowane są pod względem pilności oraz wagi zadania - każdy z wariantów specyfikowany jest przez inny kolor personalizowany w ustawieniach. Koncept jest implementacją Macierzy Eisenhowera(matryca priorytetów).
 
 <p float="left">
  <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/task_list.jpg" height="450" hspace="20"/>
@@ -27,12 +27,14 @@ Aplikacja umożliwia dodawanie, usuwanie oraz edycję zadań. Zadania kategoryzo
 
 ## Widok macierzy oraz nawyków
 
+
 <p float="left">
   <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/matrix_view.jpg" height="450" hspace="100"/>
   <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/habits.jpg" height="450" hspace="20"/>
 </p>
 
 ## Ustawienia oraz nawigacja
+W aplikacji dostępny jest boczny pasek nawigacji do którego dodawane będą kolejne funkcjonalności. Użytkownik może spersonalizować ustawienia motywu oraz kolorów zadań.
 
 <p float="left">
   <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/settings.jpg" height="450" hspace="100"/>
