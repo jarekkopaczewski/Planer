@@ -1,22 +1,30 @@
 package skills.future.planer.db.habit;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import skills.future.planer.db.task.TaskData;
+import java.util.List;
 
 @Dao
 public interface HabitDao {
     /**
+     * @return all habits from database
+     */
+    @Query("SELECT * FROM HabitData")
+    LiveData<List<HabitData>> getHabits();
+
+    /**
      * Method insert given habit to database
      *
      * @param habitData which will be inserted to database
+     * @return new habit id
      */
     @Insert
-    void insert(HabitData habitData);
+    long insert(HabitData habitData);
 
     /**
      * Method delete habit from database
