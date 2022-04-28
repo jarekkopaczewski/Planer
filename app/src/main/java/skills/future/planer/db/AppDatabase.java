@@ -12,13 +12,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import skills.future.planer.db.habit.HabitDao;
+import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 
-@Database(entities = {TaskData.class}, exportSchema = false, version = 1)
+@Database(entities = {TaskData.class, HabitData.class}, exportSchema = false, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
@@ -27,6 +29,8 @@ public abstract class AppDatabase extends RoomDatabase {
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
 
     public abstract TaskDataDao taskDataTabDao();
+
+    public abstract HabitDao habitDao();
 
     public static AppDatabase getInstance(final Context context/*, final AppExecutors executors*/) {
         if (sInstance == null) {
