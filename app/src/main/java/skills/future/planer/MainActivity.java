@@ -2,11 +2,11 @@ package skills.future.planer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -25,13 +25,25 @@ import com.google.android.material.navigation.NavigationView;
 
 import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.db.AppDatabase;
-import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    /**
+     * Displays version of application in "Settings menu"
+     * versionName - parameter in build.gradle (Module)
+     */
+    private void displayVersionOfApplication(Menu menu) {
+        try {
+            menu.findItem(R.id.action_version).setTitle("Wersja: " +
+                    getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_CONFIGURATIONS).versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        displayVersionOfApplication(menu);
         return true;
     }
 
