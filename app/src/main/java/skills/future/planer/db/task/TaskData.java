@@ -29,7 +29,7 @@ public class TaskData implements Parcelable {
      * task id
      */
     @PrimaryKey(autoGenerate = true)
-    private int taskDataId;
+    private Long taskDataId;
     /**
      * task status
      */
@@ -94,7 +94,7 @@ public class TaskData implements Parcelable {
      */
     @Ignore
     public TaskData() {
-        this.taskDataId = 0;
+        this.taskDataId = 0L;
         this.status = false;
     }
 
@@ -109,7 +109,7 @@ public class TaskData implements Parcelable {
      */
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText) {
-        this.taskDataId = 0;
+        this.taskDataId = 0L;
         this.status = false;
         this.category = category;
         this.priorities = priorities;
@@ -133,7 +133,7 @@ public class TaskData implements Parcelable {
     @Ignore
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText, CalendarDay startingDate, CalendarDay endingDate) {
-        this.taskDataId = 0;
+        this.taskDataId = 0L;
         this.status = false;
         this.category = category;
         this.priorities = priorities;
@@ -151,7 +151,7 @@ public class TaskData implements Parcelable {
      */
     @Ignore
     protected TaskData(Parcel in) {
-        taskDataId = in.readInt();
+        taskDataId = in.readLong();
         byte tmpStatus = in.readByte();
         status = tmpStatus == 0 ? null : tmpStatus == 1;
         taskTitleText = in.readString();
@@ -239,7 +239,7 @@ public class TaskData implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(taskDataId);
+        dest.writeLong(taskDataId);
         dest.writeByte((byte) (status == null ? 0 : status ? 1 : 2));
         dest.writeString(taskTitleText);
         dest.writeString(taskDetailsText);
@@ -254,9 +254,9 @@ public class TaskData implements Parcelable {
 
         TaskData taskData = (TaskData) o;
 
-        if (getTaskDataId() != taskData.getTaskDataId()) return false;
         if (getStartingDate() != taskData.getStartingDate()) return false;
         if (getEndingDate() != taskData.getEndingDate()) return false;
+        if (!getTaskDataId().equals(taskData.getTaskDataId())) return false;
         if (!getStatus().equals(taskData.getStatus())) return false;
         if (getCategory() != taskData.getCategory()) return false;
         if (getPriorities() != taskData.getPriorities()) return false;
@@ -268,7 +268,7 @@ public class TaskData implements Parcelable {
 
     @Override
     public int hashCode() {
-        int result = getTaskDataId();
+        int result = getTaskDataId().hashCode();
         result = 31 * result + getStatus().hashCode();
         result = 31 * result + (getCategory() != null ? getCategory().hashCode() : 0);
         result = 31 * result + (getPriorities() != null ? getPriorities().hashCode() : 0);
