@@ -20,7 +20,7 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
-    private List<String> habitsList = new ArrayList<>(Arrays.asList("Nawyk testowy", "Nawyk testowy 2", "Nawyk nawyk nawyk nawyk", "Nawyk testowy 2", "Nawyk testowy 2"));
+    private List<String> habitsList = new ArrayList<>(Arrays.asList("Picie wody rano", "Czytanie książki", "Biegnie", "Jedzenie w domu", "Nie palić"));
 
     public HabitTotalAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);

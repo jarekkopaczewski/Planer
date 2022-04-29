@@ -45,7 +45,7 @@ public class HabitFragment extends Fragment {
 
         AnimateView.singleAnimation(binding.circularProgressIndicator, getContext(), R.anim.scalezoom2);
 
-        circularProgressIndicator.setProgress(36.0f, 100.0f);
+        circularProgressIndicator.setProgress(40.0f, 100.0f);
         circularProgressIndicator.animate();
         circularProgressIndicator.setProgressTextAdapter(new TextAdapter());
 
