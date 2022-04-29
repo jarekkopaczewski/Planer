@@ -31,11 +31,13 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
     private final ImageView iconTaskCategory, detailImageView;
     private final CardView cardView;
     private final Context context;
+    private final View item;
 
 
     public TaskDataViewHolder(View itemView, Context context) {
         super(itemView);
         this.context = context;
+        this.item = itemView;
         title = itemView.findViewById(R.id.taskTitleTextView);
         checkBox = itemView.findViewById(R.id.checkBoxTask);
         iconTaskCategory = itemView.findViewById(R.id.iconTaskCategory);
@@ -82,7 +84,7 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
             color = Colors.getColorFromPreferences("notUrgentNotImportant", getContext());
 
         cardView.setCardBackgroundColor(color);
-        detailImageView.setImageTintList(ColorStateList.valueOf(color));
+//        detailImageView.setImageTintList(ColorStateList.valueOf(color));
         iconTaskCategory.setImageTintList(ColorStateList.valueOf(color));
     }
 

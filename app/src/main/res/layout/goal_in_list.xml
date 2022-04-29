@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/circularProgressIndicatorGoal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goalTitleText">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_slideshow2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="@string/large_text"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/goalTitleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:autofillHints="Dodaj tytuł"
+        android:background="@null"
+        android:fontFamily="@font/signika_regular"
+        android:gravity="center_vertical"
+        android:hint="@string/EditTextTitleHintt"
+        android:lines="2"
+        android:minHeight="48dp"
+        android:scrollHorizontally="false"
+        android:text="Awansować w pracy"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+        android:id="@+id/circularProgressIndicatorGoal"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="16dp"
+        app:direction="clockwise"
+        app:drawDot="false"
+        app:enableProgressAnimation="true"
+        app:gradientEndColor="@color/progress_gradient"
+        app:gradientType="linear"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:progressBackgroundColor="@color/progress_background"
+        app:progressCap="round"
+        app:progressColor="@color/second_color_30"
+        app:progressStrokeWidth="10dp"
+        app:textColor="@color/imageTintColor"
+        app:textSize="20sp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -101,18 +101,6 @@
                 app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
                 app:layout_constraintTop_toBottomOf="@+id/taskTitleTextView" />
 
-            <ImageView
-                android:id="@+id/detailImageView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:foregroundGravity="center"
-                android:scaleType="fitCenter"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/info"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteY="7dp" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

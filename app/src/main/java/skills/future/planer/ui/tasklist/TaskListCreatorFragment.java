@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 
 import skills.future.planer.R;
+import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
@@ -42,11 +44,14 @@ public class TaskListCreatorFragment extends Fragment {
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingDay, beginDay;
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
+    private ActivityMainBinding binding2;
+    private ImageView menuButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
+        binding2 = ActivityMainBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
 
         createEditDateFields();
