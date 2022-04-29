@@ -22,6 +22,11 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
         checkBox = itemView.findViewById(R.id.habitBoxTask);
     }
 
+    /**
+     * Sets up all part of view with values from database
+     *
+     * @param title
+     */
     public void setEveryThing(String title) {
         this.title.setText(title);
     }

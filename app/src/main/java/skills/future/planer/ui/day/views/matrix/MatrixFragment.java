@@ -85,6 +85,9 @@ public class MatrixFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Generates new background resources for current colors
+     */
     private void setUpBackground() {
         int colors[] = {Colors.getColorFromPreferences("urgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
         GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.BR_TL, colors);

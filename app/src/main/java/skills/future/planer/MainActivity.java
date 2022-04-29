@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private BottomNavigationView bottomView;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
         // bind views
         DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        BottomNavigationView bottomView = binding.appBarMain.bottomBar;
+        navigationView = binding.navView;
+        bottomView = binding.appBarMain.bottomBar;
         MaterialToolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -78,6 +80,13 @@ public class MainActivity extends AppCompatActivity {
             if(!navDrawer.isDrawerOpen(Gravity.LEFT)) navDrawer.openDrawer(Gravity.LEFT);
             else navDrawer.closeDrawer(Gravity.RIGHT);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if( bottomView.getSelectedItemId() == R.id.nav_day || bottomView.getSelectedItemId() == R.id.nav_task_list && !navigationView.isSelected())
+            bottomView.setSelectedItemId(R.id.nav_month);
     }
 
     // set/read settings

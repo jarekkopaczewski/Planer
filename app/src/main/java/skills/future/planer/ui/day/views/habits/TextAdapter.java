@@ -6,6 +6,11 @@ import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 
 public class TextAdapter implements  CircularProgressIndicator.ProgressTextAdapter{
 
+    /**
+     * Sets format of displayed info in progress bar
+     * @param currentProgress
+     * @return
+     */
     @NonNull
     @Override
     public String formatText(double currentProgress) {

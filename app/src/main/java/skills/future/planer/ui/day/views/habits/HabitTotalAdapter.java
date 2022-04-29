@@ -41,6 +41,7 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
 
         CheckBox checkBox = itemView.findViewById(R.id.habitBoxTask);
 
+        // click on view change checkbox state
         itemView.setOnClickListener(e->{
             AnimateView.animateInOut(itemView, context);
             checkBox.setChecked(!checkBox.isChecked());
@@ -61,6 +62,10 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
         return position;
     }
 
+    /**
+     * Gets number of habits in list
+     * @return
+     */
     @Override
     public int getItemCount() {
         if (habitsList != null)
