@@ -11,14 +11,15 @@ import java.util.List;
 
 import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.day.DayFragmentDirections;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
 public class TaskDayAdapter extends TaskTotalAdapter {
 
-    public TaskDayAdapter(Context context) {
-        super(context);
+    public TaskDayAdapter(Context context, TaskDataViewModel mTaskViewModel) {
+        super(context, mTaskViewModel);
     }
 
     @NonNull
@@ -50,9 +51,10 @@ public class TaskDayAdapter extends TaskTotalAdapter {
 
     @Override
     protected void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
-        holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
-                Navigation.findNavController(holder.itemView)
-                        .navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(getFullTaskList().get(position).getTaskDataId())));
+        if (holder.itemView.findViewById(R.id.detailImageView) != null)
+            holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
+                    Navigation.findNavController(holder.itemView)
+                            .navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(getFullTaskList().get(position).getTaskDataId())));
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -19,8 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMatrixBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
+import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.DayViewModel;
 import skills.future.planer.ui.tasklist.Colors;
 
@@ -34,6 +37,7 @@ public class MatrixFragment extends Fragment {
     private ArrayList<TaskDataViewModel> taskDataViewModels;
     private ArrayList<ProgressBar> progressBars;
     private ArrayList<ConstraintLayout> backgroundConstrains;
+    private LinearLayout linearLayoutMatrix;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -41,6 +45,9 @@ public class MatrixFragment extends Fragment {
         binding = FragmentMatrixBinding.inflate(inflater, container, false);
         matrixModelView = new ViewModelProvider(this).get(MatrixModelView.class);
         View root = binding.getRoot();
+
+        linearLayoutMatrix = binding.linearLayoutMatrix;
+        AnimateView.singleAnimation(binding.linearLayoutMatrix, getContext(), R.anim.scalezoom2);
 
         // create array lists
         matrixAdapters = new ArrayList<>();
@@ -78,6 +85,9 @@ public class MatrixFragment extends Fragment {
         return root;
     }
 
+    /**
+     * Generates new background resources for current colors
+     */
     private void setUpBackground() {
         int colors[] = {Colors.getColorFromPreferences("urgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
         GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.BR_TL, colors);
