@@ -85,9 +85,9 @@ public class DayViewModel extends ViewModel {
         if (viewPager.getAdapter().getPageTitle(position).equals("Lista zadań")) {
             updateTaskList(date, dayTaskListViewModel);
             checkDateIsToday(date, fabDay, dayNumberView);
-        } else {
+        } else 
             changeVisibility(fabDay, dayNumberView, View.INVISIBLE);
-        }
+        
 
         if (viewPager.getAdapter().getPageTitle(position).equals("Macierz"))
             updateMatrix(date, matrixModelView);
