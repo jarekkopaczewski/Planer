@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import lombok.Getter;
+import lombok.Setter;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
+@Getter
 public class DayTaskListViewModel extends ViewModel {
 
     private static TaskDataViewModel mWordViewModel;

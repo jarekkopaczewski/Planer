@@ -1,5 +1,6 @@
 package skills.future.planer.ui.tasklist;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.ChipGroup;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +60,7 @@ public class TaskListFragment extends Fragment {
         listTotal.setAdapter(taskTotalAdapter);
         //listTotal.setTextFilterEnabled(true);
 //        taskTotalAdapter.getFilter().filter("");
-        listTotal.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        listTotal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, true));
 
         // fab enter animation
         AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
@@ -170,6 +173,13 @@ public class TaskListFragment extends Fragment {
         });
 
         return root;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onStart() {
+        super.onStart();
+        taskTotalAdapter.notifyDataSetChanged();
     }
 
     @Override
