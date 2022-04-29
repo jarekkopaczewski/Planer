@@ -24,12 +24,10 @@ import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMatrixBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.day.DayViewModel;
 import skills.future.planer.ui.tasklist.Colors;
 
 public class MatrixFragment extends Fragment {
 
-    private DayViewModel dayViewModel;
     private FragmentMatrixBinding binding;
     private MatrixModelView matrixModelView;
     private ArrayList<RecyclerView> recyclerViews;
@@ -166,6 +164,7 @@ public class MatrixFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setUpBackground();
     }
 
     @Override

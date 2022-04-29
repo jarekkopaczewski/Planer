@@ -1,5 +1,6 @@
 package skills.future.planer.ui.day.views.daylist;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,6 @@ public class DayTaskListFragment extends Fragment {
         dayListViewModel.setWordViewModel(mTaskViewModel);
         dayListViewModel.setTaskDayAdapter(taskDayAdapter);
         dayListViewModel.setLifecycleOwner(this.getViewLifecycleOwner());
-
         return root;
     }
 
@@ -81,4 +81,10 @@ public class DayTaskListFragment extends Fragment {
         binding = null;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onStart() {
+        super.onStart();
+        taskDayAdapter.notifyDataSetChanged();
+    }
 }
