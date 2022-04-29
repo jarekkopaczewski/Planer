@@ -9,7 +9,6 @@ import androidx.navigation.Navigation;
 
 import java.util.List;
 
-import lombok.Getter;
 import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
