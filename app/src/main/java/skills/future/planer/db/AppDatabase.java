@@ -34,8 +34,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (sInstance == null) {
                     Log.d(LOG_TAG, "Creating new database instance");
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, DB_NAME).fallbackToDestructiveMigration().allowMainThreadQueries().build();
-                            //.addCallback(sRoomDatabaseCallback)
+                            AppDatabase.class, DB_NAME).fallbackToDestructiveMigration().allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
                 }
             }
         }
