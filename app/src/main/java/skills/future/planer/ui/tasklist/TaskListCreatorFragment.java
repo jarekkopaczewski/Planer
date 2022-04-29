@@ -344,19 +344,6 @@ public class TaskListCreatorFragment extends Fragment {
                     Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (checkDate(endingDay, CalendarDay.today())) {
-            Toast.makeText(this.getContext(),
-                    "Data zakończenia zadania nie może być wcześniej niż dzisiaj!",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (checkDate(beginDay, CalendarDay.today())) {
-            Toast.makeText(this.getContext(),
-                    "Data rozpoczęcia zadania nie może być wcześniej niż dzisiaj!",
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
         return true;
     }
 
