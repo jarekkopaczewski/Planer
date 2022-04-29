@@ -49,7 +49,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     new PopulateDbAsync(sInstance).execute();
                 }
             };
- 
+
     /**
      * Populate the database in the background.
      */

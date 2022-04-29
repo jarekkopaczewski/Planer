@@ -67,6 +67,8 @@ public class TaskListFragment extends Fragment {
             mWordViewModel.insert(result);
         });
         binding.fab.setOnClickListener(view -> {
+            //turn off filters
+            binding.chipGroup.clearCheck();
             AnimateView.animateInOut(binding.fab, getContext());
             Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment(-1));
         });
