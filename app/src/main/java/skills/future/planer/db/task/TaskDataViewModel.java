@@ -92,4 +92,12 @@ public class TaskDataViewModel extends AndroidViewModel {
     public void deleteTaskData(TaskData taskData) {
         mRepository.deleteTaskData(taskData);
     }
+
+    public CalendarDay getMinTaskDate() {
+        return CalendarDay.from(2022, 1, 1);
+    }
+
+    public CalendarDay getMaxTaskDate() {
+        return CalendarDay.from(2022, 12, 31);
+    }
 }

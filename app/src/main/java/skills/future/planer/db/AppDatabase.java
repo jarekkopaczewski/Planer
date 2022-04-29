@@ -70,11 +70,11 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-            CalendarDay day2 = CalendarDay.from(2022, 4, 21);
+            CalendarDay day2 = CalendarDay.from(2022, 1, 21);
             CalendarDay day3 = CalendarDay.from(2022, 4, 23);
             CalendarDay day4 = CalendarDay.from(2022, 4, 7);
             CalendarDay day5 = CalendarDay.from(2022, 4, 9);
-            CalendarDay day6 = CalendarDay.from(2022, 4, 26);
+            CalendarDay day6 = CalendarDay.from(2022, 12, 26);
 
             for (int i = 0; i <= 4; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu", "", day2, day3);
@@ -104,7 +104,7 @@ public abstract class AppDatabase extends RoomDatabase {
                         "Zaimplementuj rozproszony system imitujący działanie sieci " +
                                 "tablic reklamowych, na których cyklicznie wyświetlane są zadane teksty.\n" +
                                 "Wymiana danych pomiędzy elementami systemu powinna odbywać się " +
-                                "poprzez gniazda SSL, z wykorzystaniem menadżera bezpieczeństwa i plików polityki.", day, day2);
+                                "poprzez gniazda SSL, z wykorzystaniem menadżera bezpieczeństwa i plików polityki.", day2, day6);
                 mDao.insert(word);
             }
 
