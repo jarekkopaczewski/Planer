@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateLongClickListener;
 
 import org.threeten.bp.LocalDate;
 
@@ -82,6 +84,14 @@ public class MonthFragment extends Fragment {
         createListsWithDotsByTaskNumber(today);
 
         materialCalendarView.setOnMonthChangedListener((widget, date) -> createListsWithDotsByTaskNumber(date));
+
+        materialCalendarView.setOnDateLongClickListener((widget, date) -> {
+            System.out.println("jestem tu");
+            Navigation.findNavController(root)
+                    .navigate(MonthFragmentDirections.actionNavMonthToNavDay());
+
+        });
+
 
 
         requireActivity().runOnUiThread(() -> {
