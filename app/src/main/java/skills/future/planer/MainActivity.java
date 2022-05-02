@@ -95,13 +95,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if( bottomView.getSelectedItemId() == R.id.nav_day || bottomView.getSelectedItemId() == R.id.nav_task_list && !navigationView.isSelected())
-            bottomView.setSelectedItemId(R.id.nav_month);
-    }
-
     // set/read settings
     private void themePreferences() {
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);

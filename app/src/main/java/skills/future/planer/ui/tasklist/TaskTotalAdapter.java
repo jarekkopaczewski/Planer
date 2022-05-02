@@ -138,22 +138,22 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
                 Animation animation  = AnimationUtils.loadAnimation(context, R.anim.removetask);
                 animation.setAnimationListener(new Animation.AnimationListener() {
-                                                   @Override
-                                                   public void onAnimationStart(Animation animation) {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                                                   }
+                    }
 
-                                                   @Override
-                                                   public void onAnimationEnd(Animation animation) {
-                                                       var task = fullTaskList.get(position);
-                                                       mTaskViewModel.deleteTaskData(task);
-                                                   }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        var task = fullTaskList.get(position);
+                        mTaskViewModel.deleteTaskData(task);
+                    }
 
-                                                   @Override
-                                                   public void onAnimationRepeat(Animation animation) {
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
 
-                                                   }
-                                               });
+                    }
+                });
                 holder.itemView.startAnimation(animation);
             });
     }

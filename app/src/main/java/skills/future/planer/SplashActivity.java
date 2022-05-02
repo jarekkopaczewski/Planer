@@ -18,9 +18,9 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-        Intent intent = new Intent(this, MainActivity.class);
 
         new Handler().postDelayed(() -> {
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }, 1000);
