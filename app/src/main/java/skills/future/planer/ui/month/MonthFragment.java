@@ -180,6 +180,4 @@ public class MonthFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
-
 }
