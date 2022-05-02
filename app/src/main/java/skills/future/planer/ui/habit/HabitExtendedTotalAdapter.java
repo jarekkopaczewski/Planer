@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +41,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         View itemView;
         itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
+        ImageView editButton = itemView.findViewById(R.id.editImageHabit);
 
         itemView.setOnClickListener(e->{
             AnimateView.animateInOut(itemView, context);
@@ -58,9 +60,11 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         AnimateView.singleAnimation(itemView.findViewById(R.id.tueChip), context, R.anim.scalezoom2);
         AnimateView.singleAnimation(itemView.findViewById(R.id.mondayChip), context, R.anim.scalezoom2);
 
-        itemView.findViewById(R.id.editImageHabit).setOnClickListener(e->{
+        editButton.setOnClickListener(e->{
+            AnimateView.animateInOut(editButton, context);
             context.startActivity(new Intent(context, HabitCreatorActivity.class));
         });
+
 
         return itemView;
     }

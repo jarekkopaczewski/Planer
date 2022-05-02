@@ -102,6 +102,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
         PowerSpinnerView powerSpinnerView = binding.spinner;
         powerSpinnerView.selectItemByIndex(0);
+        binding.spinner2.selectItemByIndex(0);
 
         saveCreatorButtonHabit.setOnClickListener(e -> {
             if (editTextTitle.getText() == null || editTextTitle.getText().length() <= 0) {
