@@ -29,6 +29,17 @@
             android:layout_height="match_parent"
             android:background="@color/foreground">
 
+            <ImageView
+                android:id="@+id/trashImageViewHabit"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintEnd_toStartOf="@+id/editImageHabit"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/trash"
+                app:tint="@color/imageTintColor_2" />
+
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView2"
                 android:layout_width="0dp"
@@ -151,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="2dp"
                 android:autoSizeTextType="none"
                 android:ellipsize="end"
@@ -165,7 +176,7 @@
                 android:textColor="@color/textColor"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/editImageHabit"
+                app:layout_constraintEnd_toStartOf="@+id/trashImageViewHabit"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

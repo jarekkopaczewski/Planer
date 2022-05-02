@@ -1,6 +1,8 @@
 package skills.future.planer.ui.habit;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +67,22 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
             context.startActivity(new Intent(context, HabitCreatorActivity.class));
         });
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("Confirm deletion");
+        builder.setMessage("Are you sure?");
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            //TODO delete habit from database
+            dialog.dismiss();
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog alert = builder.create();
+        itemView.findViewById(R.id.trashImageViewHabit).setOnClickListener(e->alert.show());
 
         return itemView;
     }

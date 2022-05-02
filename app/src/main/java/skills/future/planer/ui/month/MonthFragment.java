@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMonthBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
+import skills.future.planer.ui.AnimateView;
 
 /**
  * MonthFragment represents a Month fragment.
@@ -73,6 +74,7 @@ public class MonthFragment extends Fragment {
         binding = FragmentMonthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         materialCalendarView = binding.calendarView;
+        AnimateView.singleAnimation(binding.monthCard, getContext(), R.anim.scalezoom);
 
         //setting current day as selected
         materialCalendarView.setDateSelected(CalendarDay.today(), true);
