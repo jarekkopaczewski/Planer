@@ -4,6 +4,7 @@
 * [Widok macierzy oraz nawyków](#widok-macierzy-oraz-nawyków)
 * [Technologie i narzędzia](#technologie-i-narzędzia)
 * [Ustawienia oraz nawigacja](#ustawienia-oraz-nawigacja)
+* [Widoki celów i nawyków](#widoki-celów-i-nawyków)
 
 # O projekcie
 
@@ -39,6 +40,14 @@ W aplikacji dostępny jest boczny pasek nawigacji do którego dodawane będą ko
 <p float="left">
   <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/settings.jpg" height="450" hspace="100"/>
   <img src="https://github.com/jarekkopaczewski/Planer/blob/562ebcdda1585f0f7f73883fc1f0cb8b1dac13ac/screens/app_bar.jpg" height="450" hspace="20"/>
+</p>
+
+## Widoki celów i nawyków
+
+<p float="left">
+ <img src="https://github.com/jarekkopaczewski/Planer/blob/c8a1d61392b319286cc99fd6d77bdf403b6a5858/screens/habitBrowser.jpg" height="450" hspace="20"/>
+ <img src="https://github.com/jarekkopaczewski/Planer/blob/c8a1d61392b319286cc99fd6d77bdf403b6a5858/screens/habitCreator.jpg" height="450" hspace="20"/>
+ <img src="https://github.com/jarekkopaczewski/Planer/blob/c8a1d61392b319286cc99fd6d77bdf403b6a5858/screens/goalBrowser.jpg" height="450" hspace="20"/>
 </p>
 
 ## Technologie i narzędzia
