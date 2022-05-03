@@ -6,6 +6,10 @@ public enum HabitDuration {
 
     private final Integer daysNumber;
 
+    public Integer getDaysNumber() {
+        return daysNumber;
+    }
+
     HabitDuration(Integer daysNumber) {
         this.daysNumber = daysNumber;
     }

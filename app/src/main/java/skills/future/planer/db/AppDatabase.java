@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.room.Database;
 import androidx.room.Room;
@@ -20,7 +21,7 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 
-@Database(entities = {TaskData.class, HabitData.class}, exportSchema = false, version = 2)
+@Database(entities = {TaskData.class, HabitData.class}, exportSchema = false, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
@@ -47,9 +48,9 @@ public abstract class AppDatabase extends RoomDatabase {
         return sInstance;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback =
+    private static final RoomDatabase.Callback sRoomDatabaseCallback =
             new RoomDatabase.Callback() {
-                public void onOpen(SupportSQLiteDatabase db) {
+                public void onOpen(@NonNull SupportSQLiteDatabase db) {
                     super.onOpen(db);
                     new PopulateDbAsync(sInstance).execute();
                 }
@@ -64,6 +65,7 @@ public abstract class AppDatabase extends RoomDatabase {
         //String[] words = {"dolphin", "crocodile", "cobra"};
 
         PopulateDbAsync(AppDatabase db) {
+            super();
             mDao = db.taskDataTabDao();
         }
 
@@ -82,23 +84,23 @@ public abstract class AppDatabase extends RoomDatabase {
 
             for (int i = 0; i <= 4; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu", "", day2, day3);
-                mDao.insert(word);
+                word.setTaskDataId(mDao.insert(word));
             }
             for (int i = 0; i <= 4; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "1iu", "", day3, day6);
-                mDao.insert(word);
+                word.setTaskDataId(mDao.insert(word));
             }
             for (int i = 0; i <= 4; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "2niu", "", day2, day3);
-                mDao.insert(word);
+                word.setTaskDataId(mDao.insert(word));
             }
             for (int i = 0; i <= 4; i++) {
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "3inu", "", day4, day2);
-                mDao.insert(word);
+                word.setTaskDataId(mDao.insert(word));
             }
             for (int i = 0; i <= 4; i++) {
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "4ninu", "", day4, day5);
-                mDao.insert(word);
+                word.setTaskDataId(mDao.insert(word));
             }
             for (int i = 0; i < 10; i++) {
                 TaskData word = new TaskData(TaskCategory.Work,
@@ -109,7 +111,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                 "tablic reklamowych, na których cyklicznie wyświetlane są zadane teksty.\n" +
                                 "Wymiana danych pomiędzy elementami systemu powinna odbywać się " +
                                 "poprzez gniazda SSL, z wykorzystaniem menadżera bezpieczeństwa i plików polityki.", day, day2);
-                mDao.insert(word);
+                word.setTaskDataId(mDao.insert(word));
             }
 
             /*for (int i = 0; i <= 1; i++) {
