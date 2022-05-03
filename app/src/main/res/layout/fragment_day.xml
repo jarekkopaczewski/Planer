@@ -2,16 +2,30 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".ui.day.DayFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.day.DayFragment">
+
+    <ImageView
+        android:id="@+id/todayIconDay"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="50dp"
+        android:elevation="1dp"
+        android:src="@drawable/today_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/calendarPagerDay"
+        app:srcCompat="@drawable/today_icon"
+        app:tint="@color/imageTintColor" />
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView"
+        android:id="@+id/calendarPagerDay"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="@color/foreground"
         android:backgroundTint="@color/foreground"
+        android:elevation="0dp"
         android:fontFamily="@font/signika_regular"
         android:theme="@style/ArrowsStyle"
         android:translationZ="0dp"
@@ -26,7 +40,9 @@
         app:mcv_selectionMode="single"
         app:mcv_showOtherDates="all"
         app:mcv_showWeekDays="true"
-        app:mcv_tileSize="0dp" />
+        app:mcv_tileSize="0dp">
+
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/dayViewPager"
@@ -36,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView">
+        app:layout_constraintTop_toBottomOf="@+id/calendarPagerDay">
 
         <androidx.viewpager.widget.PagerTabStrip
             android:id="@+id/pager_header"
@@ -44,41 +60,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:paddingTop="4dp"
-            android:paddingBottom="4dp" />
+            android:paddingBottom="4dp">
+
+        </androidx.viewpager.widget.PagerTabStrip>
 
     </androidx.viewpager.widget.ViewPager>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/dayFab"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        android:layout_marginEnd="75dp"
-        android:layout_marginBottom="1dp"
-        android:clickable="true"
-        android:contentDescription="@string/fabContentDescription"
-        android:paddingBottom="70dp"
-        android:scaleType="center"
-        android:visibility="invisible"
-        app:backgroundTint="@color/second_color_30"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <TextView
-        android:id="@+id/dayNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="7dp"
-        android:text=""
-        android:textColor="#FFFFFF"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/dayFab"
-        app:layout_constraintEnd_toEndOf="@+id/dayFab"
-        app:layout_constraintStart_toStartOf="@+id/dayFab"
-        app:layout_constraintTop_toTopOf="@+id/dayFab" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
