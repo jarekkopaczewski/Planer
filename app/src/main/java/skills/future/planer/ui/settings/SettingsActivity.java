@@ -27,6 +27,9 @@ public class SettingsActivity extends AppCompatActivity {
         binding = SettingsActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // change navigation bar color
+        getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));
+
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()

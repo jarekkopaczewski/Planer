@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +47,14 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
             AnimateView.animateInOut(itemView, context);
             checkBox.setChecked(!checkBox.isChecked());
         });
+
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(checkBox.isChecked())
+                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.VISIBLE);
+            else
+                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.INVISIBLE);
+        });
+
         return itemView;
     }
 

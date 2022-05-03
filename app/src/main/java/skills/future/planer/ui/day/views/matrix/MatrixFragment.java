@@ -46,6 +46,7 @@ public class MatrixFragment extends Fragment {
 
         linearLayoutMatrix = binding.linearLayoutMatrix;
         AnimateView.singleAnimation(binding.linearLayoutMatrix, getContext(), R.anim.scalezoom2);
+        AnimateView.singleAnimation(binding.imageViewBackground, getContext(), R.anim.scalezoom2);
 
         // create array lists
         matrixAdapters = new ArrayList<>();
@@ -53,12 +54,6 @@ public class MatrixFragment extends Fragment {
         recyclerViews = new ArrayList<>();
         progressBars = new ArrayList<>();
         backgroundConstrains = new ArrayList<>();
-
-        // progress bars binding
-        progressBars.add(binding.urgentImportantProgressBar);
-        progressBars.add(binding.urgentNotImportantProgressBar);
-        progressBars.add(binding.notUrgentImportantProgressBar);
-        progressBars.add(binding.notUrgentNotImportantProgressBar);
 
         // recycler binding
         recyclerViews.add(binding.urgentImportantRecycler);
@@ -78,7 +73,6 @@ public class MatrixFragment extends Fragment {
         MatrixModelView.setMatrixAdapters(matrixAdapters);
         MatrixModelView.setTaskDataViewModels(taskDataViewModels);
         MatrixModelView.setViewLifecycleOwner(this.getViewLifecycleOwner());
-        MatrixModelView.setProgressBars(progressBars);
 
         return root;
     }

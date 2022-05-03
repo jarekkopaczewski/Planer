@@ -21,6 +21,7 @@ import skills.future.planer.databinding.FragmentDayBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
 import skills.future.planer.ui.day.views.matrix.MatrixModelView;
+import skills.future.planer.ui.slideshow.SlideshowViewModel;
 
 @Getter
 public class DayFragment extends Fragment {
@@ -72,10 +73,10 @@ public class DayFragment extends Fragment {
      * Creates view pager
      */
     private void createViewPager(ViewGroup container) {
-        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
-        myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
-        vpPager.setAdapter(myPagerAdapter);
-        vpPager.setCurrentItem(2);
+            myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
+            myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
+            vpPager.setAdapter(myPagerAdapter);
+            vpPager.setCurrentItem(2);
     }
 
     /**

@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -31,10 +29,14 @@ import skills.future.planer.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static BottomNavigationView bottomView;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    private BottomNavigationView bottomView;
     private NavigationView navigationView;
+
+    public static BottomNavigationView getBottomView() {
+        return bottomView;
+    }
 
     /**
      * Displays version of application in "Settings menu"
@@ -89,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         ImageView button = binding.appBarMain.testButton;
         DrawerLayout navDrawer = binding.drawerLayout;
 
-        button.setOnClickListener(e->{
-            if(!navDrawer.isDrawerOpen(Gravity.LEFT)) navDrawer.openDrawer(Gravity.LEFT);
+        button.setOnClickListener(e -> {
+            if (!navDrawer.isDrawerOpen(Gravity.LEFT)) navDrawer.openDrawer(Gravity.LEFT);
             else navDrawer.closeDrawer(Gravity.RIGHT);
         });
     }

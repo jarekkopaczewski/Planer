@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_nav_home_to_habitCreatorFragment"
             app:destination="@id/nav_habit_creator" />
+        <action
+            android:id="@+id/action_nav_home_to_taskListCreatorFragment"
+            app:destination="@id/taskListCreatorFragment" />
     </fragment>
 
     <fragment
@@ -139,6 +142,9 @@
         <argument
             android:name="idTaskToEdit"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_taskListCreatorFragment_to_nav_home"
+            app:destination="@id/nav_home" />
     </fragment>
     <fragment
         android:id="@+id/nav_habit_creator"
