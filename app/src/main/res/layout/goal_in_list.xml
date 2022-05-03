@@ -9,7 +9,7 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView2"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="110dp"
         android:layout_marginTop="35dp"
         android:background="@color/background"
         android:fillViewport="true"
@@ -130,9 +130,8 @@
         android:id="@+id/goalsList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:background="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -156,5 +155,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <com.akki.circlemenu.CircleMenu
+        android:id="@+id/circle_menu"
+        android:layout_width="70dp"
+        android:layout_height="300dp"
+        android:foregroundTint="@color/imageTintColor"
+        android:padding="5dp"
+        android:translationZ="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        app:menu_background_color="@array/menu_back_colors"
+        app:menu_close_duration="300"
+        app:menu_icons="@array/menus"
+        app:menu_open_duration="400"
+        app:menu_orientation="vertical"
+        app:menu_radius="75dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

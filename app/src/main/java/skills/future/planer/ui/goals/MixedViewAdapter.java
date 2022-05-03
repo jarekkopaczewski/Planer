@@ -14,11 +14,12 @@ import java.util.List;
 
 import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.day.views.habits.HabitViewHolder;
+import skills.future.planer.ui.habit.HabitExtendedViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
-public class MixedViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
 
     private static final int LAYOUT_HABIT = 0;
     private static final int LAYOUT_TASK = 1;
@@ -45,9 +46,9 @@ public class MixedViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ICustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return switch (viewType) {
-            case LAYOUT_HABIT -> new HabitViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context);
+            case LAYOUT_HABIT -> new HabitExtendedViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context);
             default -> new TaskDataViewHolder(createViewOfItem(parent, R.layout.fragment_task_in_list), context);
         };
     }
@@ -61,13 +62,17 @@ public class MixedViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(ICustomViewHolder holder, final int position) {
 
         if (holder.getItemViewType() == LAYOUT_HABIT) {
-
+            holder.setEveryThing("Nawyk testowy");
         } else {
-            //TaskData current = fullTaskList.get(position);
-            //(TaskDataViewHolder)holder.setEveryThing(current);
+            TaskData taskData = new TaskData();
+            taskData.setTaskTitleText("Zadanie");
+            taskData.setCategory(TaskCategory.Private);
+            taskData.setStartingDate(System.currentTimeMillis());
+            taskData.setEndingDate(System.currentTimeMillis());
+            holder.setEveryThing(taskData);
         }
     }
 }

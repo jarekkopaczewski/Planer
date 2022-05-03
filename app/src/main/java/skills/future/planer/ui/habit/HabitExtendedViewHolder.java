@@ -16,11 +16,13 @@ import java.util.Random;
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
 import skills.future.planer.R;
+import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
+import skills.future.planer.ui.goals.ICustomViewHolder;
 
 @Getter
-public class HabitExtendedViewHolder extends RecyclerView.ViewHolder {
+public class HabitExtendedViewHolder extends ICustomViewHolder {
     private final TextView title;
     private final CircularProgressIndicator circularProgressIndicatorHabit;
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
@@ -37,6 +39,7 @@ public class HabitExtendedViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("ResourceAsColor")
+    @Override
     public void setEveryThing(String title) {
         this.title.setText(title);
 
