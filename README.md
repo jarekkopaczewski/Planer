@@ -47,7 +47,7 @@ W aplikacji dostępny jest boczny pasek nawigacji do którego dodawane będą ko
 <p float="left">
  <img src="https://github.com/jarekkopaczewski/Planer/blob/c8a1d61392b319286cc99fd6d77bdf403b6a5858/screens/habitBrowser.jpg" height="450" hspace="20"/>
  <img src="https://github.com/jarekkopaczewski/Planer/blob/c8a1d61392b319286cc99fd6d77bdf403b6a5858/screens/habitCreator.jpg" height="450" hspace="20"/>
- <img src="https://github.com/jarekkopaczewski/Planer/blob/c8a1d61392b319286cc99fd6d77bdf403b6a5858/screens/goalBrowser.jpg" height="450" hspace="20"/>
+ <img src="https://github.com/jarekkopaczewski/Planer/blob/044b693a67f1b3c8d9c21efc8a2a8b3421267113/screens/goalBrowser.jpg" height="450" hspace="20"/>
 </p>
 
 ## Technologie i narzędzia
