@@ -61,7 +61,7 @@ public class TaskListCreatorFragment extends Fragment {
 
         processFabColor();
 
-        Integer taskID = -1;
+        Long taskID = -1L;
         taskID = getTaskIDFromFragmentArgument(taskID);
         saveBtnOnClickListenerSetter(taskID);
 
@@ -101,9 +101,9 @@ public class TaskListCreatorFragment extends Fragment {
     /**
      * Checks is edit of task or create new task
      */
-    private Integer getTaskIDFromFragmentArgument(Integer taskID) {
+    private Long getTaskIDFromFragmentArgument(Long taskID) {
         if (getArguments() != null) {
-            taskID = (Integer) getArguments().get("idTaskToEdit");
+            taskID = (Long) getArguments().get("idTaskToEdit");
             if (taskID != -1)
                 loadDataFromTask(taskID);
         }
@@ -139,7 +139,7 @@ public class TaskListCreatorFragment extends Fragment {
     /**
      * Gets TaskData from database, and sets fields of creatorFragment
      */
-    private void loadDataFromTask(Integer taskID) {
+    private void loadDataFromTask(Long taskID) {
         taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
         try {
             editTask = taskDataDao.findById(taskID);
@@ -191,7 +191,7 @@ public class TaskListCreatorFragment extends Fragment {
      * But if task is edited
      * listener sends edited TaskData
      */
-    private void saveBtnOnClickListenerSetter(Integer taskID) {
+    private void saveBtnOnClickListenerSetter(Long taskID) {
         saveButton.setOnClickListener(view1 -> {
             AnimateView.animateInOut(saveButton, getContext());
 
@@ -230,7 +230,7 @@ public class TaskListCreatorFragment extends Fragment {
     /**
      * Sends task to database depending on the creator type
      */
-    private void sendTaskToDataBase(Integer taskID, View view1) {
+    private void sendTaskToDataBase(Long taskID, View view1) {
         //If the task is edited
         if (taskID != -1)
             taskDataDao.editOne(editTask);

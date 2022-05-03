@@ -94,7 +94,7 @@ public class TaskData implements Parcelable {
      */
     @Ignore
     public TaskData() {
-        this.taskDataId = 0L;
+        //this.taskDataId = 0L;
         this.status = false;
     }
 
@@ -109,7 +109,7 @@ public class TaskData implements Parcelable {
      */
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText) {
-        this.taskDataId = 0L;
+        //this.taskDataId = 0L;
         this.status = false;
         this.category = category;
         this.priorities = priorities;
@@ -133,7 +133,7 @@ public class TaskData implements Parcelable {
     @Ignore
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText, CalendarDay startingDate, CalendarDay endingDate) {
-        this.taskDataId = 0L;
+        //this.taskDataId = 0L;
         this.status = false;
         this.category = category;
         this.priorities = priorities;

@@ -23,7 +23,7 @@ public interface TaskDataDao {
      * @throws Exception if sth is wrong xd
      */
     @Query("SELECT * FROM taskData WHERE taskDataId = :id")
-    TaskData findById(int id) throws Exception;
+    TaskData findById(Long id) throws Exception;
 
     /**
      * Method insert given taskData to database
