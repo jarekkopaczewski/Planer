@@ -22,20 +22,23 @@ import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.ui.goals.ICustomViewHolder;
 import skills.future.planer.ui.tasklist.Colors;
 
 @Getter
-public class TaskDataViewHolder extends RecyclerView.ViewHolder {
+public class TaskDataViewHolder extends ICustomViewHolder {
     private final TextView title, date;
     private final CheckBox checkBox;
     private final ImageView iconTaskCategory, detailImageView;
     private final CardView cardView;
     private final Context context;
+    private final View item;
 
 
     public TaskDataViewHolder(View itemView, Context context) {
         super(itemView);
         this.context = context;
+        this.item = itemView;
         title = itemView.findViewById(R.id.taskTitleTextView);
         checkBox = itemView.findViewById(R.id.checkBoxTask);
         iconTaskCategory = itemView.findViewById(R.id.iconTaskCategory);
@@ -44,11 +47,17 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
         detailImageView = itemView.findViewById(R.id.detailImageView);
     }
 
+    @Override
     public void setEveryThing(TaskData taskData) {
         setColor(taskData);
         setTextTitle(taskData);
         setIconCategory(taskData);
         setCheckBoxListener(taskData);
+    }
+
+    @Override
+    public void setEveryThing(String title) {
+
     }
 
     /**
@@ -82,7 +91,7 @@ public class TaskDataViewHolder extends RecyclerView.ViewHolder {
             color = Colors.getColorFromPreferences("notUrgentNotImportant", getContext());
 
         cardView.setCardBackgroundColor(color);
-        detailImageView.setImageTintList(ColorStateList.valueOf(color));
+//        detailImageView.setImageTintList(ColorStateList.valueOf(color));
         iconTaskCategory.setImageTintList(ColorStateList.valueOf(color));
     }
 

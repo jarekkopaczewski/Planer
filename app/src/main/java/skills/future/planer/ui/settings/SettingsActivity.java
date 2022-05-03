@@ -1,5 +1,6 @@
 package skills.future.planer.ui.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -12,6 +13,7 @@ import java.util.Objects;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.SettingsActivityBinding;
+import skills.future.planer.ui.habit.HabitCreatorActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -24,6 +26,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         binding = SettingsActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // change navigation bar color
+        getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()

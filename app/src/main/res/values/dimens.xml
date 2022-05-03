@@ -5,4 +5,6 @@
     <dimen name="nav_header_height">190dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="pageMargin">10dp</dimen>
+    <dimen name="offset">10dp</dimen>
 </resources>

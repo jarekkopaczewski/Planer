@@ -81,7 +81,7 @@
                 android:textAlignment="viewStart"
                 android:textColor="@color/textColor"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toStartOf="@+id/detailImageView"
+                app:layout_constraintEnd_toStartOf="@+id/trashImageView"
                 app:layout_constraintStart_toEndOf="@+id/colorMarkCardView"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -145,9 +145,21 @@
                 android:layout_height="25dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="10dp"
+                app:tint="@color/imageTintColor_2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/pencil" />
+
+            <ImageView
+                android:id="@+id/trashImageView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:tint="@color/imageTintColor_2"
+                app:layout_constraintEnd_toStartOf="@+id/detailImageView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/trash" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

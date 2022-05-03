@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -19,14 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMatrixBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
-import skills.future.planer.ui.day.DayViewModel;
+import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.tasklist.Colors;
 
 public class MatrixFragment extends Fragment {
 
-    private DayViewModel dayViewModel;
     private FragmentMatrixBinding binding;
     private MatrixModelView matrixModelView;
     private ArrayList<RecyclerView> recyclerViews;
@@ -34,6 +35,7 @@ public class MatrixFragment extends Fragment {
     private ArrayList<TaskDataViewModel> taskDataViewModels;
     private ArrayList<ProgressBar> progressBars;
     private ArrayList<ConstraintLayout> backgroundConstrains;
+    private LinearLayout linearLayoutMatrix;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -42,18 +44,16 @@ public class MatrixFragment extends Fragment {
         matrixModelView = new ViewModelProvider(this).get(MatrixModelView.class);
         View root = binding.getRoot();
 
+        linearLayoutMatrix = binding.linearLayoutMatrix;
+        AnimateView.singleAnimation(binding.linearLayoutMatrix, getContext(), R.anim.scalezoom2);
+        AnimateView.singleAnimation(binding.imageViewBackground, getContext(), R.anim.scalezoom2);
+
         // create array lists
         matrixAdapters = new ArrayList<>();
         taskDataViewModels = new ArrayList<>();
         recyclerViews = new ArrayList<>();
         progressBars = new ArrayList<>();
         backgroundConstrains = new ArrayList<>();
-
-        // progress bars binding
-        progressBars.add(binding.urgentImportantProgressBar);
-        progressBars.add(binding.urgentNotImportantProgressBar);
-        progressBars.add(binding.notUrgentImportantProgressBar);
-        progressBars.add(binding.notUrgentNotImportantProgressBar);
 
         // recycler binding
         recyclerViews.add(binding.urgentImportantRecycler);
@@ -73,11 +73,13 @@ public class MatrixFragment extends Fragment {
         MatrixModelView.setMatrixAdapters(matrixAdapters);
         MatrixModelView.setTaskDataViewModels(taskDataViewModels);
         MatrixModelView.setViewLifecycleOwner(this.getViewLifecycleOwner());
-        MatrixModelView.setProgressBars(progressBars);
 
         return root;
     }
 
+    /**
+     * Generates new background resources for current colors
+     */
     private void setUpBackground() {
         int colors[] = {Colors.getColorFromPreferences("urgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
         GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.BR_TL, colors);
@@ -156,6 +158,7 @@ public class MatrixFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        setUpBackground();
     }
 
     @Override

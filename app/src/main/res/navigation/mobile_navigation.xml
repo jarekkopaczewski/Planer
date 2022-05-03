@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="skills.future.planer.ui.home.HomeFragment"
+        android:name="skills.future.planer.ui.goals.GoalsFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
+        tools:layout="@layout/fragment_goals">
         <action
             android:id="@+id/action_nav_home_to_nav_gallery"
             app:destination="@id/nav_gallery"
@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_nav_home_to_habitCreatorFragment"
             app:destination="@id/nav_habit_creator" />
+        <action
+            android:id="@+id/action_nav_home_to_taskListCreatorFragment"
+            app:destination="@id/taskListCreatorFragment" />
     </fragment>
 
     <fragment
@@ -138,11 +141,14 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="idTaskToEdit"
-            app:argType="long" />
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_taskListCreatorFragment_to_nav_home"
+            app:destination="@id/nav_home" />
     </fragment>
     <fragment
         android:id="@+id/nav_habit_creator"
-        android:name="skills.future.planer.HabitCreatorFragment"
+        android:name="skills.future.planer.ui.habit.HabitBrowserFragment"
         android:label="fragment_habit_creator"
-        tools:layout="@layout/fragment_habit_creator" />
+        tools:layout="@layout/fragment_habit_browser" />
 </navigation>

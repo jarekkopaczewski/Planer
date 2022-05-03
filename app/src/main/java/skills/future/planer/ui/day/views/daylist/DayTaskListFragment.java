@@ -1,5 +1,6 @@
 package skills.future.planer.ui.day.views.daylist;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
@@ -24,7 +26,7 @@ import skills.future.planer.ui.day.DayFragmentDirections;
 public class DayTaskListFragment extends Fragment {
 
     private DayTaskListViewModel dayListViewModel;
-    private TaskDataViewModel mWordViewModel;
+    private TaskDataViewModel mTaskViewModel;
     private DayTaskListFragmentBinding binding;
     private TaskDayAdapter taskDayAdapter;
 
@@ -34,16 +36,17 @@ public class DayTaskListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = DayTaskListFragmentBinding.inflate(inflater, container, false);
         dayListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
-        mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
+        mTaskViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
 
         View root = binding.getRoot();
 
         createList();
 
-        dayListViewModel.setWordViewModel(mWordViewModel);
+        AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
+
+        dayListViewModel.setWordViewModel(mTaskViewModel);
         dayListViewModel.setTaskDayAdapter(taskDayAdapter);
         dayListViewModel.setLifecycleOwner(this.getViewLifecycleOwner());
-
         return root;
     }
 
@@ -53,12 +56,11 @@ public class DayTaskListFragment extends Fragment {
      */
     private void createList() {
         RecyclerView listDay = binding.listTotalView;
-        taskDayAdapter = new TaskDayAdapter(this.getContext());
+        taskDayAdapter = new TaskDayAdapter(this.getContext(),mTaskViewModel);
         listDay.setAdapter(taskDayAdapter);
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         createListenerForFab();
-        createItemTouchHelper(listDay);
     }
 
     /**
@@ -73,35 +75,16 @@ public class DayTaskListFragment extends Fragment {
         });
     }
 
-    /**
-     * Creates item touch helper
-     */
-    private void createItemTouchHelper(RecyclerView listDay) {
-        new ItemTouchHelper(
-                new ItemTouchHelper.SimpleCallback(0,
-                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                    @Override
-                    public boolean onMove(@NonNull RecyclerView recyclerView,
-                                          @NonNull RecyclerView.ViewHolder viewHolder,
-                                          @NonNull RecyclerView.ViewHolder target) {
-                        return false;
-                    }
-
-                    @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
-                                         int direction) {
-                        int position = viewHolder.getAdapterPosition();
-                        TaskData myTaskData = taskDayAdapter.getTaskDataAtPosition(position);
-                        mWordViewModel.deleteTaskData(myTaskData);
-                    }
-                }).attachToRecyclerView(listDay);
-    }
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onStart() {
+        super.onStart();
+        taskDayAdapter.notifyDataSetChanged();
+    }
 }

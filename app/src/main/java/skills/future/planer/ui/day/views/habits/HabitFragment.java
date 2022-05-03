@@ -1,23 +1,33 @@
 package skills.future.planer.ui.day.views.habits;
 
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import skills.future.planer.databinding.HabitFragmentBinding;
+import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
+import skills.future.planer.R;
+import skills.future.planer.databinding.FragmentHabitBinding;
+import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 
 public class HabitFragment extends Fragment {
 
     private HabitViewModel habitViewModel;
-    private HabitFragmentBinding binding;
+    private FragmentHabitBinding binding;
+    private HabitTotalAdapter habitTotalAdapter;
+    private RecyclerView habitList;
+    private CircularProgressIndicator circularProgressIndicator;
 
     public static HabitFragment newInstance() {
         return new HabitFragment();
@@ -26,7 +36,27 @@ public class HabitFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
-        binding = HabitFragmentBinding.inflate(inflater, container, false);
+        binding = FragmentHabitBinding.inflate(inflater, container, false);
+        circularProgressIndicator = binding.circularProgressIndicator;
+
+        habitList = binding.habitList;
+        habitTotalAdapter = new HabitTotalAdapter(this.getContext());
+        habitList.setAdapter(habitTotalAdapter);
+        habitList.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
+        AnimateView.singleAnimation(binding.circularProgressIndicator, getContext(), R.anim.scalezoom2);
+
+        circularProgressIndicator.setProgress(40.0f, 100.0f);
+        circularProgressIndicator.animate();
+        circularProgressIndicator.setProgressTextAdapter(new TextAdapter());
+
+        if (circularProgressIndicator.getProgress() <= 40)
+            circularProgressIndicator.setProgressColor(ContextCompat.getColor(getContext(), R.color.bad));
+        else if (circularProgressIndicator.getProgress() <= 75)
+            circularProgressIndicator.setProgressColor(ContextCompat.getColor(getContext(), R.color.mid));
+        else
+            circularProgressIndicator.setProgressColor(ContextCompat.getColor(getContext(), R.color.good));
+
         View root = binding.getRoot();
         return root;
     }
@@ -36,5 +66,4 @@ public class HabitFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

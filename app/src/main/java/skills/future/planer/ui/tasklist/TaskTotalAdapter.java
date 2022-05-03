@@ -1,14 +1,21 @@
 package skills.future.planer.ui.tasklist;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -35,11 +43,13 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private static final int LAYOUT_SMALL = 0;
     private static final int LAYOUT_BIG = 1;
     private final AtomicInteger positionToChange = new AtomicInteger(-1);
+    private final TaskDataViewModel mTaskViewModel;
 
 
-    public TaskTotalAdapter(Context context) {
+    public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
+        this.mTaskViewModel = mTaskViewModel;
     }
 
     @NonNull
@@ -78,6 +88,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
         createListenerToExtendView(holder);
         createListenerToEditButton(holder, position);
+        createListenerToTrashButton(holder, position);
     }
 
     /**
@@ -94,7 +105,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
                 positionToChange.set(holder.getAdapterPosition());
                 this.notifyItemChanged(holder.getAdapterPosition());
             } else {
-
                 int adapterPosition = holder.getAdapterPosition();
                 this.notifyItemChanged(positionAtomic);
 
@@ -113,10 +123,39 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
      * Creates listener to edit button which starts a TaskListCreatorFragment
      */
     protected void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
-        holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
-                Navigation.findNavController(holder.itemView)
-                        .navigate(TaskListFragmentDirections
-                                .navToEditTaskListCreatorFragment(fullTaskList.get(position).getTaskDataId())));
+        if (holder.itemView.findViewById(R.id.detailImageView) != null)
+            holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
+                    Navigation.findNavController(holder.itemView)
+                            .navigate(TaskListFragmentDirections
+                                    .navToEditTaskListCreatorFragment(fullTaskList.get(position).getTaskDataId())));
+    }
+
+    /**
+     * Creates listener to edit button which starts a TaskListCreatorFragment
+     */
+    protected void createListenerToTrashButton(@NonNull TaskDataViewHolder holder, int position) {
+        if (holder.itemView.findViewById(R.id.trashImageView) != null)
+            holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
+                Animation animation  = AnimationUtils.loadAnimation(context, R.anim.removetask);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        var task = fullTaskList.get(position);
+                        mTaskViewModel.deleteTaskData(task);
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                holder.itemView.startAnimation(animation);
+            });
     }
 
     @Override

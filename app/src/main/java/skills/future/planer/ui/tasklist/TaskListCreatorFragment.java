@@ -30,6 +30,7 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.month.MonthFragment;
 
 
 public class TaskListCreatorFragment extends Fragment {
@@ -59,6 +60,8 @@ public class TaskListCreatorFragment extends Fragment {
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
 
+        setStartingDateByGlobalDate();
+
         processFabColor();
 
         Long taskID = -1L;
@@ -66,6 +69,21 @@ public class TaskListCreatorFragment extends Fragment {
         saveBtnOnClickListenerSetter(taskID);
 
         return root;
+    }
+
+    /**
+     * Sets the date based on the global date
+     */
+    private void setStartingDateByGlobalDate() {
+        switchDate.setChecked(true);
+        int y = MonthFragment.getGlobalSelectedDate().getYear(),
+                m = MonthFragment.getGlobalSelectedDate().getMonth() - 1,
+                d = MonthFragment.getGlobalSelectedDate().getDay();
+        beginDayCalendar.set(y, m, d);
+        endingDayCalendar.set(y, m, d);
+
+        updateBeginDateEditText();
+        updateEndingDateEditText();
     }
 
     /**
@@ -358,5 +376,11 @@ public class TaskListCreatorFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        processFabColor();
     }
 }
