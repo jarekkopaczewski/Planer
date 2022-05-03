@@ -14,11 +14,11 @@
         android:layout_marginTop="18dp"
         android:layout_marginEnd="50dp"
         android:elevation="15dp"
-        android:src="@drawable/today_icon"
+        android:src="@drawable/today_icon_2"
         app:tint="@color/imageTintColor"
         app:layout_constraintEnd_toEndOf="@+id/monthCard"
         app:layout_constraintTop_toTopOf="@+id/monthCard"
-        app:srcCompat="@drawable/today_icon" />
+        app:srcCompat="@drawable/today_icon_2" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/monthCard"
