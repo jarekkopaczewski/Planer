@@ -26,7 +26,6 @@ public class MatrixModelView extends ViewModel {
         for (int i = 0; i < 4; i++) {
             try {
                 int finalI = i;
-
                 taskDataViewModels.get(i)
                         .getCategorizedTaskDataFromDay(i, dateInLong)
                         .observe(viewLifecycleOwner, taskData -> {

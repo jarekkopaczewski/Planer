@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -33,6 +34,7 @@ import skills.future.planer.ui.AnimateView;
  */
 public class MonthFragment extends Fragment {
 
+    private static CalendarDay globalSelectedDate = null;
     /**
      * Calendar widget
      */
@@ -64,6 +66,7 @@ public class MonthFragment extends Fragment {
     private final EventDecorator eventDecoratorTwo = new EventDecorator(twoDot, 2);
     private final EventDecorator eventDecoratorThree = new EventDecorator(threeDot, 3);
     private final EventDecorator eventDecoratorFour = new EventDecorator(fourDot, 4);
+    private ImageView todayIcon;
 
     /**
      * View creation method.
@@ -74,18 +77,23 @@ public class MonthFragment extends Fragment {
 
         binding = FragmentMonthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        materialCalendarView = binding.calendarView;
+        
+        materialCalendarView = binding.calendar;
+        todayIcon = binding.todayIconMonth;
+
         AnimateView.singleAnimation(binding.monthCard, getContext(), R.anim.scalezoom);
+
 
         //setting current day as selected
         materialCalendarView.setDateSelected(CalendarDay.today(), true);
         mWordViewModel = ViewModelProviders.of(this).get(TaskDataViewModel.class);
 
-        CalendarDay today = CalendarDay.today();
-        createListsWithDotsByTaskNumber(today);
-
-        materialCalendarView.setOnMonthChangedListener((widget, date) -> createListsWithDotsByTaskNumber(date));
-
+        if (globalSelectedDate == null) {
+            CalendarDay today = CalendarDay.today();
+            globalSelectedDate = today;
+            createListsWithDotsByTaskNumber(today);
+        }
+        createCalendarListeners();
 
         requireActivity().runOnUiThread(() -> {
             materialCalendarView.addDecorator(eventDecoratorOne);
@@ -95,7 +103,36 @@ public class MonthFragment extends Fragment {
         });
 
         addDecoratorForDecoratingCurrentDate();
+        dateJumperToday();
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setDateMarker(globalSelectedDate);
+    }
+
+    private void setDateMarker(CalendarDay dateMarker) {
+        materialCalendarView.setCurrentDate(dateMarker, true);
+        materialCalendarView.setDateSelected(materialCalendarView.getSelectedDate(), false);
+        materialCalendarView.setDateSelected(dateMarker, true);
+    }
+
+    /**
+     * Sets calendar listeners
+     */
+    private void createCalendarListeners() {
+        materialCalendarView.setOnMonthChangedListener((widget, date) -> createListsWithDotsByTaskNumber(date));
+
+        materialCalendarView.setOnDateChangedListener((widget, date, selected) -> globalSelectedDate = date);
+
+        materialCalendarView.setOnDateLongClickListener((widget, date) -> {
+            materialCalendarView.setSelectedDate(date);
+            globalSelectedDate = date;
+            MainActivity.getBottomView().setSelectedItemId(R.id.nav_day);
+        });
     }
 
     /**
@@ -150,6 +187,7 @@ public class MonthFragment extends Fragment {
                     dateNextMonth.getMonth(),
                     dateNextMonth.lengthOfMonth());
 
+
             int value;
 
             for (LocalDate i = firstDay; i.isBefore(lastDay); i = i.plusDays(1)) {
@@ -173,6 +211,25 @@ public class MonthFragment extends Fragment {
             requireActivity().runOnUiThread(() -> materialCalendarView.invalidateDecorators());
 
         });
+    }
+
+    /**
+     * Responsible for jump to today
+     */
+    private void dateJumperToday() {
+        todayIcon.setOnClickListener(v -> {
+            CalendarDay today = CalendarDay.today();
+            MonthFragment.setGlobalSelectedDate(today);
+            setDateMarker(globalSelectedDate);
+        });
+    }
+
+    public static CalendarDay getGlobalSelectedDate() {
+        return globalSelectedDate;
+    }
+
+    public static void setGlobalSelectedDate(CalendarDay globalSelectedDate) {
+        MonthFragment.globalSelectedDate = globalSelectedDate;
     }
 
     /**

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +22,6 @@ import java.time.ZoneId;
 import java.util.Calendar;
 
 import skills.future.planer.R;
-import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
@@ -32,6 +30,7 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.month.MonthFragment;
 
 
 public class TaskListCreatorFragment extends Fragment {
@@ -44,14 +43,11 @@ public class TaskListCreatorFragment extends Fragment {
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingDay, beginDay;
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
-    private ActivityMainBinding binding2;
-    private ImageView menuButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
-        binding2 = ActivityMainBinding.inflate(getLayoutInflater());
         View root = binding.getRoot();
 
         createEditDateFields();
@@ -64,6 +60,8 @@ public class TaskListCreatorFragment extends Fragment {
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
 
+        setStartingDateByGlobalDate();
+
         processFabColor();
 
         Integer taskID = -1;
@@ -71,6 +69,21 @@ public class TaskListCreatorFragment extends Fragment {
         saveBtnOnClickListenerSetter(taskID);
 
         return root;
+    }
+
+    /**
+     * Sets the date based on the global date
+     */
+    private void setStartingDateByGlobalDate() {
+        switchDate.setChecked(true);
+        int y = MonthFragment.getGlobalSelectedDate().getYear(),
+                m = MonthFragment.getGlobalSelectedDate().getMonth() - 1,
+                d = MonthFragment.getGlobalSelectedDate().getDay();
+        beginDayCalendar.set(y, m, d);
+        endingDayCalendar.set(y, m, d);
+
+        updateBeginDateEditText();
+        updateEndingDateEditText();
     }
 
     /**

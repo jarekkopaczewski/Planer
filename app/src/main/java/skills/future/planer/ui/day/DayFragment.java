@@ -4,58 +4,64 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
-import org.threeten.bp.LocalDate;
-
 import lombok.Getter;
+import skills.future.planer.MainActivity;
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentDayBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
+import skills.future.planer.ui.day.views.habits.HabitViewModel;
 import skills.future.planer.ui.day.views.matrix.MatrixModelView;
+import skills.future.planer.ui.month.MonthFragment;
 import skills.future.planer.ui.slideshow.SlideshowViewModel;
+
 
 @Getter
 public class DayFragment extends Fragment {
 
     private DayViewModel dayViewModel;
     private DayTaskListViewModel dayTaskListViewModel;
+    private HabitViewModel habitViewModel;
     private MatrixModelView matrixModelView;
     private FragmentDayBinding binding;
     private MyPagerAdapter myPagerAdapter;
     private MaterialCalendarView calendarView;
-    private FloatingActionButton fabDay;
-    private TextView dayNumberView;
     private ViewPager vpPager;
+    private ImageView todayIcon;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         dayViewModel = new ViewModelProvider(this).get(DayViewModel.class);
         dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
         matrixModelView = new ViewModelProvider(this).get(MatrixModelView.class);
+        habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
 
         binding = FragmentDayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         bindingElements();
 
-        calendarView.setSelectedDate(LocalDate.now());
+        calendarView.setSelectedDate(MonthFragment.getGlobalSelectedDate());
 
         createViewPager(container);
 
         setListenerForCreateTask();
-        createPagerListener();
-        dateJumper();
         updateDayViewComponents();
+        dateJumperToday();
 
+        createPagerListener();
+
+        setLongListenerToMonthFragment();
         return root;
     }
 
@@ -63,10 +69,9 @@ public class DayFragment extends Fragment {
      * Binds components of view
      */
     private void bindingElements() {
-        calendarView = binding.calendarView;
-        fabDay = binding.dayFab;
-        dayNumberView = binding.dayNumber;
+        calendarView = binding.calendarPagerDay;
         vpPager = binding.dayViewPager;
+        todayIcon = binding.todayIconDay;
     }
 
     /**
@@ -92,13 +97,10 @@ public class DayFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        var selectedDay = calendarView.getSelectedDate();
-        if (dayViewModel.checkIsTaskListView(vpPager) && selectedDay != null) {
-            dayViewModel.checkDateIsToday(selectedDay, fabDay, dayNumberView);
-            dayTaskListViewModel.updateDate(selectedDay);
-        }
-        if (dayViewModel.checkIsMatrixView(vpPager) && selectedDay != null)
-            matrixModelView.setUpModels(selectedDay);
+
+        CalendarDay selectedDay = MonthFragment.getGlobalSelectedDate();
+        checkToUpdateComponents(selectedDay);
+        dayViewModel.returnToDate(calendarView, selectedDay);
     }
 
     /**
@@ -112,13 +114,7 @@ public class DayFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                dayViewModel.checkPagerChange(position,
-                        vpPager,
-                        calendarView.getSelectedDate(),
-                        fabDay,
-                        dayNumberView,
-                        matrixModelView,
-                        dayTaskListViewModel);
+                checkToUpdateComponents(MonthFragment.getGlobalSelectedDate());
             }
 
             @Override
@@ -128,32 +124,48 @@ public class DayFragment extends Fragment {
     }
 
     /**
-     * Responsible for jump to today
+     * Checks which page is needed to refresh
      */
-    private void dateJumper() {
-        dayNumberView.setText(String.valueOf(dayViewModel.getToday().getValue().getDay()));
-        fabDay.setOnClickListener(v -> {
-            dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);
-            dayTaskListViewModel.updateDate(dayViewModel.getToday().getValue());
-        });
-        dayViewModel.returnToToday(calendarView, fabDay, dayNumberView);
+    private void checkToUpdateComponents(CalendarDay selectedDay) {
+        if (dayViewModel.checkIsTaskListView(vpPager)) {
+            if (DayTaskListViewModel.getViewLifecycleOwner() != null)
+                dayTaskListViewModel.updateDate(selectedDay);
+        } else if (dayViewModel.checkIsMatrixView(vpPager))
+            matrixModelView.setUpModels(selectedDay);
+        else if (dayViewModel.checkIsHabitsView(vpPager))
+            // TODO podczepić nawyki
+            habitViewModel.setUpModels(selectedDay);
     }
 
     /**
-     * Checks to change visibility of the fab button
-     * Checks to update Matrix view
-     * Checks to update TaskList view
+     * Responsible for jump to today
+     */
+    private void dateJumperToday() {
+        todayIcon.setOnClickListener(v -> {
+            CalendarDay today = CalendarDay.today();
+            MonthFragment.setGlobalSelectedDate(today);
+            dayViewModel.returnToDate(calendarView, today);
+            checkToUpdateComponents(today);
+        });
+    }
+
+    /**
+     * Checks to update page in view pager when date is changed
      */
     private void updateDayViewComponents() {
         calendarView.setOnDateChangedListener((widget, date, selected) -> {
-            if (dayViewModel.checkIsTaskListView(vpPager)) {
-                dayViewModel.checkDateIsToday(date,
-                        fabDay,
-                        dayNumberView);
-                dayTaskListViewModel.updateDate(date);
-            }
-            if (dayViewModel.checkIsMatrixView(vpPager))
-                matrixModelView.setUpModels(date);
+            MonthFragment.setGlobalSelectedDate(date);
+            checkToUpdateComponents(date);
+        });
+    }
+
+    /**
+     * Sets listener which navigate to month fragment
+     */
+    private void setLongListenerToMonthFragment() {
+        calendarView.setOnDateLongClickListener((widget, date) -> {
+            MonthFragment.setGlobalSelectedDate(date);
+            MainActivity.getBottomView().setSelectedItemId(R.id.nav_month);
         });
     }
 

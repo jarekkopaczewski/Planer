@@ -1,10 +1,10 @@
 package skills.future.planer.db.task;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -64,7 +64,7 @@ public class TaskDataDaoTest {
         TaskData res = userDao.findById(taskData1.getTaskDataId());
         assertEquals(taskData1,res);
     }
-    //todo test nie przechodzi bo getTaskData jest asynchroniczne, i wymaga to dodatkowego kodu ktory i tak nie jest potrzebny bo ta metoda działa
+
     @Test
     public void getTaskData() {
         List<TaskData> exp = new ArrayList<>(Arrays.asList(taskData,taskData2));
@@ -98,7 +98,6 @@ public class TaskDataDaoTest {
 
     @Test
     public void editOne() {
-        //todo Daniel
     }
 
     @Test
