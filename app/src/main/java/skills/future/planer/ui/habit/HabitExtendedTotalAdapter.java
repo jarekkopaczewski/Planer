@@ -1,10 +1,14 @@
 package skills.future.planer.ui.habit;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,12 +43,47 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         View itemView;
         itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
+        ImageView editButton = itemView.findViewById(R.id.editImageHabit);
 
         itemView.setOnClickListener(e->{
             AnimateView.animateInOut(itemView, context);
         });
 
-        AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
+        // animation
+        AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabit), context, R.anim.scalezoom2);
+        AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
+        AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
+
+        AnimateView.singleAnimation(itemView.findViewById(R.id.sundayChip), context, R.anim.scalezoom2);
+        AnimateView.singleAnimation(itemView.findViewById(R.id.saturdayChip), context, R.anim.scalezoom2);
+        AnimateView.singleAnimation(itemView.findViewById(R.id.fridChip), context, R.anim.scalezoom2);
+        AnimateView.singleAnimation(itemView.findViewById(R.id.thursChip), context, R.anim.scalezoom2);
+        AnimateView.singleAnimation(itemView.findViewById(R.id.wednChip), context, R.anim.scalezoom2);
+        AnimateView.singleAnimation(itemView.findViewById(R.id.tueChip), context, R.anim.scalezoom2);
+        AnimateView.singleAnimation(itemView.findViewById(R.id.mondayChip), context, R.anim.scalezoom2);
+
+        editButton.setOnClickListener(e->{
+            AnimateView.animateInOut(editButton, context);
+            context.startActivity(new Intent(context, HabitCreatorActivity.class));
+        });
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("Confirm deletion");
+        builder.setMessage("Are you sure?");
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            //TODO delete habit from database
+            dialog.dismiss();
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        AlertDialog alert = builder.create();
+        itemView.findViewById(R.id.trashImageViewHabit).setOnClickListener(e->alert.show());
+
         return itemView;
     }
 

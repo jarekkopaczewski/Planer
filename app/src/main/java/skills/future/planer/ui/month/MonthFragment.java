@@ -27,6 +27,7 @@ import skills.future.planer.MainActivity;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentMonthBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
+import skills.future.planer.ui.AnimateView;
 
 /**
  * MonthFragment represents a Month fragment.
@@ -76,9 +77,11 @@ public class MonthFragment extends Fragment {
 
         binding = FragmentMonthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        
         materialCalendarView = binding.calendar;
         todayIcon = binding.todayIconMonth;
+
+        AnimateView.singleAnimation(binding.monthCard, getContext(), R.anim.scalezoom);
 
 
         //setting current day as selected
@@ -237,6 +240,4 @@ public class MonthFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
-
 }

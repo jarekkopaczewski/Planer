@@ -1,5 +1,6 @@
 package skills.future.planer.ui.day.views.habits;
 
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -48,6 +49,13 @@ public class HabitFragment extends Fragment {
         circularProgressIndicator.setProgress(40.0f, 100.0f);
         circularProgressIndicator.animate();
         circularProgressIndicator.setProgressTextAdapter(new TextAdapter());
+
+        if (circularProgressIndicator.getProgress() <= 40)
+            circularProgressIndicator.setProgressColor(ContextCompat.getColor(getContext(), R.color.bad));
+        else if (circularProgressIndicator.getProgress() <= 75)
+            circularProgressIndicator.setProgressColor(ContextCompat.getColor(getContext(), R.color.mid));
+        else
+            circularProgressIndicator.setProgressColor(ContextCompat.getColor(getContext(), R.color.good));
 
         View root = binding.getRoot();
         return root;

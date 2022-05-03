@@ -2,7 +2,12 @@
 <resources>
     <array name="temp_array">
         <item>21 dni</item>
-        <item>48 dni</item>
-        <item>96 dni</item>
+        <item>90 dni</item>
+        <item>120 dni</item>
+    </array>
+    <array name="goals">
+        <item>brak</item>
+        <item>Awansować</item>
+        <item>Nauczyć się programować</item>
     </array>
 </resources>

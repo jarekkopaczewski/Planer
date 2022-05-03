@@ -61,6 +61,7 @@ public class TaskListFragment extends Fragment {
             TaskData result = bundle.getParcelable("bundleKey");
             mWordViewModel.insert(result);
         });
+
         binding.fab.setOnClickListener(view -> {
             //turn off filters
             binding.chipGroup.clearCheck();

@@ -30,9 +30,9 @@ import skills.future.planer.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static BottomNavigationView bottomView;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    private static BottomNavigationView bottomView;
     private NavigationView navigationView;
 
     /**
