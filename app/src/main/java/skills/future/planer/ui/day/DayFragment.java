@@ -73,10 +73,10 @@ public class DayFragment extends Fragment {
      * Creates view pager
      */
     private void createViewPager(ViewGroup container) {
-        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
-        myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
-        vpPager.setAdapter(myPagerAdapter);
-        vpPager.setCurrentItem(2);
+            myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
+            myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
+            vpPager.setAdapter(myPagerAdapter);
+            vpPager.setCurrentItem(2);
     }
 
     /**

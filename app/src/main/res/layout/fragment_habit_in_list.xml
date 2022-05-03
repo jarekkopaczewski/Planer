@@ -28,6 +28,24 @@
             android:layout_height="match_parent"
             android:background="@color/foreground">
 
+            <ImageView
+                android:id="@+id/doneImageViewHabit"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginStart="-5dp"
+                android:layout_marginEnd="-5dp"
+                android:alpha="0.5"
+                android:backgroundTint="@color/imageTintColor"
+                android:scaleType="fitXY"
+                android:translationZ="2dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/line"
+                app:tint="@color/imageTintColor" />
+
             <TextView
                 android:id="@+id/habitTitleTextView"
                 android:layout_width="0dp"

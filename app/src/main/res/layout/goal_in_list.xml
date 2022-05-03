@@ -3,17 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView2"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="35dp"
+        android:background="@color/background"
         android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/circularProgressIndicatorGoal"
+        android:paddingBottom="5dp"
+        android:translationZ="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goalTitleText">
+        app:layout_constraintTop_toBottomOf="@+id/goalTitleText"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,17 +32,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:background="@color/background"
+                android:justificationMode="inter_word"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:text="@string/large_text"
                 android:textAlignment="center"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <TextView
         android:id="@+id/goalTitleText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
         android:autofillHints="Dodaj tytuł"
         android:background="@null"
         android:fontFamily="@font/signika_regular"
@@ -48,16 +60,43 @@
         android:text="Awansować w pracy"
         android:textColor="@color/textColor"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:translationZ="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorGoal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/goalTitleText2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="-10dp"
+        android:autofillHints="Dodaj tytuł"
+        android:background="@null"
+        android:fontFamily="@font/signika_regular"
+        android:gravity="center_vertical"
+        android:hint="@string/EditTextTitleHintt"
+        android:lines="2"
+        android:minHeight="48dp"
+        android:scrollHorizontally="false"
+        android:text="Nawyki i zadania:"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorGoal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+        app:layout_constraintVertical_bias="0.0" />
 
     <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
         android:id="@+id/circularProgressIndicatorGoal"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:translationZ="2dp"
         app:direction="clockwise"
         app:drawDot="false"
         app:enableProgressAnimation="true"
@@ -65,13 +104,57 @@
         app:gradientType="linear"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:progressBackgroundColor="@color/progress_background"
         app:progressCap="round"
         app:progressColor="@color/second_color_30"
         app:progressStrokeWidth="10dp"
         app:textColor="@color/imageTintColor"
-        app:textSize="20sp" />
+        app:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:alpha="0.2"
+        android:backgroundTint="@color/imageTintColor_2"
+        android:rotation="180"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nestedScrollView2"
+        app:srcCompat="@drawable/shadow" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/goalsList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goalTitleText2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginStart="-5dp"
+        android:layout_marginTop="-50dp"
+        android:layout_marginEnd="-5dp"
+        android:background="@color/background"
+        android:translationZ="-1dp"
+        app:cardBackgroundColor="@color/background"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/nestedScrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

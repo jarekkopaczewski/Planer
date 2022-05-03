@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.Random;
 
@@ -24,26 +25,14 @@ public class HabitExtendedViewHolder extends RecyclerView.ViewHolder {
     private final CircularProgressIndicator circularProgressIndicatorHabit;
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
-    private final Chip monday;
-    private final Chip tuesday;
-    private final Chip wednesday;
-    private final Chip thursday;
-    private final Chip friday;
-    private final Chip saturday;
-    private final Chip sunday;
+    private final ChipGroup chipGroup;
 
     public HabitExtendedViewHolder(View itemView, Context context) {
         super(itemView);
         title = itemView.findViewById(R.id.habitTitleTextViewExtended);
         circularProgressIndicatorHabit = itemView.findViewById(R.id.circularProgressIndicatorHabit);
         circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitDay);
-        monday = itemView.findViewById(R.id.mondayChip);
-        tuesday = itemView.findViewById(R.id.tueChip);
-        wednesday = itemView.findViewById(R.id.wednChip);
-        thursday = itemView.findViewById(R.id.thursChip);
-        friday = itemView.findViewById(R.id.fridChip);
-        saturday = itemView.findViewById(R.id.saturdayChip);
-        sunday = itemView.findViewById(R.id.sundayChip);
+        chipGroup = itemView.findViewById(R.id.chipGroupWeek);
         this.context = context;
     }
 
@@ -52,6 +41,10 @@ public class HabitExtendedViewHolder extends RecyclerView.ViewHolder {
         this.title.setText(title);
 
         Random random = new Random();
+
+        for( int i = 0; i < random.nextInt(7); i++)
+            chipGroup.removeViewAt(random.nextInt(7-i));
+
 
         circularProgressIndicatorHabit.setMaxProgress(100);
         circularProgressIndicatorHabit.setCurrentProgress(random.nextInt(99));

@@ -61,7 +61,7 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/chipGroup"
+                        android:id="@+id/chipGroupWeek"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -76,13 +76,14 @@
                             android:checked="true"
                             android:text="Pn"
                             app:checkedIconEnabled="false"
-                            app:chipStartPadding="2dp" />
+                            app:closeIconEndPadding="0dp"
+                            app:closeIconStartPadding="0dp"
+                            app:textEndPadding="2dp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/tueChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="-5dp"
                             android:checkable="true"
                             android:checked="true"
                             android:text="Wt"
@@ -94,7 +95,6 @@
                             android:id="@+id/wednChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="-5dp"
                             android:checkable="true"
                             android:checked="true"
                             android:text="Śr"
@@ -104,7 +104,6 @@
                             android:id="@+id/thursChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="-5dp"
                             android:checkable="true"
                             android:checked="true"
                             android:text="Cz"
@@ -114,7 +113,6 @@
                             android:id="@+id/fridChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="-5dp"
                             android:checkable="true"
                             android:checked="true"
                             android:text="Pt"
@@ -124,7 +122,6 @@
                             android:id="@+id/saturdayChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="-5dp"
                             android:checkable="true"
                             android:checked="true"
                             android:text="So"
@@ -134,7 +131,6 @@
                             android:id="@+id/sundayChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="-5dp"
                             android:checkable="true"
                             android:checked="true"
                             android:text="Nd"
