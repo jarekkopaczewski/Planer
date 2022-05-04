@@ -70,6 +70,7 @@ public class TaskDataViewHolder extends ICustomViewHolder {
 
         checkBox.setOnClickListener(e -> {
             taskData.setStatus(checkBox.isChecked());
+            //todo zamioenić ma TaskDataModelView
             var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
             taskDataDao.editOne(taskData);
         });
