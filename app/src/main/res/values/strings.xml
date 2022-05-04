@@ -59,6 +59,8 @@
     <string name="important">Ważne</string>
     <string name="not_urgent">Niepilne</string>
     <string name="not_important">Nieważne</string>
+    <string name="doneTask">Zrobione</string>
+    <string name="notDoneTask">Niezrobione</string>
     <string name="habits">Nawyki</string>
     <string name="habitsTitle">Kreator nawyków</string>
     <string name="habit_error_1">Tytuł nie może być pusty!</string>

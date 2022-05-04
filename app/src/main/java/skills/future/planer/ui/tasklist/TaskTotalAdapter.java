@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
@@ -199,6 +201,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         TaskCategory category = null;
         Priorities priorities = null;
         TimePriority timePriority = null;
+        int status = -1;
 
         //checking which filter is checked
         for (String filter : filters) {
@@ -220,10 +223,19 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             if (filter.equals(Priorities.NotImportant.toString())) {
                 priorities = Priorities.NotImportant;
             }
+            if (filter.equals("NotDone")) {
+                status=0;
+            }
+            if (filter.equals("Done")) {
+                status=1;
+            }
+
         }
 
         //list of filtered tasks
         List<TaskData> list = new ArrayList<>();
+        List<TaskData> list2 = new ArrayList<>();
+
 
         //checks which query to execute
         if (category == null && priorities == null && timePriority != null) {
@@ -251,9 +263,17 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             list = fullTaskList;
         }
 
-        filteredTaskList = list;
-        notifyDataSetChanged();
+       // list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities, timePriority, category, status);
 
+        if(status!=-1){
+            list2=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(status);
+            ArrayList list3 = (ArrayList) list.stream()
+                    .distinct()
+                    .filter(list2::contains)
+                    .collect(Collectors.toList());
+            filteredTaskList=list3;
+        }else {filteredTaskList = list;}
+        notifyDataSetChanged();
     }
 
     /**
