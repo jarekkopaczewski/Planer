@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.ActivityHabitCreatorBinding;
+import skills.future.planer.ui.month.MonthFragment;
 
 
 public class HabitCreatorActivity extends AppCompatActivity {
@@ -47,6 +48,9 @@ public class HabitCreatorActivity extends AppCompatActivity {
         daysChipGroupTwo = binding.daysChipGroupTwo;
         saveCreatorButtonHabit = binding.saveCreatorButtonHabit;
         editTextTitle = binding.editTextTitle;
+
+        // set start date
+        calendar2.set(MonthFragment.getGlobalSelectedDate().getYear(), MonthFragment.getGlobalSelectedDate().getMonth() - 1, MonthFragment.getGlobalSelectedDate().getDay());
 
         // set current time & date
         timeEditText.setText(formatter.format(calendar.getTime()));
