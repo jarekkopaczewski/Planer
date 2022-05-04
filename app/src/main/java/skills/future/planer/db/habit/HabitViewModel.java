@@ -6,7 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import java.util.List;
+
+import skills.future.planer.db.task.TaskData;
+import skills.future.planer.tools.DatesParser;
 
 public class HabitViewModel extends AndroidViewModel {
     private final HabitRepository habitRepository;
@@ -23,11 +28,15 @@ public class HabitViewModel extends AndroidViewModel {
         return habitRepository.getAllHabits();
     }
 
+    public LiveData<List<HabitData>> getAllHabitDataFromDay(CalendarDay date) {
+        return habitRepository.getAllHabitDataFromDay(DatesParser.toMilliseconds(date));
+    }
+
     /**
      * Method insert habit to database
      * @param habitData which will be inserted
      */
-    void insert(HabitData habitData){
+    public void insert(HabitData habitData){
         habitRepository.insert(habitData);
     }
 
@@ -35,7 +44,7 @@ public class HabitViewModel extends AndroidViewModel {
      * Method edit habit in database
      * @param habitData which will be updated
      */
-    void edit(HabitData habitData){
+    public void edit(HabitData habitData){
         habitRepository.edit(habitData);
     }
 
@@ -43,7 +52,7 @@ public class HabitViewModel extends AndroidViewModel {
      * Method delete habit from database
      * @param habitData which will be deleted
      */
-    void delete(HabitData habitData){
+    public void delete(HabitData habitData){
         habitRepository.delete(habitData);
     }
 }

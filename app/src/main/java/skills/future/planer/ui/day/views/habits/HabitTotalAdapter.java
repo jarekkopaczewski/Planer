@@ -1,5 +1,6 @@
 package skills.future.planer.ui.day.views.habits;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,23 +16,33 @@ import java.util.Arrays;
 import java.util.List;
 
 import skills.future.planer.R;
+import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.ui.AnimateView;
 
 public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
-    private List<String> habitsList = new ArrayList<>(Arrays.asList("Picie wody rano", "Czytanie książki", "Biegnie", "Jedzenie w domu", "Nie palić"));
+    private List<HabitData> habitsList = new ArrayList<>();
+    private final HabitViewModel habitViewModel;
 
-    public HabitTotalAdapter(Context context) {
+    public HabitTotalAdapter(Context context, HabitViewModel habitViewModel) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
+        this.habitViewModel = habitViewModel;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setHabitsList(List<HabitData> habitsList) {
+        this.habitsList = habitsList;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public HabitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HabitViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list), context);
+        return new HabitViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list), habitViewModel);
     }
 
     @NonNull
@@ -43,13 +54,13 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
         CheckBox checkBox = itemView.findViewById(R.id.habitBoxTask);
 
         // click on view change checkbox state
-        itemView.setOnClickListener(e->{
+        itemView.setOnClickListener(e -> {
             AnimateView.animateInOut(itemView, context);
             checkBox.setChecked(!checkBox.isChecked());
         });
 
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if(checkBox.isChecked())
+            if (checkBox.isChecked())
                 itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.VISIBLE);
             else
                 itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.INVISIBLE);
@@ -61,7 +72,7 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull HabitViewHolder holder, int position) {
         if (habitsList != null) {
-            String current = habitsList.get(position);
+            var current = habitsList.get(position);
             holder.setEveryThing(current);
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
@@ -73,6 +84,7 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
 
     /**
      * Gets number of habits in list
+     *
      * @return
      */
     @Override
@@ -81,4 +93,5 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
             return habitsList.size();
         else return 0;
     }
+
 }

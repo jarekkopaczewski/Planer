@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,12 +18,14 @@ import android.view.ViewGroup;
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentHabitBinding;
+import skills.future.planer.db.habit.HabitViewModel;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 
 public class HabitFragment extends Fragment {
 
+    private HabitDayViewModel habitDayViewModel;
     private HabitViewModel habitViewModel;
     private FragmentHabitBinding binding;
     private HabitTotalAdapter habitTotalAdapter;
@@ -35,12 +38,17 @@ public class HabitFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
+        habitDayViewModel = new ViewModelProvider(this).get(HabitDayViewModel.class);
+        habitViewModel = ViewModelProviders.of(this).get(HabitViewModel.class);
+        habitDayViewModel.setHabitViewModel(habitViewModel);
+
         binding = FragmentHabitBinding.inflate(inflater, container, false);
         circularProgressIndicator = binding.circularProgressIndicator;
 
         habitList = binding.habitList;
-        habitTotalAdapter = new HabitTotalAdapter(this.getContext());
+        habitTotalAdapter = new HabitTotalAdapter(this.getContext(),habitViewModel);
+        habitDayViewModel.setHabitTotalAdapter(habitTotalAdapter);
+        habitDayViewModel.setViewLifecycleOwner(this.getViewLifecycleOwner());
         habitList.setAdapter(habitTotalAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(this.getContext()));
 

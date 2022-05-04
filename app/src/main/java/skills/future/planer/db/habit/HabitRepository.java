@@ -28,6 +28,13 @@ public class HabitRepository {
     }
 
     /**
+     * @return references to the habit list based on day
+     */
+    LiveData<List<HabitData>> getAllHabitDataFromDay(long date) {
+        return habitDao.getTaskDataByDate(date);
+    }
+
+    /**
      * Method insert habit to database
      * @param habitData which will be inserted
      */
