@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -69,24 +70,56 @@ public class HabitData {
      * @return list of calendar days where habit was done
      */
     public List<CalendarDay> getAllDaysWhereHabitsWasDone() {
-        //todo nie licz dni tygodnia nie zaznaczonych w daysOfWeek
-        return null;
+        var dateIterator = DatesParser.toLocalDate(beginDay);
+        List<CalendarDay> result = new ArrayList<>();
+        for (int i = 0; i < habitDuration.getDaysNumber(); i++) {
+            if (dayChecking.charAt(i) == '1'&& isDayOfWeekChecked(dateIterator))
+                result.add(DatesParser.toCalendarDay(dateIterator));
+            dateIterator = dateIterator.plusDays(1);
+        }
+        return result;
     }
 
     /**
      * @return list of calendar days where habit was done
      */
     public int getNumberOfDaysWhereHabitsWasDone() {
-        //todo nie licz dni tygodnia nie zaznaczonych w daysOfWeek
-        return 0;
+        var dateIterator = DatesParser.toLocalDate(beginDay);
+        var result = 0;
+        for (int i = 0; i < habitDuration.getDaysNumber(); i++) {
+            if (dayChecking.charAt(i) == '1'&& isDayOfWeekChecked(dateIterator))
+                i++;
+            dateIterator = dateIterator.plusDays(1);
+        }
+        return result;
     }
 
     /**
      * @return list of calendar days where habit wasn't done
      */
     public int getNumberOfDaysWhereHabitsWasFailure() {
-        //todo nie licz dni tygodnia nie zaznaczonych w daysOfWeek
-        return 0;
+        var dateIterator = DatesParser.toLocalDate(beginDay);
+        var result = 0;
+        for (int i = 0; i < habitDuration.getDaysNumber(); i++) {
+            if (dayChecking.charAt(i) == '0'&& isDayOfWeekChecked(dateIterator))
+                i++;
+            dateIterator = dateIterator.plusDays(1);
+        }
+        return result;
+    }
+
+    private boolean isDayOfWeekChecked(LocalDate date){
+        StringBuilder myName = new StringBuilder(getDaysOfWeek());
+        return switch (date.getDayOfWeek()){
+            case MONDAY -> myName.charAt(0)=='1';
+            case TUESDAY -> myName.charAt(1)=='1';
+            case WEDNESDAY -> myName.charAt(2)=='1';
+            case THURSDAY -> myName.charAt(3)=='1';
+            case FRIDAY -> myName.charAt(4)=='1';
+            case SATURDAY -> myName.charAt(5)=='1';
+            case SUNDAY -> myName.charAt(6)=='1';
+        };
+
     }
 
     public CalendarDay getBeginCalendarDay() {

@@ -37,4 +37,8 @@ public class DatesParser {
         return DatesParser.toMilliseconds(LocalDate.of(calendarDay.getYear(),calendarDay.getMonth(),
                 calendarDay.getDay()));
     }
+
+    public static CalendarDay toCalendarDay(LocalDate localDate) {
+        return CalendarDay.from(localDate.getYear(),localDate.getMonth().getValue(),localDate.getDayOfMonth());
+    }
 }

@@ -1,6 +1,7 @@
 package skills.future.planer.db.habit;
 
 public enum HabitDuration {
+    UltraShort(21),
     Short(90),
     Long(120);
 

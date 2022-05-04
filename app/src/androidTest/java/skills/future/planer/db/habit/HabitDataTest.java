@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.generate;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import org.junit.Before;
@@ -16,6 +18,7 @@ import java.time.LocalDate;
 
 import skills.future.planer.db.DataBaseException;
 
+@RunWith(AndroidJUnit4.class)
 public class HabitDataTest {
     HabitData habit;
 
@@ -53,7 +56,6 @@ public class HabitDataTest {
         assertEquals(expected, actual);
     }
 
-
     @Test(expected = DataBaseException.class)
     public void checkChangingHabitStateNotSetDayChecking() throws DataBaseException {
         habit = new HabitData();
@@ -64,5 +66,22 @@ public class HabitDataTest {
     public void checkChangingHabitStateWrongDate() throws DataBaseException {
         habit = new HabitData();
         habit.setHabitDoneIn(CalendarDay.from(2022, 5, 1));
+    }
+
+    @Test
+    public void getAllDaysWhereHabitsWasDone() throws DataBaseException {
+        assertTrue(habit.getAllDaysWhereHabitsWasDone().isEmpty());
+        habit.setHabitDoneIn(CalendarDay.from(2022, 1, 1));
+        habit.setHabitDoneIn(CalendarDay.from(2022, 2, 1));
+        habit.setHabitDoneIn(CalendarDay.from(2022, 3, 31));
+        assertEquals(3, habit.getAllDaysWhereHabitsWasDone().size());
+    }
+
+    @Test
+    public void getNumberOfDaysWhereHabitsWasDone() {
+    }
+
+    @Test
+    public void getNumberOfDaysWhereHabitsWasFailure() {
     }
 }
