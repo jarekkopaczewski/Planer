@@ -16,6 +16,7 @@ import java.util.Random;
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
 import skills.future.planer.R;
+import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
@@ -40,8 +41,8 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public void setEveryThing(String title) {
-        this.title.setText(title);
+    public void setEveryThing(HabitData habitData) {
+        this.title.setText(habitData.getTitle());
 
         Random random = new Random();
 

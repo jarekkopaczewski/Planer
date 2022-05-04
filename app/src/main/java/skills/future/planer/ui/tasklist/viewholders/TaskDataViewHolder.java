@@ -55,15 +55,10 @@ public class TaskDataViewHolder extends ICustomViewHolder {
         setCheckBoxListener(taskData);
     }
 
-    @Override
-    public void setEveryThing(String title) {
-
-    }
-
     /**
      * Sets listener for done/not done checkBox
      *
-     * @param taskData
+     * @param taskData which will be updated
      */
     private void setCheckBoxListener(TaskData taskData) {
         checkBox.setChecked(taskData.getStatus());

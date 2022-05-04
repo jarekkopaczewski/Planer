@@ -24,7 +24,7 @@ public class HabitViewModel extends AndroidViewModel {
     /**
      * @return reference to list of all habits
      */
-    LiveData<List<HabitData>> getAllHabits() {
+    public LiveData<List<HabitData>> getAllHabits() {
         return habitRepository.getAllHabits();
     }
 
