@@ -13,13 +13,17 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.time.LocalDate;
+
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.tools.DatesParser;
 
 @Database(entities = {TaskData.class, HabitData.class}, exportSchema = false, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
@@ -39,7 +43,8 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (sInstance == null) {
                     Log.d(LOG_TAG, "Creating new database instance");
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, DB_NAME).fallbackToDestructiveMigration().allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
+                            AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
+                            .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
                 }
             }
         }
@@ -61,11 +66,13 @@ public abstract class AppDatabase extends RoomDatabase {
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final TaskDataDao mDao;
+        private final HabitDao habitDao;
         //String[] words = {"dolphin", "crocodile", "cobra"};
 
         PopulateDbAsync(AppDatabase db) {
             super();
             mDao = db.taskDataTabDao();
+            habitDao = db.habitDao();
         }
 
         @Override
@@ -73,35 +80,41 @@ public abstract class AppDatabase extends RoomDatabase {
             // Start the app with a clean database every time.
             // Not needed if you only populate the database
             // when it is first created
-//            mDao.deleteAll();
-//            CalendarDay day = CalendarDay.today();
-//            CalendarDay day2 = CalendarDay.from(2022, 4, 21);
-//            CalendarDay day3 = CalendarDay.from(2022, 4, 23);
-//            CalendarDay day4 = CalendarDay.from(2022, 4, 7);
-//            CalendarDay day5 = CalendarDay.from(2022, 4, 9);
-//            CalendarDay day6 = CalendarDay.from(2022, 4, 26);
-//            int counter = 1;
+            mDao.deleteAll();
+            habitDao.deleteAll();
+            CalendarDay day = CalendarDay.today();
+            CalendarDay day2 = CalendarDay.from(2022, 4, 21);
+            CalendarDay day3 = CalendarDay.from(2022, 4, 23);
+            CalendarDay day4 = CalendarDay.from(2022, 4, 7);
+            CalendarDay day5 = CalendarDay.from(2022, 4, 9);
+            CalendarDay day6 = CalendarDay.from(2022, 4, 26);
+            int counter = 1;
+            try {
+                habitDao.insert(new HabitData("test", "1111111", HabitDuration.Short, DatesParser.toLocalDate(day)));
+            } catch (DataBaseException e) {
+                e.printStackTrace();
+            }
 //
-//            for (int i = 0; i < 1; i++) {
-//                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day2, day3);
-//                mDao.insert(word);
-//                counter++;
-//            }
-//            for (int i = 0; i < 1; i++) {
-//                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie " + counter, "", day2, day3);
-//                mDao.insert(word);
-//                counter++;
-//            }
-//            for (int i = 0; i <= 1; i++) {
-//                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie " + counter, "", day4, day2);
-//                mDao.insert(word);
-//                counter++;
-//            }
-//            for (int i = 0; i <= 1; i++) {
-//                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie " + counter, "", day4, day5);
-//                mDao.insert(word);
-//                counter++;
-//            }
+            for (int i = 0; i < 1; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day2, day3);
+                mDao.insert(word);
+                counter++;
+            }
+            for (int i = 0; i < 1; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie " + counter, "", day2, day3);
+                mDao.insert(word);
+                counter++;
+            }
+            for (int i = 0; i <= 1; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie " + counter, "", day4, day2);
+                mDao.insert(word);
+                counter++;
+            }
+            for (int i = 0; i <= 1; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie " + counter, "", day4, day5);
+                mDao.insert(word);
+                counter++;
+            }
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
 //                mDao.insert(word);
