@@ -13,6 +13,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.util.Calendar;
+
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
@@ -89,8 +91,12 @@ public abstract class AppDatabase extends RoomDatabase {
             CalendarDay day6 = CalendarDay.from(2022, 4, 26);
             int counter = 1;
             try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR, 12);
+                calendar.set(Calendar.MONTH, 0);
                 for (int i = 0; i < 5; i++)
-                    habitDao.insert(new HabitData("test", "1110011", HabitDuration.Short, DatesParser.toLocalDate(day2)));
+                    habitDao.insert(new HabitData("test", "1110011",
+                            HabitDuration.Short, DatesParser.toLocalDate(day2), calendar));
             } catch (DataBaseException e) {
                 e.printStackTrace();
             }

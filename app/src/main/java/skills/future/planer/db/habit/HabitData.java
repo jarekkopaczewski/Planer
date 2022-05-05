@@ -14,6 +14,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -51,7 +52,7 @@ public class HabitData {
     @Setter(AccessLevel.PACKAGE)
     private String dayChecking;
     private Long foreignKeyToGoal;
-
+    private Long notificationTime;
 
     HabitData() {
         title = dayChecking = daysOfWeek = "";
@@ -61,13 +62,14 @@ public class HabitData {
 
     @Ignore
     public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
-                     LocalDate beginDay) throws DataBaseException {
+                     LocalDate beginDay, Calendar calendar) throws DataBaseException {
         this.title = title;
         setDaysOfWeek(daysOfWeek);
         this.habitDuration = habitDuration;
         this.beginDay = DatesParser.toMilliseconds(beginDay);
         this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
         dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
+        notificationTime = calendar.getTimeInMillis();
     }
 
     /**
@@ -144,6 +146,12 @@ public class HabitData {
 
     public CalendarDay getEndCalendarDay() {
         return endDay != 0 ? DatesParser.toCalendarDay(endDay) : null;
+    }
+
+    public Calendar getNotificationTimeCalendar() {
+        var cal = Calendar.getInstance();
+        cal.setTimeInMillis(notificationTime);
+        return cal;
     }
 
     /**

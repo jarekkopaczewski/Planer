@@ -1,7 +1,7 @@
 package skills.future.planer.db.habit;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.generate;
 
@@ -12,9 +12,9 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 
 import skills.future.planer.db.DataBaseException;
 
@@ -24,8 +24,11 @@ public class HabitDataTest {
 
     @Before
     public void setUp() throws DataBaseException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, 12);
+        calendar.set(Calendar.MONTH, 0);
         habit = new HabitData("test", "1111111", HabitDuration.Short,
-                LocalDate.of(2022, 1, 1));
+                LocalDate.of(2022, 1, 1), calendar);
     }
 
     @Test
@@ -75,13 +78,5 @@ public class HabitDataTest {
         habit.setHabitDoneIn(CalendarDay.from(2022, 2, 1));
         habit.setHabitDoneIn(CalendarDay.from(2022, 3, 31));
         assertEquals(3, habit.getAllDaysWhereHabitsWasDone().size());
-    }
-
-    @Test
-    public void getNumberOfDaysWhereHabitsWasDone() {
-    }
-
-    @Test
-    public void getNumberOfDaysWhereHabitsWasFailure() {
     }
 }
