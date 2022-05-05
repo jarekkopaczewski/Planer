@@ -57,6 +57,21 @@ public class TaskListFragment extends Fragment {
 
         listTotal = binding.listTotalView;
         listTotal.setAdapter(taskTotalAdapter);
+
+        //list of filters
+        filters = new ArrayList<>();
+        //filter on not done tasks on start
+        filters.add("NotDone");
+        binding.notDoneTask.setChecked(true);
+
+        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), listTotal -> {
+            try {
+                taskTotalAdapter.CategoryFilter(filters);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         //listTotal.setTextFilterEnabled(true);
 //        taskTotalAdapter.getFilter().filter("");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
@@ -69,20 +84,7 @@ public class TaskListFragment extends Fragment {
             mWordViewModel.insert(result);
         });
 
-        binding.notDoneTask.setChecked(true);
-//        //binding.notDoneTask.
-        binding.chipGroup.check(binding.notDoneTask.getId());
-        taskTotalAdapter.notifyDataSetChanged();
-      //  binding.notDoneTask.callOnClick();
-
-//        binding.notDoneTask.setChecked(false);
-//        binding.notDoneTask.setChecked(true);
-        //binding.chipGroup.
-
-
         binding.fab.setOnClickListener(view -> {
-            //turn off filters
-            binding.chipGroup.clearCheck();
             AnimateView.animateInOut(binding.fab, getContext());
             Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment(-1));
         });
@@ -150,7 +152,6 @@ public class TaskListFragment extends Fragment {
         binding.notDoneTask.setOnClickListener(view -> {
             if (binding.doneTask.isChecked())
                 binding.doneTask.setChecked(false);
-            System.out.println("2222222222222");
         });
 
         binding.doneTask.setOnClickListener(view -> {
@@ -166,11 +167,12 @@ public class TaskListFragment extends Fragment {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+
                 //list of checked chips ids
                 List<Integer> checked = binding.chipGroup.getCheckedChipIds();
 
-                //new list of filters
-                filters = new ArrayList<>();
+                //filters = new ArrayList<>();
+                filters.clear();
 
                 //getting chips ids
                 int work = binding.workChip.getId();
@@ -181,7 +183,6 @@ public class TaskListFragment extends Fragment {
                 int not_important = binding.notImportantChip.getId();
                 int notstatus = binding.notDoneTask.getId();
                 int status = binding.doneTask.getId();
-                System.out.println("1111111111111111111111");
 
                 //compare them with checked ids
                 for (Integer id : checked) {
@@ -206,53 +207,6 @@ public class TaskListFragment extends Fragment {
         };
 
         binding.chipGroup.setOnCheckedStateChangeListener(listener);
-
-            binding.notDoneTask.setChecked(true);
-            //binding.notDoneTask.
-            binding.chipGroup.check(binding.notDoneTask.getId());
-            listener.onCheckedChanged(binding.chipGroup, binding.chipGroup.getCheckedChipIds());
-        binding.chipGroup.setOnCheckedStateChangeListener(listener);
-
-
-        //listener.onCheckedChanged(binding.chipGroup, binding.chipGroup.getCheckedChipIds());
-
-//        binding.chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-//
-//            //list of checked chips ids
-//            List<Integer> checked = binding.chipGroup.getCheckedChipIds();
-//
-//            //new list of filters
-//            filters = new ArrayList<>();
-//
-//            //getting chips ids
-//            int work = binding.workChip.getId();
-//            int private_chip = binding.privateChip.getId();
-//            int urgent = binding.urgentChip.getId();
-//            int not_urgent = binding.notUrgentChip.getId();
-//            int important = binding.importantChip.getId();
-//            int not_important = binding.notImportantChip.getId();
-//            int notstatus = binding.notDoneTask.getId();
-//            int status = binding.doneTask.getId();
-//
-//            //compare them with checked ids
-//            for (Integer id : checked) {
-//                if (id.equals(work)) filters.add(TaskCategory.Work.toString());
-//                if (id.equals(private_chip)) filters.add(TaskCategory.Private.toString());
-//                if (id.equals(urgent)) filters.add(TimePriority.Urgent.toString());
-//                if (id.equals(not_urgent)) filters.add(TimePriority.NotUrgent.toString());
-//                if (id.equals(important)) filters.add(Priorities.Important.toString());
-//                if (id.equals(not_important)) filters.add(Priorities.NotImportant.toString());
-//                if (id.equals(notstatus)) filters.add("NotDone");
-//                if (id.equals(status)) filters.add("Done");
-//            }
-//
-//            //give list of filters to CategoryFilter
-//            try {
-//                taskTotalAdapter.CategoryFilter(filters);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        });
 
         return root;
     }

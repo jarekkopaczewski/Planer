@@ -136,6 +136,21 @@
                 tools:visibility="visible">
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/notDoneTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/notDoneTask"
+                    tools:text="@string/notDoneTask" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/doneTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/doneTask" />
+
+                <com.google.android.material.chip.Chip
                     android:id="@+id/workChip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -176,21 +191,6 @@
                     android:layout_height="wrap_content"
                     android:checkable="true"
                     android:text="@string/not_important" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/doneTask"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkable="true"
-                    android:text="@string/doneTask" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/notDoneTask"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkable="true"
-                    android:text="@string/notDoneTask"
-                    tools:text="@string/notDoneTask" />
 
             </com.google.android.material.chip.ChipGroup>
         </LinearLayout>

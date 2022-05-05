@@ -138,7 +138,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     protected void createListenerToTrashButton(@NonNull TaskDataViewHolder holder, int position) {
         if (holder.itemView.findViewById(R.id.trashImageView) != null)
             holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
-                Animation animation  = AnimationUtils.loadAnimation(context, R.anim.removetask);
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
                 animation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -224,17 +224,16 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
                 priorities = Priorities.NotImportant;
             }
             if (filter.equals("NotDone")) {
-                status=0;
+                status = 0;
             }
             if (filter.equals("Done")) {
-                status=1;
+                status = 1;
             }
-
         }
 
         //list of filtered tasks
         List<TaskData> list = new ArrayList<>();
-        List<TaskData> list2 = new ArrayList<>();
+        List<TaskData> list2;
 
 
         //checks which query to execute
@@ -263,16 +262,18 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             list = fullTaskList;
         }
 
-       // list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities, timePriority, category, status);
-
-        if(status!=-1){
-            list2=AppDatabase.getInstance(context).taskDataTabDao().getTaskData(status);
+        //checks if filter by status
+        if (status != -1) {
+            list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(status);
             ArrayList list3 = (ArrayList) list.stream()
                     .distinct()
                     .filter(list2::contains)
                     .collect(Collectors.toList());
-            filteredTaskList=list3;
-        }else {filteredTaskList = list;}
+            filteredTaskList = list3;
+        } else {
+            filteredTaskList = list;
+        }
+
         notifyDataSetChanged();
     }
 
