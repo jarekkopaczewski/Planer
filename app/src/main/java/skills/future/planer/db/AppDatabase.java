@@ -13,6 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
@@ -23,7 +24,7 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
-@Database(entities = {TaskData.class, HabitData.class}, exportSchema = false, version = 5)
+@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting

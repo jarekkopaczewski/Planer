@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.generate;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
@@ -19,11 +20,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.DataBaseException;
+import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.tools.DatesParser;
 
 @Getter
 @Setter
-@Entity
+@Entity(foreignKeys = {@ForeignKey(entity = GoalData.class,
+        parentColumns = "goalId",
+        childColumns = "foreignKeyToGoal",
+        onDelete = ForeignKey.CASCADE)})
 public class HabitData {
     @PrimaryKey(autoGenerate = true)
     private Long habitId;
@@ -45,6 +50,8 @@ public class HabitData {
      */
     @Setter(AccessLevel.PACKAGE)
     private String dayChecking;
+    private Long foreignKeyToGoal;
+
 
     HabitData() {
         title = dayChecking = daysOfWeek = "";
