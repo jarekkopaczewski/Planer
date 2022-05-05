@@ -31,7 +31,8 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
     private final HabitViewModel habitViewModel;
     private final LifecycleOwner viewLifecycleOwner;
 
-    public HabitExtendedViewHolder(View itemView, Context context, HabitViewModel habitViewModel, LifecycleOwner viewLifecycleOwner) {
+    public HabitExtendedViewHolder(View itemView, Context context, HabitViewModel habitViewModel,
+                                   LifecycleOwner viewLifecycleOwner) {
         super(itemView);
         title = itemView.findViewById(R.id.habitTitleTextViewExtended);
         circularProgressIndicatorHabit = itemView.findViewById(R.id.circularProgressIndicatorHabit);
@@ -41,7 +42,6 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
         this.habitViewModel = habitViewModel;
         this.viewLifecycleOwner = viewLifecycleOwner;
     }
-
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -61,7 +61,7 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
                 chip.setText(habitData.getDayWeekName(i));
                 chip.setCheckable(false);
                 chipGroup.addView(chip);
-            }
+            }//todo rysuje zle chipy
         }
     }
 

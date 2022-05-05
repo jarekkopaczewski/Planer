@@ -36,12 +36,14 @@ public class HabitData {
      * days number
      */
     private HabitDuration habitDuration;
-    private Long beginDay, endDay;
+    private Long beginDay;
+    @Getter(AccessLevel.PACKAGE)
+    private Long endDay;
     /**
      * string with status if habit was done, 1 -was done, 0 -no,
      * first bit is status for begin day etc.
      */
-    @Getter(AccessLevel.PACKAGE)
+    @Setter(AccessLevel.PACKAGE)
     private String dayChecking;
 
     HabitData() {
@@ -169,5 +171,23 @@ public class HabitData {
         int dif = (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(beginDay),
                 DatesParser.toLocalDate(globalSelectedDate));
         return dayChecking.charAt(dif) == '1';
+    }
+
+    public void setBeginLocalDay(LocalDate beginDay) {
+        this.beginDay = DatesParser.toMilliseconds(beginDay);
+        this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
+    }
+
+    public void setHabitDuration(HabitDuration habitDuration) {
+        if (!this.habitDuration.getDaysNumber().equals(habitDuration.getDaysNumber())) {
+            if (this.habitDuration.getDaysNumber() < habitDuration.getDaysNumber()) {
+                dayChecking = dayChecking + generate(() -> "0").limit(habitDuration.getDaysNumber() -
+                        this.habitDuration.getDaysNumber()).collect(joining());
+            } else {
+                dayChecking = dayChecking.substring(0, habitDuration.getDaysNumber());
+                //todo jest blad przy ustawieniu 21 dni
+            }
+            this.habitDuration = habitDuration;
+        }
     }
 }

@@ -12,6 +12,16 @@ import java.util.List;
 @Dao
 public interface HabitDao {
     /**
+     * Method get HabitData with given id
+     *
+     * @param id of searched habitData
+     * @return HabitData
+     * @throws Exception if sth is wrong xd
+     */
+    @Query("SELECT * FROM HabitData WHERE habitId = :id")
+    HabitData findById(Long id) throws Exception;
+
+    /**
      * @return all habits from database
      */
     @Query("SELECT * FROM HabitData")

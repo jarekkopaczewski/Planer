@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import skills.future.planer.db.AppDatabase;
-import skills.future.planer.db.task.TaskData;
 
 public class HabitRepository {
     private final HabitDao habitDao;
@@ -52,9 +51,14 @@ public class HabitRepository {
 
     /**
      * Method delete habit from database
+     *
      * @param habitData which will be deleted
      */
-    void delete(HabitData habitData){
+    void delete(HabitData habitData) {
         habitDao.deleteOne(habitData);
+    }
+
+    HabitData findById(Long habitId) throws Exception {
+        return habitDao.findById(habitId);
     }
 }
