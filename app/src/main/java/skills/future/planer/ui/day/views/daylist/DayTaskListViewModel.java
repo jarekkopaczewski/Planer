@@ -5,28 +5,26 @@ import androidx.lifecycle.ViewModel;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import lombok.Getter;
-import lombok.Setter;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 
 public class DayTaskListViewModel extends ViewModel {
 
-    private static TaskDataViewModel mWordViewModel;
+    private static TaskDataViewModel taskDataViewModel;
     private static TaskTotalAdapter taskDayAdapter;
     private static LifecycleOwner viewLifecycleOwner;
+
+    public static TaskDataViewModel getMWordViewModel() {
+        return taskDataViewModel;
+    }
 
     /**
      * Sets observer for list for concrete day
      */
     public void updateDate(CalendarDay date) {
-        mWordViewModel.getAllTaskDataFromDay(date)
+        taskDataViewModel.getAllTaskDataFromDay(date)
                 .observe(viewLifecycleOwner,
                         taskData -> taskDayAdapter.setFilteredTaskList(taskData));
-    }
-
-    public void setWordViewModel(TaskDataViewModel mWordViewModel) {
-        DayTaskListViewModel.mWordViewModel = mWordViewModel;
     }
 
     public void setTaskDayAdapter(TaskTotalAdapter taskDayAdapter) {
@@ -37,8 +35,8 @@ public class DayTaskListViewModel extends ViewModel {
         DayTaskListViewModel.viewLifecycleOwner = viewLifecycleOwner;
     }
 
-    public static TaskDataViewModel getMWordViewModel() {
-        return mWordViewModel;
+    public void setTaskViewModel(TaskDataViewModel mWordViewModel) {
+        DayTaskListViewModel.taskDataViewModel = mWordViewModel;
     }
 
     public static TaskTotalAdapter getTaskDayAdapter() {

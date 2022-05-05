@@ -13,8 +13,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.time.LocalDate;
-
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
@@ -90,28 +88,29 @@ public abstract class AppDatabase extends RoomDatabase {
             CalendarDay day6 = CalendarDay.from(2022, 4, 26);
             int counter = 1;
             try {
-                habitDao.insert(new HabitData("test", "1111111", HabitDuration.Short, DatesParser.toLocalDate(day)));
+                for (int i = 0; i < 5; i++)
+                    habitDao.insert(new HabitData("test", "1111111", HabitDuration.Short, DatesParser.toLocalDate(day)));
             } catch (DataBaseException e) {
                 e.printStackTrace();
             }
 //
             for (int i = 0; i < 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day2, day3);
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
                 mDao.insert(word);
                 counter++;
             }
             for (int i = 0; i < 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie " + counter, "", day2, day3);
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie nieważne i pilne" + counter, "", day2, day3);
                 mDao.insert(word);
                 counter++;
             }
             for (int i = 0; i <= 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie " + counter, "", day4, day2);
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day4, day2);
                 mDao.insert(word);
                 counter++;
             }
             for (int i = 0; i <= 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie " + counter, "", day4, day5);
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day4, day5);
                 mDao.insert(word);
                 counter++;
             }

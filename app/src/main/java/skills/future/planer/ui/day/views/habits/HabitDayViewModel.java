@@ -9,7 +9,7 @@ import skills.future.planer.db.habit.HabitViewModel;
 
 public class HabitDayViewModel extends ViewModel {
     private static HabitViewModel habitViewModel;
-    private HabitTotalAdapter habitTotalAdapter;
+    private static HabitTotalAdapter habitTotalAdapter;
     private static LifecycleOwner viewLifecycleOwner;
 
 
@@ -29,7 +29,8 @@ public class HabitDayViewModel extends ViewModel {
     public void setHabitViewModel(HabitViewModel habitViewModel) {
         HabitDayViewModel.habitViewModel = habitViewModel;
     }
-    public LifecycleOwner getViewLifecycleOwner() {
+
+    public static LifecycleOwner getViewLifecycleOwner() {
         return viewLifecycleOwner;
     }
 
@@ -42,6 +43,6 @@ public class HabitDayViewModel extends ViewModel {
     }
 
     public void setHabitTotalAdapter(HabitTotalAdapter habitTotalAdapter) {
-        this.habitTotalAdapter = habitTotalAdapter;
+        HabitDayViewModel.habitTotalAdapter = habitTotalAdapter;
     }
 }

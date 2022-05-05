@@ -6,13 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import skills.future.planer.R;
@@ -42,7 +40,8 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
     @NonNull
     @Override
     public HabitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HabitViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list), habitViewModel);
+        return new HabitViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list),
+                habitViewModel, this);
     }
 
     @NonNull
@@ -73,7 +72,7 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
     public void onBindViewHolder(@NonNull HabitViewHolder holder, int position) {
         if (habitsList != null) {
             var current = habitsList.get(position);
-            holder.setEveryThing(current);
+            holder.setEveryThing(current, position);
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
     }
@@ -85,7 +84,7 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
     /**
      * Gets number of habits in list
      *
-     * @return
+     * @return if habitList isn't null size of list
      */
     @Override
     public int getItemCount() {

@@ -77,10 +77,10 @@ public class DayFragment extends Fragment {
      * Creates view pager
      */
     private void createViewPager(ViewGroup container) {
-            myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
-            myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
-            vpPager.setAdapter(myPagerAdapter);
-            vpPager.setCurrentItem(2);
+        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
+        myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
+        vpPager.setAdapter(myPagerAdapter);
+        vpPager.setCurrentItem(2);
     }
 
     /**
@@ -132,8 +132,8 @@ public class DayFragment extends Fragment {
         } else if (dayViewModel.checkIsMatrixView(vpPager))
             matrixModelView.setUpModels(selectedDay);
         else if (dayViewModel.checkIsHabitsView(vpPager))
-            // TODO podczepić nawyki
-            habitDayViewModel.updateDate(selectedDay);
+            if (HabitDayViewModel.getViewLifecycleOwner() != null)
+                habitDayViewModel.updateDate(selectedDay);
     }
 
     /**
