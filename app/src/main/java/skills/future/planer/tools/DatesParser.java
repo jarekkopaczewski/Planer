@@ -5,6 +5,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 public class DatesParser {
     public static CalendarDay toCalendarDay(Long dateInMilliseconds) {
@@ -34,11 +35,16 @@ public class DatesParser {
     }
 
     public static Long toMilliseconds(CalendarDay calendarDay) {
-        return DatesParser.toMilliseconds(LocalDate.of(calendarDay.getYear(),calendarDay.getMonth(),
+        return DatesParser.toMilliseconds(LocalDate.of(calendarDay.getYear(), calendarDay.getMonth(),
                 calendarDay.getDay()));
     }
 
     public static CalendarDay toCalendarDay(LocalDate localDate) {
-        return CalendarDay.from(localDate.getYear(),localDate.getMonth().getValue(),localDate.getDayOfMonth());
+        return CalendarDay.from(localDate.getYear(), localDate.getMonth().getValue(), localDate.getDayOfMonth());
+    }
+
+    public static int countDifferenceBetweenDays(CalendarDay begin, CalendarDay end) {
+        return (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(begin),
+                DatesParser.toLocalDate(end));
     }
 }

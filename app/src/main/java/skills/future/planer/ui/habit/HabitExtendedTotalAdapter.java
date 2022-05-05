@@ -3,27 +3,23 @@ package skills.future.planer.ui.habit;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.day.views.habits.HabitViewHolder;
-import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
 public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtendedViewHolder> {
 
@@ -31,6 +27,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
     private final Context context;
     private final HabitViewModel habitViewModel;
     private List<HabitData> habitsList = new ArrayList<>();
+    private final LifecycleOwner viewLifecycleOwner;
 
     @SuppressLint("NotifyDataSetChanged")
     public void setHabitsList(List<HabitData> habitsList) {
@@ -39,16 +36,18 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
 
     }
 
-    public HabitExtendedTotalAdapter(Context context, HabitViewModel habitViewModel) {
+    public HabitExtendedTotalAdapter(Context context, HabitViewModel habitViewModel, LifecycleOwner viewLifecycleOwner) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
-        this.habitViewModel =habitViewModel;
+        this.habitViewModel = habitViewModel;
+        this.viewLifecycleOwner = viewLifecycleOwner;
     }
 
     @NonNull
     @Override
     public HabitExtendedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HabitExtendedViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context);
+        return new HabitExtendedViewHolder(createViewOfItem(parent,
+                R.layout.fragment_habit_in_list_extended), context, habitViewModel, viewLifecycleOwner);
     }
 
     @NonNull
@@ -65,19 +64,18 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
 
-        AnimateView.singleAnimation(itemView.findViewById(R.id.sundayChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.saturdayChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.fridChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.thursChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.wednChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.tueChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.mondayChip), context, R.anim.scalezoom2);
+//todo usunąć?        AnimateView.singleAnimation(itemView.findViewById(R.id.sundayChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.saturdayChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.fridChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.thursChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.wednChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.tueChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.mondayChip), context, R.anim.scalezoom2);
 
         editButton.setOnClickListener(e -> {
             AnimateView.animateInOut(editButton, context);
             context.startActivity(new Intent(context, HabitCreatorActivity.class));
         });
-
 
 
         return itemView;
@@ -90,10 +88,10 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
             holder.setEveryThing(current);
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
-        createListenerToTrashButton(holder,position);
+        createListenerToTrashButton(holder, position);
     }
 
-    private void createListenerToTrashButton(@NonNull HabitExtendedViewHolder holder, int position){
+    private void createListenerToTrashButton(@NonNull HabitExtendedViewHolder holder, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setTitle("Confirm deletion");

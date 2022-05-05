@@ -83,7 +83,7 @@ public class HabitData {
         var result = 0;
         for (int i = 0; i < habitDuration.getDaysNumber(); i++) {
             if (dayChecking.charAt(i) == '1' && isDayOfWeekChecked(dateIterator))
-                i++;
+                result++;
             dateIterator = dateIterator.plusDays(1);
         }
         return result;
@@ -97,7 +97,7 @@ public class HabitData {
         var result = 0;
         for (int i = 0; i < habitDuration.getDaysNumber(); i++) {
             if (dayChecking.charAt(i) == '0' && isDayOfWeekChecked(dateIterator))
-                i++;
+                result++;
             dateIterator = dateIterator.plusDays(1);
         }
         return result;
@@ -114,7 +114,19 @@ public class HabitData {
             case SATURDAY -> myName.charAt(5) == '1';
             case SUNDAY -> myName.charAt(6) == '1';
         };
+    }
 
+    public String getDayWeekName(int i) {
+        return switch (i) {
+            case 0 -> "Pn";
+            case 1 -> "Wt";
+            case 2 -> "Sr";
+            case 3 -> "Czw";
+            case 4 -> "Pt";
+            case 5 -> "So";
+            case 6 -> "Nie";
+            default -> throw new IllegalStateException("Unexpected value: " + i);
+        };
     }
 
     public CalendarDay getBeginCalendarDay() {
@@ -136,8 +148,7 @@ public class HabitData {
         if (calendarDay.isAfter(getEndCalendarDay()) || calendarDay.isBefore(getBeginCalendarDay()))
             throw new DataBaseException("Wrong calendarDay");
         StringBuilder myName = new StringBuilder(getDayChecking());
-        int dif = (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(beginDay),
-                DatesParser.toLocalDate(calendarDay));
+        int dif = DatesParser.countDifferenceBetweenDays(DatesParser.toCalendarDay(beginDay), calendarDay);
         if (dif > habitDuration.getDaysNumber())
             throw new DataBaseException("tst");
         if (dayChecking.charAt(dif) == '0')

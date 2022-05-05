@@ -89,7 +89,7 @@ public abstract class AppDatabase extends RoomDatabase {
             int counter = 1;
             try {
                 for (int i = 0; i < 5; i++)
-                    habitDao.insert(new HabitData("test", "1111111", HabitDuration.Short, DatesParser.toLocalDate(day)));
+                    habitDao.insert(new HabitData("test", "1110011", HabitDuration.Short, DatesParser.toLocalDate(day2)));
             } catch (DataBaseException e) {
                 e.printStackTrace();
             }

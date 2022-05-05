@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import skills.future.planer.R;
@@ -20,7 +19,6 @@ import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.habit.HabitExtendedViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
 public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
@@ -52,7 +50,7 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
     @Override
     public ICustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return switch (viewType) {
-            case LAYOUT_HABIT -> new HabitExtendedViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context);
+            case LAYOUT_HABIT -> new TaskDataViewHolder(createViewOfItem(parent, R.layout.fragment_task_in_list), context);//todo new HabitExtendedViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context, );
             default -> new TaskDataViewHolder(createViewOfItem(parent, R.layout.fragment_task_in_list), context);
         };
     }
