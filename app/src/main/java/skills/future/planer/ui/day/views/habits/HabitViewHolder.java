@@ -1,5 +1,6 @@
 package skills.future.planer.ui.day.views.habits;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -19,13 +20,15 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
     private final CheckBox checkBox;
     private final HabitViewModel habitViewModel;
     private final HabitTotalAdapter habitTotalAdapter;
+    private final Context context;
 
-    public HabitViewHolder(View itemView, HabitViewModel habitViewModel, HabitTotalAdapter habitTotalAdapter) {
+    public HabitViewHolder(View itemView, HabitViewModel habitViewModel, HabitTotalAdapter habitTotalAdapter, Context context) {
         super(itemView);
         this.habitViewModel = habitViewModel;
         title = itemView.findViewById(R.id.habitTitleTextView);
         checkBox = itemView.findViewById(R.id.habitBoxTask);
         this.habitTotalAdapter = habitTotalAdapter;
+        this.context = context;
     }
 
     /**
@@ -38,6 +41,10 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
         title.setText(habitData.getTitle());
         checkBox.setChecked(habitData.isHabitDone(MonthFragment.getGlobalSelectedDate()));
         checkBox.setOnClickListener(e -> {
+//            if (checkBox.isChecked())
+//                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.VISIBLE);
+//            else
+//                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.INVISIBLE);
             try {
                 habitData.setHabitDoneIn(MonthFragment.getGlobalSelectedDate());
                 habitViewModel.edit(habitData);
@@ -46,5 +53,17 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
                 dataBaseException.printStackTrace();
             }
         });
+        // click on view change checkbox state
+//        itemView.setOnClickListener(e -> {
+//            AnimateView.animateInOut(itemView, context);
+//            checkBox.setChecked(!checkBox.isChecked());
+//            try {
+//                habitData.setHabitDoneIn(MonthFragment.getGlobalSelectedDate());
+//                habitViewModel.edit(habitData);
+//                habitTotalAdapter.notifyItemChanged(position);
+//            } catch (DataBaseException dataBaseException) {
+//                dataBaseException.printStackTrace();
+//            }
+//        });
     }
 }

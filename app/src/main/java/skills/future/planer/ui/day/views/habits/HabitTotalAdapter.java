@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,30 +40,13 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
     @Override
     public HabitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new HabitViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list),
-                habitViewModel, this);
+                habitViewModel, this, context);
     }
 
     @NonNull
     private View createViewOfItem(@NonNull ViewGroup parent, int layoutType) {
-        View itemView;
-        itemView = layoutInflater.inflate(layoutType, parent, false);
+        View itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
-
-        CheckBox checkBox = itemView.findViewById(R.id.habitBoxTask);
-
-        // click on view change checkbox state
-        itemView.setOnClickListener(e -> {
-            AnimateView.animateInOut(itemView, context);
-            checkBox.setChecked(!checkBox.isChecked());
-        });
-
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (checkBox.isChecked())
-                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.VISIBLE);
-            else
-                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.INVISIBLE);
-        });
-
         return itemView;
     }
 
