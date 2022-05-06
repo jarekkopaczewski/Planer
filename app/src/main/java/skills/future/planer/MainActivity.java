@@ -31,7 +31,6 @@ import com.google.android.material.navigation.NavigationView;
 import lombok.SneakyThrows;
 import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.db.AppDatabase;
-import skills.future.planer.notification.NotificationFactory;
 import skills.future.planer.notification.NotificationService;
 import skills.future.planer.ui.settings.SettingsActivity;
 
@@ -66,13 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
         themePreferences();
 
-        NotificationFactory notificationFactory = new NotificationFactory(this, this);
-        notificationFactory.generateNewNotification();
+        startService(new Intent(this, NotificationService.class));
 
-        Thread.sleep(1000);
 
-        notificationFactory.generateNewNotification();
-        createService();
+        //createService();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -155,12 +151,9 @@ public class MainActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(this, NotificationService.class);
         bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
         // notificationService.setMainActivity(this);
-        restartTimer();
-    }
-
-    public void restartTimer() {
 
     }
+
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
