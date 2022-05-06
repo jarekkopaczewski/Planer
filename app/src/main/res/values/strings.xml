@@ -63,4 +63,5 @@
     <string name="habitsTitle">Kreator nawyków</string>
     <string name="habit_error_1">Tytuł nie może być pusty!</string>
     <string name="habit_error_2">Wybierz przynajmniej jeden dzień!</string>
+    <string name="local_service_started">start</string>
 </resources>

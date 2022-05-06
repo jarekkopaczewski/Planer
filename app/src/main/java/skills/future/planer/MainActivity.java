@@ -1,9 +1,13 @@
 package skills.future.planer;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,16 +28,23 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import lombok.SneakyThrows;
 import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.notification.NotificationFactory;
+import skills.future.planer.notification.NotificationService;
 import skills.future.planer.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
+
+    private boolean isBound;
+    private NotificationService notificationService;
 
     private static BottomNavigationView bottomView;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private NavigationView navigationView;
+
 
     /**
      * Displays version of application in "Settings menu"
@@ -48,11 +59,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         themePreferences();
+
+        NotificationFactory notificationFactory = new NotificationFactory(this, this);
+        notificationFactory.generateNewNotification();
+
+        Thread.sleep(1000);
+
+        notificationFactory.generateNewNotification();
+        createService();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -97,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // set/read settings
 
+    // set/read settings
     private void themePreferences() {
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -130,6 +150,31 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    private void createService() {
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        // notificationService.setMainActivity(this);
+        restartTimer();
+    }
+
+    public void restartTimer() {
+
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            notificationService = ((NotificationService.LocalBinder) service).getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            notificationService = null;
+            isBound = false;
+        }
+    };
 
     public static BottomNavigationView getBottomView() {
         return bottomView;
