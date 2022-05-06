@@ -39,6 +39,9 @@ public interface TaskDataDao {
     @Query("SELECT * FROM taskData")
     LiveData<List<TaskData>> getTaskData();
 
+    @Query("SELECT * FROM taskData")
+    List<TaskData> getTaskData2();
+
     /**
      * @param taskCategory specified taskCategory
      * @return all taskData with specified taskCategory

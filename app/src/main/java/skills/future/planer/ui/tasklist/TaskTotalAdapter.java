@@ -42,10 +42,16 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private final Context context;
     private List<TaskData> filteredTaskList = new ArrayList<>();
     private List<TaskData> fullTaskList = new ArrayList<>();
+    private List<TaskData> searchList = new ArrayList<>();
+    private List<TaskData> filterList = new ArrayList<>();
     private static final int LAYOUT_SMALL = 0;
     private static final int LAYOUT_BIG = 1;
     private final AtomicInteger positionToChange = new AtomicInteger(-1);
     private final TaskDataViewModel mTaskViewModel;
+    private boolean first = true;
+    private boolean searchIsNull=false;
+    private boolean filterIsNull=false;
+    ArrayList<TaskData> filteredItems = new ArrayList<>();
 
 
     public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel) {
@@ -160,6 +166,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             });
     }
 
+
     @Override
     public int getItemViewType(int position) {
         if (position == positionToChange.get())
@@ -259,7 +266,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities, timePriority, category);
         }
         if (category == null && priorities == null && timePriority == null) {
-            list = fullTaskList;
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData2();
         }
 
         //checks if filter by status
@@ -269,9 +276,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
                     .distinct()
                     .filter(list2::contains)
                     .collect(Collectors.toList());
-            filteredTaskList = list3;
+
+            filterList=list3;
         } else {
-            filteredTaskList = list;
+            filterList=list;
         }
 
         notifyDataSetChanged();
@@ -300,18 +308,12 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             constraint = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
             if (constraint.toString().length() > 0) {
-                ArrayList<TaskData> filteredItems = new ArrayList<>();
 
-                for (int i = 0, l = filteredTaskList.size(); i < l; i++) {
-                    TaskData taskData = filteredTaskList.get(i);
+
+                for (int i = 0, l = filterList.size(); i < l; i++) {
+                    TaskData taskData = filterList.get(i);
                     if (taskData.getTaskTitleText().toLowerCase().contains(constraint))
                         filteredItems.add(taskData);
-                }
-                result.count = filteredItems.size();
-                result.values = filteredItems;
-            } else {
-                synchronized (this) {
-                    result.values = fullTaskList;
                 }
             }
             return result;
@@ -320,12 +322,24 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         @SuppressLint("NotifyDataSetChanged")
         @SuppressWarnings("unchecked")
         @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
+        public void publishResults(CharSequence constraint, FilterResults results) {
+
             filteredTaskList.clear();
-            filteredTaskList.addAll((ArrayList<TaskData>) results.values);
+            if(constraint.toString().length() > 0) {
+                filteredTaskList.addAll((ArrayList<TaskData>) filteredItems);
+                filteredItems.clear();
+            }else{
+                filteredTaskList.addAll((ArrayList<TaskData>) filterList);
+                System.out.println("filterlist dziala");
+            }
+
+            System.out.println("dziala_publish");
+
+            System.out.println("FilterList:");
+            System.out.println(filterList);
             notifyDataSetChanged();
         }
-    }
 
 
-}
+
+}}

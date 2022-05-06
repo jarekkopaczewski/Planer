@@ -42,7 +42,7 @@ public class TaskListFragment extends Fragment {
     public TaskListFragment() {
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
     @SneakyThrows
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,10 +53,10 @@ public class TaskListFragment extends Fragment {
         mWordViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
         taskTotalAdapter = new TaskTotalAdapter(this.getContext(), mWordViewModel);
 
-        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
-
         listTotal = binding.listTotalView;
         listTotal.setAdapter(taskTotalAdapter);
+
+        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
         //list of filters
         filters = new ArrayList<>();
@@ -71,9 +71,12 @@ public class TaskListFragment extends Fragment {
                 e.printStackTrace();
             }
         });
+        //System.out.println(counter++);
 
         //listTotal.setTextFilterEnabled(true);
-//        taskTotalAdapter.getFilter().filter("");
+       // taskTotalAdapter.getFilter().filter("");
+        //taskTotalAdapter.setFilteredTaskList(taskTotalAdapter.getFullTaskList());
+        binding.searchEditText.setText("LOL");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
 
         // fab enter animation
@@ -91,18 +94,28 @@ public class TaskListFragment extends Fragment {
 
         binding.searchImageView.setOnClickListener(e -> {
             AnimateView.animateInOut(binding.searchImageView, this.getContext());
-            //taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+            taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
         });
+
+        binding.searchEditText.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                System.out.println("hehe");
+                binding.searchEditText.setText("");
+            }
+        });
+
 
         binding.searchEditText.addTextChangedListener(new TextWatcher() {
 
+            @SneakyThrows
             @Override
             public void afterTextChanged(Editable s) {
-//                if (binding.searchEditText.getText().toString().equals("")) {
-//                    taskTotalAdapter.getFilter().filter("");
-//                }else {
-//                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
-//                }
+                if (binding.searchEditText.getText().toString().equals("")) {
+                    taskTotalAdapter.getFilter().filter("");
+                }else {
+                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+                }
             }
 
             @Override
@@ -159,6 +172,7 @@ public class TaskListFragment extends Fragment {
                 binding.notDoneTask.setChecked(false);
         });
 
+
         /*
          * Chip Group Listener
          * Searches by iDs and returns list of checked filters
@@ -195,11 +209,16 @@ public class TaskListFragment extends Fragment {
                     if (id.equals(notstatus)) filters.add("NotDone");
                     if (id.equals(status)) filters.add("Done");
                 }
-                System.out.println(filters);
+               // System.out.println(filters);
 
                 //give list of filters to CategoryFilter
                 try {
                     taskTotalAdapter.CategoryFilter(filters);
+                    if (binding.searchEditText.getText().toString().equals("")) {
+                        taskTotalAdapter.getFilter().filter("");
+                    }else {
+                        taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -211,15 +230,24 @@ public class TaskListFragment extends Fragment {
         return root;
     }
 
+    @SneakyThrows
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onStart() {
         super.onStart();
-        taskTotalAdapter.notifyDataSetChanged();
     }
 
+    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
+    @SneakyThrows
     @Override
     public void onDestroyView() {
+//        binding.searchEditText.getText().clear();
+//        //binding.searchEditText.setText("");
+//        taskTotalAdapter.getFilter().filter("");
+//        taskTotalAdapter.CategoryFilter(filters);
+//        taskTotalAdapter.notifyDataSetChanged();
+//        String n = binding.searchEditText.getText().toString();
+//        System.out.println("Text:");
         super.onDestroyView();
         binding = null;
     }
