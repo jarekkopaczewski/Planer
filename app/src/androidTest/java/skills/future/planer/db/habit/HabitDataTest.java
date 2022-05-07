@@ -28,7 +28,7 @@ public class HabitDataTest {
         calendar.set(Calendar.HOUR, 12);
         calendar.set(Calendar.MONTH, 0);
         habit = new HabitData("test", "1111111", HabitDuration.Short,
-                LocalDate.of(2022, 1, 1), calendar);
+                LocalDate.of(2022, 1, 1), calendar.getTimeInMillis());
     }
 
     @Test

@@ -54,25 +54,25 @@ public class HabitData {
     }
 
     public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
-                     LocalDate beginDay, Calendar calendar) throws Exception {
+                     LocalDate beginDay, Long notificationTime) throws Exception {
         this.title = title;
         editDaysOfWeek(daysOfWeek);
         this.habitDuration = habitDuration;
         this.beginDay = DatesParser.toMilliseconds(beginDay);
         this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
         dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
-        notificationTime = calendar.getTimeInMillis();
+        this.notificationTime = notificationTime;
     }
 
     public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
-                     LocalDate beginDay, Calendar calendar, Long foreignKeyToGoal) throws Exception {
+                     LocalDate beginDay, Long notificationTime, Long foreignKeyToGoal) throws Exception {
         this.title = title;
         editDaysOfWeek(daysOfWeek);
         this.habitDuration = habitDuration;
         this.beginDay = DatesParser.toMilliseconds(beginDay);
         this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
         dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
-        notificationTime = calendar.getTimeInMillis();
+        this.notificationTime = notificationTime;
         this.foreignKeyToGoal = foreignKeyToGoal;
     }
 
@@ -204,8 +204,8 @@ public class HabitData {
                         this.habitDuration.getDaysNumber()).collect(joining());
             } else {
                 dayChecking = dayChecking.substring(0, habitDuration.getDaysNumber());
-                //todo zmienić końcowy dzień
             }
+            endDay = DatesParser.toMilliseconds(DatesParser.toLocalDate(beginDay).plusDays(habitDuration.getDaysNumber() - 1));
             this.habitDuration = habitDuration;
         }
     }

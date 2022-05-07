@@ -83,8 +83,9 @@ public class HabitCreatorActivity extends AppCompatActivity {
         if (parameters != null) {
             try {
                 HabitData habit = habitViewModel.findById(parameters.getLong("habitToEditId"));
+                calendar.setTimeInMillis(habit.getNotificationTime());
                 editTextTitle.setText(habit.getTitle());
-                timeEditText.setText("---");
+                timeEditText.setText(formatter.format(calendar.getTime()));
                 editTextDateHabit.setText(DatesParser.toLocalDate(habit.getBeginCalendarDay()).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
                 var days = habit.getDaysOfWeek();
                 MondayChip.setChecked(days.charAt(0) == '1');
@@ -146,7 +147,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             (FridayChip.isChecked() ? "1" : "0") +
                             (SaturdayChip.isChecked() ? "1" : "0") +
                             (SundayChip.isChecked() ? "1" : "0");
-                    var habit = new HabitData(editTextTitle.getText().toString(), weekDays, duration, DatesParser.toLocalDate(calendar2.getTime()), calendar);
+                    var habit = new HabitData(editTextTitle.getText().toString(), weekDays, duration, DatesParser.toLocalDate(calendar2.getTime()), calendar.getTimeInMillis());
                     habitViewModel.insert(habit);
                 } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
@@ -182,6 +183,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     habitData.editDaysOfWeek(weekDays);
                     habitData.setTitle(editTextTitle.getText().toString());
                     habitData.setBeginLocalDay(DatesParser.toLocalDate(calendar2.getTime()));
+                    habitData.setNotificationTime(calendar.getTimeInMillis());
                     habitViewModel.edit(habitData);
                 } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();

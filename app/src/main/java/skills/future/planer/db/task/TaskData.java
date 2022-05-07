@@ -133,6 +133,21 @@ public class TaskData implements Parcelable {
      */
     @Ignore
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
+                    String taskTitleText, String taskDetailsText, CalendarDay startingDate,
+                    CalendarDay endingDate, Long foreignKeyToGoal) {
+        //this.taskDataId = 0L;
+        this.status = false;
+        this.category = category;
+        this.priorities = priorities;
+        this.timePriority = timePriority;
+        this.taskTitleText = taskTitleText;
+        this.taskDetailsText = taskDetailsText;
+        setEndingCalendarDate(endingDate);
+        setStartingCalendarDate(startingDate);
+        this.foreignKeyToGoal = foreignKeyToGoal;
+    }
+
+    public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText, CalendarDay startingDate, CalendarDay endingDate) {
         //this.taskDataId = 0L;
         this.status = false;

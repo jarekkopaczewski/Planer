@@ -5,13 +5,17 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.Map;
 
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.task.TaskData;
 
 public class GoalRepository {
     private final GoalsDao goalsDao;
     private LiveData<List<GoalData>> goals;
-    private LiveData<List<GoalsHabitRelation>> goalsHabit;
+    private LiveData<Map<GoalData, List<HabitData>>> goalsHabit;
+    private LiveData<Map<GoalData, List<TaskData>>> goalsTasks;
 
     public GoalRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
@@ -27,10 +31,16 @@ public class GoalRepository {
         return goals;
     }
 
-    LiveData<List<GoalsHabitRelation>> getGoalsWithHabits() {
+    LiveData<Map<GoalData, List<HabitData>>> getHabitsFromGoal(Long goalId) {
         if (goalsHabit == null)
-            goalsHabit = goalsDao.getGoalsWithHabits();
+            goalsHabit = goalsDao.getHabitsFromGoal(goalId);
         return goalsHabit;
+    }
+
+    LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId) {
+        if (goalsTasks == null)
+            goalsTasks = goalsDao.getTasksFromGoal(goalId);
+        return goalsTasks;
     }
 
     /**

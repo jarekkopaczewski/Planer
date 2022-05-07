@@ -7,6 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.Map;
+
+import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.task.TaskData;
 
 public class GoalsViewModel extends AndroidViewModel {
     private final GoalRepository goalRepository;
@@ -23,8 +27,12 @@ public class GoalsViewModel extends AndroidViewModel {
         return goalRepository.getAllGoals();
     }
 
-    public LiveData<List<GoalsHabitRelation>> getGoalsWithHabits() {
-        return goalRepository.getGoalsWithHabits();
+    public LiveData<Map<GoalData, List<HabitData>>> getHabitsFromGoal(Long goalId) {
+        return goalRepository.getHabitsFromGoal(goalId);
+    }
+
+    public LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId) {
+        return goalRepository.getTasksFromGoal(goalId);
     }
 
     /**
