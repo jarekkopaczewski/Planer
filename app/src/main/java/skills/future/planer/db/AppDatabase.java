@@ -24,7 +24,7 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.tools.DatesParser;
 
-@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 6)
+@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 7)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
@@ -85,6 +85,7 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
             habitDao.deleteAll();
+            goalsDao.deleteAll();
             CalendarDay day = CalendarDay.today();
             CalendarDay day2 = CalendarDay.from(2022, 4, 21);
             CalendarDay day3 = CalendarDay.from(2022, 4, 23);

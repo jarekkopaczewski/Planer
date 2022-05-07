@@ -204,7 +204,7 @@ public class HabitData {
                         this.habitDuration.getDaysNumber()).collect(joining());
             } else {
                 dayChecking = dayChecking.substring(0, habitDuration.getDaysNumber());
-                //todo jest blad przy ustawieniu 21 dni
+                //todo zmienić końcowy dzień
             }
             this.habitDuration = habitDuration;
         }
