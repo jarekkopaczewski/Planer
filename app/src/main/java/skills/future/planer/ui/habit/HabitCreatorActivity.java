@@ -86,7 +86,8 @@ public class HabitCreatorActivity extends AppCompatActivity {
                 calendar.setTimeInMillis(habit.getNotificationTime());
                 editTextTitle.setText(habit.getTitle());
                 timeEditText.setText(formatter.format(calendar.getTime()));
-                editTextDateHabit.setText(DatesParser.toLocalDate(habit.getBeginCalendarDay()).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                editTextDateHabit.setText(DatesParser.toLocalDate(habit.getBeginCalendarDay())
+                        .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
                 var days = habit.getDaysOfWeek();
                 MondayChip.setChecked(days.charAt(0) == '1');
                 TuesdayChip.setChecked(days.charAt(1) == '1');
@@ -129,16 +130,19 @@ public class HabitCreatorActivity extends AppCompatActivity {
         saveCreatorButtonHabit.setOnClickListener(e -> {
             if (editTextTitle.getText() == null || editTextTitle.getText().length() <= 0) {
                 Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
-            } else if (daysChipGroupOne.getCheckedChipIds().size() == 0 && daysChipGroupTwo.getCheckedChipIds().size() == 0) {
+            } else if (daysChipGroupOne.getCheckedChipIds().size() == 0 &&
+                    daysChipGroupTwo.getCheckedChipIds().size() == 0) {
                 Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     var tab = getResources().getStringArray(R.array.temp_array);
-                    HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0])) {
+                    HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner
+                            .getSelectedIndex()].split(" ")[0])) {
                         case 21 -> HabitDuration.UltraShort;
                         case 90 -> HabitDuration.Short;
                         case 120 -> HabitDuration.Long;
-                        default -> throw new IllegalStateException("Unexpected value: " + Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0]));
+                        default -> throw new IllegalStateException("Unexpected value: " +
+                                Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0]));
                     };
                     String weekDays = (MondayChip.isChecked() ? "1" : "0") +
                             (TuesdayChip.isChecked() ? "1" : "0") +
@@ -147,7 +151,9 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             (FridayChip.isChecked() ? "1" : "0") +
                             (SaturdayChip.isChecked() ? "1" : "0") +
                             (SundayChip.isChecked() ? "1" : "0");
-                    var habit = new HabitData(editTextTitle.getText().toString(), weekDays, duration, DatesParser.toLocalDate(calendar2.getTime()), calendar.getTimeInMillis());
+                    var habit = new HabitData(editTextTitle.getText().toString(), weekDays, duration,
+                            DatesParser.toLocalDate(calendar2.getTime()),
+                            calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
                     habitViewModel.insert(habit);
                 } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
@@ -161,16 +167,19 @@ public class HabitCreatorActivity extends AppCompatActivity {
         saveCreatorButtonHabit.setOnClickListener(e -> {
             if (editTextTitle.getText() == null || editTextTitle.getText().length() <= 0) {
                 Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
-            } else if (daysChipGroupOne.getCheckedChipIds().size() == 0 && daysChipGroupTwo.getCheckedChipIds().size() == 0) {
+            } else if (daysChipGroupOne.getCheckedChipIds().size() == 0
+                    && daysChipGroupTwo.getCheckedChipIds().size() == 0) {
                 Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     var tab = getResources().getStringArray(R.array.temp_array);
-                    HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0])) {
+                    HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner
+                            .getSelectedIndex()].split(" ")[0])) {
                         case 21 -> HabitDuration.UltraShort;
                         case 90 -> HabitDuration.Short;
                         case 120 -> HabitDuration.Long;
-                        default -> throw new IllegalStateException("Unexpected value: " + Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0]));
+                        default -> throw new IllegalStateException("Unexpected value: " +
+                                Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0]));
                     };
                     habitData.editHabitDur(duration);
                     String weekDays = (MondayChip.isChecked() ? "1" : "0") +
