@@ -34,6 +34,10 @@ public interface HabitDao {
     @Query("SELECT * FROM HabitData WHERE :date >= beginDay AND :date <= endDay")
     LiveData<List<HabitData>> getTaskDataByDate(long date);
 
+    @Query("SELECT * FROM HabitData WHERE notificationTime = (SELECT MIN( notificationTime - :time)" +
+            " FROM HabitData WHERE (notificationTime - :time) >0)")
+    HabitData getNextNotification(long time) throws Exception;
+
     /**
      * Method insert given habit to database
      *
@@ -59,6 +63,7 @@ public interface HabitDao {
 
     /**
      * Method update given habit
+     *
      * @param habitData given habit which will be updated
      */
     @Update

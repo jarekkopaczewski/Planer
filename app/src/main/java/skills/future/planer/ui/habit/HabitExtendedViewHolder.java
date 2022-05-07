@@ -62,7 +62,7 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
                 chip.setText(habitData.getDayWeekName(i));
                 chip.setCheckable(false);
                 chipGroup.addView(chip);
-            }//todo rysuje zle chipy
+            }
         }
     }
 
