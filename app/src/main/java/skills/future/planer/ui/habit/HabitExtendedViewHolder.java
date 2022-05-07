@@ -54,6 +54,7 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
     }
 
     private void setUpChipGroup(HabitData habitData) {
+        chipGroup.removeAllViews();
         var days = habitData.getDaysOfWeek();
         for (int i = 0; i < days.length(); i++) {
             if (days.charAt(i) == '1') {

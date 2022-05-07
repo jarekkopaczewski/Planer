@@ -147,7 +147,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             (FridayChip.isChecked() ? "1" : "0") +
                             (SaturdayChip.isChecked() ? "1" : "0") +
                             (SundayChip.isChecked() ? "1" : "0");
-                    var habit = new HabitData(editTextTitle.getText().toString(), weekDays, duration, DatesParser.toLocalDate(calendar2.getTime()));
+                    var habit = new HabitData(editTextTitle.getText().toString(), weekDays, duration, DatesParser.toLocalDate(calendar2.getTime()), calendar);
                     habitViewModel.insert(habit);
                 } catch (DataBaseException dataBaseException) {
                     dataBaseException.printStackTrace();
@@ -172,7 +172,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                         case 120 -> HabitDuration.Long;
                         default -> throw new IllegalStateException("Unexpected value: " + Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0]));
                     };
-                    habitData.setHabitDuration(duration);
+                    habitData.editHabitDur(duration);
                     String weekDays = (MondayChip.isChecked() ? "1" : "0") +
                             (TuesdayChip.isChecked() ? "1" : "0") +
                             (WednesdayChip.isChecked() ? "1" : "0") +

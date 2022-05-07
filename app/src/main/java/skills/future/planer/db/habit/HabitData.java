@@ -193,7 +193,7 @@ public class HabitData {
         this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
     }
 
-    public void setHabitDuration(HabitDuration habitDuration) {
+    public void editHabitDur(HabitDuration habitDuration) {
         if (!this.habitDuration.getDaysNumber().equals(habitDuration.getDaysNumber())) {
             if (this.habitDuration.getDaysNumber() < habitDuration.getDaysNumber()) {
                 dayChecking = dayChecking + generate(() -> "0").limit(habitDuration.getDaysNumber() -
