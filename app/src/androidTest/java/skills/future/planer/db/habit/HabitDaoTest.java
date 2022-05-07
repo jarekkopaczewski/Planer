@@ -23,9 +23,12 @@ public class HabitDaoTest {
     @Test
     public void getNextNotification() throws Exception {
         var cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR, 23);
+        cal.set(Calendar.HOUR_OF_DAY, 21);
         cal.set(Calendar.MINUTE, 0);
-        assertEquals(habit, habitDao.getNextNotification(cal.getTimeInMillis()));
+        var zm = cal.getTimeInMillis();
+        System.out.println(zm);
+        System.out.println(habitDao.getNextNotification(zm));
+        assertEquals(habit, habitDao.getNextNotification(zm));
     }
 
     @Before
@@ -34,7 +37,7 @@ public class HabitDaoTest {
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).allowMainThreadQueries().build();
         habitDao = db.habitDao();
         var cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR, 22);
+        cal.set(Calendar.HOUR_OF_DAY, 22);
         cal.set(Calendar.MINUTE, 0);
         habit = new HabitData("test", "1111111", HabitDuration.Short, LocalDate.of(2022, 12, 1), cal);
         habitDao.insert(habit);
