@@ -41,10 +41,10 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
         title.setText(habitData.getTitle());
         checkBox.setChecked(habitData.isHabitDone(MonthFragment.getGlobalSelectedDate()));
         checkBox.setOnClickListener(e -> {
-            if (checkBox.isChecked())
-                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.VISIBLE);
-            else
-                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.INVISIBLE);
+//            if (checkBox.isChecked())
+//                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.VISIBLE);
+//            else
+//                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.INVISIBLE);
             try {
                 habitData.setHabitDoneIn(MonthFragment.getGlobalSelectedDate());
                 habitViewModel.edit(habitData);

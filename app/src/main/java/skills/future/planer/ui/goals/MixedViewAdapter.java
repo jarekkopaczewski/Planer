@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import skills.future.planer.R;
-import skills.future.planer.db.DataBaseException;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.task.TaskData;
@@ -69,8 +69,11 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         if (holder.getItemViewType() == LAYOUT_HABIT) {
             HabitData habitData = null;
             try {
-                habitData = new HabitData("Nawyk testowy","1111111", HabitDuration.Short, LocalDate.of(2022,5,4));
-            } catch (DataBaseException e) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR, 12);
+                cal.set(Calendar.MINUTE, 1);
+                habitData = new HabitData("Nawyk testowy", "1111111", HabitDuration.Short, LocalDate.of(2022, 5, 4), cal);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             holder.setEveryThing(habitData);

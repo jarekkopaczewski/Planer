@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +30,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
     private final HabitViewModel habitViewModel;
     private List<HabitData> habitsList = new ArrayList<>();
     private final LifecycleOwner viewLifecycleOwner;
+    private final FragmentActivity activity;
 
     @SuppressLint("NotifyDataSetChanged")
     public void setHabitsList(List<HabitData> habitsList) {
@@ -36,11 +39,12 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
 
     }
 
-    public HabitExtendedTotalAdapter(Context context, HabitViewModel habitViewModel, LifecycleOwner viewLifecycleOwner) {
+    public HabitExtendedTotalAdapter(Context context, HabitViewModel habitViewModel, LifecycleOwner viewLifecycleOwner, FragmentActivity activity) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.habitViewModel = habitViewModel;
         this.viewLifecycleOwner = viewLifecycleOwner;
+        this.activity = activity;
     }
 
     @NonNull
@@ -88,7 +92,20 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
             holder.setEveryThing(current);
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
+
+        createListenerToEditButton(holder, position);
         createListenerToTrashButton(holder, position);
+    }
+
+    private void createListenerToEditButton(@NonNull HabitExtendedViewHolder holder, int position) {
+        holder.itemView.findViewById(R.id.editImageHabit).setOnClickListener(e -> {
+            var intent = new Intent(activity, HabitCreatorActivity.class);
+            var bundle = new Bundle();
+            bundle.putLong("habitToEditId", habitsList.get(position).getHabitId());
+            intent.putExtras(bundle);
+            activity.startActivity(intent);
+            notifyItemChanged(position);
+        });
     }
 
     private void createListenerToTrashButton(@NonNull HabitExtendedViewHolder holder, int position) {

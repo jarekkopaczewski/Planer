@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 public class DatesParser {
     public static CalendarDay toCalendarDay(Long dateInMilliseconds) {
@@ -23,8 +24,14 @@ public class DatesParser {
     }
 
     public static LocalDate toLocalDate(CalendarDay calendarDay) {
-        return LocalDate.of(calendarDay.getYear(),calendarDay.getMonth(),
+        return LocalDate.of(calendarDay.getYear(), calendarDay.getMonth(),
                 calendarDay.getDay());
+    }
+
+    public static LocalDate toLocalDate(Date date) {
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
     public static Long toMilliseconds(LocalDate localDate) {

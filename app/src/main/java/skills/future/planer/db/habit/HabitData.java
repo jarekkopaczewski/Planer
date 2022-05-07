@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.generate;
 
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -13,6 +12,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import lombok.AccessLevel;
@@ -36,29 +36,44 @@ public class HabitData {
      * days number
      */
     private HabitDuration habitDuration;
-    private Long beginDay, endDay;
+    private Long beginDay;
+    @Getter(AccessLevel.PACKAGE)
+    private Long endDay;
     /**
      * string with status if habit was done, 1 -was done, 0 -no,
      * first bit is status for begin day etc.
      */
-    @Getter(AccessLevel.PACKAGE)
     private String dayChecking;
+    private Long foreignKeyToGoal;
+    private Long notificationTime;
 
-    HabitData() {
+    public HabitData() {
         title = dayChecking = daysOfWeek = "";
         habitDuration = HabitDuration.Short;
         beginDay = endDay = 0L;
     }
 
-    @Ignore
     public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
-                     LocalDate beginDay) throws DataBaseException {
+                     LocalDate beginDay, Calendar calendar) throws Exception {
         this.title = title;
-        setDaysOfWeek(daysOfWeek);
+        editDaysOfWeek(daysOfWeek);
         this.habitDuration = habitDuration;
         this.beginDay = DatesParser.toMilliseconds(beginDay);
         this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
         dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
+        notificationTime = calendar.getTimeInMillis();
+    }
+
+    public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
+                     LocalDate beginDay, Calendar calendar, Long foreignKeyToGoal) throws Exception {
+        this.title = title;
+        editDaysOfWeek(daysOfWeek);
+        this.habitDuration = habitDuration;
+        this.beginDay = DatesParser.toMilliseconds(beginDay);
+        this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
+        dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
+        notificationTime = calendar.getTimeInMillis();
+        this.foreignKeyToGoal = foreignKeyToGoal;
     }
 
     /**
@@ -137,6 +152,12 @@ public class HabitData {
         return endDay != 0 ? DatesParser.toCalendarDay(endDay) : null;
     }
 
+    public Calendar getNotificationTimeCalendar() {
+        var cal = Calendar.getInstance();
+        cal.setTimeInMillis(notificationTime);
+        return cal;
+    }
+
     /**
      * Method set for givenDay opposite state of accomplish habit
      *
@@ -158,7 +179,7 @@ public class HabitData {
         setDayChecking(myName.toString());
     }
 
-    public void setDaysOfWeek(String daysOfWeek) throws DataBaseException {
+    public void editDaysOfWeek(String daysOfWeek) throws Exception {
         if (daysOfWeek.length() != 7)
             throw new DataBaseException("Wrong daysOfWeek argument length. Excepted: 7, Actual:" +
                     daysOfWeek.length());
@@ -169,5 +190,23 @@ public class HabitData {
         int dif = (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(beginDay),
                 DatesParser.toLocalDate(globalSelectedDate));
         return dayChecking.charAt(dif) == '1';
+    }
+
+    public void setBeginLocalDay(LocalDate beginDay) {
+        this.beginDay = DatesParser.toMilliseconds(beginDay);
+        this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
+    }
+
+    public void editHabitDur(HabitDuration habitDuration) {
+        if (!this.habitDuration.getDaysNumber().equals(habitDuration.getDaysNumber())) {
+            if (this.habitDuration.getDaysNumber() < habitDuration.getDaysNumber()) {
+                dayChecking = dayChecking + generate(() -> "0").limit(habitDuration.getDaysNumber() -
+                        this.habitDuration.getDaysNumber()).collect(joining());
+            } else {
+                dayChecking = dayChecking.substring(0, habitDuration.getDaysNumber());
+                //todo jest blad przy ustawieniu 21 dni
+            }
+            this.habitDuration = habitDuration;
+        }
     }
 }

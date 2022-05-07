@@ -59,4 +59,8 @@ public class HabitRepository {
     public void delete(HabitData habitData) {
         habitDao.deleteOne(habitData);
     }
+
+    HabitData findById(Long habitId) throws Exception {
+        return habitDao.findById(habitId);
+    }
 }

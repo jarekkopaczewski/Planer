@@ -12,6 +12,16 @@ import java.util.List;
 @Dao
 public interface HabitDao {
     /**
+     * Method get HabitData with given id
+     *
+     * @param id of searched habitData
+     * @return HabitData
+     * @throws Exception if sth is wrong xd
+     */
+    @Query("SELECT * FROM HabitData WHERE habitId = :id")
+    HabitData findById(Long id) throws Exception;
+
+    /**
      * @return all habits from database
      */
     @Query("SELECT * FROM HabitData")
@@ -23,6 +33,10 @@ public interface HabitDao {
      */
     @Query("SELECT * FROM HabitData WHERE :date >= beginDay AND :date <= endDay")
     LiveData<List<HabitData>> getTaskDataByDate(long date);
+
+    @Query(" SELECT MIN( notificationTime - :time)" +
+            " FROM HabitData WHERE (notificationTime - :time) >0")
+    Long getNextNotification(long time) throws Exception;
 
     /**
      * Method insert given habit to database
@@ -49,6 +63,7 @@ public interface HabitDao {
 
     /**
      * Method update given habit
+     *
      * @param habitData given habit which will be updated
      */
     @Update

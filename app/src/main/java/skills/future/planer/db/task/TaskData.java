@@ -70,6 +70,7 @@ public class TaskData implements Parcelable {
      */
     @ColumnInfo(name = "endingDate")
     private long endingDate = 0;
+    private Long foreignKeyToGoal;
 
     /**
      * Field used to pack taskData to bundle it isn't save in database
