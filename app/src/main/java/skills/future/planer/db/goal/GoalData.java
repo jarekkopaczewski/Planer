@@ -18,4 +18,25 @@ public class GoalData {
         this.title = title;
         this.details = details;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GoalData goalData = (GoalData) o;
+
+        if (!getGoalId().equals(goalData.getGoalId())) return false;
+        if (getTitle() != null ? !getTitle().equals(goalData.getTitle()) : goalData.getTitle() != null)
+            return false;
+        return getDetails() != null ? getDetails().equals(goalData.getDetails()) : goalData.getDetails() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getGoalId().hashCode();
+        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
+        result = 31 * result + (getDetails() != null ? getDetails().hashCode() : 0);
+        return result;
+    }
 }

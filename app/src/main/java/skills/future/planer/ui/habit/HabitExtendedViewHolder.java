@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
@@ -19,7 +20,6 @@ import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
 import skills.future.planer.ui.goals.ICustomViewHolder;
-import skills.future.planer.ui.month.MonthFragment;
 
 @Getter
 public class HabitExtendedViewHolder extends ICustomViewHolder {
@@ -84,7 +84,7 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
         circularProgressIndicatorHabitDay
                 .setCurrentProgress(DatesParser.countDifferenceBetweenDays(habitData.getBeginCalendarDay(),
-                        MonthFragment.getGlobalSelectedDate()));
+                        CalendarDay.today()));
                        /* ((double) habitData.getNumberOfDaysWhereHabitsWasDone()
                         / (habitData.getNumberOfDaysWhereHabitsWasDone()
                         + habitData.getNumberOfDaysWhereHabitsWasFailure())));*/

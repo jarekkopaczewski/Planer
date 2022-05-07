@@ -13,8 +13,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.util.Calendar;
-
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
@@ -85,6 +83,7 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
             habitDao.deleteAll();
+            goalsDao.deleteAll();
             CalendarDay day = CalendarDay.today();
             CalendarDay day2 = CalendarDay.from(2022, 4, 21);
             CalendarDay day3 = CalendarDay.from(2022, 4, 23);
@@ -96,12 +95,9 @@ public abstract class AppDatabase extends RoomDatabase {
             goal.setGoalId(goalsDao.insert(goal));
 
             try {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, 20);
-                calendar.set(Calendar.MINUTE, 43);
                 for (int i = 0; i < 1; i++)
-                    habitDao.insert(new HabitData("test2", "1110011",
-                            HabitDuration.Short, DatesParser.toLocalDate(day2), calendar, goal.getGoalId()));
+                    habitDao.insert(new HabitData("test", "1110011",
+                            HabitDuration.Short, DatesParser.toLocalDate(day2), 12, 0, goal.getGoalId()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

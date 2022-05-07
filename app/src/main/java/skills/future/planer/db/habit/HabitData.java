@@ -54,25 +54,37 @@ public class HabitData {
     }
 
     public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
-                     LocalDate beginDay, Calendar calendar) throws Exception {
+                     LocalDate beginDay, int hour, int minutes) throws Exception {
         this.title = title;
         editDaysOfWeek(daysOfWeek);
         this.habitDuration = habitDuration;
         this.beginDay = DatesParser.toMilliseconds(beginDay);
         this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
         dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
-        notificationTime = calendar.getTimeInMillis();
+        var cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minutes);
+        var cal2 = Calendar.getInstance();
+        cal2.set(Calendar.HOUR_OF_DAY, 0);
+        cal2.set(Calendar.MINUTE, 0);
+        this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
     }
 
     public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
-                     LocalDate beginDay, Calendar calendar, Long foreignKeyToGoal) throws Exception {
+                     LocalDate beginDay, int hour, int minutes, Long foreignKeyToGoal) throws Exception {
         this.title = title;
         editDaysOfWeek(daysOfWeek);
         this.habitDuration = habitDuration;
         this.beginDay = DatesParser.toMilliseconds(beginDay);
         this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
         dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
-        notificationTime = calendar.getTimeInMillis();
+        var cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minutes);
+        var cal2 = Calendar.getInstance();
+        cal2.set(Calendar.HOUR_OF_DAY, 1);
+        cal2.set(Calendar.MINUTE, 0);
+        this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
         this.foreignKeyToGoal = foreignKeyToGoal;
     }
 
@@ -204,8 +216,8 @@ public class HabitData {
                         this.habitDuration.getDaysNumber()).collect(joining());
             } else {
                 dayChecking = dayChecking.substring(0, habitDuration.getDaysNumber());
-                //todo jest blad przy ustawieniu 21 dni
             }
+            endDay = DatesParser.toMilliseconds(DatesParser.toLocalDate(beginDay).plusDays(habitDuration.getDaysNumber() - 1));
             this.habitDuration = habitDuration;
         }
     }
