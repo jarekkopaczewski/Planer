@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.ActivityHabitCreatorBinding;
+import skills.future.planer.ui.month.MonthFragment;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.habit.HabitViewModel;
@@ -110,8 +111,12 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
         } else {
             // set current time & date
+            calendar2.set(MonthFragment.getGlobalSelectedDate().getYear(),
+                    MonthFragment.getGlobalSelectedDate().getMonth() - 1,
+                    MonthFragment.getGlobalSelectedDate().getDay());
             timeEditText.setText(formatter.format(calendar.getTime()));
             editTextDateHabit.setText(formatterDate.format(calendar2.getTime()));
+
 
             // add save button listener & add conditions check
             saveHabitButtonSetUp();
