@@ -7,9 +7,12 @@ import android.widget.Toast;
 
 import androidx.lifecycle.LifecycleService;
 
+import skills.future.planer.db.habit.HabitRepository;
+
 public class NotificationService extends LifecycleService {
 
     private NotificationFactory notificationFactory;
+    private HabitRepository habitRepository;
 
     public class LocalBinder extends Binder {
         public NotificationService getService() {
@@ -31,9 +34,11 @@ public class NotificationService extends LifecycleService {
     @Override
     public void onCreate() {
         super.onCreate();
-        notificationFactory = new NotificationFactory(getApplicationContext(), this);
+        habitRepository = new HabitRepository(getApplication());
+        notificationFactory = new NotificationFactory(getApplicationContext(), this, habitRepository);
         serviceThread = new Thread(() -> {
-
+            /*habitRepository.getAllHabitDataFromDay(Calendar.getInstance()
+                    .getTimeInMillis()).observe(this, habitData -> );*/
         });
     }
 
@@ -41,6 +46,7 @@ public class NotificationService extends LifecycleService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+
 
         notificationFactory.generateNewNotification(false);
         /*Message msg = serviceHandler.obtainMessage();

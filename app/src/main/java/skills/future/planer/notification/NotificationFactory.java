@@ -10,6 +10,7 @@ import java.util.Calendar;
 
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.habit.HabitRepository;
 
 public class NotificationFactory {
 
@@ -17,6 +18,7 @@ public class NotificationFactory {
     private static final String CHANNEL_NAME = "Habit Channel";
     private static final String CHANNEL_DESCRIPTION = "Channel of Planer application";
     private final AppDatabase appDatabase;
+    private HabitRepository habitRepository;
     private HabitData habitNotify;
     private int numberOfNotDoneHabits;
     private LifecycleOwner lifecycleOwner;
@@ -24,18 +26,19 @@ public class NotificationFactory {
     private static int notificationId = 1;
     private final Context context;
 
-    public NotificationFactory(Context context, LifecycleOwner lifecycleOwner) {
+    public NotificationFactory(Context context, LifecycleOwner lifecycleOwner, HabitRepository habitRepository) {
         this.context = context;
         this.lifecycleOwner = lifecycleOwner;
         appDatabase = AppDatabase.getInstance(context);
+        this.habitRepository = habitRepository;
         createDatabaseObservers();
     }
 
     private void createDatabaseObservers() {
+
         appDatabase.habitDao().getHabits().observe(lifecycleOwner,
                 habitData -> habitData.forEach(habitData1 -> habitNotify = habitData1));
-        appDatabase.habitDao().getHabits().observe(lifecycleOwner,
-                habitData -> numberOfNotDoneHabits = habitData.size());
+
     }
 
 
