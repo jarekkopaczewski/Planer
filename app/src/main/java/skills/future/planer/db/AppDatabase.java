@@ -97,10 +97,10 @@ public abstract class AppDatabase extends RoomDatabase {
 
             try {
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR, 12);
-                calendar.set(Calendar.MONTH, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 20);
+                calendar.set(Calendar.MINUTE, 43);
                 for (int i = 0; i < 1; i++)
-                    habitDao.insert(new HabitData("test", "1110011",
+                    habitDao.insert(new HabitData("test2", "1110011",
                             HabitDuration.Short, DatesParser.toLocalDate(day2), calendar, goal.getGoalId()));
             } catch (Exception e) {
                 e.printStackTrace();

@@ -6,6 +6,8 @@ import android.content.Context;
 
 import androidx.lifecycle.LifecycleOwner;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import java.util.Calendar;
 
 import skills.future.planer.db.AppDatabase;
@@ -36,16 +38,27 @@ public class NotificationFactory {
 
     private void createDatabaseObservers() {
 
-        appDatabase.habitDao().getHabits().observe(lifecycleOwner,
-                habitData -> habitData.forEach(habitData1 -> habitNotify = habitData1));
-
+        habitRepository.getAllHabitDataFromDay(Calendar.getInstance().getTimeInMillis())
+                .observe(lifecycleOwner, habitDataList -> {
+                    numberOfNotDoneHabits = 0;
+                    habitDataList.forEach(habitData -> {
+                        if (!habitData.isHabitDone(CalendarDay.today()))
+                            numberOfNotDoneHabits++;
+                    });
+                });
+        try {
+            habitRepository.getNextNotificationHabit(Calendar.getInstance().getTimeInMillis())
+                    .observe(lifecycleOwner, habitData -> habitNotify = habitData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
     /**
      * Generates Notification depending on type
      */
-    public void generateNewNotification(boolean daySummary) {
+    public void generateNewNotification(boolean daySummary, long time) {
         createHabitNotificationChannel();
         if (daySummary) {
             if (numberOfNotDoneHabits != 0)
@@ -60,7 +73,7 @@ public class NotificationFactory {
                     CHANNEL_ID,
                     habitNotify,
                     notificationId,
-                    Calendar.getInstance().getTimeInMillis()).show();
+                    time).show();
 
         notificationId++;
     }

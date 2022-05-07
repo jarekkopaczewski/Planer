@@ -35,8 +35,8 @@ public class Notification {
         builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.today_icon)
                 .setContentTitle(context.getText(R.string.title_of_notification_singular))
-                .setWhen(time)
-                .setContentText(context.getText(R.string.time_of_realization_habit) + habitData.getTitle())
+                .setWhen(Calendar.getInstance().getTimeInMillis() + time)
+                .setContentText(context.getText(R.string.time_of_realization_habit) + " " + habitData.getTitle())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER);
     }

@@ -30,7 +30,15 @@ public class HabitRepository {
      * @return references to the habit list based on day
      */
     public LiveData<List<HabitData>> getAllHabitDataFromDay(long date) {
-        return habitDao.getTaskDataByDate(date);
+        return habitDao.getHabitDataByDate(date);
+    }
+
+    public Long getNextNotification(long time) throws Exception {
+        return habitDao.getNextNotification(time);
+    }
+
+    public LiveData<HabitData> getNextNotificationHabit(long time) throws Exception {
+        return habitDao.getNextNotificationHabit(time);
     }
 
     /**

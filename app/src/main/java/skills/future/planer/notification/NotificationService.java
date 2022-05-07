@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import androidx.lifecycle.LifecycleService;
 
+import java.util.Calendar;
+
 import skills.future.planer.db.habit.HabitRepository;
 
 public class NotificationService extends LifecycleService {
@@ -29,16 +31,33 @@ public class NotificationService extends LifecycleService {
 
     private final IBinder binder = new LocalBinder();
     private Thread serviceThread;
-
+    private Long sleepTime = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         habitRepository = new HabitRepository(getApplication());
         notificationFactory = new NotificationFactory(getApplicationContext(), this, habitRepository);
+        habitRepository.getAllHabits().observe(this, habitData -> {
+            if (serviceThread.getState() == Thread.State.TIMED_WAITING)
+                serviceThread.notify();
+        });
+
+
         serviceThread = new Thread(() -> {
-            /*habitRepository.getAllHabitDataFromDay(Calendar.getInstance()
-                    .getTimeInMillis()).observe(this, habitData -> );*/
+            while (true) {
+                try {
+                    sleepTime = habitRepository.getNextNotification(Calendar.getInstance().getTimeInMillis());
+                    if (sleepTime != null) {
+                        notificationFactory.generateNewNotification(false, sleepTime);
+                        serviceThread.wait(sleepTime);
+                    } else
+                        break;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
         });
     }
 
@@ -47,13 +66,10 @@ public class NotificationService extends LifecycleService {
         super.onStartCommand(intent, flags, startId);
         Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
 
+        if (!serviceThread.isAlive())
+            serviceThread.start();
 
-        notificationFactory.generateNewNotification(false);
-        /*Message msg = serviceHandler.obtainMessage();
-        msg.arg1 = startId;
-        serviceHandler.sendMessage(msg);
-*/
-        // If we get killed, after returning from here, restart
+
         return START_STICKY;
     }
 
