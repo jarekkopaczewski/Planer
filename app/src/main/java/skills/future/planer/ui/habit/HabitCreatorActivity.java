@@ -22,7 +22,6 @@ import java.util.Locale;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.ActivityHabitCreatorBinding;
-import skills.future.planer.db.DataBaseException;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.habit.HabitViewModel;
@@ -149,7 +148,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             (SundayChip.isChecked() ? "1" : "0");
                     var habit = new HabitData(editTextTitle.getText().toString(), weekDays, duration, DatesParser.toLocalDate(calendar2.getTime()), calendar);
                     habitViewModel.insert(habit);
-                } catch (DataBaseException dataBaseException) {
+                } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
                 }
                 finish();
@@ -180,11 +179,11 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             (FridayChip.isChecked() ? "1" : "0") +
                             (SaturdayChip.isChecked() ? "1" : "0") +
                             (SundayChip.isChecked() ? "1" : "0");
-                    habitData.setDaysOfWeek(weekDays);
+                    habitData.editDaysOfWeek(weekDays);
                     habitData.setTitle(editTextTitle.getText().toString());
                     habitData.setBeginLocalDay(DatesParser.toLocalDate(calendar2.getTime()));
                     habitViewModel.edit(habitData);
-                } catch (DataBaseException dataBaseException) {
+                } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
                 }
                 finish();

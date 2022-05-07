@@ -5,8 +5,6 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.generate;
 
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -21,15 +19,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.DataBaseException;
-import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.tools.DatesParser;
 
 @Getter
 @Setter
-@Entity(foreignKeys = {@ForeignKey(entity = GoalData.class,
-        parentColumns = "goalId",
-        childColumns = "foreignKeyToGoal",
-        onDelete = ForeignKey.CASCADE)})
+@Entity
 public class HabitData {
     @PrimaryKey(autoGenerate = true)
     private Long habitId;
@@ -49,27 +43,37 @@ public class HabitData {
      * string with status if habit was done, 1 -was done, 0 -no,
      * first bit is status for begin day etc.
      */
-    @Setter(AccessLevel.PACKAGE)
     private String dayChecking;
     private Long foreignKeyToGoal;
     private Long notificationTime;
 
-    HabitData() {
+    public HabitData() {
         title = dayChecking = daysOfWeek = "";
         habitDuration = HabitDuration.Short;
         beginDay = endDay = 0L;
     }
 
-    @Ignore
     public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
-                     LocalDate beginDay, Calendar calendar) throws DataBaseException {
+                     LocalDate beginDay, Calendar calendar) throws Exception {
         this.title = title;
-        setDaysOfWeek(daysOfWeek);
+        editDaysOfWeek(daysOfWeek);
         this.habitDuration = habitDuration;
         this.beginDay = DatesParser.toMilliseconds(beginDay);
         this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
         dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
         notificationTime = calendar.getTimeInMillis();
+    }
+
+    public HabitData(String title, String daysOfWeek, HabitDuration habitDuration,
+                     LocalDate beginDay, Calendar calendar, Long foreignKeyToGoal) throws Exception {
+        this.title = title;
+        editDaysOfWeek(daysOfWeek);
+        this.habitDuration = habitDuration;
+        this.beginDay = DatesParser.toMilliseconds(beginDay);
+        this.endDay = DatesParser.toMilliseconds(beginDay.plusDays(habitDuration.getDaysNumber() - 1));
+        dayChecking = generate(() -> "0").limit(habitDuration.getDaysNumber()).collect(joining());
+        notificationTime = calendar.getTimeInMillis();
+        this.foreignKeyToGoal = foreignKeyToGoal;
     }
 
     /**
@@ -175,7 +179,7 @@ public class HabitData {
         setDayChecking(myName.toString());
     }
 
-    public void setDaysOfWeek(String daysOfWeek) throws DataBaseException {
+    public void editDaysOfWeek(String daysOfWeek) throws Exception {
         if (daysOfWeek.length() != 7)
             throw new DataBaseException("Wrong daysOfWeek argument length. Excepted: 7, Actual:" +
                     daysOfWeek.length());

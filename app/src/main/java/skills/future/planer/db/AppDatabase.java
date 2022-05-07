@@ -16,17 +16,15 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.util.Calendar;
 
 import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
-import skills.future.planer.db.task.enums.category.TaskCategory;
-import skills.future.planer.db.task.enums.priority.Priorities;
-import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
-@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 5)
+@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 6)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
@@ -37,6 +35,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract TaskDataDao taskDataTabDao();
 
     public abstract HabitDao habitDao();
+
+    public abstract GoalsDao goalsDao();
 
     public static AppDatabase getInstance(final Context context/*, final AppExecutors executors*/) {
         if (sInstance == null) {
@@ -68,12 +68,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
         private final TaskDataDao mDao;
         private final HabitDao habitDao;
+        private final GoalsDao goalsDao;
         //String[] words = {"dolphin", "crocodile", "cobra"};
 
         PopulateDbAsync(AppDatabase db) {
             super();
             mDao = db.taskDataTabDao();
             habitDao = db.habitDao();
+            goalsDao = db.goalsDao();
         }
 
         @Override
@@ -90,37 +92,41 @@ public abstract class AppDatabase extends RoomDatabase {
             CalendarDay day5 = CalendarDay.from(2022, 4, 9);
             CalendarDay day6 = CalendarDay.from(2022, 4, 26);
             int counter = 1;
+            var goal = new GoalData("tsego", "asfasf");
+            goal.setGoalId(goalsDao.insert(goal));
+
             try {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR, 12);
                 calendar.set(Calendar.MONTH, 0);
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 1; i++)
                     habitDao.insert(new HabitData("test", "1110011",
-                            HabitDuration.Short, DatesParser.toLocalDate(day2), calendar));
-            } catch (DataBaseException e) {
+                            HabitDuration.Short, DatesParser.toLocalDate(day2), calendar, goal.getGoalId()));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+
 //
-            for (int i = 0; i < 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
-                mDao.insert(word);
-                counter++;
-            }
-            for (int i = 0; i < 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie nieważne i pilne" + counter, "", day2, day3);
-                mDao.insert(word);
-                counter++;
-            }
-            for (int i = 0; i <= 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day4, day2);
-                mDao.insert(word);
-                counter++;
-            }
-            for (int i = 0; i <= 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day4, day5);
-                mDao.insert(word);
-                counter++;
-            }
+//            for (int i = 0; i < 1; i++) {
+//                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
+//                mDao.insert(word);
+//                counter++;
+//            }
+//            for (int i = 0; i < 1; i++) {
+//                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie nieważne i pilne" + counter, "", day2, day3);
+//                mDao.insert(word);
+//                counter++;
+//            }
+//            for (int i = 0; i <= 1; i++) {
+//                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day4, day2);
+//                mDao.insert(word);
+//                counter++;
+//            }
+//            for (int i = 0; i <= 1; i++) {
+//                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day4, day5);
+//                mDao.insert(word);
+//                counter++;
+//            }
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
 //                mDao.insert(word);

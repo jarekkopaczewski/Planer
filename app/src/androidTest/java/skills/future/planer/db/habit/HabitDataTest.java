@@ -23,7 +23,7 @@ public class HabitDataTest {
     HabitData habit;
 
     @Before
-    public void setUp() throws DataBaseException {
+    public void setUp() throws Exception {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR, 12);
         calendar.set(Calendar.MONTH, 0);
@@ -32,16 +32,16 @@ public class HabitDataTest {
     }
 
     @Test
-    public void checkDaysOfWeekNoCheckedDays() throws DataBaseException {
+    public void checkDaysOfWeekNoCheckedDays() throws Exception {
         String days = "0000000";
-        habit.setDaysOfWeek(days);
+        habit.editDaysOfWeek(days);
         assertEquals(habit.getDaysOfWeek(), days);
     }
 
     @Test(expected = DataBaseException.class)
-    public void checkDaysOfWeekTooMuchCheckedDays() throws DataBaseException {
+    public void checkDaysOfWeekTooMuchCheckedDays() throws Exception {
         String days = "00000001";
-        habit.setDaysOfWeek(days);
+        habit.editDaysOfWeek(days);
         assertEquals(habit.getDaysOfWeek(), days);
     }
 
