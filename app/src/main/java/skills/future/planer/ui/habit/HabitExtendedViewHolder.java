@@ -82,9 +82,11 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
 
     private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
-        circularProgressIndicatorHabitDay
-                .setCurrentProgress(DatesParser.countDifferenceBetweenDays(habitData.getBeginCalendarDay(),
-                        CalendarDay.today()));
+        if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
+            circularProgressIndicatorHabitDay
+                    .setCurrentProgress(DatesParser.countDifferenceBetweenDays(
+                            habitData.getBeginCalendarDay(), CalendarDay.today()));
+        else circularProgressIndicatorHabitDay.setCurrentProgress(0);
                        /* ((double) habitData.getNumberOfDaysWhereHabitsWasDone()
                         / (habitData.getNumberOfDaysWhereHabitsWasDone()
                         + habitData.getNumberOfDaysWhereHabitsWasFailure())));*/
