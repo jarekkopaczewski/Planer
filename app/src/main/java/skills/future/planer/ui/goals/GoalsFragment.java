@@ -12,6 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
+<<<<<<<<< Temporary merge branch 1
+import com.codeboy.pager2_transformers.Pager2_BackDrawTransformer;
+import com.codeboy.pager2_transformers.Pager2_CubeInTransformer;
+import com.codeboy.pager2_transformers.Pager2_CubeOutTransformer;
+import com.codeboy.pager2_transformers.Pager2_DepthTransformer;
+=========
+>>>>>>>>> Temporary merge branch 2
 import com.codeboy.pager2_transformers.Pager2_ZoomInTransformer;
 
 import skills.future.planer.databinding.FragmentGoalsBinding;
@@ -33,9 +40,12 @@ public class GoalsFragment extends Fragment {
         View root = binding.getRoot();
 
         totalGoalList = binding.totalGoalList;
-        goalTotalAdapter = new GoalTotalAdapter(this.getContext(), this, new ViewModelProvider(this).get(HabitViewModel.class));
         pagerCountText = binding.pagerCountText;
 
+        goalTotalAdapter.setLifecycle(getLifecycle());
+        goalTotalAdapter.setFragmentManager(getChildFragmentManager());
+
+        goalTotalAdapter = new GoalTotalAdapter(this.getContext(), this, new ViewModelProvider(this).get(HabitViewModel.class));
         goalTotalAdapter.setLifecycle(getLifecycle());
         goalTotalAdapter.setFragmentManager(getChildFragmentManager());
         goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
