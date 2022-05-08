@@ -130,7 +130,7 @@ public class HabitData {
         return result;
     }
 
-    private boolean isDayOfWeekChecked(LocalDate date) {
+    public boolean isDayOfWeekChecked(LocalDate date) {
         StringBuilder myName = new StringBuilder(getDaysOfWeek());
         return switch (date.getDayOfWeek()) {
             case MONDAY -> myName.charAt(0) == '1';
@@ -201,7 +201,9 @@ public class HabitData {
     public boolean isHabitDone(CalendarDay globalSelectedDate) {
         int dif = (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(beginDay),
                 DatesParser.toLocalDate(globalSelectedDate));
-        return dayChecking.charAt(dif) == '1';
+        if (dif >= 0 && dif <= habitDuration.getDaysNumber())
+            return dayChecking.charAt(dif) == '1';
+        return false;
     }
 
     public void setBeginLocalDay(LocalDate beginDay) {

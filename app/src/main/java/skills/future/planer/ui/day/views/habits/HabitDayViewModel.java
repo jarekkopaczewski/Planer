@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.util.stream.Collectors;
+
 import skills.future.planer.db.habit.HabitViewModel;
+import skills.future.planer.tools.DatesParser;
 
 public class HabitDayViewModel extends ViewModel {
     private static HabitViewModel habitViewModel;
@@ -18,8 +21,10 @@ public class HabitDayViewModel extends ViewModel {
      */
     public void updateDate(CalendarDay date) {
         habitViewModel.getAllHabitDataFromDay(date)
-                .observe(viewLifecycleOwner,
-                        taskData -> habitTotalAdapter.setHabitsList(taskData));
+                .observe(viewLifecycleOwner, habits -> habitTotalAdapter.setHabitsList
+                        (habits.stream().filter(habitData -> habitData
+                                .isDayOfWeekChecked(DatesParser.toLocalDate(date)))
+                                .collect(Collectors.toList())));
     }
 
     public HabitViewModel getHabitViewModel() {
