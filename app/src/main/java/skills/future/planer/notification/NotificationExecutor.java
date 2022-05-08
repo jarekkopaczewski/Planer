@@ -3,40 +3,39 @@ package skills.future.planer.notification;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
-public class SerialExecutor implements Executor {
+public class NotificationExecutor implements Executor {
     private final Queue<Runnable> tasks = new ArrayDeque<>();
-    private final Executor executor;
+    private Future<?> future;
+    private final ExecutorService executor;
     private Runnable active;
 
-    SerialExecutor(Executor executor) {
+    NotificationExecutor(ExecutorService executor) {
         this.executor = executor;
     }
 
     public synchronized void execute(Runnable r) {
-        tasks.add(() -> {
-            try {
-                r.run();
-            } finally {
-                scheduleNext();
-            }
-        });
+        tasks.add(r);
         if (active == null) {
             scheduleNext();
         }
     }
 
-    protected synchronized void scheduleNext() {
+    public synchronized void scheduleNext() {
         if ((active = tasks.poll()) != null) {
-            executor.execute(active);
+            future = executor.submit(active);
         }
     }
 
     public void clearQueue() {
         if (active != null)
-            synchronized (active) {
-                active.notify();
+            synchronized (future) {
+                future.cancel(true);
+                active = null;
             }
         tasks.clear();
+
     }
 }

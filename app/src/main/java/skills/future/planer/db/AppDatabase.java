@@ -1,6 +1,7 @@
 package skills.future.planer.db;
 
 import android.content.Context;
+import android.icu.util.Calendar;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -90,6 +91,7 @@ public abstract class AppDatabase extends RoomDatabase {
             CalendarDay day4 = CalendarDay.from(2022, 4, 7);
             CalendarDay day5 = CalendarDay.from(2022, 4, 9);
             CalendarDay day6 = CalendarDay.from(2022, 4, 26);
+            var cal = Calendar.getInstance();
             int counter = 1;
             var goal = new GoalData("tsego", "asfasf");
             goal.setGoalId(goalsDao.insert(goal));
@@ -97,9 +99,9 @@ public abstract class AppDatabase extends RoomDatabase {
             try {
                 for (int i = 0; i < 1; i++)
                     habitDao.insert(new HabitData("test", "1110011",
-                            HabitDuration.Short, DatesParser.toLocalDate(day2), 16, 38, goal.getGoalId()));
+                            HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
                 habitDao.insert(new HabitData("test2", "1110011",
-                        HabitDuration.Short, DatesParser.toLocalDate(day2), 16, 40, goal.getGoalId()));
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

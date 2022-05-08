@@ -22,6 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static final String KEY_PREF_THEME = "themes";
     public static final String KEY_PREF_TIME = "time_picker";
+    public static String chosenTimeField = "20:00";
     private SettingsActivityBinding binding;
 
     @Override
@@ -72,6 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
                 var chosenTime = formatter.format(calendar.getTime());
                 Objects.requireNonNull(time_picker).setTitle("Godzina podsumowania: " + chosenTime);
                 time_picker.setDefaultValue(chosenTime);
+                chosenTimeField = chosenTime;
             };
 
             Objects.requireNonNull(time_picker).setOnPreferenceClickListener(preference -> {
