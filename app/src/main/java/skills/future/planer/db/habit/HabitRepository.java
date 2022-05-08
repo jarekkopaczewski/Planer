@@ -37,7 +37,7 @@ public class HabitRepository {
         return habitDao.getNextNotification(time);
     }
 
-    public LiveData<HabitData> getNextNotificationHabit(long time) throws Exception {
+    public HabitData getNextNotificationHabit(long time) throws Exception {
         return habitDao.getNextNotificationHabit(time);
     }
 

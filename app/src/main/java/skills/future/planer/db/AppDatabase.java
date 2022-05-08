@@ -97,7 +97,9 @@ public abstract class AppDatabase extends RoomDatabase {
             try {
                 for (int i = 0; i < 1; i++)
                     habitDao.insert(new HabitData("test", "1110011",
-                            HabitDuration.Short, DatesParser.toLocalDate(day2), 12, 0, goal.getGoalId()));
+                            HabitDuration.Short, DatesParser.toLocalDate(day2), 16, 38, goal.getGoalId()));
+                habitDao.insert(new HabitData("test2", "1110011",
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), 16, 40, goal.getGoalId()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

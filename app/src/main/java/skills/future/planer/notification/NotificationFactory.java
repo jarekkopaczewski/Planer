@@ -46,19 +46,13 @@ public class NotificationFactory {
                             numberOfNotDoneHabits++;
                     });
                 });
-        try {
-            habitRepository.getNextNotificationHabit(Calendar.getInstance().getTimeInMillis())
-                    .observe(lifecycleOwner, habitData -> habitNotify = habitData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 
     /**
      * Generates Notification depending on type
      */
-    public void generateNewNotification(boolean daySummary, long time) {
+    public void generateNewNotification(boolean daySummary, HabitData habitNotify) {
         createHabitNotificationChannel();
         if (daySummary) {
             if (numberOfNotDoneHabits != 0)
@@ -72,8 +66,7 @@ public class NotificationFactory {
                     context,
                     CHANNEL_ID,
                     habitNotify,
-                    notificationId,
-                    time).show();
+                    notificationId).show();
 
         notificationId++;
     }

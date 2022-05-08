@@ -130,7 +130,7 @@ public class HabitData {
         return result;
     }
 
-    private boolean isDayOfWeekChecked(LocalDate date) {
+    public boolean isDayOfWeekChecked(LocalDate date) {
         StringBuilder myName = new StringBuilder(getDaysOfWeek());
         return switch (date.getDayOfWeek()) {
             case MONDAY -> myName.charAt(0) == '1';

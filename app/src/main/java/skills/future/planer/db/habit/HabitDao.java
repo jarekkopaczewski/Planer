@@ -39,7 +39,7 @@ public interface HabitDao {
 
     @Query("SELECT * FROM HABITDATA WHERE (notificationTime - :time) = " +
             "(SELECT MIN( notificationTime - :time) FROM HabitData WHERE (notificationTime - :time) > 0)")
-    LiveData<HabitData> getNextNotificationHabit(long time) throws Exception;
+    HabitData getNextNotificationHabit(long time) throws Exception;
 
     /**
      * Method insert given habit to database

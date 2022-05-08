@@ -17,11 +17,11 @@ public class Notification {
     private NotificationCompat.Builder builder;
 
     public Notification(Context context, String channelId,
-                        HabitData habitData, int notificationId, long time) {
+                        HabitData habitData, int notificationId) {
         this.context = context;
         this.channelId = channelId;
         this.notificationId = notificationId;
-        setNotificationSettings(habitData, time);
+        setNotificationSettings(habitData);
     }
 
     public Notification(Context context, String channelId, int notificationId, boolean moreThanOne) {
@@ -31,11 +31,10 @@ public class Notification {
         setNotificationSettings(moreThanOne);
     }
 
-    private void setNotificationSettings(HabitData habitData, long time) {
+    private void setNotificationSettings(HabitData habitData) {
         builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.today_icon)
                 .setContentTitle(context.getText(R.string.title_of_notification_singular))
-                .setWhen(Calendar.getInstance().getTimeInMillis() + time)
                 .setContentText(context.getText(R.string.time_of_realization_habit) + " " + habitData.getTitle())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER);
