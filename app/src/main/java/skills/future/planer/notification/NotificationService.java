@@ -3,11 +3,9 @@ package skills.future.planer.notification;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import androidx.lifecycle.LifecycleService;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +15,6 @@ import lombok.SneakyThrows;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitRepository;
 import skills.future.planer.tools.DatesParser;
-import skills.future.planer.ui.settings.SettingsActivity;
 
 public class NotificationService extends LifecycleService {
 
@@ -27,6 +24,7 @@ public class NotificationService extends LifecycleService {
 
     private final IBinder binder = new LocalBinder();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService summaryExecutor = Executors.newSingleThreadExecutor();
     private NotificationExecutor notificationExecutor;
 
 
@@ -49,12 +47,15 @@ public class NotificationService extends LifecycleService {
         habitRepository = new HabitRepository(getApplication());
         notificationFactory = new NotificationFactory(getApplicationContext(), this, habitRepository);
 
-
         notificationExecutor = new NotificationExecutor(executor);
 
+        summaryRunnable();
+        habitRunnable();
+    }
 
+    private void habitRunnable() {
         habitRepository.getAllHabitDataFromDay(Calendar.getInstance().getTimeInMillis())
-                .observe(this, habitDataList -> new Thread(() -> {
+                .observe(this, habitDataList -> Executors.newSingleThreadExecutor().execute(() -> {
                     var calendarTime = Calendar.getInstance();
                     var time = calendarTime.getTimeInMillis();
 
@@ -62,13 +63,6 @@ public class NotificationService extends LifecycleService {
                     calendarTime.set(Calendar.MINUTE, 0);
 
                     var deltaTime = time - calendarTime.getTimeInMillis();
-
-                    String[] timeTable = SettingsActivity.chosenTimeField.split(":");
-                    Arrays.stream(timeTable).forEach(System.out::println);
-
-                    calendarTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeTable[0]));
-                    calendarTime.set(Calendar.MINUTE, Integer.parseInt(timeTable[1]));
-
 
                     notificationExecutor.clearQueue();
 
@@ -82,16 +76,28 @@ public class NotificationService extends LifecycleService {
                                     timeBetween[1] = timeBetween[0];
                                 timeBetween[0] += habitData.getNotificationTime() - deltaTime;
                             })
-                            .forEach(habitData -> {
-                                var test = habitData.getNotificationTime() - deltaTime - timeBetween[1];
-                                System.out.println(test);
-                                notificationExecutor
-                                        .execute(createNewRunnableNotification(
-                                                habitData, test));
-                            });
-                }).start());
+                            .forEach(habitData -> notificationExecutor
+                                    .execute(createNewRunnableNotification(
+                                            habitData,
+                                            habitData.getNotificationTime() - deltaTime - timeBetween[1])));
+                }));
     }
 
+    private void summaryRunnable() {
+        summaryExecutor.submit(() -> {
+            String[] timeTable = "20:00".split(":");
+            var summaryTime = Calendar.getInstance();
+            summaryTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeTable[0]));
+            summaryTime.set(Calendar.MINUTE, Integer.parseInt(timeTable[1]));
+            var time = summaryTime.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+            if (time > 0)
+                summaryExecutor.execute(createNewRunnableNotification(time));
+        });
+    }
+
+    /**
+     * Creates habit notification
+     */
     private Runnable createNewRunnableNotification(HabitData habitData, long timeToNotification) {
         return () -> {
             synchronized (this) {
@@ -105,6 +111,9 @@ public class NotificationService extends LifecycleService {
         };
     }
 
+    /**
+     * Creates summary notification
+     */
     private Runnable createNewRunnableNotification(long timeToNotification) {
         return () -> {
             synchronized (this) {
@@ -121,17 +130,9 @@ public class NotificationService extends LifecycleService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
-
         return START_STICKY;
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
-    }
 }
 
 

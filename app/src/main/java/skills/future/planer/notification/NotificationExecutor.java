@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 public class NotificationExecutor implements Executor {
-    private final Queue<Runnable> tasks = new ArrayDeque<>();
+    private final Queue<Runnable> habits = new ArrayDeque<>();
     private Future<?> future;
     private final ExecutorService executor;
     private Runnable active;
@@ -17,25 +17,27 @@ public class NotificationExecutor implements Executor {
     }
 
     public synchronized void execute(Runnable r) {
-        tasks.add(r);
+        habits.add(r);
         if (active == null) {
             scheduleNext();
         }
     }
 
     public synchronized void scheduleNext() {
-        if ((active = tasks.poll()) != null) {
+        if ((active = habits.poll()) != null) {
             future = executor.submit(active);
         }
     }
 
+    /**
+     * Clears queue and interrupt current thread
+     */
     public void clearQueue() {
         if (active != null)
             synchronized (future) {
                 future.cancel(true);
                 active = null;
             }
-        tasks.clear();
-
+        habits.clear();
     }
 }

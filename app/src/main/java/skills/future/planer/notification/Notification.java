@@ -5,8 +5,6 @@ import android.content.Context;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import java.util.Calendar;
-
 import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
 
@@ -43,15 +41,19 @@ public class Notification {
     private void setNotificationSettings(boolean moreThanOne) {
         builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.today_icon)
-                .setWhen(Calendar.getInstance().getTimeInMillis())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER);
         if (moreThanOne)
             builder.setContentTitle(context.getText(R.string.title_reminder_about_habit_plural))
-                    .setContentText(context.getText(R.string.reminder_about_habit_plural));
+                    .setContentText(context.getText(R.string.reminder_about_habit_plural))
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(context.getText(R.string.reminder_about_habit_plural)));
+
         else
             builder.setContentTitle(context.getText(R.string.title_reminder_about_habit_singular))
-                    .setContentText(context.getText(R.string.reminder_about_habit_singular));
+                    .setContentText(context.getText(R.string.reminder_about_habit_singular))
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(context.getText(R.string.reminder_about_habit_singular)));
     }
 
     public void show() {

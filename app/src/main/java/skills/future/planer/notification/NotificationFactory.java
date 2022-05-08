@@ -10,7 +10,6 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.util.Calendar;
 
-import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitRepository;
 
@@ -19,25 +18,17 @@ public class NotificationFactory {
     private static final String CHANNEL_ID = "100";
     private static final String CHANNEL_NAME = "Habit Channel";
     private static final String CHANNEL_DESCRIPTION = "Channel of Planer application";
-    private final AppDatabase appDatabase;
-    private HabitRepository habitRepository;
-    private HabitData habitNotify;
     private int numberOfNotDoneHabits;
-    private LifecycleOwner lifecycleOwner;
 
     private static int notificationId = 1;
     private final Context context;
 
     public NotificationFactory(Context context, LifecycleOwner lifecycleOwner, HabitRepository habitRepository) {
         this.context = context;
-        this.lifecycleOwner = lifecycleOwner;
-        appDatabase = AppDatabase.getInstance(context);
-        this.habitRepository = habitRepository;
-        createDatabaseObservers();
+        createNotDoneTaskObserver(lifecycleOwner, habitRepository);
     }
 
-    private void createDatabaseObservers() {
-
+    private void createNotDoneTaskObserver(LifecycleOwner lifecycleOwner, HabitRepository habitRepository) {
         habitRepository.getAllHabitDataFromDay(Calendar.getInstance().getTimeInMillis())
                 .observe(lifecycleOwner, habitDataList -> {
                     numberOfNotDoneHabits = 0;
@@ -54,13 +45,14 @@ public class NotificationFactory {
      */
     public void generateNewNotification(boolean daySummary, HabitData habitNotify) {
         createHabitNotificationChannel();
+
         if (daySummary) {
             if (numberOfNotDoneHabits != 0)
                 new Notification(
                         context,
                         CHANNEL_ID,
                         notificationId,
-                        numberOfNotDoneHabits > 1);
+                        numberOfNotDoneHabits > 1).show();
         } else
             new Notification(
                     context,

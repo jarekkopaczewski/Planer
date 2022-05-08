@@ -33,14 +33,6 @@ public class HabitRepository {
         return habitDao.getHabitDataByDate(date);
     }
 
-    public Long getNextNotification(long time) throws Exception {
-        return habitDao.getNextNotification(time);
-    }
-
-    public HabitData getNextNotificationHabit(long time) throws Exception {
-        return habitDao.getNextNotificationHabit(time);
-    }
-
     /**
      * Method insert habit to database
      *

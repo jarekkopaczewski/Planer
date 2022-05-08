@@ -66,8 +66,8 @@
     <string name="local_service_started">start</string>
     <string name="title_of_notification_singular">Przypomnienie o nawyku</string>
     <string name="time_of_realization_habit">Czas na realizację twojego nawyku: </string>
-    <string name="title_reminder_about_habit_singular">Przypomnienie o niezrobionych nawyku</string>
-    <string name="title_reminder_about_habit_plural">Przypomnienie o niezrobionym nawykach</string>
+    <string name="title_reminder_about_habit_singular">Przypomnienie o niezrobionym nawyku</string>
+    <string name="title_reminder_about_habit_plural">Przypomnienie o niezrobionych nawykach</string>
     <string name="reminder_about_habit_singular">Dzień zbliża się ku końcowi, a dalej masz niezrealizowny nawyk</string>
     <string name="reminder_about_habit_plural">Dzień zbliża się ku końcowi, a dalej masz niezrealizowne nawyki</string>
 </resources>

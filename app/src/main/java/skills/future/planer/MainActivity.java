@@ -1,13 +1,9 @@
 package skills.future.planer;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,8 +32,6 @@ import skills.future.planer.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private boolean isBound;
-    private NotificationService notificationService;
 
     private static BottomNavigationView bottomView;
     private AppBarConfiguration mAppBarConfiguration;
@@ -147,13 +141,22 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    public static BottomNavigationView getBottomView() {
+        return bottomView;
+    }
+
+    /**
+     * TODO może bedzie jeszcze potrzebne w przyypadku listenera daty więc zostawiam
+     */
+    /*private boolean isBound;
+    private NotificationService notificationService;
+
     private void createService() {
         Intent serviceIntent = new Intent(this, NotificationService.class);
         bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
         // notificationService.setMainActivity(this);
 
     }
-
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -167,9 +170,5 @@ public class MainActivity extends AppCompatActivity {
             notificationService = null;
             isBound = false;
         }
-    };
-
-    public static BottomNavigationView getBottomView() {
-        return bottomView;
-    }
+    };*/
 }
