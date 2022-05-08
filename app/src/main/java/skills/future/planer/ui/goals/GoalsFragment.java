@@ -42,9 +42,6 @@ public class GoalsFragment extends Fragment {
         totalGoalList = binding.totalGoalList;
         pagerCountText = binding.pagerCountText;
 
-        goalTotalAdapter.setLifecycle(getLifecycle());
-        goalTotalAdapter.setFragmentManager(getChildFragmentManager());
-
         goalTotalAdapter = new GoalTotalAdapter(this.getContext(), this, new ViewModelProvider(this).get(HabitViewModel.class));
         goalTotalAdapter.setLifecycle(getLifecycle());
         goalTotalAdapter.setFragmentManager(getChildFragmentManager());
