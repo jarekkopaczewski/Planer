@@ -13,13 +13,14 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentHabitBinding;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
+import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.month.MonthFragment;
 
@@ -48,6 +49,7 @@ public class HabitFragment extends Fragment {
         habitTotalAdapter = new HabitTotalAdapter(this.getContext(), habitViewModel);
         habitDayViewModel.setHabitTotalAdapter(habitTotalAdapter);
         habitDayViewModel.setViewLifecycleOwner(this.getViewLifecycleOwner());
+        habitDayViewModel.setCircularProgress(binding.circularProgressIndicator);
         habitList.setAdapter(habitTotalAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -60,21 +62,25 @@ public class HabitFragment extends Fragment {
         circularProgressIndicator = binding.circularProgressIndicator;
         AnimateView.singleAnimation(binding.circularProgressIndicator, getContext(), R.anim.scalezoom2);
 
-        AtomicReference<Double> progressDone = new AtomicReference<>((double) 0);
-        AtomicReference<Double> progressAll = new AtomicReference<>((double) -1);
+
         /// set observer if sth on habitList was changed
         habitViewModel.getAllHabitDataFromDay(MonthFragment.getGlobalSelectedDate()).observe(
                 this.getViewLifecycleOwner(), habitData -> {
-                    progressAll.set(0.0);
-                    progressDone.set(0.0);
-                    for (HabitData habit : habitData) {
-                        progressDone.updateAndGet(v -> v + (habit.isHabitDone(MonthFragment.getGlobalSelectedDate()) ? 1.0 : 0.0));
-                        progressAll.updateAndGet(v -> v + 1.0);
+                    Integer progressDone = 0;
+                    Integer progressAll = 0;
+                    for (HabitData habit : habitData.stream().filter(habits -> habits
+                            .isDayOfWeekChecked(DatesParser.toLocalDate(MonthFragment.getGlobalSelectedDate())))
+                            .collect(Collectors.toList())) {
+                        progressDone += (habit.isHabitDone(MonthFragment.getGlobalSelectedDate()) ? 1 : 0);
+                        progressAll += 1;
                     }
-                    circularProgressIndicator.setProgress((progressDone.get() / progressAll.get()) * 100.0f, 100.0f);
+                    if (progressAll > 0.5)
+                        circularProgressIndicator.setCurrentProgress(((double) progressDone / progressAll) * 100.0f);
+                    else
+                        circularProgressIndicator.setCurrentProgress(100.0f);
                 });
 
-        circularProgressIndicator.setProgress(0.0f, 100.0f);
+        circularProgressIndicator.setMaxProgress(100.0f);
         circularProgressIndicator.animate();
         circularProgressIndicator.setProgressTextAdapter(new TextAdapter());
 

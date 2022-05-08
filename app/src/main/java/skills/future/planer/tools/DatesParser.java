@@ -38,7 +38,6 @@ public class DatesParser {
     }
 
     public static Long toMilliseconds(LocalDate localDate) {
-
         return java.util.Date.from(localDate.atStartOfDay()
                 .atZone(ZoneId.of("Etc/GMT+1"))
                 .toInstant()).getTime();
@@ -56,6 +55,14 @@ public class DatesParser {
     public static int countDifferenceBetweenDays(CalendarDay begin, CalendarDay end) {
         return (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(begin),
                 DatesParser.toLocalDate(end));
+    }
+
+    public static Calendar toCalendar(Long date) {
+        var cal = Calendar.getInstance();
+        var loc = toLocalDate(date);
+        cal.clear();
+        cal.set(loc.getYear(), loc.getMonthValue(), loc.getDayOfMonth());
+        return cal;
     }
 
     public static String toSting(CalendarDay day) {
