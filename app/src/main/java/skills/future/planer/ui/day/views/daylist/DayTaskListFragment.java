@@ -12,13 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
-import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.DayFragmentDirections;
@@ -44,7 +42,7 @@ public class DayTaskListFragment extends Fragment {
 
         AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
 
-        dayListViewModel.setWordViewModel(mTaskViewModel);
+        dayListViewModel.setTaskViewModel(mTaskViewModel);
         dayListViewModel.setTaskDayAdapter(taskDayAdapter);
         dayListViewModel.setLifecycleOwner(this.getViewLifecycleOwner());
         return root;

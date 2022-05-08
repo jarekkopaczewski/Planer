@@ -36,11 +36,11 @@ public class TaskDataDaoTest {
         userDao = db.taskDataTabDao();
         taskData = new TaskData(TaskCategory.Private, Priorities.Important,
                 TimePriority.Urgent, "Title","Details");
-        taskData.setTaskDataId(1);
+        taskData.setTaskDataId(1L);
         taskData2 = new TaskData(TaskCategory.Private, Priorities.Important,
                 TimePriority.Urgent, "Title","Details",
                 CalendarDay.from(2000,1,1),CalendarDay.from(2020,2,2));
-        taskData2.setTaskDataId(2);
+        taskData2.setTaskDataId(2L);
         userDao.insert(taskData);
         userDao.insert(taskData2);
     }
@@ -59,7 +59,7 @@ public class TaskDataDaoTest {
     public void insert() throws Exception {
         TaskData taskData1 = new TaskData(TaskCategory.Private, Priorities.NotImportant,
                 TimePriority.NotUrgent, "Title","Details");
-        taskData1.setTaskDataId(3);
+        taskData1.setTaskDataId(3L);
         userDao.insert(taskData1);
         TaskData res = userDao.findById(taskData1.getTaskDataId());
         assertEquals(taskData1,res);
@@ -72,13 +72,13 @@ public class TaskDataDaoTest {
     }
 
     @Test
-    public void testGetTaskData() throws Exception {
+    public void testGetTaskData() {
         List<TaskData> exp = new ArrayList<>(Arrays.asList(taskData,taskData2));
         assertEquals(exp,userDao.getTaskData(TaskCategory.Private));
     }
 
     @Test
-    public void testGetTaskData1() throws Exception {
+    public void testGetTaskData1() {
         List<TaskData> exp = new ArrayList<>(Arrays.asList(taskData,taskData2));
         assertEquals(exp,userDao.getTaskData(Priorities.Important,TimePriority.Urgent));
     }

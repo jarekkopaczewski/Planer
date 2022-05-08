@@ -66,77 +66,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:visibility="visible"
-                        tools:visibility="visible">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/mondayChip"
-                            android:layout_width="50dp"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:checked="true"
-                            android:text="Pn"
-                            app:checkedIconEnabled="false"
-                            app:closeIconEndPadding="0dp"
-                            app:closeIconStartPadding="0dp"
-                            app:textEndPadding="2dp" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/tueChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:checked="true"
-                            android:text="Wt"
-                            app:checkedIconEnabled="false"
-                            app:checkedIconVisible="false"
-                            app:closeIconVisible="false" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/wednChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:checked="true"
-                            android:text="Śr"
-                            app:checkedIconEnabled="false" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/thursChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:checked="true"
-                            android:text="Cz"
-                            app:checkedIconEnabled="false" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/fridChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:checked="true"
-                            android:text="Pt"
-                            app:checkedIconEnabled="false" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/saturdayChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:checked="true"
-                            android:text="So"
-                            app:checkedIconEnabled="false" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/sundayChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checkable="true"
-                            android:checked="true"
-                            android:text="Nd"
-                            app:checkedIconEnabled="false" />
-
-                    </com.google.android.material.chip.ChipGroup>
+                        tools:visibility="visible" />
 
                 </LinearLayout>
             </HorizontalScrollView>

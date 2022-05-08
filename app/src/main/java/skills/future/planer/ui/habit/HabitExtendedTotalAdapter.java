@@ -1,41 +1,57 @@
 package skills.future.planer.ui.habit;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import skills.future.planer.R;
+import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.day.views.habits.HabitViewHolder;
 
 public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtendedViewHolder> {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
-    private List<String> habitsList = new ArrayList<>(Arrays.asList("Nawyk testowy", "Nawyk testowy 2", "Nawyk nawyk nawyk nawyk", "Nawyk testowy 2", "Nawyk testowy 2"));
+    private final HabitViewModel habitViewModel;
+    private List<HabitData> habitsList = new ArrayList<>();
+    private final LifecycleOwner viewLifecycleOwner;
+    private final FragmentActivity activity;
 
-    public HabitExtendedTotalAdapter(Context context) {
+    @SuppressLint("NotifyDataSetChanged")
+    public void setHabitsList(List<HabitData> habitsList) {
+        this.habitsList = habitsList;
+        notifyDataSetChanged();
+
+    }
+
+    public HabitExtendedTotalAdapter(Context context, HabitViewModel habitViewModel, LifecycleOwner viewLifecycleOwner, FragmentActivity activity) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
+        this.habitViewModel = habitViewModel;
+        this.viewLifecycleOwner = viewLifecycleOwner;
+        this.activity = activity;
     }
 
     @NonNull
     @Override
     public HabitExtendedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HabitExtendedViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context);
+        return new HabitExtendedViewHolder(createViewOfItem(parent,
+                R.layout.fragment_habit_in_list_extended), context, habitViewModel, viewLifecycleOwner);
     }
 
     @NonNull
@@ -45,44 +61,26 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
         ImageView editButton = itemView.findViewById(R.id.editImageHabit);
 
-        itemView.setOnClickListener(e->{
-            AnimateView.animateInOut(itemView, context);
-        });
+        itemView.setOnClickListener(e -> AnimateView.animateInOut(itemView, context));
 
         // animation
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabit), context, R.anim.scalezoom2);
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
 
-        AnimateView.singleAnimation(itemView.findViewById(R.id.sundayChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.saturdayChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.fridChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.thursChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.wednChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.tueChip), context, R.anim.scalezoom2);
-        AnimateView.singleAnimation(itemView.findViewById(R.id.mondayChip), context, R.anim.scalezoom2);
+//todo usunąć?        AnimateView.singleAnimation(itemView.findViewById(R.id.sundayChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.saturdayChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.fridChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.thursChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.wednChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.tueChip), context, R.anim.scalezoom2);
+//        AnimateView.singleAnimation(itemView.findViewById(R.id.mondayChip), context, R.anim.scalezoom2);
 
-        editButton.setOnClickListener(e->{
+        editButton.setOnClickListener(e -> {
             AnimateView.animateInOut(editButton, context);
             context.startActivity(new Intent(context, HabitCreatorActivity.class));
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        builder.setTitle("Confirm deletion");
-        builder.setMessage("Are you sure?");
-
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            //TODO delete habit from database
-            dialog.dismiss();
-        });
-
-        builder.setNegativeButton("No", (dialog, which) -> {
-            dialog.dismiss();
-        });
-
-        AlertDialog alert = builder.create();
-        itemView.findViewById(R.id.trashImageViewHabit).setOnClickListener(e->alert.show());
 
         return itemView;
     }
@@ -90,10 +88,41 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
     @Override
     public void onBindViewHolder(@NonNull HabitExtendedViewHolder holder, int position) {
         if (habitsList != null) {
-            String current = habitsList.get(position);
+            HabitData current = habitsList.get(position);
             holder.setEveryThing(current);
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
+
+        createListenerToEditButton(holder, position);
+        createListenerToTrashButton(holder, position);
+    }
+
+    private void createListenerToEditButton(@NonNull HabitExtendedViewHolder holder, int position) {
+        holder.itemView.findViewById(R.id.editImageHabit).setOnClickListener(e -> {
+            var intent = new Intent(activity, HabitCreatorActivity.class);
+            var bundle = new Bundle();
+            bundle.putLong("habitToEditId", habitsList.get(position).getHabitId());
+            intent.putExtras(bundle);
+            activity.startActivity(intent);
+            notifyItemChanged(position);
+        });
+    }
+
+    private void createListenerToTrashButton(@NonNull HabitExtendedViewHolder holder, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("Confirm deletion");
+        builder.setMessage("Are you sure?");
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            habitViewModel.delete(habitsList.get(position));
+            dialog.dismiss();
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alert = builder.create();
+        holder.itemView.findViewById(R.id.trashImageViewHabit).setOnClickListener(e -> alert.show());
     }
 
     public long getItemId(int position) {

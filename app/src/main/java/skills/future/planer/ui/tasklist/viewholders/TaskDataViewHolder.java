@@ -10,11 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
 
 import lombok.Getter;
 import skills.future.planer.R;
@@ -22,6 +17,7 @@ import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.goals.ICustomViewHolder;
 import skills.future.planer.ui.tasklist.Colors;
 
@@ -55,21 +51,17 @@ public class TaskDataViewHolder extends ICustomViewHolder {
         setCheckBoxListener(taskData);
     }
 
-    @Override
-    public void setEveryThing(String title) {
-
-    }
-
     /**
      * Sets listener for done/not done checkBox
      *
-     * @param taskData
+     * @param taskData which will be updated
      */
     private void setCheckBoxListener(TaskData taskData) {
         checkBox.setChecked(taskData.getStatus());
 
         checkBox.setOnClickListener(e -> {
             taskData.setStatus(checkBox.isChecked());
+            //todo zamioenić ma TaskDataModelView
             var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
             taskDataDao.editOne(taskData);
         });
@@ -107,30 +99,15 @@ public class TaskDataViewHolder extends ICustomViewHolder {
      * Convert dates in long to string
      */
     private String setDateTextView(@NonNull TaskData task) {
-        Calendar calendar = Calendar.getInstance();
 
         String dateView = "";
         if (task.getEndingDate() != 0) {
             if (task.getStartingDate() != 0) {
-                calendar.setTime(Date.from(Instant.ofEpochMilli(task.getStartingDate())));
-                dateView = generateDayInString(calendar) + " - ";
+                dateView = DatesParser.toSting(task.getStartingCalendarDate()) + " - ";
             }
-            calendar.setTime(Date.from(Instant.ofEpochMilli(task.getEndingDate())));
-            dateView += generateDayInString(calendar);
+            dateView += DatesParser.toSting(task.getEndingCalendarDate());
         }
         return dateView;
-    }
-
-    /**
-     * Generate date string from calendar format
-     */
-    @NonNull
-    private String generateDayInString(@NonNull Calendar calendar) {
-        return calendar.get(Calendar.DAY_OF_MONTH)
-                + "."
-                + calendar.get(Calendar.MONTH)
-                + "."
-                + calendar.get(Calendar.YEAR);
     }
 
     /**
