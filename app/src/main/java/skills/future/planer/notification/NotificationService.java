@@ -1,20 +1,23 @@
 package skills.future.planer.notification;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 
 import androidx.lifecycle.LifecycleService;
+import androidx.preference.PreferenceManager;
 
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import lombok.SneakyThrows;
+import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitRepository;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.settings.SettingsActivity;
 
 public class NotificationService extends LifecycleService {
 
@@ -26,7 +29,8 @@ public class NotificationService extends LifecycleService {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final ExecutorService summaryExecutor = Executors.newSingleThreadExecutor();
     private NotificationExecutor notificationExecutor;
-
+    private SharedPreferences sharedPref;
+    private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
 
     public class LocalBinder extends Binder {
         public NotificationService getService() {
@@ -40,16 +44,19 @@ public class NotificationService extends LifecycleService {
         return binder;
     }
 
-    @SneakyThrows
+
     @Override
     public void onCreate() {
         super.onCreate();
+        PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.root_preferences, false);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         habitRepository = new HabitRepository(getApplication());
         notificationFactory = new NotificationFactory(getApplicationContext(), this, habitRepository);
-
         notificationExecutor = new NotificationExecutor(executor);
 
         summaryRunnable();
+        sharedPref.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+
         habitRunnable();
     }
 
@@ -84,15 +91,20 @@ public class NotificationService extends LifecycleService {
     }
 
     private void summaryRunnable() {
-        summaryExecutor.submit(() -> {
-            String[] timeTable = "20:00".split(":");
-            var summaryTime = Calendar.getInstance();
-            summaryTime.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeTable[0]));
-            summaryTime.set(Calendar.MINUTE, Integer.parseInt(timeTable[1]));
-            var time = summaryTime.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
-            if (time > 0)
-                summaryExecutor.execute(createNewRunnableNotification(time));
-        });
+        preferenceChangeListener = (sharedPreferences, key) -> {
+            if (key.equals(SettingsActivity.KEY_PREF_TIME)) {
+                summaryExecutor.execute(() -> {
+                    int time_str = sharedPreferences.getInt(SettingsActivity.KEY_PREF_TIME, 72000);
+                    var summaryTime = Calendar.getInstance();
+                    var hours = time_str / 3600;
+                    summaryTime.set(Calendar.HOUR_OF_DAY, hours);
+                    summaryTime.set(Calendar.MINUTE, (time_str - 3600 * hours) / 60);
+                    var time = summaryTime.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
+                    if (time > 0)
+                        summaryExecutor.execute(createNewRunnableNotification(time));
+                });
+            }
+        };
     }
 
     /**

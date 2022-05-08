@@ -1,31 +1,22 @@
 package skills.future.planer.ui.settings;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.view.View;
-import android.widget.TimePicker;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.TimePickerPreference;
 
 import java.util.Objects;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.SettingsActivityBinding;
-import skills.future.planer.ui.habit.HabitCreatorActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String KEY_PREF_THEME = "themes";
+    public static final String KEY_PREF_TIME = "time_picker";
     private SettingsActivityBinding binding;
 
     @Override
@@ -66,9 +57,20 @@ public class SettingsActivity extends AppCompatActivity {
          * gets value and sets theme value
          */
         private void setTheme() {
-            ListPreference listPreference = findPreference("themes");
+            ListPreference listPreference = findPreference(KEY_PREF_THEME);
             Objects.requireNonNull(listPreference).setOnPreferenceChangeListener((preference, newValue) -> {
                 AppCompatDelegate.setDefaultNightMode(Integer.parseInt((String) newValue));
+                return true;
+            });
+        }
+
+        /**
+         * Finds preference responsible for time
+         */
+        private void setTime() {
+            TimePickerPreference timePreference = findPreference(KEY_PREF_TIME);
+            Objects.requireNonNull(timePreference).setOnPreferenceChangeListener((preference, newValue) -> {
+
                 return true;
             });
         }
