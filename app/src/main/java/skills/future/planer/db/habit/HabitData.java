@@ -201,7 +201,9 @@ public class HabitData {
     public boolean isHabitDone(CalendarDay globalSelectedDate) {
         int dif = (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(beginDay),
                 DatesParser.toLocalDate(globalSelectedDate));
-        return dayChecking.charAt(dif) == '1';
+        if (dif >= 0 && dif <= habitDuration.getDaysNumber())
+            return dayChecking.charAt(dif) == '1';
+        return false;
     }
 
     public void setBeginLocalDay(LocalDate beginDay) {

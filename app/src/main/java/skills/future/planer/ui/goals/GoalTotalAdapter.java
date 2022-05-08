@@ -93,4 +93,11 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
             return goalsList.size();
         else return 0;
     }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setGoalsList(List<GoalData> goalsList) {
+        this.goalsList = goalsList;
+        notifyDataSetChanged();
+    }
 }

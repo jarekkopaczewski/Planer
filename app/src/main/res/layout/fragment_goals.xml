@@ -13,12 +13,24 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="2dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:scrollbars="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/pagerCountText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/signika_regular"
+        android:gravity="center|start"
+        android:paddingStart="17dp"
+        app:layout_constraintBottom_toTopOf="@+id/totalGoalList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
