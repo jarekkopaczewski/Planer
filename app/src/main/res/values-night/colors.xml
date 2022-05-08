@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="your_unchecked_color">#b5b3b3</color>
+    <color name="your_checked_color">#868686</color>
+    <color name="taskListBottomColor">#B81D1D</color>
+    <color name="navigationBarColor">#090909</color>
+    <color name="second_color_30">#007E8F</color>
+    <color name="second_color_30_2">#63FFFA</color>
+    <color name="background">#151515</color>
+    <color name="background_2">#202020</color>
+    <color name="foreground">#2C2C2C</color>
+    <color name="second_color_3320">#F36718</color>
+    <color name="imageTintColor">#FFFFFF</color>
+    <color name="imageTintColor_2">#959595</color>
+    <color name="shadow">#353535</color>
+    <color name="textColor">#F4F4F4</color>
+    <color name="textColor_2">#BFBFBF</color>
+    <color name="todayChooseColor">#00F</color>
+    <color name="f1">#E141E1D6</color>
+    <color name="f3">#FF007E8F</color>
+    <color name="f4">#FFC6A2CA</color>
+    <color name="f2">#FF715397</color>
+    <color name="progress_gradient">#DCDCDC</color>
+    <color name="progress_background">#FF000000</color>
+    <color name="good">#00E676</color>
+    <color name="mid">#FFFB00</color>
+    <color name="bad">#FF1744</color>
+    <color name="scroll">#00FF1744</color>
+</resources>

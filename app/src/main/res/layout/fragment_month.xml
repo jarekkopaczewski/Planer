@@ -1,29 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".ui.month.MonthFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/TEXT"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
-        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/todayIconMonth"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="50dp"
+        android:elevation="15dp"
+        android:src="@drawable/today_icon_2"
+        app:tint="@color/imageTintColor"
+        app:layout_constraintEnd_toEndOf="@+id/monthCard"
+        app:layout_constraintTop_toTopOf="@+id/monthCard"
+        app:srcCompat="@drawable/today_icon_2" />
 
-    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:mcv_calendarMode="month"
-        app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:mcv_firstDayOfWeek="monday"
-        app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
-        app:mcv_selectionColor="#00F"
-        app:mcv_selectionMode="single"
-        app:mcv_showOtherDates="all" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/monthCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:elevation="0dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01999998">
 
-</FrameLayout>
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/foreground"
+            android:elevation="0dp"
+            android:fontFamily="@font/signika_regular"
+            android:theme="@style/ArrowsStyle"
+            app:mcv_calendarMode="month"
+            app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:mcv_firstDayOfWeek="monday"
+            app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:mcv_selectionColor="@color/second_color_30"
+            app:mcv_selectionMode="single"
+            app:mcv_showOtherDates="all">
+
+        </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

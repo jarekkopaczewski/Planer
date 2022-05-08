@@ -5,32 +5,62 @@
     <string name="nav_header_title">Jan Testowy</string>
     <string name="nav_header_subtitle">jan.testowy@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-
+    <string name="action_settings">Ustawienia</string>
+    <string name="action_version">Wersja: </string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="month">Month</string>
-    <string name="day">Day</string>
-    <string name="tasks">Tasks</string>
+    <string name="month">Miesiąc</string>
+    <string name="day">Dzień</string>
+    <string name="tasks">Zadania</string>
     <string name="TaskListElementFabricButton">Zapisz</string>
-    <string name="goals">Goals</string>
-    <string name="priorities">Priorities</string>
-    <string name="stats">Stats</string>
+    <string name="goals">Cele</string>
+    <string name="priorities">Podsumowania</string>
+    <string name="stats">Statystyki</string>
     <string name="EditTextTitleHintt">Tytuł zadania</string>
     <string name="EditTextDetailsHint">Szczegóły zadania</string>
     <string name="imageViewTaskDetailsDescription">TODO</string>
     <string name="imageViewTaskDateDescription">TODO</string>
     <string name="SwitchDatePickerText">Ustaw czas trwania zadania</string>
     <string name="fabContentDescription">Create new task </string>
-    <string name="editTextEndDateHint">Data zakończenia zadania</string>
+    <string name="editTextEndDateHint">Data zakończenia</string>
     <string name="textViewImportant">Ważne</string>
-    <string name="TextViewNotImportant">Nie ważne</string>
+    <string name="TextViewNotImportant">Nieważne</string>
     <string name="TextViewUrgent">Pilne</string>
-    <string name="TextViewNotUrgent">Nie pilne</string>
+    <string name="TextViewNotUrgent">Niepilne</string>
     <string name="TextViewWork">Praca</string>
     <string name="TextViewPrivate">Prywatne</string>
-    <string name="editTextBeginDate">Data rozpoczęcia zadania</string>
+    <string name="editTextBeginDate">Data rozpoczęcia</string>
     <string name="SearchMessage">Czego szukasz?</string>
+    <string name="title_activity_settings">Ustawienia</string>
+    <string name="theme_title">Domyślny motyw aplikacji</string>
+    <string name="save_button_description">Zapisz zadanie</string>
+    <string name="empty_description"> </string>
+    <string name="large_text">
+
+        "Material is the metaphor."
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic."
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics."
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts."
+        "Bold, graphic, intentional."
+    </string>
+    <string name="dateInterval">do</string>
+    <string name="work">Praca</string>
+    <string name="private_chip">Prywatne</string>
+    <string name="urgent">Pilne</string>
+    <string name="important">Ważne</string>
+    <string name="not_urgent">Niepilne</string>
+    <string name="not_important">Nieważne</string>
+    <string name="habits">Nawyki</string>
+    <string name="habitsTitle">Kreator nawyków</string>
+    <string name="habit_error_1">Tytuł nie może być pusty!</string>
+    <string name="habit_error_2">Wybierz przynajmniej jeden dzień!</string>
 </resources>

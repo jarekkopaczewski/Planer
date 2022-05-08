@@ -1,11 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".ui.day.DayFragment">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.day.DayFragment">
 
-    <androidx.viewpager2.widget.ViewPager2
+    <ImageView
+        android:id="@+id/todayIconDay"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="50dp"
+        android:elevation="1dp"
+        android:src="@drawable/today_icon_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/calendarPagerDay"
+        app:srcCompat="@drawable/today_icon_2"
+        app:tint="@color/imageTintColor" />
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarPagerDay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="100dp"
+        android:background="@color/foreground"
+        android:backgroundTint="@color/foreground"
+        android:elevation="0dp"
+        android:fontFamily="@font/signika_regular"
+        android:theme="@style/ArrowsStyle"
+        android:translationZ="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mcv_calendarMode="week"
+        app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:mcv_firstDayOfWeek="monday"
+        app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:mcv_selectionColor="@color/second_color_30"
+        app:mcv_selectionMode="single"
+        app:mcv_showOtherDates="all"
+        app:mcv_showWeekDays="true"
+        app:mcv_tileSize="0dp">
+
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/dayViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarPagerDay">
+
+        <androidx.viewpager.widget.PagerTabStrip
+            android:id="@+id/pager_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+        </androidx.viewpager.widget.PagerTabStrip>
+
+    </androidx.viewpager.widget.ViewPager>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

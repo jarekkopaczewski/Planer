@@ -10,9 +10,8 @@ android {
         applicationId "skills.future.planer"
         minSdk 26
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
-
+        versionCode 32
+        versionName "0.4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,9 +32,18 @@ android {
 }
 
 dependencies {
-
+    implementation 'com.github.CodeBoy722:ViewPager2_Transformers:1.0.0'
+    implementation 'com.jaredrummler:colorpicker:1.1.0'
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+    implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.3.0'
+    // Android preferences
+    implementation 'com.github.alokverma:circle-menu:1.1'
+    implementation 'androidx.preference:preference:1.2.0'
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+    implementation 'com.ramotion.circlemenu:circle-menu:0.3.2'
+    implementation "com.github.skydoves:powerspinner:1.1.9"
     //noinspection AnnotationProcessorOnCompilePath
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -48,6 +56,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.6.0-beta01'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     // Required -- JUnit 4 framework
@@ -60,22 +69,16 @@ dependencies {
     testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
     // Optional -- Mockk framework
     testImplementation "io.mockk:mockk:1.4.1"
-
     implementation "androidx.room:room-runtime:2.4.2"
     annotationProcessor "androidx.room:room-compiler:2.4.2"
-
     // optional - RxJava2 support for Room
     implementation "androidx.room:room-rxjava2:2.4.2"
-
     // optional - RxJava3 support for Room
     implementation "androidx.room:room-rxjava3:2.4.2"
-
     // optional - Guava support for Room, including Optional and ListenableFuture
     implementation "androidx.room:room-guava:2.4.2"
-
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:2.4.2"
-
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.5.0-alpha01"
 }

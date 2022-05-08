@@ -1,28 +1,39 @@
 package skills.future.planer.ui.tasklist;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
+import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataViewModel;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
 
 public class TaskListFragment extends Fragment {
 
-    private ListView listTotal;
+    private RecyclerView listTotal;
     private TaskTotalAdapter taskTotalAdapter;
     private FragmentTaskListBinding binding;
-    private TaskListModelView taskListModelView;
+    private TaskDataViewModel mWordViewModel;
+    private ArrayList<String> filters;
 
     public TaskListFragment() {
     }
@@ -30,36 +41,48 @@ public class TaskListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        taskListModelView = new ViewModelProvider(this).get(TaskListModelView.class);
         binding = FragmentTaskListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        listTotal = binding.listTotalView;
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), inflater);
-        listTotal.setAdapter(taskTotalAdapter);
-        listTotal.setTextFilterEnabled(true);
-        taskTotalAdapter.getFilter().filter("");
+        mWordViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
+        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), mWordViewModel);
+        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
-        // animation test
+        listTotal = binding.listTotalView;
+        listTotal.setAdapter(taskTotalAdapter);
+        //listTotal.setTextFilterEnabled(true);
+//        taskTotalAdapter.getFilter().filter("");
+        listTotal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
+
+        // fab enter animation
         AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
 
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            TaskData result = bundle.getParcelable("bundleKey");
+            mWordViewModel.insert(result);
+        });
+
         binding.fab.setOnClickListener(view -> {
+            //turn off filters
+            binding.chipGroup.clearCheck();
             AnimateView.animateInOut(binding.fab, getContext());
-            Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment());
+            Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment(-1));
         });
 
         binding.searchImageView.setOnClickListener(e -> {
-            AnimateView.animateInOut(binding.searchImageView, getContext());
-            taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+            AnimateView.animateInOut(binding.searchImageView, this.getContext());
+            //taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
         });
 
         binding.searchEditText.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (binding.searchEditText.getText().toString().equals("")) {
-                    taskTotalAdapter.getFilter().filter("");
-                }
+//                if (binding.searchEditText.getText().toString().equals("")) {
+//                    taskTotalAdapter.getFilter().filter("");
+//                }else {
+//                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+//                }
             }
 
             @Override
@@ -73,13 +96,85 @@ public class TaskListFragment extends Fragment {
             }
         });
 
+        /*
+         * Chips OnClick Listeners
+         */
+        binding.workChip.setOnClickListener(view -> {
+            if (binding.privateChip.isChecked())
+                binding.privateChip.setChecked(false);
+        });
+
+        binding.privateChip.setOnClickListener(view -> {
+            if (binding.workChip.isChecked())
+                binding.workChip.setChecked(false);
+        });
+
+        binding.importantChip.setOnClickListener(view -> {
+            if (binding.notImportantChip.isChecked())
+                binding.notImportantChip.setChecked(false);
+        });
+
+        binding.notImportantChip.setOnClickListener(view -> {
+            if (binding.importantChip.isChecked())
+                binding.importantChip.setChecked(false);
+        });
+
+        binding.urgentChip.setOnClickListener(view -> {
+            if (binding.notUrgentChip.isChecked())
+                binding.notUrgentChip.setChecked(false);
+        });
+
+        binding.notUrgentChip.setOnClickListener(view -> {
+            if (binding.urgentChip.isChecked())
+                binding.urgentChip.setChecked(false);
+        });
+
+        /*
+         * Chip Group Listener
+         * Searches by iDs and returns list of checked filters
+         */
+        binding.chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+
+            //list of checked chips ids
+            List<Integer> checked = binding.chipGroup.getCheckedChipIds();
+
+            //new list of filters
+            filters = new ArrayList<>();
+
+            //getting chips ids
+            int work = binding.workChip.getId();
+            int private_chip = binding.privateChip.getId();
+            int urgent = binding.urgentChip.getId();
+            int not_urgent = binding.notUrgentChip.getId();
+            int important = binding.importantChip.getId();
+            int not_important = binding.notImportantChip.getId();
+
+            //compare them with checked ids
+            for (Integer id : checked) {
+                if (id.equals(work)) filters.add(TaskCategory.Work.toString());
+                if (id.equals(private_chip)) filters.add(TaskCategory.Private.toString());
+                if (id.equals(urgent)) filters.add(TimePriority.Urgent.toString());
+                if (id.equals(not_urgent)) filters.add(TimePriority.NotUrgent.toString());
+                if (id.equals(important)) filters.add(Priorities.Important.toString());
+                if (id.equals(not_important)) filters.add(Priorities.NotImportant.toString());
+            }
+
+            //give list of filters to CategoryFilter
+            try {
+                taskTotalAdapter.CategoryFilter(filters);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         return root;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onResume() {
-        super.onResume();
-        taskTotalAdapter.refreshTaskList();
+    public void onStart() {
+        super.onStart();
+        taskTotalAdapter.notifyDataSetChanged();
     }
 
     @Override

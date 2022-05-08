@@ -16,5 +16,9 @@
                 android:id="@+id/nav_slideshow"
                 android:icon="@drawable/stat"
                 android:title="@string/stats"/>
+        <item
+            android:id="@+id/nav_habit_creator"
+            android:icon="@drawable/routine"
+            android:title="@string/habits"/>
     </group>
 </menu>

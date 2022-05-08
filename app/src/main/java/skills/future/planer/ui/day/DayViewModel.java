@@ -1,19 +1,47 @@
 package skills.future.planer.ui.day;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
+import androidx.viewpager.widget.ViewPager;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import lombok.Getter;
+
+@Getter
 public class DayViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
-
-    public DayViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is day fragment");
+    /**
+     * Moves cursor to  date
+     */
+    public void returnToDate(@NonNull MaterialCalendarView materialCalendarView,
+                             CalendarDay date) {
+        materialCalendarView.setCurrentDate(date, true);
+        materialCalendarView.setDateSelected(materialCalendarView.getSelectedDate(), false);
+        materialCalendarView.setDateSelected(date, true);
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    /**
+     * Return true if current pager position is on task list view
+     */
+    public boolean checkIsTaskListView(@NonNull ViewPager viewPager) {
+        return viewPager.getAdapter().getPageTitle(viewPager.getCurrentItem()).equals("Lista zadań");
+    }
+
+    /**
+     * Return true if current pager position is on matrix view
+     */
+    public boolean checkIsMatrixView(@NonNull ViewPager vpPager) {
+        return vpPager.getAdapter().getPageTitle(vpPager.getCurrentItem()).equals("Macierz");
+    }
+
+    /**
+     * Return true if current pager position is on habit view
+     */
+    public boolean checkIsHabitsView(@NonNull ViewPager vpPager) {
+        return vpPager.getAdapter().getPageTitle(vpPager.getCurrentItem()).equals("Nawyki");
     }
 }
+
+
