@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_margin="5dp"
+    android:background="@color/background"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/taskCardExtended"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/foreground"
+        app:cardBackgroundColor="@color/foreground"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/foreground">
+
+            <TextView
+                android:id="@+id/habitTitleTextViewExtended"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="2dp"
+                android:autoSizeTextType="none"
+                android:ellipsize="end"
+                android:fontFamily="@font/signika_regular"
+                android:foregroundGravity="center"
+                android:gravity="center|start"
+                android:maxLines="1"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/textColor"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorHabitDay"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.086" />
+
+            <TextView
+                android:id="@+id/habitTitleTextViewExtended2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="2dp"
+                android:autoSizeTextType="none"
+                android:ellipsize="end"
+                android:fontFamily="@font/signika_regular"
+                android:foregroundGravity="center"
+                android:gravity="center|end"
+                android:maxLines="1"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="Progres"
+                android:textAlignment="viewStart"
+                android:textColor="@color/textColor"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorHabitDay"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/habitTitleTextViewExtended" />
+
+            <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+                android:id="@+id/circularProgressIndicatorHabitDay"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:direction="clockwise"
+                app:drawDot="false"
+                app:enableProgressAnimation="true"
+                app:gradientEndColor="@color/progress_gradient"
+                app:gradientType="linear"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.96"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:progressBackgroundColor="@color/progress_background"
+                app:progressCap="round"
+                app:progressColor="@color/second_color_30"
+                app:progressStrokeWidth="10dp"
+                app:textColor="@color/imageTintColor"
+                app:textSize="18sp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

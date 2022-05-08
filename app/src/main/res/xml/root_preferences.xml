@@ -38,12 +38,11 @@
         app:key="notUrgentNotImportant"
         app:title="Nieważne niepilne" />
 
-    <Preference
-        android:defaultValue="20:00"
+    <TimePickerPreference
         android:key="time_picker"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Godzina podsumowania: 20:00" />
-
+        android:title="Godzina przypomnienia"
+        app:defaultHours="10"
+        app:defaultMins="0"
+        app:timeAsSummary="true" />
 
 </PreferenceScreen>

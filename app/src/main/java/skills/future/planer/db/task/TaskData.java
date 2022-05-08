@@ -10,13 +10,12 @@ import androidx.room.PrimaryKey;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.util.Calendar;
-
 import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.tools.DatesParser;
 
 /**
  * Class encapsulate data for task
@@ -177,40 +176,6 @@ public class TaskData implements Parcelable {
     }
 
     /**
-     * Setter of endingDate
-     *
-     * @param endingCalendarDay date to set
-     */
-    @Ignore
-    public void setEndingCalendarDate(CalendarDay endingCalendarDay) {
-        var date = Calendar.getInstance();
-        date.set(endingCalendarDay.getYear(),
-                endingCalendarDay.getMonth(),
-                endingCalendarDay.getDay(),
-                23,
-                59,
-                59);
-        endingDate = date.getTimeInMillis();
-    }
-
-    /**
-     * Setter of startingDate
-     *
-     * @param startingCalendarDay date to set
-     */
-    @Ignore
-    public void setStartingCalendarDate(CalendarDay startingCalendarDay) {
-        var date = Calendar.getInstance();
-        date.set(startingCalendarDay.getYear(),
-                startingCalendarDay.getMonth(),
-                startingCalendarDay.getDay(),
-                0,
-                0,
-                0);
-        startingDate = date.getTimeInMillis();
-    }
-
-    /**
      * Getter of endingDate
      *
      * @return if is set then return date if not then return null
@@ -218,12 +183,20 @@ public class TaskData implements Parcelable {
     @Ignore
     public CalendarDay getEndingCalendarDate() {
         if (endingDate != 0) {
-            var date = Calendar.getInstance();
-            date.setTimeInMillis(endingDate);
-            return CalendarDay.from(date.get(Calendar.YEAR), date.get(Calendar.MONTH),
-                    date.get(Calendar.DAY_OF_MONTH));
+
+            return DatesParser.toCalendarDay(endingDate);
         }
         return null;
+    }
+
+    /**
+     * Setter of endingDate
+     *
+     * @param endingCalendarDay date to set
+     */
+    @Ignore
+    public void setEndingCalendarDate(CalendarDay endingCalendarDay) {
+        endingDate = DatesParser.toMilliseconds(endingCalendarDay);
     }
 
     /**
@@ -234,12 +207,19 @@ public class TaskData implements Parcelable {
     @Ignore
     public CalendarDay getStartingCalendarDate() {
         if (startingDate != 0) {
-            var date = Calendar.getInstance();
-            date.setTimeInMillis(startingDate);
-            return CalendarDay.from(date.get(Calendar.YEAR), date.get(Calendar.MONTH),
-                    date.get(Calendar.DAY_OF_MONTH));
+            return DatesParser.toCalendarDay(startingDate);
         }
         return null;
+    }
+
+    /**
+     * Setter of startingDate
+     *
+     * @param startingCalendarDay date to set
+     */
+    @Ignore
+    public void setStartingCalendarDate(CalendarDay startingCalendarDay) {
+        startingDate = DatesParser.toMilliseconds(startingCalendarDay);
     }
 
     @Override

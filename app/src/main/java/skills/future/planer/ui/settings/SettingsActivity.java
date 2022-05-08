@@ -1,17 +1,27 @@
 package skills.future.planer.ui.settings;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.TimePicker;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import java.util.Objects;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.SettingsActivityBinding;
+import skills.future.planer.ui.habit.HabitCreatorActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -24,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         binding = SettingsActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
 
         // change navigation bar color
         getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));
@@ -42,7 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends me.philio.preferencecompatextended.PreferenceFragmentCompat {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

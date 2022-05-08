@@ -12,6 +12,13 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
 import skills.future.planer.R;
@@ -68,9 +75,21 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
 
     private void setUpCircularProgressIndicatorHabit(HabitData habitData) {
         circularProgressIndicatorHabit.setMaxProgress(100);
-        circularProgressIndicatorHabit.setCurrentProgress(((double) habitData.getNumberOfDaysWhereHabitsWasDone()
-                / (habitData.getNumberOfDaysWhereHabitsWasDone()
-                + habitData.getNumberOfDaysWhereHabitsWasFailure())) * 100);
+        Date date = new Date(habitData.getBeginDay());
+
+        Calendar today = Calendar.getInstance();
+        today.clear(Calendar.HOUR); today.clear(Calendar.MINUTE); today.clear(Calendar.SECOND);
+
+        Date todayDate = today.getTime();
+
+        long numberOfDays = TimeUnit.DAYS.convert(todayDate.getTime() - date.getTime(), TimeUnit.MILLISECONDS)+1;
+
+        System.out.println(habitData.getNumberOfDaysWhereHabitsWasDone() );
+        System.out.println( numberOfDays);
+        double currentProgress = ((double) habitData.getNumberOfDaysWhereHabitsWasDone() / numberOfDays) * 100;
+        if (currentProgress > 100f) currentProgress = 100f;
+        circularProgressIndicatorHabit.setCurrentProgress(currentProgress);
+
         circularProgressIndicatorHabit.setProgressTextAdapter(new TextAdapter());
         if (circularProgressIndicatorHabit.getProgress() <= 40)
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.bad));
@@ -82,9 +101,14 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
 
     private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
-        circularProgressIndicatorHabitDay
-                .setCurrentProgress(DatesParser.countDifferenceBetweenDays(habitData.getBeginCalendarDay(),
-                        CalendarDay.today()));
+        if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
+            circularProgressIndicatorHabitDay
+                    .setCurrentProgress(DatesParser.countDifferenceBetweenDays(
+                            habitData.getBeginCalendarDay(), CalendarDay.today())+1);
+        else if(CalendarDay.today().isBefore(habitData.getBeginCalendarDay()))
+            circularProgressIndicatorHabitDay.setCurrentProgress(0);
+        else
+            circularProgressIndicatorHabitDay.setCurrentProgress(1);
                        /* ((double) habitData.getNumberOfDaysWhereHabitsWasDone()
                         / (habitData.getNumberOfDaysWhereHabitsWasDone()
                         + habitData.getNumberOfDaysWhereHabitsWasFailure())));*/
