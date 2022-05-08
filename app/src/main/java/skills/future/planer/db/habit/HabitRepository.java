@@ -34,6 +34,13 @@ public class HabitRepository {
     }
 
     /**
+     * @return references to the habit list based on day
+     */
+    public List<HabitData> getAllHabitDataFromDayList(long date) {
+        return habitDao.getHabitDataByDateList(date);
+    }
+
+    /**
      * Method insert habit to database
      *
      * @param habitData which will be inserted

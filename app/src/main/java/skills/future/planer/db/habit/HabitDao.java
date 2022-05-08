@@ -35,6 +35,13 @@ public interface HabitDao {
     LiveData<List<HabitData>> getHabitDataByDate(long date);
 
     /**
+     * @param date date in long format
+     * @return all habits with specified date
+     */
+    @Query("SELECT * FROM HabitData WHERE :date >= beginDay AND :date <= endDay")
+    List<HabitData> getHabitDataByDateList(long date);
+
+    /**
      * Method insert given habit to database
      *
      * @param habitData which will be inserted to database
