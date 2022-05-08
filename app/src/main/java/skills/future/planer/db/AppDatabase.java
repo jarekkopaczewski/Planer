@@ -46,7 +46,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     Log.d(LOG_TAG, "Creating new database instance");
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                            .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
+                            .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
                 }
             }
         }
@@ -94,17 +94,6 @@ public abstract class AppDatabase extends RoomDatabase {
             CalendarDay day5 = CalendarDay.from(2022, 4, 9);
             CalendarDay day6 = CalendarDay.from(2022, 4, 26);
             int counter = 1;
-            var goal = new GoalData("tsego", "asfasf");
-            goal.setGoalId(goalsDao.insert(goal));
-
-            try {
-                for (int i = 0; i < 1; i++)
-                    habitDao.insert(new HabitData("test", "1110011",
-                            HabitDuration.Short, DatesParser.toLocalDate(day2), 12, 0, goal.getGoalId()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
 
             for (int i = 0; i < 1; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
@@ -125,6 +114,20 @@ public abstract class AppDatabase extends RoomDatabase {
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day2, day3);
                 word.setTaskDataId(mDao.insert(word));
                 counter++;
+            }
+
+            for (int i = 0; i <= 4; i++) {
+                var goal = new GoalData("Cel " + i, "opis");
+                goal.setGoalId(goalsDao.insert(goal));
+            }
+
+            var goal = new GoalData("Cel 23 ", "opis");
+            try {
+                for (int i = 0; i < 1; i++)
+                    habitDao.insert(new HabitData("test", "1110011",
+                            HabitDuration.Short, DatesParser.toLocalDate(day2), 12, 0, goal.getGoalId()));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
