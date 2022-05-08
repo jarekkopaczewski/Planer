@@ -52,7 +52,7 @@
                     android:id="@+id/urgentImportantRecycler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="35dp"
                     android:layout_weight="1"
                     android:clipToPadding="false"
                     android:padding="5dp"
@@ -61,7 +61,8 @@
                     android:translationZ="2dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
