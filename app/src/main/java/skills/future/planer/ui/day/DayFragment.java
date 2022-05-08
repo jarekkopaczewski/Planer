@@ -20,10 +20,9 @@ import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentDayBinding;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
-import skills.future.planer.ui.day.views.habits.HabitViewModel;
+import skills.future.planer.ui.day.views.habits.HabitDayViewModel;
 import skills.future.planer.ui.day.views.matrix.MatrixModelView;
 import skills.future.planer.ui.month.MonthFragment;
-import skills.future.planer.ui.slideshow.SlideshowViewModel;
 
 
 @Getter
@@ -31,7 +30,7 @@ public class DayFragment extends Fragment {
 
     private DayViewModel dayViewModel;
     private DayTaskListViewModel dayTaskListViewModel;
-    private HabitViewModel habitViewModel;
+    private HabitDayViewModel habitDayViewModel;
     private MatrixModelView matrixModelView;
     private FragmentDayBinding binding;
     private MyPagerAdapter myPagerAdapter;
@@ -44,7 +43,7 @@ public class DayFragment extends Fragment {
         dayViewModel = new ViewModelProvider(this).get(DayViewModel.class);
         dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
         matrixModelView = new ViewModelProvider(this).get(MatrixModelView.class);
-        habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
+        habitDayViewModel = new ViewModelProvider(this).get(HabitDayViewModel.class);
 
         binding = FragmentDayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -78,10 +77,10 @@ public class DayFragment extends Fragment {
      * Creates view pager
      */
     private void createViewPager(ViewGroup container) {
-            myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
-            myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
-            vpPager.setAdapter(myPagerAdapter);
-            vpPager.setCurrentItem(2);
+        myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
+        myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
+        vpPager.setAdapter(myPagerAdapter);
+        vpPager.setCurrentItem(2);
     }
 
     /**
@@ -133,8 +132,8 @@ public class DayFragment extends Fragment {
         } else if (dayViewModel.checkIsMatrixView(vpPager))
             matrixModelView.setUpModels(selectedDay);
         else if (dayViewModel.checkIsHabitsView(vpPager))
-            // TODO podczepić nawyki
-            habitViewModel.setUpModels(selectedDay);
+            if (HabitDayViewModel.getViewLifecycleOwner() != null)
+                habitDayViewModel.updateDate(selectedDay);
     }
 
     /**

@@ -81,7 +81,7 @@ public class MatrixFragment extends Fragment {
      * Generates new background resources for current colors
      */
     private void setUpBackground() {
-        int colors[] = {Colors.getColorFromPreferences("urgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
+        int[] colors = {Colors.getColorFromPreferences("urgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
         GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.BR_TL, colors);
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
@@ -90,7 +90,7 @@ public class MatrixFragment extends Fragment {
         gd.setAlpha(255);
         backgroundConstrains.get(0).setBackgroundDrawable(gd);
 
-        int colors2[] = {Colors.getColorFromPreferences("urgentNotImportant", getContext()), 0x00ffffff, 0x00ffffff};
+        int[] colors2 = {Colors.getColorFromPreferences("urgentNotImportant", getContext()), 0x00ffffff, 0x00ffffff};
         gd = new GradientDrawable(GradientDrawable.Orientation.BL_TR, colors2);
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
@@ -99,7 +99,7 @@ public class MatrixFragment extends Fragment {
         gd.setAlpha(255);
         backgroundConstrains.get(1).setBackgroundDrawable(gd);
 
-        int colors3[] = {Colors.getColorFromPreferences("notUrgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
+        int[] colors3 = {Colors.getColorFromPreferences("notUrgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
         gd = new GradientDrawable(GradientDrawable.Orientation.TL_BR, colors3);
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
@@ -108,7 +108,7 @@ public class MatrixFragment extends Fragment {
         gd.setAlpha(255);
         backgroundConstrains.get(2).setBackgroundDrawable(gd);
 
-        int colors4[] = {Colors.getColorFromPreferences("notUrgentNotImportant", getContext()), 0x00ffffff, 0x00ffffff};
+        int[] colors4 = {Colors.getColorFromPreferences("notUrgentNotImportant", getContext()), 0x00ffffff, 0x00ffffff};
         gd = new GradientDrawable(GradientDrawable.Orientation.TL_BR, colors4);
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
@@ -128,32 +128,17 @@ public class MatrixFragment extends Fragment {
             recyclerViews.get(i).setAdapter(matrixAdapters.get(i));
             recyclerViews.get(i).setLayoutManager(new LinearLayoutManager(this.getContext()));
             taskDataViewModels.add(new ViewModelProvider(this).get(TaskDataViewModel.class));
+//            try {
+//                int finalI = i;
+//                taskDataViewModels.get(i).getCategorizedTaskDataFromDay(i,
+//                        DatesParser.toMilliseconds(MonthFragment.getGlobalSelectedDate()))
+//                        .observe(this.getViewLifecycleOwner(),
+//                                taskData -> matrixAdapters.get(finalI).setFilteredTaskList(taskData));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
     }
-    /*
-     */
-
-    /**
-     * Adds live data observers & fragmentResultsListeners
-     *//*
-    public void setUpModels(Calendar date) {
-        for (int i = 0; i < 4; i++) {
-            try {
-                int finalI = i;
-                var dateLong = date.getTimeInMillis();
-
-                taskDataViewModels.get(i)
-                        .getCategorizedTaskDataFromDay(finalI, dateLong)
-                        .observe(this.getViewLifecycleOwner(), taskData -> {
-                            matrixAdapters.get(finalI).setFilteredTaskList(new DayCategorizedTaskData(taskData).getAllCategorizedDayFromQuarter(finalI));
-                            progressBars.get(finalI).setMax(matrixAdapters.get(finalI).getItemCount());
-                            progressBars.get(finalI).setProgress(matrixAdapters.get(finalI).getDone());
-                        });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     @Override
     public void onResume() {

@@ -2,19 +2,18 @@ package skills.future.planer.ui.goals;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import java.util.Random;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
 import skills.future.planer.R;
+import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
 
 @Getter
@@ -33,14 +32,14 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
         this.context = context;
     }
 
-    public void setEveryThing(String title) {
-        this.title.setText(title);
+    public void setEveryThing(GoalData goalData) {
+        this.title.setText(goalData.getTitle());
         Random random = new Random();
         circularProgressIndicatorHabit.setCurrentProgress(random.nextInt(99));
         circularProgressIndicatorHabit.setProgressTextAdapter(new TextAdapter());
 
         if (circularProgressIndicatorHabit.getProgress() <= 40)
-            circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color. bad));
+            circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.bad));
         else if (circularProgressIndicatorHabit.getProgress() <= 75)
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.mid));
         else
