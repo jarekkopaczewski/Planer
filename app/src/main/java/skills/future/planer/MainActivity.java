@@ -24,16 +24,20 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import lombok.SneakyThrows;
 import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.notification.NotificationService;
 import skills.future.planer.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
+
 
     private static BottomNavigationView bottomView;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private NavigationView navigationView;
+
 
     /**
      * Displays version of application in "Settings menu"
@@ -48,11 +52,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         themePreferences();
+
+        startService(new Intent(this, NotificationService.class));
+
+
+        //createService();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -97,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // set/read settings
 
+    // set/read settings
     private void themePreferences() {
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -134,4 +144,31 @@ public class MainActivity extends AppCompatActivity {
     public static BottomNavigationView getBottomView() {
         return bottomView;
     }
+
+    /**
+     * TODO może bedzie jeszcze potrzebne w przyypadku listenera daty więc zostawiam
+     */
+    /*private boolean isBound;
+    private NotificationService notificationService;
+
+    private void createService() {
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        // notificationService.setMainActivity(this);
+
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            notificationService = ((NotificationService.LocalBinder) service).getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            notificationService = null;
+            isBound = false;
+        }
+    };*/
 }

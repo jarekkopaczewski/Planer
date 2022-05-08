@@ -361,8 +361,7 @@
                     app:spinner_arrow_gravity="end"
                     app:spinner_divider_color="@color/imageTintColor"
                     app:spinner_divider_show="true"
-                    app:spinner_divider_size="0.2dp"
-                    app:spinner_item_array="@array/goals" />
+                    app:spinner_divider_size="0.2dp" />
 
                 <ImageView
                     android:id="@+id/imageView"
