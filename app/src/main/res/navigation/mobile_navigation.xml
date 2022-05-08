@@ -141,7 +141,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="idTaskToEdit"
-            app:argType="integer" />
+            app:argType="long" />
         <action
             android:id="@+id/action_taskListCreatorFragment_to_nav_home"
             app:destination="@id/nav_home" />

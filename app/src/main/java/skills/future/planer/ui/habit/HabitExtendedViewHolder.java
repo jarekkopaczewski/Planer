@@ -6,18 +6,18 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-
-import java.util.Random;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
 import skills.future.planer.R;
-import skills.future.planer.db.task.TaskData;
-import skills.future.planer.ui.AnimateView;
+import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.habit.HabitViewModel;
+import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
 import skills.future.planer.ui.goals.ICustomViewHolder;
 
@@ -28,44 +28,72 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
     private final ChipGroup chipGroup;
+    private final HabitViewModel habitViewModel;
+    private final LifecycleOwner viewLifecycleOwner;
 
-    public HabitExtendedViewHolder(View itemView, Context context) {
+    public HabitExtendedViewHolder(View itemView, Context context, HabitViewModel habitViewModel,
+                                   LifecycleOwner viewLifecycleOwner) {
         super(itemView);
         title = itemView.findViewById(R.id.habitTitleTextViewExtended);
         circularProgressIndicatorHabit = itemView.findViewById(R.id.circularProgressIndicatorHabit);
         circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitDay);
         chipGroup = itemView.findViewById(R.id.chipGroupWeek);
         this.context = context;
+        this.habitViewModel = habitViewModel;
+        this.viewLifecycleOwner = viewLifecycleOwner;
     }
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public void setEveryThing(String title) {
-        this.title.setText(title);
+    public void setEveryThing(HabitData habitData) {
+        this.title.setText(habitData.getTitle());
 
-        Random random = new Random();
+        setUpChipGroup(habitData);
+        setUpCircularProgressIndicatorHabit(habitData);
+        setUpCircularProgressIndicatorOfDays(habitData);
+    }
 
-        for( int i = 0; i < random.nextInt(7); i++)
-            chipGroup.removeViewAt(random.nextInt(7-i));
+    private void setUpChipGroup(HabitData habitData) {
+        chipGroup.removeAllViews();
+        var days = habitData.getDaysOfWeek();
+        for (int i = 0; i < days.length(); i++) {
+            if (days.charAt(i) == '1') {
+                var chip = new Chip(context);
+                chip.setText(habitData.getDayWeekName(i));
+                chip.setCheckable(false);
+                chipGroup.addView(chip);
+            }
+        }
+    }
 
-
+    private void setUpCircularProgressIndicatorHabit(HabitData habitData) {
         circularProgressIndicatorHabit.setMaxProgress(100);
-        circularProgressIndicatorHabit.setCurrentProgress(random.nextInt(99));
+        circularProgressIndicatorHabit.setCurrentProgress(((double) habitData.getNumberOfDaysWhereHabitsWasDone()
+                / (habitData.getNumberOfDaysWhereHabitsWasDone()
+                + habitData.getNumberOfDaysWhereHabitsWasFailure())) * 100);
         circularProgressIndicatorHabit.setProgressTextAdapter(new TextAdapter());
-
-        circularProgressIndicatorHabitDay.setMaxProgress(21);
-        circularProgressIndicatorHabitDay.setCurrentProgress(random.nextInt(20));
-
-        HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
-        habitTextAdapter.setMaxProgress(circularProgressIndicatorHabitDay.getMaxProgress());
-        circularProgressIndicatorHabitDay.setProgressTextAdapter(habitTextAdapter);
-
         if (circularProgressIndicatorHabit.getProgress() <= 40)
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.bad));
         else if (circularProgressIndicatorHabit.getProgress() <= 75)
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.mid));
         else
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.good));
+    }
+
+    private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
+        circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
+        if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
+            circularProgressIndicatorHabitDay
+                    .setCurrentProgress(DatesParser.countDifferenceBetweenDays(
+                            habitData.getBeginCalendarDay(), CalendarDay.today()));
+        else circularProgressIndicatorHabitDay.setCurrentProgress(0);
+                       /* ((double) habitData.getNumberOfDaysWhereHabitsWasDone()
+                        / (habitData.getNumberOfDaysWhereHabitsWasDone()
+                        + habitData.getNumberOfDaysWhereHabitsWasFailure())));*/
+
+        HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
+        habitTextAdapter.setMaxProgress(circularProgressIndicatorHabitDay.getMaxProgress());
+        circularProgressIndicatorHabitDay.setProgressTextAdapter(habitTextAdapter);
 
         if (circularProgressIndicatorHabitDay.getProgress() / circularProgressIndicatorHabitDay.getMaxProgress() <= 0.4)
             circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.bad));

@@ -23,15 +23,16 @@ public interface TaskDataDao {
      * @throws Exception if sth is wrong xd
      */
     @Query("SELECT * FROM taskData WHERE taskDataId = :id")
-    TaskData findById(int id) throws Exception;
+    TaskData findById(Long id) throws Exception;
 
     /**
      * Method insert given taskData to database
      *
      * @param taskData which will be inserted to database
+     * @return new taskId
      */
     @Insert
-    void insert(TaskData taskData);
+    long insert(TaskData taskData);
 
     /**
      * @return all taskData from database
@@ -42,10 +43,9 @@ public interface TaskDataDao {
     /**
      * @param taskCategory specified taskCategory
      * @return all taskData with specified taskCategory
-     * @throws Exception
      */
     @Query("SELECT * FROM taskData WHERE category = :taskCategory ")
-    List<TaskData> getTaskData(TaskCategory taskCategory) throws Exception;
+    List<TaskData> getTaskData(TaskCategory taskCategory);
 
     /**
      * @param date specified date
@@ -66,10 +66,9 @@ public interface TaskDataDao {
      * @param priorities   specified taskCategory
      * @param timePriority specified timePriority
      * @return all taskData with specified priorities and timePriority
-     * @throws Exception
      */
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority")
-    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority) throws Exception;
+    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority);
 
     @Query("SELECT * FROM taskData WHERE priorities =:priorities AND category = :taskCategory")
     List<TaskData> getTaskData(Priorities priorities, TaskCategory taskCategory) throws Exception;
@@ -101,16 +100,17 @@ public interface TaskDataDao {
     void deleteAll();
 
     /**
-     * @param taskData
+     * Method update taskData in database
+     * @param taskData which will be updated
      */
     @Update
     void editOne(TaskData taskData);
 
     /**
-     * @return
+     * @return taskId of lastAdded task
      */
     @Query("SELECT MAX(taskDataId) FROM taskData")
-    int getIdOfLastAddedTask();
+    Long getIdOfLastAddedTask();
 
     @Query("SELECT COUNT(*) FROM TASKDATA WHERE :date >= startingDate AND :date <= endingDate")
     int getNumberOfTaskByDate(long date);
