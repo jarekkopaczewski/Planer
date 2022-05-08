@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -31,6 +32,7 @@ public class HabitFragment extends Fragment {
     private FragmentHabitBinding binding;
     private HabitTotalAdapter habitTotalAdapter;
     private RecyclerView habitList;
+    private TextView habitTextInfo;
     private CircularProgressIndicator circularProgressIndicator;
 
     public static HabitFragment newInstance() {
@@ -45,7 +47,9 @@ public class HabitFragment extends Fragment {
 
         binding = FragmentHabitBinding.inflate(inflater, container, false);
 
+
         habitList = binding.habitList;
+        habitTextInfo = binding.habitTextInfo;
         habitTotalAdapter = new HabitTotalAdapter(this.getContext(), habitViewModel);
         habitDayViewModel.setHabitTotalAdapter(habitTotalAdapter);
         habitDayViewModel.setViewLifecycleOwner(this.getViewLifecycleOwner());
@@ -61,7 +65,6 @@ public class HabitFragment extends Fragment {
     private void setUpProgressIndicator() {
         circularProgressIndicator = binding.circularProgressIndicator;
         AnimateView.singleAnimation(binding.circularProgressIndicator, getContext(), R.anim.scalezoom2);
-
 
         /// set observer if sth on habitList was changed
         habitViewModel.getAllHabitDataFromDay(MonthFragment.getGlobalSelectedDate()).observe(
@@ -90,6 +93,22 @@ public class HabitFragment extends Fragment {
             circularProgressIndicator.setProgressColor(ContextCompat.getColor(requireContext(), R.color.mid));
         else
             circularProgressIndicator.setProgressColor(ContextCompat.getColor(requireContext(), R.color.good));
+    }
+
+    private void checkThereAreHabits() {
+        if (habitTotalAdapter.getItemCount() == 0) {
+            habitTextInfo.setVisibility(View.VISIBLE);
+            circularProgressIndicator.setVisibility(View.INVISIBLE);
+        } else {
+            habitTextInfo.setVisibility(View.INVISIBLE);
+            circularProgressIndicator.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //checkThereAreHabits();
     }
 
     @Override

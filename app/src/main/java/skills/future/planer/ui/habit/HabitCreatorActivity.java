@@ -7,21 +7,29 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.ActivityHabitCreatorBinding;
+import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsDao;
+import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.ui.month.MonthFragment;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
@@ -43,7 +51,9 @@ public class HabitCreatorActivity extends AppCompatActivity {
     private EditText editTextTitle;
     private HabitViewModel habitViewModel;
     private PowerSpinnerView habitDurationSpinner;
+    private PowerSpinnerView goalSpinner;
     private Chip MondayChip, TuesdayChip, WednesdayChip, ThursdayChip, FridayChip, SaturdayChip, SundayChip;
+    private int selectedGoalId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +62,8 @@ public class HabitCreatorActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));
 
+        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+
         // binding
         timeEditText = binding.timeEditText;
         editTextDateHabit = binding.editTextDateHabit;
@@ -59,12 +71,23 @@ public class HabitCreatorActivity extends AppCompatActivity {
         daysChipGroupTwo = binding.daysChipGroupTwo;
         saveCreatorButtonHabit = binding.saveCreatorButtonHabit;
         editTextTitle = binding.editTextTitle;
+        goalSpinner = binding.spinner2;
 
         Bundle parameters = getIntent().getExtras();
         // sets first item selected in check boxes
         habitDurationSpinner = binding.spinner;
 
-        binding.spinner2.selectItemByIndex(0);
+        goalsViewModel.getAllGoals().observe(this, goalData -> {
+            var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
+            list.add(0,"brak");
+            goalSpinner.setItems(list);
+            goalSpinner.selectItemByIndex(0);
+        });
+
+        goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
+            selectedGoalId = i;
+        });
+
         // add on click & time change listener
         setUpTime();
         // add on click & time change listener
@@ -77,7 +100,6 @@ public class HabitCreatorActivity extends AppCompatActivity {
         FridayChip = binding.FridayChip;
         SaturdayChip = binding.SaturdayChip;
         SundayChip = binding.SunDayChip;
-
 
         habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
 
@@ -159,6 +181,10 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     var habit = new HabitData(editTextTitle.getText().toString(), weekDays, duration,
                             DatesParser.toLocalDate(calendar2.getTime()),
                             calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+
+                    if(selectedGoalId!=0)
+                        habit.setForeignKeyToGoal((long) selectedGoalId);
+
                     habitViewModel.insert(habit);
                 } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
