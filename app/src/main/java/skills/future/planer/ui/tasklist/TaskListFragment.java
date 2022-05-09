@@ -56,7 +56,7 @@ public class TaskListFragment extends Fragment {
         listTotal = binding.listTotalView;
         listTotal.setAdapter(taskTotalAdapter);
 
-        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
+       // mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
 
         //list of filters
         filters = new ArrayList<>();
@@ -66,17 +66,14 @@ public class TaskListFragment extends Fragment {
 
         mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), listTotal -> {
             try {
+                taskTotalAdapter.setFilteredTaskList(listTotal);
                 taskTotalAdapter.CategoryFilter(filters);
+                taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        //System.out.println(counter++);
 
-        //listTotal.setTextFilterEnabled(true);
-       // taskTotalAdapter.getFilter().filter("");
-        //taskTotalAdapter.setFilteredTaskList(taskTotalAdapter.getFullTaskList());
-        binding.searchEditText.setText("LOL");
         listTotal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
 
         // fab enter animation
@@ -100,7 +97,6 @@ public class TaskListFragment extends Fragment {
         binding.searchEditText.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                System.out.println("hehe");
                 binding.searchEditText.setText("");
             }
         });
@@ -227,6 +223,7 @@ public class TaskListFragment extends Fragment {
 
         binding.chipGroup.setOnCheckedStateChangeListener(listener);
 
+
         return root;
     }
 
@@ -241,13 +238,6 @@ public class TaskListFragment extends Fragment {
     @SneakyThrows
     @Override
     public void onDestroyView() {
-//        binding.searchEditText.getText().clear();
-//        //binding.searchEditText.setText("");
-//        taskTotalAdapter.getFilter().filter("");
-//        taskTotalAdapter.CategoryFilter(filters);
-//        taskTotalAdapter.notifyDataSetChanged();
-//        String n = binding.searchEditText.getText().toString();
-//        System.out.println("Text:");
         super.onDestroyView();
         binding = null;
     }

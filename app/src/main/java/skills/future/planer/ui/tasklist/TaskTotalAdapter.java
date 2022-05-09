@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 
@@ -25,6 +26,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
@@ -48,10 +50,9 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private static final int LAYOUT_BIG = 1;
     private final AtomicInteger positionToChange = new AtomicInteger(-1);
     private final TaskDataViewModel mTaskViewModel;
-    private boolean first = true;
-    private boolean searchIsNull=false;
-    private boolean filterIsNull=false;
-    ArrayList<TaskData> filteredItems = new ArrayList<>();
+    private ArrayList<TaskData> filteredItems = new ArrayList<>();
+    private ArrayList<String> filters = new ArrayList<>();
+
 
 
     public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel) {
@@ -97,6 +98,8 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         createListenerToExtendView(holder);
         createListenerToEditButton(holder, position);
         createListenerToTrashButton(holder, position);
+        //createListenerToCheckBox(holder,position);
+
     }
 
     /**
@@ -166,6 +169,26 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             });
     }
 
+    @SuppressLint({"NotifyDataSetChanged"})
+    private void createListenerToCheckBox(@NonNull TaskDataViewHolder holder, int position) {
+        if (holder.itemView.findViewById(R.id.checkBoxTask) != null){
+            var task = fullTaskList.get(position);
+            holder.getCheckBox().setChecked(task.getStatus());
+            holder.itemView.findViewById(R.id.checkBoxTask).setOnClickListener(view -> {
+                task.setStatus(holder.getCheckBox().isChecked());
+                var taskDataDao = AppDatabase.getInstance(context).taskDataTabDao();
+                taskDataDao.editOne(task);
+                try {
+                    CategoryFilter(filters);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                notifyDataSetChanged();
+                //notifyItemChanged(position);
+            });
+        }
+    }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -209,6 +232,8 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         Priorities priorities = null;
         TimePriority timePriority = null;
         int status = -1;
+        //this.filters=filters;
+
 
         //checking which filter is checked
         for (String filter : filters) {
@@ -305,10 +330,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private class TaskFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+           // CategoryFilter(filters);
             constraint = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
             if (constraint.toString().length() > 0) {
-
 
                 for (int i = 0, l = filterList.size(); i < l; i++) {
                     TaskData taskData = filterList.get(i);
@@ -330,13 +355,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
                 filteredItems.clear();
             }else{
                 filteredTaskList.addAll((ArrayList<TaskData>) filterList);
-                System.out.println("filterlist dziala");
             }
-
-            System.out.println("dziala_publish");
-
-            System.out.println("FilterList:");
-            System.out.println(filterList);
             notifyDataSetChanged();
         }
 
