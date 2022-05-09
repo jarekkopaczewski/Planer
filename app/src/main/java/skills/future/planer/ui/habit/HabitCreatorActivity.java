@@ -19,6 +19,7 @@ import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -160,7 +161,8 @@ public class HabitCreatorActivity extends AppCompatActivity {
             } else if (daysChipGroupOne.getCheckedChipIds().size() == 0 &&
                     daysChipGroupTwo.getCheckedChipIds().size() == 0) {
                 Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
-            } else {
+            } else{
+                checkHabitsNumber();
                 try {
                     var tab = getResources().getStringArray(R.array.temp_array);
                     HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner
@@ -202,6 +204,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     && daysChipGroupTwo.getCheckedChipIds().size() == 0) {
                 Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
             } else {
+                checkHabitsNumber();
                 try {
                     var tab = getResources().getStringArray(R.array.temp_array);
                     HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner
@@ -261,4 +264,16 @@ public class HabitCreatorActivity extends AppCompatActivity {
                 date, calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH),
                 calendar2.get(Calendar.DAY_OF_MONTH)).show());
     }
-}
+
+    private void checkHabitsNumber(){
+            habitViewModel.getAllHabits().observe(this, habit -> {
+                var list = new ArrayList<HabitData>(habit);
+                try {
+                    if((list.size()>3)){
+                    Toast.makeText(this,R.string.reminder_too_many_habits,Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+             }}
