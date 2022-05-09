@@ -230,7 +230,7 @@
                             tools:visibility="visible">
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/workChip"
+                                android:id="@+id/MondayChip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checkable="true"
@@ -238,7 +238,7 @@
                                 android:text="Pn" />
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/privateChip"
+                                android:id="@+id/TuesdayChip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checkable="true"
@@ -246,7 +246,7 @@
                                 android:text="Wt" />
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/wednChip"
+                                android:id="@+id/WednesdayChip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checkable="true"
@@ -254,7 +254,7 @@
                                 android:text="Śr" />
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/importantChip"
+                                android:id="@+id/ThursdayChip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checkable="true"
@@ -272,7 +272,7 @@
                             android:layout_weight="1">
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/notUrgentChip"
+                                android:id="@+id/FridayChip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checkable="true"
@@ -280,7 +280,7 @@
                                 android:text="Pt" />
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/notImportantChip"
+                                android:id="@+id/SaturdayChip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checkable="true"
@@ -288,7 +288,7 @@
                                 android:text="So" />
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/notImportantChip2"
+                                android:id="@+id/SunDayChip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:checkable="true"
@@ -361,8 +361,7 @@
                     app:spinner_arrow_gravity="end"
                     app:spinner_divider_color="@color/imageTintColor"
                     app:spinner_divider_show="true"
-                    app:spinner_divider_size="0.2dp"
-                    app:spinner_item_array="@array/goals" />
+                    app:spinner_divider_size="0.2dp" />
 
                 <ImageView
                     android:id="@+id/imageView"

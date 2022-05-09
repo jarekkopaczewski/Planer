@@ -10,13 +10,12 @@ import androidx.room.PrimaryKey;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.util.Calendar;
-
 import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.tools.DatesParser;
 
 /**
  * Class encapsulate data for task
@@ -29,7 +28,7 @@ public class TaskData implements Parcelable {
      * task id
      */
     @PrimaryKey(autoGenerate = true)
-    private int taskDataId;
+    private Long taskDataId;
     /**
      * task status
      */
@@ -70,6 +69,7 @@ public class TaskData implements Parcelable {
      */
     @ColumnInfo(name = "endingDate")
     private long endingDate = 0;
+    private Long foreignKeyToGoal;
 
     /**
      * Field used to pack taskData to bundle it isn't save in database
@@ -94,7 +94,7 @@ public class TaskData implements Parcelable {
      */
     @Ignore
     public TaskData() {
-        this.taskDataId = 0;
+        //this.taskDataId = 0L;
         this.status = false;
     }
 
@@ -109,7 +109,7 @@ public class TaskData implements Parcelable {
      */
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText) {
-        this.taskDataId = 0;
+        //this.taskDataId = 0L;
         this.status = false;
         this.category = category;
         this.priorities = priorities;
@@ -132,8 +132,23 @@ public class TaskData implements Parcelable {
      */
     @Ignore
     public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
+                    String taskTitleText, String taskDetailsText, CalendarDay startingDate,
+                    CalendarDay endingDate, Long foreignKeyToGoal) {
+        //this.taskDataId = 0L;
+        this.status = false;
+        this.category = category;
+        this.priorities = priorities;
+        this.timePriority = timePriority;
+        this.taskTitleText = taskTitleText;
+        this.taskDetailsText = taskDetailsText;
+        setEndingCalendarDate(endingDate);
+        setStartingCalendarDate(startingDate);
+        this.foreignKeyToGoal = foreignKeyToGoal;
+    }
+
+    public TaskData(TaskCategory category, Priorities priorities, TimePriority timePriority,
                     String taskTitleText, String taskDetailsText, CalendarDay startingDate, CalendarDay endingDate) {
-        this.taskDataId = 0;
+        //this.taskDataId = 0L;
         this.status = false;
         this.category = category;
         this.priorities = priorities;
@@ -151,47 +166,13 @@ public class TaskData implements Parcelable {
      */
     @Ignore
     protected TaskData(Parcel in) {
-        taskDataId = in.readInt();
+        taskDataId = in.readLong();
         byte tmpStatus = in.readByte();
         status = tmpStatus == 0 ? null : tmpStatus == 1;
         taskTitleText = in.readString();
         taskDetailsText = in.readString();
         startingDate = in.readLong();
         endingDate = in.readLong();
-    }
-
-    /**
-     * Setter of endingDate
-     *
-     * @param endingCalendarDay date to set
-     */
-    @Ignore
-    public void setEndingCalendarDate(CalendarDay endingCalendarDay) {
-        var date = Calendar.getInstance();
-        date.set(endingCalendarDay.getYear(),
-                endingCalendarDay.getMonth(),
-                endingCalendarDay.getDay(),
-                23,
-                59,
-                59);
-        endingDate = date.getTimeInMillis();
-    }
-
-    /**
-     * Setter of startingDate
-     *
-     * @param startingCalendarDay date to set
-     */
-    @Ignore
-    public void setStartingCalendarDate(CalendarDay startingCalendarDay) {
-        var date = Calendar.getInstance();
-        date.set(startingCalendarDay.getYear(),
-                startingCalendarDay.getMonth(),
-                startingCalendarDay.getDay(),
-                0,
-                0,
-                0);
-        startingDate = date.getTimeInMillis();
     }
 
     /**
@@ -202,12 +183,20 @@ public class TaskData implements Parcelable {
     @Ignore
     public CalendarDay getEndingCalendarDate() {
         if (endingDate != 0) {
-            var date = Calendar.getInstance();
-            date.setTimeInMillis(endingDate);
-            return CalendarDay.from(date.get(Calendar.YEAR), date.get(Calendar.MONTH),
-                    date.get(Calendar.DAY_OF_MONTH));
+
+            return DatesParser.toCalendarDay(endingDate);
         }
         return null;
+    }
+
+    /**
+     * Setter of endingDate
+     *
+     * @param endingCalendarDay date to set
+     */
+    @Ignore
+    public void setEndingCalendarDate(CalendarDay endingCalendarDay) {
+        endingDate = DatesParser.toMilliseconds(endingCalendarDay);
     }
 
     /**
@@ -218,12 +207,19 @@ public class TaskData implements Parcelable {
     @Ignore
     public CalendarDay getStartingCalendarDate() {
         if (startingDate != 0) {
-            var date = Calendar.getInstance();
-            date.setTimeInMillis(startingDate);
-            return CalendarDay.from(date.get(Calendar.YEAR), date.get(Calendar.MONTH),
-                    date.get(Calendar.DAY_OF_MONTH));
+            return DatesParser.toCalendarDay(startingDate);
         }
         return null;
+    }
+
+    /**
+     * Setter of startingDate
+     *
+     * @param startingCalendarDay date to set
+     */
+    @Ignore
+    public void setStartingCalendarDate(CalendarDay startingCalendarDay) {
+        startingDate = DatesParser.toMilliseconds(startingCalendarDay);
     }
 
     @Override
@@ -239,7 +235,7 @@ public class TaskData implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(taskDataId);
+        dest.writeLong(taskDataId);
         dest.writeByte((byte) (status == null ? 0 : status ? 1 : 2));
         dest.writeString(taskTitleText);
         dest.writeString(taskDetailsText);
@@ -254,9 +250,9 @@ public class TaskData implements Parcelable {
 
         TaskData taskData = (TaskData) o;
 
-        if (getTaskDataId() != taskData.getTaskDataId()) return false;
         if (getStartingDate() != taskData.getStartingDate()) return false;
         if (getEndingDate() != taskData.getEndingDate()) return false;
+        if (!getTaskDataId().equals(taskData.getTaskDataId())) return false;
         if (!getStatus().equals(taskData.getStatus())) return false;
         if (getCategory() != taskData.getCategory()) return false;
         if (getPriorities() != taskData.getPriorities()) return false;
@@ -268,7 +264,7 @@ public class TaskData implements Parcelable {
 
     @Override
     public int hashCode() {
-        int result = getTaskDataId();
+        int result = getTaskDataId().hashCode();
         result = 31 * result + getStatus().hashCode();
         result = 31 * result + (getCategory() != null ? getCategory().hashCode() : 0);
         result = 31 * result + (getPriorities() != null ? getPriorities().hashCode() : 0);

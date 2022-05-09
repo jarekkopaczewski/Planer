@@ -10,6 +10,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.util.Calendar;
 import java.util.List;
 
+import skills.future.planer.tools.DatesParser;
+
 /**
  * View Model to keep a reference to the taskDataRepository and
  * an up-to-date list of all taskData.
@@ -55,7 +57,7 @@ public class TaskDataViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<TaskData>> getAllTaskDataFromDay(CalendarDay date) {
-        return mRepository.getAllTaskDataFromDay(convertCalendarDayToLong(date));
+        return mRepository.getAllTaskDataFromDay(DatesParser.toMilliseconds(date));
     }
 
     /**
@@ -64,15 +66,7 @@ public class TaskDataViewModel extends AndroidViewModel {
      * @param date date for which we want to get data
      */
     public int getNumberOfTaskByDate(CalendarDay date) {
-        return mRepository.getNumberOfTaskByDate(convertCalendarDayToLong(date));
-    }
-
-    /**
-     * Converts date to long value
-     */
-    private long convertCalendarDayToLong(CalendarDay date) {
-        calendarDate.set(date.getYear(), date.getMonth(), date.getDay());
-        return calendarDate.getTimeInMillis();
+        return mRepository.getNumberOfTaskByDate(DatesParser.toMilliseconds(date));
     }
 
     /**
