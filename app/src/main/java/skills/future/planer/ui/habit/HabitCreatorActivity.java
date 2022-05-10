@@ -7,7 +7,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,27 +20,24 @@ import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.ActivityHabitCreatorBinding;
 import skills.future.planer.db.goal.GoalData;
-import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.goal.GoalsViewModel;
-import skills.future.planer.ui.month.MonthFragment;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.month.MonthFragment;
 
 
 public class HabitCreatorActivity extends AppCompatActivity {
 
-    private final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
-    private final SimpleDateFormat formatterDate = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+    private final SimpleDateFormat formatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
+    private final SimpleDateFormat formatterDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
     private final Calendar calendar = Calendar.getInstance();
     private final Calendar calendar2 = Calendar.getInstance();
     private TextView timeEditText;
@@ -80,7 +76,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
         goalsViewModel.getAllGoals().observe(this, goalData -> {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
-            list.add(0,"brak");
+            list.add(0, "brak");
             goalSpinner.setItems(list);
             goalSpinner.selectItemByIndex(0);
         });
@@ -107,7 +103,11 @@ public class HabitCreatorActivity extends AppCompatActivity {
         if (parameters != null) {
             try {
                 HabitData habit = habitViewModel.findById(parameters.getLong("habitToEditId"));
-                calendar.setTimeInMillis(habit.getNotificationTime());
+                int hours = (int) (habit.getNotificationTime() / 3600000);
+                int minute = (int) ((habit.getNotificationTime() / 60000) % 60);
+
+                calendar.set(Calendar.HOUR_OF_DAY, hours);
+                calendar.set(Calendar.MINUTE, minute);
                 editTextTitle.setText(habit.getTitle());
                 timeEditText.setText(formatter.format(calendar.getTime()));
                 editTextDateHabit.setText(DatesParser.toLocalDate(habit.getBeginCalendarDay())
@@ -161,7 +161,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
             } else if (daysChipGroupOne.getCheckedChipIds().size() == 0 &&
                     daysChipGroupTwo.getCheckedChipIds().size() == 0) {
                 Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
-            } else{
+            } else {
                 checkHabitsNumber();
                 try {
                     var tab = getResources().getStringArray(R.array.temp_array);
@@ -184,7 +184,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             DatesParser.toLocalDate(calendar2.getTime()),
                             calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
-                    if(selectedGoalId!=0)
+                    if (selectedGoalId != 0)
                         habit.setForeignKeyToGoal((long) selectedGoalId);
 
                     habitViewModel.insert(habit);
@@ -226,7 +226,9 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     habitData.editDaysOfWeek(weekDays);
                     habitData.setTitle(editTextTitle.getText().toString());
                     habitData.setBeginLocalDay(DatesParser.toLocalDate(calendar2.getTime()));
-                    habitData.setNotificationTime(calendar.getTimeInMillis());
+                    habitData.setNotificationTime(
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE));
                     habitViewModel.edit(habitData);
                 } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
@@ -265,15 +267,16 @@ public class HabitCreatorActivity extends AppCompatActivity {
                 calendar2.get(Calendar.DAY_OF_MONTH)).show());
     }
 
-    private void checkHabitsNumber(){
-            habitViewModel.getAllHabits().observe(this, habit -> {
-                var list = new ArrayList<HabitData>(habit);
-                try {
-                    if((list.size()>3)){
-                    Toast.makeText(this,R.string.reminder_too_many_habits,Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+    private void checkHabitsNumber() {
+        habitViewModel.getAllHabits().observe(this, habit -> {
+            var list = new ArrayList<>(habit);
+            try {
+                if ((list.size() > 3)) {
+                    Toast.makeText(this, R.string.reminder_too_many_habits, Toast.LENGTH_SHORT).show();
                 }
-            });
-             }}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+}

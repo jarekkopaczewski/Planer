@@ -6,7 +6,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.ListPreference;
-import androidx.preference.TimePickerPreference;
 
 import java.util.Objects;
 
@@ -64,15 +63,5 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        /**
-         * Finds preference responsible for time
-         */
-        private void setTime() {
-            TimePickerPreference timePreference = findPreference(KEY_PREF_TIME);
-            Objects.requireNonNull(timePreference).setOnPreferenceChangeListener((preference, newValue) -> {
-
-                return true;
-            });
-        }
     }
 }

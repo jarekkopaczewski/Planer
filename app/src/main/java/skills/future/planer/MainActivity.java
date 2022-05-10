@@ -1,9 +1,13 @@
 package skills.future.planer;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         themePreferences();
 
-        startService(new Intent(this, NotificationService.class));
-
-
-        //createService();
+        createService();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -107,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //startService(new Intent(this, NotificationService.class));
+    }
 
     // set/read settings
     private void themePreferences() {
@@ -146,29 +152,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * TODO może bedzie jeszcze potrzebne w przyypadku listenera daty więc zostawiam
+     * Binding service to run in background
      */
-    /*private boolean isBound;
     private NotificationService notificationService;
 
     private void createService() {
         Intent serviceIntent = new Intent(this, NotificationService.class);
+        startService(serviceIntent);
         bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-        // notificationService.setMainActivity(this);
-
     }
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             notificationService = ((NotificationService.LocalBinder) service).getService();
-            isBound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             notificationService = null;
-            isBound = false;
         }
-    };*/
+    };
 }

@@ -11,6 +11,7 @@
         android:theme="@style/Theme.Planer">
         <service
             android:name=".notification.NotificationService"
+            android:launchMode="singleTop"
             android:exported="false" />
 
         <activity

@@ -16,6 +16,7 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +39,7 @@ public class NotificationService extends LifecycleService {
     private NotificationExecutor notificationExecutor;
     private SharedPreferences sharedPref;
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
+    private Future<?> activeSummaryNotifications;
 
     public class LocalBinder extends Binder {
         public NotificationService getService() {
@@ -67,7 +69,7 @@ public class NotificationService extends LifecycleService {
         habitObserver();
 
         scheduledExecutorService.scheduleAtFixedRate(habitRunnable(), countNextDelay(0, 0, 1), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
-        scheduledExecutorService.scheduleAtFixedRate(summaryRunnable(sharedPref), countNextDelay(0, 0, 2), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(checkIsNotificationScheduled(sharedPref), countNextDelay(0, 0, 2), TimeUnit.DAYS.toSeconds(1), TimeUnit.SECONDS);
 
     }
 
@@ -97,6 +99,7 @@ public class NotificationService extends LifecycleService {
 
                     calendarTime.set(Calendar.HOUR_OF_DAY, 0);
                     calendarTime.set(Calendar.MINUTE, 0);
+                    calendarTime.set(Calendar.SECOND, 0);
 
                     var deltaTime = time - calendarTime.getTimeInMillis();
 
@@ -129,6 +132,8 @@ public class NotificationService extends LifecycleService {
 
             calendarTime.set(Calendar.HOUR_OF_DAY, 0);
             calendarTime.set(Calendar.MINUTE, 0);
+            calendarTime.set(Calendar.SECOND, 0);
+            calendarTime.set(Calendar.MILLISECOND, 0);
 
             var deltaTime = time - calendarTime.getTimeInMillis();
 
@@ -160,8 +165,18 @@ public class NotificationService extends LifecycleService {
     private void summaryListener() {
         preferenceChangeListener = (sharedPreferences, key) -> {
             if (key.equals(SettingsActivity.KEY_PREF_TIME)) {
-                summaryExecutor.execute(summaryRunnable(sharedPreferences));
+                summaryExecutor.execute(checkIsNotificationScheduled(sharedPreferences));
             }
+        };
+    }
+
+    private Runnable checkIsNotificationScheduled(SharedPreferences sharedPreferences) {
+        return () -> {
+            if (activeSummaryNotifications != null)
+                synchronized (activeSummaryNotifications) {
+                    activeSummaryNotifications.cancel(true);
+                }
+            summaryExecutor.execute(summaryRunnable(sharedPreferences));
         };
     }
 
@@ -177,7 +192,7 @@ public class NotificationService extends LifecycleService {
             summaryTime.set(Calendar.MINUTE, (time_str - 3600 * hours) / 60);
             var time = summaryTime.getTimeInMillis() - Calendar.getInstance().getTimeInMillis();
             if (time > 0)
-                summaryExecutor.execute(createNewRunnableNotification(time));
+                activeSummaryNotifications = summaryExecutor.submit(createNewRunnableNotification(time));
         };
     }
 
@@ -206,7 +221,7 @@ public class NotificationService extends LifecycleService {
                 try {
                     wait(timeToNotification);
                     notificationFactory.generateNewNotification(true, null);
-                    //notificationExecutor.scheduleNext();
+                    activeSummaryNotifications = null;
                 } catch (InterruptedException ignored) {
                 }
             }
@@ -219,11 +234,6 @@ public class NotificationService extends LifecycleService {
         return START_STICKY;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        scheduledExecutorService.shutdown();
-    }
 }
 
 

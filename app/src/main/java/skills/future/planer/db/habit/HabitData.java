@@ -67,6 +67,8 @@ public class HabitData {
         var cal2 = Calendar.getInstance();
         cal2.set(Calendar.HOUR_OF_DAY, 0);
         cal2.set(Calendar.MINUTE, 0);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
         this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
     }
 
@@ -82,8 +84,10 @@ public class HabitData {
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minutes);
         var cal2 = Calendar.getInstance();
-        cal2.set(Calendar.HOUR_OF_DAY, 1);
+        cal2.set(Calendar.HOUR_OF_DAY, 0);
         cal2.set(Calendar.MINUTE, 0);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
         this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
         this.foreignKeyToGoal = foreignKeyToGoal;
     }
@@ -164,11 +168,6 @@ public class HabitData {
         return endDay != 0 ? DatesParser.toCalendarDay(endDay) : null;
     }
 
-    public Calendar getNotificationTimeCalendar() {
-        var cal = Calendar.getInstance();
-        cal.setTimeInMillis(notificationTime);
-        return cal;
-    }
 
     /**
      * Method set for givenDay opposite state of accomplish habit
@@ -222,5 +221,17 @@ public class HabitData {
             endDay = DatesParser.toMilliseconds(DatesParser.toLocalDate(beginDay).plusDays(habitDuration.getDaysNumber() - 1));
             this.habitDuration = habitDuration;
         }
+    }
+
+    public void setNotificationTime(int hours, int minutes) {
+        var cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, hours);
+        cal.set(Calendar.MINUTE, minutes);
+        var cal2 = Calendar.getInstance();
+        cal2.set(Calendar.HOUR_OF_DAY, 0);
+        cal2.set(Calendar.MINUTE, 0);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
+        this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
     }
 }
