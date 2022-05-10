@@ -12,9 +12,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -84,8 +81,6 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
 
         long numberOfDays = TimeUnit.DAYS.convert(todayDate.getTime() - date.getTime(), TimeUnit.MILLISECONDS)+1;
 
-        System.out.println(habitData.getNumberOfDaysWhereHabitsWasDone() );
-        System.out.println( numberOfDays);
         double currentProgress = ((double) habitData.getNumberOfDaysWhereHabitsWasDone() / numberOfDays) * 100;
         if (currentProgress > 100f) currentProgress = 100f;
         circularProgressIndicatorHabit.setCurrentProgress(currentProgress);

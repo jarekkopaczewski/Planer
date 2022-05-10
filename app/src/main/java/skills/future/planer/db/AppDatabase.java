@@ -126,10 +126,10 @@ public abstract class AppDatabase extends RoomDatabase {
             var goal = new GoalData("Cel 23 ", "opis");
             try {
                 for (int i = 0; i < 1; i++)
-                    habitDao.insert(new HabitData("test", "1110011",
-                            HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
-                habitDao.insert(new HabitData("test2", "1110011",
-                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
+                    habitDao.insert(new HabitData("test", "1111111",
+                            HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
+                habitDao.insert(new HabitData("test2", "1111111",
+                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
             } catch (Exception e) {
                 e.printStackTrace();
             }

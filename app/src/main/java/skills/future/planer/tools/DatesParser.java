@@ -39,7 +39,7 @@ public class DatesParser {
 
     public static Long toMilliseconds(LocalDate localDate) {
         return java.util.Date.from(localDate.atStartOfDay()
-                .atZone(ZoneId.of("Etc/GMT+1"))
+                .atZone(ZoneId.systemDefault())
                 .toInstant()).getTime();
     }
 
