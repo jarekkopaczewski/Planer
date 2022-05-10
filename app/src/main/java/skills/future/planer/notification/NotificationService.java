@@ -206,7 +206,7 @@ public class NotificationService extends LifecycleService {
                 try {
                     wait(timeToNotification);
                     notificationFactory.generateNewNotification(true, null);
-                    notificationExecutor.scheduleNext();
+                    //notificationExecutor.scheduleNext();
                 } catch (InterruptedException ignored) {
                 }
             }
