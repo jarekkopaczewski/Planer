@@ -267,6 +267,6 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
     private void checkHabitsNumber() {
         if (habitViewModel.getAllHabitsList().size() > 3)
-            Toast.makeText(this, R.string.reminder_too_many_habits, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.reminder_too_many_habits, Toast.LENGTH_LONG).show();
     }
 }
