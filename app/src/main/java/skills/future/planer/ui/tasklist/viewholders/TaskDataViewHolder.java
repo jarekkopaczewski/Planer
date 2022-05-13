@@ -19,6 +19,7 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.goals.ICustomViewHolder;
+import skills.future.planer.ui.goals.MixedRecyclerElement;
 import skills.future.planer.ui.tasklist.Colors;
 
 @Getter
@@ -44,11 +45,13 @@ public class TaskDataViewHolder extends ICustomViewHolder {
     }
 
     @Override
-    public void setEveryThing(TaskData taskData) {
-        setColor(taskData);
-        setTextTitle(taskData);
-        setIconCategory(taskData);
-        setCheckBoxListener(taskData);
+    public void setEveryThing(MixedRecyclerElement element) {
+        if (element instanceof TaskData taskData) {
+            setColor(taskData);
+            setTextTitle(taskData);
+            setIconCategory(taskData);
+            setCheckBoxListener(taskData);
+        }
     }
 
     /**
@@ -123,6 +126,5 @@ public class TaskDataViewHolder extends ICustomViewHolder {
             }
         }
     }
-
 
 }

@@ -23,6 +23,7 @@ import java.util.List;
 import lombok.Setter;
 import skills.future.planer.R;
 import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.habit.HabitCreatorActivity;
@@ -33,15 +34,19 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
     private final Context context;
     private final LifecycleOwner lifecycleOwner;
     private final HabitViewModel habitViewModel;
+    private final GoalsViewModel goalsViewModel;
     private Lifecycle lifecycle;
     private FragmentManager fragmentManager;
     private List<GoalData> goalsList = new ArrayList<>();
+    private MixedViewAdapter mixedViewAdapter;
 
-    public GoalTotalAdapter(Context context, GoalsFragment lifecycleOwner, HabitViewModel habitViewModel) {
+    public GoalTotalAdapter(Context context, GoalsFragment lifecycleOwner,
+                            HabitViewModel habitViewModel, GoalsViewModel goalsViewModel) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.lifecycleOwner = lifecycleOwner;
         this.habitViewModel = habitViewModel;
+        this.goalsViewModel = goalsViewModel;
     }
 
     @NonNull
@@ -57,17 +62,21 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
         itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
 
-        MixedViewAdapter mixedViewAdapter = new MixedViewAdapter(context, habitViewModel, lifecycleOwner);
+        mixedViewAdapter = new MixedViewAdapter(context, habitViewModel,
+                lifecycleOwner, goalsViewModel);
         RecyclerView list = itemView.findViewById(R.id.goalsList);
         list.setAdapter(mixedViewAdapter);
         list.setLayoutManager(new LinearLayoutManager(context));
 
         CircleMenu circleMenu = itemView.findViewById(R.id.circle_menu);
 
-        circleMenu.setOnMenuItemClickListener(id ->{
+        circleMenu.setOnMenuItemClickListener(id -> {
             switch (id) {
-                case R.drawable.routine -> context.startActivity(new Intent(context, HabitCreatorActivity.class));
-                case R.drawable.task_list -> Navigation.findNavController(itemView).navigate(GoalsFragmentDirections.actionNavHomeToTaskListCreatorFragment(-1));
+                case R.drawable.routine -> context.startActivity(
+                        new Intent(context, HabitCreatorActivity.class));
+                case R.drawable.task_list -> Navigation.findNavController(itemView)
+                        .navigate(GoalsFragmentDirections
+                                .actionNavHomeToTaskListCreatorFragment(-1));
             }
         });
 
@@ -79,6 +88,16 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
         if (goalsList != null) {
             GoalData current = goalsList.get(position);
             holder.setEveryThing(current);
+            goalsViewModel.getHabitsFromGoal(goalsList.get(position).getGoalId())
+                    .observe(lifecycleOwner, goalDataListMap -> {
+                        if (goalDataListMap.size() > 0)
+                            mixedViewAdapter.setHabitsList(new ArrayList<>(goalDataListMap.values()));
+                    });
+            goalsViewModel.getTasksFromGoal(goalsList.get(position).getGoalId())
+                    .observe(lifecycleOwner, goalDataListMap -> {
+                        if (goalDataListMap.size() > 0)
+                            mixedViewAdapter.setFullTaskList(new ArrayList<>(goalDataListMap.values()));
+                    });
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
     }

@@ -24,6 +24,7 @@ import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
 import skills.future.planer.ui.goals.ICustomViewHolder;
+import skills.future.planer.ui.goals.MixedRecyclerElement;
 
 @Getter
 public class HabitExtendedViewHolder extends ICustomViewHolder {
@@ -49,12 +50,14 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public void setEveryThing(HabitData habitData) {
-        this.title.setText(habitData.getTitle());
+    public void setEveryThing(MixedRecyclerElement element) {
+        if (element instanceof HabitData habitData) {
+            this.title.setText(habitData.getTitle());
 
-        setUpChipGroup(habitData);
-        setUpCircularProgressIndicatorHabit(habitData);
-        setUpCircularProgressIndicatorOfDays(habitData);
+            setUpChipGroup(habitData);
+            setUpCircularProgressIndicatorHabit(habitData);
+            setUpCircularProgressIndicatorOfDays(habitData);
+        }
     }
 
     private void setUpChipGroup(HabitData habitData) {

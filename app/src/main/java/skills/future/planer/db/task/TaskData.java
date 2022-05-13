@@ -16,6 +16,7 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.goals.MixedRecyclerElement;
 
 /**
  * Class encapsulate data for task
@@ -23,7 +24,7 @@ import skills.future.planer.tools.DatesParser;
 @Getter
 @Setter
 @Entity(tableName = "taskData")
-public class TaskData implements Parcelable {
+public class TaskData implements Parcelable, MixedRecyclerElement {
     /**
      * task id
      */

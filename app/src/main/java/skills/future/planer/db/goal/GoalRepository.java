@@ -14,8 +14,8 @@ import skills.future.planer.db.task.TaskData;
 public class GoalRepository {
     private final GoalsDao goalsDao;
     private LiveData<List<GoalData>> goals;
-    private LiveData<Map<GoalData, List<HabitData>>> goalsHabit;
-    private LiveData<Map<GoalData, List<TaskData>>> goalsTasks;
+    private LiveData<Map<GoalData, HabitData>> goalsHabit;
+    private LiveData<Map<GoalData, TaskData>> goalsTasks;
 
     public GoalRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
@@ -31,13 +31,13 @@ public class GoalRepository {
         return goals;
     }
 
-    LiveData<Map<GoalData, List<HabitData>>> getHabitsFromGoal(Long goalId) {
+    LiveData<Map<GoalData, HabitData>> getHabitsFromGoal(Long goalId) {
         if (goalsHabit == null)
             goalsHabit = goalsDao.getHabitsFromGoal(goalId);
         return goalsHabit;
     }
 
-    LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId) {
+    LiveData<Map<GoalData, TaskData>> getTasksFromGoal(Long goalId) {
         if (goalsTasks == null)
             goalsTasks = goalsDao.getTasksFromGoal(goalId);
         return goalsTasks;

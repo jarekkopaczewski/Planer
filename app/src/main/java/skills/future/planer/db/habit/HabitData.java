@@ -20,11 +20,12 @@ import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.DataBaseException;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.goals.MixedRecyclerElement;
 
 @Getter
 @Setter
 @Entity
-public class HabitData {
+public class HabitData implements MixedRecyclerElement {
     @PrimaryKey(autoGenerate = true)
     private Long habitId;
     private String title;

@@ -33,10 +33,11 @@ public class GoalsFragment extends Fragment {
         totalGoalList = binding.totalGoalList;
         pagerCountText = binding.pagerCountText;
 
-        goalTotalAdapter = new GoalTotalAdapter(this.getContext(), this, new ViewModelProvider(this).get(HabitViewModel.class));
+        goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+        goalTotalAdapter = new GoalTotalAdapter(this.getContext(), this,
+                new ViewModelProvider(this).get(HabitViewModel.class), goalsViewModel);
         goalTotalAdapter.setLifecycle(getLifecycle());
         goalTotalAdapter.setFragmentManager(getChildFragmentManager());
-        goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
         totalGoalList.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         totalGoalList.setAdapter(goalTotalAdapter);
         totalGoalList.setPageTransformer(new CustomTransformer());

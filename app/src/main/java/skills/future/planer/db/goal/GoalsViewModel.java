@@ -27,11 +27,11 @@ public class GoalsViewModel extends AndroidViewModel {
         return goalRepository.getAllGoals();
     }
 
-    public LiveData<Map<GoalData, List<HabitData>>> getHabitsFromGoal(Long goalId) {
+    public LiveData<Map<GoalData, HabitData>> getHabitsFromGoal(Long goalId) {
         return goalRepository.getHabitsFromGoal(goalId);
     }
 
-    public LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId) {
+    public LiveData<Map<GoalData, TaskData>> getTasksFromGoal(Long goalId) {
         return goalRepository.getTasksFromGoal(goalId);
     }
 
