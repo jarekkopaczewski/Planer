@@ -1,9 +1,8 @@
-package skills.future.planer.ui.habit;
+package skills.future.planer.ui.habit.view_holders;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -22,12 +21,12 @@ import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
-import skills.future.planer.ui.goals.pager.recycler.ICustomViewHolder;
 import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
+import skills.future.planer.ui.habit.HabitTextAdapter;
 
 @Getter
-public class HabitExtendedViewHolder extends ICustomViewHolder {
-    private final TextView title;
+public class HabitExtendedViewHolder extends HabitViewHolder {
+
     private final CircularProgressIndicator circularProgressIndicatorHabit;
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
@@ -36,7 +35,7 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
 
     public HabitExtendedViewHolder(View itemView, Context context, Fragment fragment) {
         super(itemView);
-        title = itemView.findViewById(R.id.habitTitleTextViewExtended);
+
         circularProgressIndicatorHabit = itemView.findViewById(R.id.circularProgressIndicatorHabit);
         circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitDay);
         chipGroup = itemView.findViewById(R.id.chipGroupWeek);
@@ -48,8 +47,6 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
     @Override
     public void setEveryThing(MixedRecyclerElement element) {
         if (element instanceof HabitData habitData) {
-            this.title.setText(habitData.getTitle());
-
             setUpChipGroup(habitData);
             setUpCircularProgressIndicatorHabit(habitData);
             setUpCircularProgressIndicatorOfDays(habitData);
