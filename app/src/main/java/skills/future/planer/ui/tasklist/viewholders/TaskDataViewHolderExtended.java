@@ -21,6 +21,7 @@ import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 import skills.future.planer.ui.tasklist.Colors;
 
 public class TaskDataViewHolderExtended extends TaskDataViewHolder {
@@ -43,13 +44,15 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
 
 
     @Override
-    public void setEveryThing(TaskData taskData) throws Exception {
-        super.setEveryThing(taskData);
-        setIconPriority(taskData);
-        setIconTimePriority(taskData);
-        setTaskDescriptionText(taskData);
-        setColor(taskData);
-        setGoalChip(taskData);
+    public void setEveryThing(MixedRecyclerElement element) {
+        if (element instanceof TaskData taskData) {
+            super.setEveryThing(taskData);
+            setIconPriority(taskData);
+            setIconTimePriority(taskData);
+            setTaskDescriptionText(taskData);
+            setColor(taskData);
+            setGoalChip(taskData);
+        }
     }
 
     /**

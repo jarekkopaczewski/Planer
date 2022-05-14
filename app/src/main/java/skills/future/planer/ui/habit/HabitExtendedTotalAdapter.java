@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -27,11 +27,8 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
 
     private final LayoutInflater layoutInflater;
     private final Context context;
-    private final HabitViewModel habitViewModel;
+    private final Fragment fragment;
     private List<HabitData> habitsList = new ArrayList<>();
-    private final LifecycleOwner viewLifecycleOwner;
-    private final FragmentActivity activity;
-
     @SuppressLint("NotifyDataSetChanged")
     public void setHabitsList(List<HabitData> habitsList) {
         this.habitsList = habitsList;
@@ -39,19 +36,17 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
 
     }
 
-    public HabitExtendedTotalAdapter(Context context, HabitViewModel habitViewModel, LifecycleOwner viewLifecycleOwner, FragmentActivity activity) {
+    public HabitExtendedTotalAdapter(Context context, Fragment fragment) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
-        this.habitViewModel = habitViewModel;
-        this.viewLifecycleOwner = viewLifecycleOwner;
-        this.activity = activity;
+        this.fragment = fragment;
     }
 
     @NonNull
     @Override
     public HabitExtendedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new HabitExtendedViewHolder(createViewOfItem(parent,
-                R.layout.fragment_habit_in_list_extended), context, habitViewModel, viewLifecycleOwner);
+                R.layout.fragment_habit_in_list_extended), context, fragment);
     }
 
     @NonNull
@@ -68,14 +63,6 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
 
-//todo usunąć?        AnimateView.singleAnimation(itemView.findViewById(R.id.sundayChip), context, R.anim.scalezoom2);
-//        AnimateView.singleAnimation(itemView.findViewById(R.id.saturdayChip), context, R.anim.scalezoom2);
-//        AnimateView.singleAnimation(itemView.findViewById(R.id.fridChip), context, R.anim.scalezoom2);
-//        AnimateView.singleAnimation(itemView.findViewById(R.id.thursChip), context, R.anim.scalezoom2);
-//        AnimateView.singleAnimation(itemView.findViewById(R.id.wednChip), context, R.anim.scalezoom2);
-//        AnimateView.singleAnimation(itemView.findViewById(R.id.tueChip), context, R.anim.scalezoom2);
-//        AnimateView.singleAnimation(itemView.findViewById(R.id.mondayChip), context, R.anim.scalezoom2);
-
         editButton.setOnClickListener(e -> {
             AnimateView.animateInOut(editButton, context);
             context.startActivity(new Intent(context, HabitCreatorActivity.class));
@@ -85,6 +72,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         return itemView;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull HabitExtendedViewHolder holder, int position) {
         if (habitsList != null) {
@@ -99,11 +87,11 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
 
     private void createListenerToEditButton(@NonNull HabitExtendedViewHolder holder, int position) {
         holder.itemView.findViewById(R.id.editImageHabit).setOnClickListener(e -> {
-            var intent = new Intent(activity, HabitCreatorActivity.class);
+            var intent = new Intent(fragment.getActivity(), HabitCreatorActivity.class);
             var bundle = new Bundle();
             bundle.putLong("habitToEditId", habitsList.get(position).getHabitId());
             intent.putExtras(bundle);
-            activity.startActivity(intent);
+            fragment.requireActivity().startActivity(intent);
             notifyItemChanged(position);
         });
     }
@@ -115,7 +103,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         builder.setMessage("Are you sure?");
 
         builder.setPositiveButton("Yes", (dialog, which) -> {
-            habitViewModel.delete(habitsList.get(position));
+            new ViewModelProvider(fragment).get(HabitViewModel.class).delete(habitsList.get(position));
             dialog.dismiss();
         });
 

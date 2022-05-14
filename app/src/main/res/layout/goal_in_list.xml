@@ -8,28 +8,30 @@
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_width="362dp"
+        android:layout_height="85dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="35dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/background"
         android:fillViewport="true"
         android:paddingBottom="5dp"
         android:translationZ="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editImageBtn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goalTitleText"
         app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/text_slideshow2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@color/background"
@@ -42,6 +44,30 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/trashImageView"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        app:srcCompat="@drawable/trash"
+        app:tint="@color/imageTintColor_2"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/editImageBtn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trashImageView"
+        app:srcCompat="@drawable/pencil"
+        app:tint="@color/imageTintColor_2"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/goalTitleText"
@@ -57,7 +83,6 @@
         android:lines="2"
         android:minHeight="48dp"
         android:scrollHorizontally="false"
-        android:text="Awansować w pracy"
         android:textColor="@color/textColor"
         android:textSize="16sp"
         android:translationZ="2dp"
@@ -81,7 +106,7 @@
         android:lines="2"
         android:minHeight="48dp"
         android:scrollHorizontally="false"
-        android:text="Nawyki i zadania:"
+        android:text="@string/GoalListHabitsAndTasksLabel"
         android:textColor="@color/textColor"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -124,7 +149,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nestedScrollView2"
-        app:srcCompat="@drawable/shadow" />
+        app:srcCompat="@drawable/shadow"
+        tools:ignore="ContentDescription" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/goalsList"
@@ -141,6 +167,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginStart="-5dp"
@@ -154,26 +181,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0">
 
-    <com.akki.circlemenu.CircleMenu
-        android:id="@+id/circle_menu"
-        android:layout_width="70dp"
-        android:layout_height="300dp"
-        android:foregroundTint="@color/imageTintColor"
-        android:padding="5dp"
-        android:translationZ="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.98"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"
-        app:menu_background_color="@array/menu_back_colors"
-        app:menu_close_duration="300"
-        app:menu_icons="@array/menus"
-        app:menu_open_duration="400"
-        app:menu_orientation="vertical"
-        app:menu_radius="75dp" />
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

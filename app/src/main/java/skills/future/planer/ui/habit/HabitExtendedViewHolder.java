@@ -6,15 +6,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -23,10 +20,10 @@ import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
 import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
-import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
-import skills.future.planer.ui.goals.ICustomViewHolder;
+import skills.future.planer.ui.goals.pager.recycler.ICustomViewHolder;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 
 @Getter
 public class HabitExtendedViewHolder extends ICustomViewHolder {
@@ -35,29 +32,28 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
     private final ChipGroup chipGroup;
-    private final HabitViewModel habitViewModel;
-    private final LifecycleOwner viewLifecycleOwner;
 
-    public HabitExtendedViewHolder(View itemView, Context context, HabitViewModel habitViewModel,
-                                   LifecycleOwner viewLifecycleOwner) {
+
+    public HabitExtendedViewHolder(View itemView, Context context, Fragment fragment) {
         super(itemView);
         title = itemView.findViewById(R.id.habitTitleTextViewExtended);
         circularProgressIndicatorHabit = itemView.findViewById(R.id.circularProgressIndicatorHabit);
         circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitDay);
         chipGroup = itemView.findViewById(R.id.chipGroupWeek);
         this.context = context;
-        this.habitViewModel = habitViewModel;
-        this.viewLifecycleOwner = viewLifecycleOwner;
     }
+
 
     @SuppressLint("ResourceAsColor")
     @Override
-    public void setEveryThing(HabitData habitData) {
-        this.title.setText(habitData.getTitle());
+    public void setEveryThing(MixedRecyclerElement element) {
+        if (element instanceof HabitData habitData) {
+            this.title.setText(habitData.getTitle());
 
-        setUpChipGroup(habitData);
-        setUpCircularProgressIndicatorHabit(habitData);
-        setUpCircularProgressIndicatorOfDays(habitData);
+            setUpChipGroup(habitData);
+            setUpCircularProgressIndicatorHabit(habitData);
+            setUpCircularProgressIndicatorOfDays(habitData);
+        }
     }
 
     private void setUpChipGroup(HabitData habitData) {
@@ -84,8 +80,6 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
 
         long numberOfDays = TimeUnit.DAYS.convert(todayDate.getTime() - date.getTime(), TimeUnit.MILLISECONDS)+1;
 
-        System.out.println(habitData.getNumberOfDaysWhereHabitsWasDone() );
-        System.out.println( numberOfDays);
         double currentProgress = ((double) habitData.getNumberOfDaysWhereHabitsWasDone() / numberOfDays) * 100;
         if (currentProgress > 100f) currentProgress = 100f;
         circularProgressIndicatorHabit.setCurrentProgress(currentProgress);
