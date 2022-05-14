@@ -13,9 +13,7 @@ import skills.future.planer.db.task.TaskData;
 
 public class GoalRepository {
     private final GoalsDao goalsDao;
-    private LiveData<List<GoalData>> goals;
-    private LiveData<Map<GoalData, HabitData>> goalsHabit;
-    private LiveData<Map<GoalData, TaskData>> goalsTasks;
+
 
     public GoalRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
@@ -26,21 +24,15 @@ public class GoalRepository {
      * @return reference to list of all habits
      */
     LiveData<List<GoalData>> getAllGoals() {
-        if (goals == null)
-            goals = goalsDao.getGoals();
-        return goals;
+        return goalsDao.getGoals();
     }
 
     LiveData<Map<GoalData, HabitData>> getHabitsFromGoal(Long goalId) {
-        if (goalsHabit == null)
-            goalsHabit = goalsDao.getHabitsFromGoal(goalId);
-        return goalsHabit;
+        return goalsDao.getHabitsFromGoal(goalId);
     }
 
     LiveData<Map<GoalData, TaskData>> getTasksFromGoal(Long goalId) {
-        if (goalsTasks == null)
-            goalsTasks = goalsDao.getTasksFromGoal(goalId);
-        return goalsTasks;
+        return goalsDao.getTasksFromGoal(goalId);
     }
 
     /**
