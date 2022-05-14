@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -22,37 +22,28 @@ import lombok.Setter;
 import skills.future.planer.R;
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
-import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.goals.GoalsCreatorActivity;
-import skills.future.planer.ui.goals.GoalsFragment;
-import skills.future.planer.ui.goals.pager.recycler.MixedViewAdapter;
 
 @Setter
 public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
     private final LayoutInflater layoutInflater;
+    private final Fragment fragment;
     private final Context context;
-    private final LifecycleOwner lifecycleOwner;
-    private final HabitViewModel habitViewModel;
-    private final GoalsViewModel goalsViewModel;
     private FragmentManager fragmentManager;
     private List<GoalData> goalsList = new ArrayList<>();
-    private MixedViewAdapter mixedViewAdapter;
 
-    public GoalTotalAdapter(Context context, GoalsFragment lifecycleOwner,
-                            HabitViewModel habitViewModel, GoalsViewModel goalsViewModel) {
-        this.layoutInflater = LayoutInflater.from(context);
-        this.context = context;
-        this.lifecycleOwner = lifecycleOwner;
-        this.habitViewModel = habitViewModel;
-        this.goalsViewModel = goalsViewModel;
 
+    public GoalTotalAdapter(Fragment fragment) {
+        this.layoutInflater = LayoutInflater.from(fragment.getContext());
+        this.fragment = fragment;
+        context = fragment.getContext();
     }
 
     @NonNull
     @Override
     public GoalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new GoalViewHolder(createViewOfItem(parent, R.layout.goal_in_list), context, fragmentManager);
+        return new GoalViewHolder(createViewOfItem(parent, R.layout.goal_in_list), fragment);
     }
 
     private void createListenerToEditButton(@NonNull GoalViewHolder holder, int position) {
@@ -73,7 +64,7 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
         builder.setMessage("Are you sure?");
 
         builder.setPositiveButton("Yes", (dialog, which) -> {
-            goalsViewModel.delete(goalsList.get(position));
+            new ViewModelProvider(fragment).get(GoalsViewModel.class).delete(goalsList.get(position));
             dialog.dismiss();
         });
 
@@ -89,15 +80,6 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
         View itemView;
         itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
-
-        mixedViewAdapter = new MixedViewAdapter(context, habitViewModel,
-                lifecycleOwner, goalsViewModel);
-        RecyclerView list = itemView.findViewById(R.id.goalsList);
-        list.setAdapter(mixedViewAdapter);
-        list.setLayoutManager(new LinearLayoutManager(context));
-
-
-
         return itemView;
     }
 
@@ -107,16 +89,7 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
         if (goalsList != null) {
             GoalData current = goalsList.get(position);
             holder.setEveryThing(current);
-            goalsViewModel.getHabitsFromGoal(goalsList.get(position).getGoalId())
-                    .observe(lifecycleOwner, goalDataListMap -> {
-                        if (goalDataListMap.size() > 0)
-                            mixedViewAdapter.setHabitsList(new ArrayList<>(goalDataListMap.values()));
-                    });
-            goalsViewModel.getTasksFromGoal(goalsList.get(position).getGoalId())
-                    .observe(lifecycleOwner, goalDataListMap -> {
-                        if (goalDataListMap.size() > 0)
-                            mixedViewAdapter.setFullTaskList(new ArrayList<>(goalDataListMap.values()));
-                    });
+
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
 

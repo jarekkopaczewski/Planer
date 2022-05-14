@@ -28,7 +28,7 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
-@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 6)
+@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 7)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
@@ -116,25 +116,23 @@ public abstract class AppDatabase extends RoomDatabase {
             }
 
 
-            for (int i = 0; i < 1; i++) {
-                var goal = new GoalData("Cel " + i, "opis", LocalDate.of(2022, 1, 1));
+            try {
+                var goal = new GoalData("Cel " + 1, "opis", LocalDate.of(2022, 1, 1));
                 goal.setGoalId(goalsDao.insert(goal));
+                habitDao.insert(new HabitData("test", "1111111",
+                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
+                habitDao.insert(new HabitData("test2", "1111111",
+                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
+                word.setTaskDataId(mDao.insert(word));
 
-
-                try {
-
-                    habitDao.insert(new HabitData("test", "1111111",
-                            HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
-                    habitDao.insert(new HabitData("test2", "1111111",
-                            HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
-                    TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
-                    word.setTaskDataId(mDao.insert(word));
-                    counter++;
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                var goal2 =
+                        new GoalData("Cel " + "agagasg", "opisasgasgagasg", LocalDate.of(2022, 2, 1));
+                goal2.setGoalId(goalsDao.insert(goal2));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
 //                mDao.insert(word);

@@ -7,38 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import skills.future.planer.R;
-import skills.future.planer.db.goal.GoalsViewModel;
-import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.habit.HabitExtendedViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
 public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
-
     private static final int LAYOUT_HABIT = 0;
     private static final int LAYOUT_TASK = 1;
     private final LayoutInflater layoutInflater;
     private final Context context;
-    private final GoalsViewModel goalsViewModel;
+    private final Fragment fragment;
     private List<MixedRecyclerElement> habitsList = new ArrayList<>();
     private List<TaskData> fullTaskList = new ArrayList<>();
-    private final HabitViewModel habitViewModel;
-    private final LifecycleOwner lifecycleOwner;
 
-    public MixedViewAdapter(Context context, HabitViewModel habitViewModel, LifecycleOwner lifecycleOwner, GoalsViewModel goalsViewModel) {
+    public MixedViewAdapter(Context context, Fragment fragment) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
-        this.habitViewModel = habitViewModel;
-        this.lifecycleOwner = lifecycleOwner;
-        this.goalsViewModel = goalsViewModel;
+        this.fragment = fragment;
     }
 
     @Override
@@ -57,7 +50,7 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
     @Override
     public ICustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return switch (viewType) {
-            case LAYOUT_HABIT -> new HabitExtendedViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context, habitViewModel, lifecycleOwner);
+            case LAYOUT_HABIT -> new HabitExtendedViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context, fragment);
             default -> new TaskDataViewHolder(createViewOfItem(parent, R.layout.fragment_task_in_list), context);
         };
     }

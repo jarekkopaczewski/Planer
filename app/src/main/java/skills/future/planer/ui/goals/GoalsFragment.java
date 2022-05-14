@@ -17,7 +17,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentGoalsBinding;
 import skills.future.planer.db.goal.GoalsViewModel;
-import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.ui.goals.pager.GoalTotalAdapter;
 import skills.future.planer.ui.habit.HabitCreatorActivity;
 
@@ -47,8 +46,7 @@ public class GoalsFragment extends Fragment {
         });
 
         GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
-        goalTotalAdapter = new GoalTotalAdapter(this.getContext(), this,
-                new ViewModelProvider(this).get(HabitViewModel.class), goalsViewModel);
+        goalTotalAdapter = new GoalTotalAdapter(this);
         goalTotalAdapter.setFragmentManager(getChildFragmentManager());
         totalGoalList.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         totalGoalList.setAdapter(goalTotalAdapter);

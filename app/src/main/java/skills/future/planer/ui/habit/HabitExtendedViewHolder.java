@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -20,7 +20,6 @@ import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
 import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
-import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
 import skills.future.planer.ui.goals.pager.recycler.ICustomViewHolder;
@@ -33,20 +32,17 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
     private final ChipGroup chipGroup;
-    private final HabitViewModel habitViewModel;
-    private final LifecycleOwner viewLifecycleOwner;
 
-    public HabitExtendedViewHolder(View itemView, Context context, HabitViewModel habitViewModel,
-                                   LifecycleOwner viewLifecycleOwner) {
+
+    public HabitExtendedViewHolder(View itemView, Context context, Fragment fragment) {
         super(itemView);
         title = itemView.findViewById(R.id.habitTitleTextViewExtended);
         circularProgressIndicatorHabit = itemView.findViewById(R.id.circularProgressIndicatorHabit);
         circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitDay);
         chipGroup = itemView.findViewById(R.id.chipGroupWeek);
         this.context = context;
-        this.habitViewModel = habitViewModel;
-        this.viewLifecycleOwner = viewLifecycleOwner;
     }
+
 
     @SuppressLint("ResourceAsColor")
     @Override
