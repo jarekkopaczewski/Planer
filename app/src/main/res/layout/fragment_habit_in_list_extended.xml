@@ -45,7 +45,7 @@
                 android:maxLines="1"
                 android:paddingStart="5dp"
                 android:paddingEnd="5dp"
-                android:text="Cel"
+                android:text="@string/goalText"
                 android:textAlignment="viewStart"
                 android:textColor="@color/textColor"
                 android:textSize="13sp"
@@ -90,7 +90,7 @@
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/chipGroupWeek"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
                         android:visibility="visible"
                         tools:visibility="visible" />

@@ -137,7 +137,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
                     Navigation.findNavController(holder.itemView)
                             .navigate(TaskListFragmentDirections
-                                    .navToEditTaskListCreatorFragment(fullTaskList.get(position).getTaskDataId())));
+                                    .navToEditTaskListCreatorFragment(filteredTaskList.get(position).getTaskDataId())));
     }
 
     /**
@@ -155,7 +155,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        var task = fullTaskList.get(position);
+                        var task = filteredTaskList.get(position);
                         mTaskViewModel.deleteTaskData(task);
                     }
 

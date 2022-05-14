@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
@@ -51,7 +52,6 @@ public class TaskListCreatorFragment extends Fragment {
     private CalendarDay endingDay, beginDay;
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
     private PowerSpinnerView goalSpinner;
-    private int selectedGoalId = 0;
     private GoalData selectedGoal;
 
     @Override
@@ -82,15 +82,11 @@ public class TaskListCreatorFragment extends Fragment {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0,"brak");
             goalSpinner.setItems(list);
-            goalSpinner.selectItemByIndex(0);
         });
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
-            selectedGoalId = i;
-            System.out.println(goalSpinner.getText());
             String goalText = (String) goalSpinner.getText();
             goalsViewModel.getAllGoals().observe(getViewLifecycleOwner(), goalData -> {
-               // var list = goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny();
                selectedGoal = goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny().orElse(null);
             });
         });
@@ -213,6 +209,9 @@ public class TaskListCreatorFragment extends Fragment {
                 updateBeginDateEditText();
                 updateEndingDateEditText();
             }
+
+            setGoal();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -251,11 +250,7 @@ public class TaskListCreatorFragment extends Fragment {
                         editTask.setEndingCalendarDate(endingDay);
                         editTask.setStartingCalendarDate(beginDay);
                         if(selectedGoal!=null) {
-                             //goalSpinner.selectItemByIndex(selectedGoalId);
-                           // goalSpinner.g
-                           // System.out.println(goalSpinner.getText());
                             editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
-                            System.out.println("YAY");
                         }
                         sendTaskToDataBase(taskID, view1);
                     }
@@ -408,6 +403,37 @@ public class TaskListCreatorFragment extends Fragment {
      */
     private boolean checkDate(CalendarDay firstDate, CalendarDay secondDate) {
         return firstDate.isBefore(secondDate);
+    }
+
+    /**
+     * Sets saved goal in spinner
+     */
+    private void setGoal(){
+        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+
+        goalsViewModel.getAllGoals().observe(getViewLifecycleOwner(), goalData -> {
+            var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
+            list.add(0,"brak");
+            goalSpinner.setItems(list);
+            GoalData goalData1 = goalsViewModel.findById(editTask.getForeignKeyToGoal());
+            String title = null;
+            if(goalData1!=null){
+                title = goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle();
+            }
+            if(title != null){
+                String finalTitle = title;
+                var find = IntStream.range(0,list.size())
+                        .filter(i -> finalTitle.equals(list.get(i)))
+                        .findAny()
+                        .orElse(-1);
+
+                if(find!=-1){
+                    goalSpinner.selectItemByIndex(find);
+                }
+            }else {
+                goalSpinner.selectItemByIndex(0);
+            }
+        });
     }
 
     @Override
