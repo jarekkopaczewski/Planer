@@ -88,13 +88,13 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
     public void onBindViewHolder(@NonNull GoalViewHolder holder, int position) {
         if (goalsList != null) {
             GoalData current = goalsList.get(position);
-            holder.setEveryThing(current);
+            //holder.setEveryThing(current);
 
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
 
-        createListenerToEditButton(holder, position);
-        createListenerToTrashButton(holder, position);
+        /*createListenerToEditButton(holder, position);
+        createListenerToTrashButton(holder, position);*/
     }
 
     public long getItemId(int position) {

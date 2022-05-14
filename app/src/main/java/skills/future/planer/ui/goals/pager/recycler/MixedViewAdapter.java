@@ -20,8 +20,10 @@ import skills.future.planer.ui.habit.HabitExtendedViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
 public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
-    private static final int LAYOUT_HABIT = 0;
-    private static final int LAYOUT_TASK = 1;
+    private static final int LAYOUT_TITLE = 0;
+    private static final int LAYOUT_DESCRIPTION = 1;
+    private static final int LAYOUT_HABIT = 2;
+    private static final int LAYOUT_TASK = 3;
     private final LayoutInflater layoutInflater;
     private final Context context;
     private final Fragment fragment;
@@ -36,20 +38,23 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
+        if (position == 0) return LAYOUT_TITLE;
+        if (position == 1) return LAYOUT_DESCRIPTION;
         if (position < habitsList.size()) return LAYOUT_HABIT;
         else return LAYOUT_TASK;
     }
 
     @Override
     public int getItemCount() {
-        return fullTaskList.size() + habitsList.size();
+        return 2;
     }
 
-    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @NonNull
     @Override
     public ICustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return switch (viewType) {
+            case LAYOUT_TITLE -> new GoalViewHolderTitle(createViewOfItem(parent, R.layout.goal_in_list_title), context, fragment);
+            case LAYOUT_DESCRIPTION -> new GoalViewHolderDescription(createViewOfItem(parent, R.layout.goal_in_list_description), context, fragment);
             case LAYOUT_HABIT -> new HabitExtendedViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list_extended), context, fragment);
             default -> new TaskDataViewHolder(createViewOfItem(parent, R.layout.fragment_task_in_list), context);
         };
@@ -66,9 +71,9 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
     @Override
     public void onBindViewHolder(ICustomViewHolder holder, final int position) {
         if (holder.getItemViewType() == LAYOUT_HABIT) {
-            holder.setEveryThing(habitsList.get(position));
+            //holder.setEveryThing(habitsList.get(position));
         } else {
-            holder.setEveryThing(fullTaskList.get(position - habitsList.size()));
+            //holder.setEveryThing(fullTaskList.get(position - habitsList.size()));
         }
     }
 

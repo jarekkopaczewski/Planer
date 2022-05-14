@@ -65,9 +65,9 @@ public class GoalsFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 if (goalTotalAdapter.getItemCount() > 0)
-                    pagerCountText.setText(position + 1 + "/" + goalTotalAdapter.getItemCount());
+                    pagerCountText.setText("Cel: " + (position + 1) + "/" + goalTotalAdapter.getItemCount());
                 else
-                    pagerCountText.setText("0/0");
+                    pagerCountText.setText("Cel: 0/0");
             }
         };
 

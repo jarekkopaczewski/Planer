@@ -208,7 +208,8 @@ public class MonthFragment extends Fragment {
             eventDecoratorTwo.setDates_tasks(twoDot);
             eventDecoratorThree.setDates_tasks(threeDot);
             eventDecoratorFour.setDates_tasks(fourDot);
-            requireActivity().runOnUiThread(() -> materialCalendarView.invalidateDecorators());
+            if (isAdded())
+                requireActivity().runOnUiThread(() -> materialCalendarView.invalidateDecorators());
 
         });
     }
