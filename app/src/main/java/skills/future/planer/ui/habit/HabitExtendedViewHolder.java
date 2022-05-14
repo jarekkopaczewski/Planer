@@ -23,8 +23,8 @@ import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
-import skills.future.planer.ui.goals.ICustomViewHolder;
-import skills.future.planer.ui.goals.MixedRecyclerElement;
+import skills.future.planer.ui.goals.pager.recycler.ICustomViewHolder;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 
 @Getter
 public class HabitExtendedViewHolder extends ICustomViewHolder {

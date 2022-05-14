@@ -20,7 +20,7 @@ import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.DataBaseException;
 import skills.future.planer.tools.DatesParser;
-import skills.future.planer.ui.goals.MixedRecyclerElement;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 
 @Getter
 @Setter

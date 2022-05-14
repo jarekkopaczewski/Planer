@@ -15,28 +15,23 @@ import androidx.viewpager2.widget.ViewPager2;
 import skills.future.planer.databinding.FragmentGoalsBinding;
 import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitViewModel;
+import skills.future.planer.ui.goals.pager.GoalTotalAdapter;
 
 public class GoalsFragment extends Fragment {
-    private GoalsViewModel goalsViewModel;
-    private GoalsFragmentViewModel homeViewModel;
     private FragmentGoalsBinding binding;
     private GoalTotalAdapter goalTotalAdapter;
-    private ViewPager2 totalGoalList;
     private TextView pagerCountText;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        homeViewModel = new ViewModelProvider(this).get(GoalsFragmentViewModel.class);
         binding = FragmentGoalsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        totalGoalList = binding.totalGoalList;
+        ViewPager2 totalGoalList = binding.totalGoalList;
         pagerCountText = binding.pagerCountText;
 
-        goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
         goalTotalAdapter = new GoalTotalAdapter(this.getContext(), this,
                 new ViewModelProvider(this).get(HabitViewModel.class), goalsViewModel);
-        goalTotalAdapter.setLifecycle(getLifecycle());
         goalTotalAdapter.setFragmentManager(getChildFragmentManager());
         totalGoalList.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         totalGoalList.setAdapter(goalTotalAdapter);

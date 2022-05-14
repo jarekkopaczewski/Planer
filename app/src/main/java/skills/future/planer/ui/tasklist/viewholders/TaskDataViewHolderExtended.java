@@ -15,7 +15,7 @@ import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
-import skills.future.planer.ui.goals.MixedRecyclerElement;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 import skills.future.planer.ui.tasklist.Colors;
 
 public class TaskDataViewHolderExtended extends TaskDataViewHolder {

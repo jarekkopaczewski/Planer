@@ -1,4 +1,4 @@
-package skills.future.planer.ui.goals;
+package skills.future.planer.ui.goals.pager;
 
 import android.content.Context;
 import android.view.View;
