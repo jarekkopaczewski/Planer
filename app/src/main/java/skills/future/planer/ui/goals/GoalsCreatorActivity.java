@@ -53,6 +53,7 @@ public class GoalsCreatorActivity extends AppCompatActivity {
                     MonthFragment.getGlobalSelectedDate().getDay());
             saveFABSetUp();
         }
+        editTextDateGoal.setText(formatterDate.format(calendar.getTime()));
     }
 
     private void setUpFields(ActivityGoalsCreatorBinding binding) {

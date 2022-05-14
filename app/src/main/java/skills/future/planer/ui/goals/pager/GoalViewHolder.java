@@ -18,7 +18,7 @@ import skills.future.planer.ui.day.views.habits.TextAdapter;
 
 @Getter
 public class GoalViewHolder extends RecyclerView.ViewHolder {
-    private final TextView title;
+    private final TextView title, details;
     private final CircularProgressIndicator circularProgressIndicatorHabit;
     private final Context context;
     private final FragmentManager fragmentManager;
@@ -27,6 +27,7 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
     public GoalViewHolder(View itemView, Context context, FragmentManager fragmentManager) {
         super(itemView);
         title = itemView.findViewById(R.id.goalTitleText);
+        details = itemView.findViewById(R.id.text_slideshow2);
         circularProgressIndicatorHabit = itemView.findViewById(R.id.circularProgressIndicatorGoal);
         this.fragmentManager = fragmentManager;
         this.context = context;
@@ -34,6 +35,7 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
 
     public void setEveryThing(GoalData goalData) {
         this.title.setText(goalData.getTitle());
+        this.details.setText(goalData.getDetails());
         Random random = new Random();
         circularProgressIndicatorHabit.setCurrentProgress(random.nextInt(99));
         circularProgressIndicatorHabit.setProgressTextAdapter(new TextAdapter());

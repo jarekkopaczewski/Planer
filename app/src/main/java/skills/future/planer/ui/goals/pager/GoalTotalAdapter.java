@@ -1,21 +1,19 @@
-package skills.future.planer.ui.goals;
+package skills.future.planer.ui.goals.pager;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.akki.circlemenu.CircleMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,9 @@ import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.habit.HabitCreatorActivity;
+import skills.future.planer.ui.goals.GoalsCreatorActivity;
+import skills.future.planer.ui.goals.GoalsFragment;
+import skills.future.planer.ui.goals.pager.recycler.MixedViewAdapter;
 
 @Setter
 public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
@@ -35,7 +35,6 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
     private final LifecycleOwner lifecycleOwner;
     private final HabitViewModel habitViewModel;
     private final GoalsViewModel goalsViewModel;
-    private Lifecycle lifecycle;
     private FragmentManager fragmentManager;
     private List<GoalData> goalsList = new ArrayList<>();
     private MixedViewAdapter mixedViewAdapter;
@@ -47,12 +46,41 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
         this.lifecycleOwner = lifecycleOwner;
         this.habitViewModel = habitViewModel;
         this.goalsViewModel = goalsViewModel;
+
     }
 
     @NonNull
     @Override
     public GoalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new GoalViewHolder(createViewOfItem(parent, R.layout.goal_in_list), context, fragmentManager);
+    }
+
+    private void createListenerToEditButton(@NonNull GoalViewHolder holder, int position) {
+        holder.itemView.findViewById(R.id.editImageBtn).setOnClickListener(e -> {
+            var intent = new Intent(context, GoalsCreatorActivity.class);
+            var bundle = new Bundle();
+            bundle.putLong("goalIdToEdit", goalsList.get(position).getGoalId());
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+            notifyItemChanged(position);
+        });
+    }
+
+    private void createListenerToTrashButton(@NonNull GoalViewHolder holder, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle("Confirm deletion");
+        builder.setMessage("Are you sure?");
+
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            goalsViewModel.delete(goalsList.get(position));
+            dialog.dismiss();
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog alert = builder.create();
+        holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> alert.show());
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -68,21 +96,12 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
         list.setAdapter(mixedViewAdapter);
         list.setLayoutManager(new LinearLayoutManager(context));
 
-        CircleMenu circleMenu = itemView.findViewById(R.id.circle_menu);
 
-        circleMenu.setOnMenuItemClickListener(id -> {
-            switch (id) {
-                case R.drawable.routine -> context.startActivity(
-                        new Intent(context, HabitCreatorActivity.class));
-                case R.drawable.task_list -> Navigation.findNavController(itemView)
-                        .navigate(GoalsFragmentDirections
-                                .actionNavHomeToTaskListCreatorFragment(-1));
-            }
-        });
 
         return itemView;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull GoalViewHolder holder, int position) {
         if (goalsList != null) {
@@ -100,6 +119,9 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
                     });
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
+
+        createListenerToEditButton(holder, position);
+        createListenerToTrashButton(holder, position);
     }
 
     public long getItemId(int position) {
@@ -112,7 +134,6 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
             return goalsList.size();
         else return 0;
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     public void setGoalsList(List<GoalData> goalsList) {

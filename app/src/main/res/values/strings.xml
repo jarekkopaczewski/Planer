@@ -77,4 +77,5 @@
     <string name="goalCreatorDetailsHint">Opis celu</string>
     <string name="dateOfBeginGoalCreatorHint">data rozpoczęcia celu</string>
     <string name="goalCreatorDateLabel">Data rozpoczęcia celu:</string>
+    <string name="GoalListHabitsAndTasksLabel">Nawyki i zadania:</string>
 </resources>

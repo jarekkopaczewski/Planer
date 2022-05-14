@@ -3,9 +3,11 @@
     <array name="menus">
         <item>@drawable/task_list</item>
         <item>@drawable/routine</item>
+        <item>@drawable/goal</item>
     </array>
 
     <array name="menu_back_colors">
+        <item>@color/second_color_30</item>
         <item>@color/second_color_30</item>
         <item>@color/second_color_30</item>
     </array>
