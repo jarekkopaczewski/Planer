@@ -10,6 +10,6 @@ public class ICustomViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public void setEveryThing(MixedRecyclerElement element) {
+    public void setEveryThing(MixedRecyclerElement element) throws Exception {
     }
 }

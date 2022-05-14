@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
@@ -32,19 +33,21 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     private final ImageView iconTimePriority;
     private final TextView taskDescriptionView;
     private final Chip goalChip;
+    private final Fragment fragment;
 
-    public TaskDataViewHolderExtended(View itemView, Context context) {
+    public TaskDataViewHolderExtended(View itemView, Context context, Fragment fragment) {
         super(itemView, context);
         this.context = context;
         taskDescriptionView = itemView.findViewById(R.id.taskDescriptionView);
         iconPriorities = itemView.findViewById(R.id.iconPriorities);
         iconTimePriority = itemView.findViewById(R.id.iconTimePriority);
         goalChip = itemView.findViewById(R.id.goalChip);
+        this.fragment=fragment;
     }
 
 
     @Override
-    public void setEveryThing(MixedRecyclerElement element) {
+    public void setEveryThing(MixedRecyclerElement element) throws Exception {
         if (element instanceof TaskData taskData) {
             super.setEveryThing(taskData);
             setIconPriority(taskData);
@@ -114,13 +117,18 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     }
 
     private void setGoalChip(@NonNull TaskData task) throws Exception {
-       // GoalsViewModel goalsViewModel = new ViewModelProvider().get(GoalsViewModel.class);
-//        GoalData goal = goalsViewModel.findById(task.getForeignKeyToGoal());
-//        if (goal != null){
-//            goalChip.setText(goal.getTitle());
-//        }else {
-//            goalChip.setVisibility(View.INVISIBLE);
-//        }
+        GoalsViewModel goalsViewModel = new ViewModelProvider(fragment).get(GoalsViewModel.class);
+        GoalData goal = goalsViewModel.findById(task.getForeignKeyToGoal());
+        if (goal != null){
+            goalChip.setVisibility(View.VISIBLE);
+            String goalText = goal.getTitle();
+            if(goalText.length()>20){
+                goalText = goalText.substring(0,17)+"...";
+            }
+            goalChip.setText(goalText);
+        }else {
+            goalChip.setVisibility(View.INVISIBLE);
+        }
 
     }
 

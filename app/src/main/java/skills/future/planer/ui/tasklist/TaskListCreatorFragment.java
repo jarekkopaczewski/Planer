@@ -52,6 +52,7 @@ public class TaskListCreatorFragment extends Fragment {
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
     private PowerSpinnerView goalSpinner;
     private int selectedGoalId = 0;
+    private GoalData selectedGoal;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -66,6 +67,7 @@ public class TaskListCreatorFragment extends Fragment {
         saveButton = binding.saveCreatorButton;
 
          goalSpinner = binding.goalSpinner;
+
 
         // title and details edit texts
         taskTitleEditText = binding.EditTextTitle;
@@ -85,6 +87,12 @@ public class TaskListCreatorFragment extends Fragment {
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
             selectedGoalId = i;
+            System.out.println(goalSpinner.getText());
+            String goalText = (String) goalSpinner.getText();
+            goalsViewModel.getAllGoals().observe(getViewLifecycleOwner(), goalData -> {
+               // var list = goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny();
+               selectedGoal = goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny().orElse(null);
+            });
         });
 
         Long taskID = -1L;
@@ -242,8 +250,13 @@ public class TaskListCreatorFragment extends Fragment {
                         setTaskData();
                         editTask.setEndingCalendarDate(endingDay);
                         editTask.setStartingCalendarDate(beginDay);
-                        if(selectedGoalId!=0)
-                            editTask.setForeignKeyToGoal((long) selectedGoalId);
+                        if(selectedGoal!=null) {
+                             //goalSpinner.selectItemByIndex(selectedGoalId);
+                           // goalSpinner.g
+                           // System.out.println(goalSpinner.getText());
+                            editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
+                            System.out.println("YAY");
+                        }
                         sendTaskToDataBase(taskID, view1);
                     }
                 } else {

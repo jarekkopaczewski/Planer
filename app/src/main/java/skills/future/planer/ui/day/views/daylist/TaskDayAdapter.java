@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import java.util.List;
@@ -18,8 +19,8 @@ import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
 public class TaskDayAdapter extends TaskTotalAdapter {
 
-    public TaskDayAdapter(Context context, TaskDataViewModel mTaskViewModel) {
-        super(context, mTaskViewModel);
+    public TaskDayAdapter(Context context, TaskDataViewModel mTaskViewModel, Fragment fragment) {
+        super(context, mTaskViewModel, fragment);
     }
 
     @NonNull

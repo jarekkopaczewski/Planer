@@ -11,6 +11,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
@@ -45,13 +47,15 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private final TaskDataViewModel mTaskViewModel;
     private ArrayList<TaskData> filteredItems = new ArrayList<>();
     private ArrayList<String> filters = new ArrayList<>();
+    private Fragment fragment;
 
 
 
-    public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel) {
+    public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel, Fragment fragment) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.mTaskViewModel = mTaskViewModel;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -61,7 +65,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         return switch (viewType) {
             case LAYOUT_BIG -> new TaskDataViewHolderExtended(
                     createViewOfItem(parent,
-                            R.layout.fragment_task_in_list_extended), context);
+                            R.layout.fragment_task_in_list_extended), context,fragment);
             default -> new TaskDataViewHolder(
                     createViewOfItem(parent,
                             R.layout.fragment_task_in_list), context);

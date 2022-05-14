@@ -51,6 +51,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
     private PowerSpinnerView goalSpinner;
     private Chip MondayChip, TuesdayChip, WednesdayChip, ThursdayChip, FridayChip, SaturdayChip, SundayChip;
     private int selectedGoalId = 0;
+    private GoalData selectedGoal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,12 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
             selectedGoalId = i;
+            System.out.println(goalSpinner.getText());
+            String goalText = (String) goalSpinner.getText();
+            goalsViewModel.getAllGoals().observe(this, goalData -> {
+                // var list = goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny();
+                selectedGoal = goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny().orElse(null);
+            });
         });
 
         // add on click & time change listener
@@ -184,8 +191,10 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             DatesParser.toLocalDate(calendar2.getTime()),
                             calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
-                    if (selectedGoalId != 0)
-                        habit.setForeignKeyToGoal((long) selectedGoalId);
+                    if(selectedGoal!=null) {
+                        habit.setForeignKeyToGoal(selectedGoal.getGoalId());
+                        System.out.println("YAY");
+                    }
 
                     habitViewModel.insert(habit);
                 } catch (Exception dataBaseException) {
@@ -229,6 +238,10 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     habitData.setNotificationTime(
                             calendar.get(Calendar.HOUR_OF_DAY),
                             calendar.get(Calendar.MINUTE));
+                    if(selectedGoal!=null) {
+                        habitData.setForeignKeyToGoal(selectedGoal.getGoalId());
+                        System.out.println("YAY");
+                    }
                     habitViewModel.edit(habitData);
                 } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
