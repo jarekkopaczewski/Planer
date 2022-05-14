@@ -86,6 +86,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         return filteredTaskList.get(position);
     }
 
+    @SneakyThrows
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TaskDataViewHolder holder, int position) {

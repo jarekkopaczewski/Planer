@@ -10,8 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+
+import com.google.android.material.chip.Chip;
 
 import skills.future.planer.R;
+import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -24,6 +30,7 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     private final ImageView iconPriorities;
     private final ImageView iconTimePriority;
     private final TextView taskDescriptionView;
+    private final Chip goalChip;
 
     public TaskDataViewHolderExtended(View itemView, Context context) {
         super(itemView, context);
@@ -31,16 +38,18 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
         taskDescriptionView = itemView.findViewById(R.id.taskDescriptionView);
         iconPriorities = itemView.findViewById(R.id.iconPriorities);
         iconTimePriority = itemView.findViewById(R.id.iconTimePriority);
+        goalChip = itemView.findViewById(R.id.goalChip);
     }
 
 
     @Override
-    public void setEveryThing(TaskData taskData) {
+    public void setEveryThing(TaskData taskData) throws Exception {
         super.setEveryThing(taskData);
         setIconPriority(taskData);
         setIconTimePriority(taskData);
         setTaskDescriptionText(taskData);
         setColor(taskData);
+        setGoalChip(taskData);
     }
 
     /**
@@ -99,6 +108,17 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
                         context.getResources(), R.drawable.snail, null));
             }
         }
+    }
+
+    private void setGoalChip(@NonNull TaskData task) throws Exception {
+       // GoalsViewModel goalsViewModel = new ViewModelProvider().get(GoalsViewModel.class);
+//        GoalData goal = goalsViewModel.findById(task.getForeignKeyToGoal());
+//        if (goal != null){
+//            goalChip.setText(goal.getTitle());
+//        }else {
+//            goalChip.setVisibility(View.INVISIBLE);
+//        }
+
     }
 
     @Override

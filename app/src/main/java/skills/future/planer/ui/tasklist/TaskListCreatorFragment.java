@@ -7,23 +7,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.stream.Collectors;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
@@ -43,6 +50,8 @@ public class TaskListCreatorFragment extends Fragment {
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingDay, beginDay;
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
+    private PowerSpinnerView goalSpinner;
+    private int selectedGoalId = 0;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -56,6 +65,8 @@ public class TaskListCreatorFragment extends Fragment {
         // save btn
         saveButton = binding.saveCreatorButton;
 
+         goalSpinner = binding.goalSpinner;
+
         // title and details edit texts
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
@@ -63,6 +74,18 @@ public class TaskListCreatorFragment extends Fragment {
         setStartingDateByGlobalDate();
 
         processFabColor();
+        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+
+        goalsViewModel.getAllGoals().observe(getViewLifecycleOwner(), goalData -> {
+            var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
+            list.add(0,"brak");
+            goalSpinner.setItems(list);
+            goalSpinner.selectItemByIndex(0);
+        });
+
+        goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
+            selectedGoalId = i;
+        });
 
         Long taskID = -1L;
         taskID = getTaskIDFromFragmentArgument(taskID);
@@ -219,6 +242,8 @@ public class TaskListCreatorFragment extends Fragment {
                         setTaskData();
                         editTask.setEndingCalendarDate(endingDay);
                         editTask.setStartingCalendarDate(beginDay);
+                        if(selectedGoalId!=0)
+                            editTask.setForeignKeyToGoal((long) selectedGoalId);
                         sendTaskToDataBase(taskID, view1);
                     }
                 } else {

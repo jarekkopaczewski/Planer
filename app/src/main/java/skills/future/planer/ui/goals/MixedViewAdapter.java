@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
@@ -89,6 +90,7 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         return itemView;
     }
 
+    @SneakyThrows
     @Override
     public void onBindViewHolder(ICustomViewHolder holder, final int position) {
 

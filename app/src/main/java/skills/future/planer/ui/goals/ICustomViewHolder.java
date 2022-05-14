@@ -13,7 +13,7 @@ public class ICustomViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public void setEveryThing(TaskData taskData) {
+    public void setEveryThing(TaskData taskData) throws Exception {
     }
 
     public void setEveryThing(HabitData habitData) {
