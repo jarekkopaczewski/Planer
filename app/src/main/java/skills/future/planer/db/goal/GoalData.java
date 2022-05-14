@@ -20,6 +20,9 @@ public class GoalData {
     private String title, details;
     private Long date;
 
+    public GoalData() {
+    }
+
     public GoalData(String title, String details, LocalDate localDate) {
         this.title = title;
         this.details = details;
@@ -49,6 +52,10 @@ public class GoalData {
 
     public CalendarDay getDateCalendarDate() {
         return date != 0 ? DatesParser.toCalendarDay(date) : null;
+    }
+
+    public void setDate(Long date) {
+        this.date = date;
     }
 
     public void setDate(LocalDate beginDay) {
