@@ -28,10 +28,9 @@ public interface GoalsDao {
      *
      * @param id of searched habitData
      * @return GoalData
-     * @throws Exception if sth is wrong xd
      */
     @Query("SELECT * FROM GoalData WHERE goalId = :id")
-    GoalData findById(Long id) throws Exception;
+    GoalData findById(Long id);
 
     /**
      * @return all goals from database

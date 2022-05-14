@@ -62,7 +62,7 @@ public class GoalsViewModel extends AndroidViewModel {
         goalRepository.delete(goalData);
     }
 
-    public GoalData findById(Long goalId) throws Exception {
+    public GoalData findById(Long goalId) {
         return goalRepository.findById(goalId);
     }
 }

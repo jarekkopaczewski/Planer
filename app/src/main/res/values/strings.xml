@@ -73,4 +73,8 @@
     <string name="reminder_about_habit_singular">Dzień zbliża się ku końcowi, a dalej masz niezrealizowny nawyk</string>
     <string name="reminder_about_habit_plural">Dzień zbliża się ku końcowi, a dalej masz niezrealizowne nawyki</string>
     <string name="reminder_too_many_habits">Masz za dużo nawyków!</string>
+    <string name="goalCreatorTitleHint">Nazwa celu</string>
+    <string name="goalCreatorDetailsHint">Opis celu</string>
+    <string name="dateOfBeginGoalCreatorHint">data rozpoczęcia celu</string>
+    <string name="goalCreatorDateLabel">Data rozpoczęcia celu:</string>
 </resources>

@@ -70,7 +70,7 @@ public class GoalRepository {
         goalsDao.deleteOne(goalData);
     }
 
-    GoalData findById(Long goalId) throws Exception {
+    GoalData findById(Long goalId) {
         return goalsDao.findById(goalId);
     }
 }
