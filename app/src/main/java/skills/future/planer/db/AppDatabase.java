@@ -14,6 +14,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.time.LocalDate;
+
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
@@ -47,7 +49,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     Log.d(LOG_TAG, "Creating new database instance");
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                            .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
+                            .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
                 }
             }
         }
@@ -112,26 +114,26 @@ public abstract class AppDatabase extends RoomDatabase {
                 word.setTaskDataId(mDao.insert(word));
                 counter++;
             }
-            for (int i = 0; i <= 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day2, day3);
-                word.setTaskDataId(mDao.insert(word));
-                counter++;
-            }
 
-            for (int i = 0; i <= 4; i++) {
-                var goal = new GoalData("Cel " + i, "opis");
+
+            for (int i = 0; i < 1; i++) {
+                var goal = new GoalData("Cel " + i, "opis", LocalDate.of(2022, 1, 1));
                 goal.setGoalId(goalsDao.insert(goal));
-            }
 
-            var goal = new GoalData("Cel 23 ", "opis");
-            try {
-                for (int i = 0; i < 1; i++)
+
+                try {
+
                     habitDao.insert(new HabitData("test", "1111111",
                             HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
-                habitDao.insert(new HabitData("test2", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
-            } catch (Exception e) {
-                e.printStackTrace();
+                    habitDao.insert(new HabitData("test2", "1111111",
+                            HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
+                    TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
+                    word.setTaskDataId(mDao.insert(word));
+                    counter++;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
