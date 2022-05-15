@@ -11,9 +11,7 @@ import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.material.chip.Chip;
 
@@ -48,7 +46,7 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
 
 
     @Override
-    public void setEveryThing(MixedRecyclerElement element) throws Exception {
+    public void setEveryThing(MixedRecyclerElement element) {
         if (element instanceof TaskData taskData) {
             super.setEveryThing(taskData);
             setIconPriority(taskData);
@@ -117,17 +115,17 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
         }
     }
 
-    private void setGoalChip(@NonNull TaskData task) throws Exception {
-        GoalsViewModel goalsViewModel = new ViewModelProvider(fragment).get(GoalsViewModel.class);
+    private void setGoalChip(@NonNull TaskData task) {
+        GoalsViewModel goalsViewModel = new ViewModelProvider(activity).get(GoalsViewModel.class);
         GoalData goal = goalsViewModel.findById(task.getForeignKeyToGoal());
-        if (goal != null){
+        if (goal != null) {
             goalChip.setVisibility(View.VISIBLE);
             String goalText = goal.getTitle();
-            if(goalText.length()>20){
-                goalText = goalText.substring(0,17)+"...";
+            if (goalText.length() > 20) {
+                goalText = goalText.substring(0, 17) + "...";
             }
             goalChip.setText(goalText);
-        }else {
+        } else {
             goalChip.setVisibility(View.INVISIBLE);
         }
 

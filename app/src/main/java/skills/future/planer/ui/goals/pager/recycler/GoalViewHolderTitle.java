@@ -4,8 +4,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import java.util.Random;
 
@@ -19,7 +19,7 @@ public class GoalViewHolderTitle extends ICustomViewHolder {
     private final TextView goalTitle;
     private final Context context;
 
-    public GoalViewHolderTitle(View itemView, Context context, Fragment fragment) {
+    public GoalViewHolderTitle(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
         progressBar = itemView.findViewById(R.id.circularProgressIndicatorGoal);
         goalTitle = itemView.findViewById(R.id.goalTitleText);

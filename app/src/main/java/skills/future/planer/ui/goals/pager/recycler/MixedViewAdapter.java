@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,15 +25,14 @@ import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
 import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
 public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
-    protected static final int LAYOUT_TITLE = 0;
+    protected static final int LAYOUT_HABIT = 2;
     private static final int LAYOUT_DESCRIPTION = 1;
-    private static final int LAYOUT_HABIT = 2;
+    private static final int LAYOUT_TITLE = 0;
     private static final int LAYOUT_TASK = 3;
     private final LayoutInflater layoutInflater;
     protected final Context context;
@@ -142,14 +140,14 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setHabitsList(ArrayList<MixedRecyclerElement> habitsList) {
+    public void setHabitsList(List<MixedRecyclerElement> habitsList) {
         this.habitsList = habitsList;
         this.habitsList.sort(Comparator.comparingLong(h -> ((HabitData) h).getEndDay()));
         notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setFullTaskList(ArrayList<MixedRecyclerElement> fullTaskList) {
+    public void setFullTaskList(List<MixedRecyclerElement> fullTaskList) {
         this.fullTaskList = fullTaskList;
         this.fullTaskList.sort(Comparator.comparingLong(t -> ((TaskData) t).getEndingDate()));
         notifyDataSetChanged();
