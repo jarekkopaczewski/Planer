@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lombok.SneakyThrows;
 import skills.future.planer.R;
@@ -295,11 +296,14 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
         //checks if filter by status
         if (status != -1) {
+            if(status==0)
             list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(status);
+            else
+                list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData_desc(status);
 
-            filterList = list.stream()
+            filterList = list2.stream()
                     .distinct()
-                    .filter(list2::contains)
+                    .filter(list::contains)
                     .collect(Collectors.toList());
         } else {
             filterList=list;
@@ -349,6 +353,13 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             filteredTaskList.clear();
             if(constraint.toString().length() > 0) {
                 filteredTaskList.addAll((ArrayList<TaskData>) filteredItems);
+//                System.out.println("--------------------------------"+ counter++);
+//                System.out.println("Lista filtrów:");
+//                filterList.forEach(s -> System.out.println(s.getTaskTitleText()));
+//                System.out.println("Lista search bar:");
+//                filteredItems.forEach(s -> System.out.println(s.getTaskTitleText()));
+//                System.out.println("Lista ostateczna:");
+//                filteredTaskList.forEach(s -> System.out.println(s.getTaskTitleText()));
                 filteredItems.clear();
             }else{
                 filteredTaskList.addAll((ArrayList<TaskData>) filterList);
