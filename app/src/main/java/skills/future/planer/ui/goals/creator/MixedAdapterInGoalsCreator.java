@@ -1,15 +1,12 @@
 package skills.future.planer.ui.goals.creator;
 
 import android.content.Context;
-import android.view.ViewGroup;
 
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 
-import skills.future.planer.R;
 import skills.future.planer.ui.goals.pager.recycler.ICustomViewHolder;
 import skills.future.planer.ui.goals.pager.recycler.MixedViewAdapter;
-import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
 
 public class MixedAdapterInGoalsCreator extends MixedViewAdapter {
     public MixedAdapterInGoalsCreator(Context context, ComponentActivity activity) {
@@ -26,26 +23,38 @@ public class MixedAdapterInGoalsCreator extends MixedViewAdapter {
         return habitsList.size() + fullTaskList.size();
     }
 
-    @SuppressWarnings("SwitchStatementWithTooFewBranches")
-    @NonNull
     @Override
-    public ICustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return switch (viewType) {
-            case LAYOUT_HABIT -> new HabitExtendedViewHolder(createViewOfItem(parent,
-                    R.layout.fragment_habit_in_list_extended), context, activity);
-            default -> new TaskViewHolderGoalsCreator(createViewOfItem(parent,
-                    R.layout.fragment_task_in_list), context, activity);
-        };
+    protected int getPositionDelay(int position) {
+        return position;
     }
 
+    /**
+     * Creates listener to taskView in list
+     * When someone presses on a taskView it will expand or close
+     */
     @Override
-    public void onBindViewHolder(ICustomViewHolder holder, final int position) {
-        if (holder.getItemViewType() == LAYOUT_HABIT) {
-            if (habitsList.size() > 0)
-                holder.setEveryThing(habitsList.get(position));
-        } else {
-            if (fullTaskList.size() > 0)
-                holder.setEveryThing(fullTaskList.get(position - habitsList.size()));
-        }
+    protected void createListenerToExtendView(@NonNull ICustomViewHolder holder) {
+        holder.itemView.setOnClickListener(v -> {
+
+            int positionAtomic = positionToChange.get();
+
+            // if no window is open
+            if (positionAtomic == -1) {
+                positionToChange.set(holder.getBindingAdapterPosition() + 2);
+                this.notifyItemChanged(holder.getBindingAdapterPosition());
+            } else {
+                int adapterPosition = holder.getBindingAdapterPosition();
+                this.notifyItemChanged(positionAtomic);
+
+                //if the window is open but we choose another
+                if (positionAtomic != adapterPosition) {
+                    positionToChange.set(adapterPosition + 2);
+                    this.notifyItemChanged(positionAtomic);
+                } else
+                    positionToChange.set(-1);
+
+            }
+        });
     }
+
 }

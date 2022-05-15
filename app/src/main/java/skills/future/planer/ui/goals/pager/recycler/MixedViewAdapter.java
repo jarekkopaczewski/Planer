@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import lombok.SneakyThrows;
 import skills.future.planer.R;
@@ -27,19 +28,24 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
+import skills.future.planer.ui.habit.view_holders.HabitViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
+import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
 
 public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
     protected static final int LAYOUT_HABIT = 2;
     private static final int LAYOUT_DESCRIPTION = 1;
-    private static final int LAYOUT_TITLE = 0;
+    protected static final int LAYOUT_HABIT_EXTENDED = 4;
     private static final int LAYOUT_TASK = 3;
+    private static final int LAYOUT_TITLE = 0;
+    private static final int LAYOUT_TASK_EXTENDED = 5;
     private final LayoutInflater layoutInflater;
     protected final Context context;
     protected final ComponentActivity activity;
     protected List<MixedRecyclerElement> habitsList = new ArrayList<>();
     protected List<MixedRecyclerElement> fullTaskList = new ArrayList<>();
     private GoalData goalData;
+    protected final AtomicInteger positionToChange = new AtomicInteger(-1);
 
     public MixedViewAdapter(Context context, ComponentActivity activity) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -57,7 +63,15 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
     }
 
     protected int checkOrder(int position) {
-        return position < habitsList.size() ? LAYOUT_HABIT : LAYOUT_TASK;
+        if (position < habitsList.size())
+            if (position == positionToChange.get() - 2)
+                return LAYOUT_HABIT_EXTENDED;
+            else
+                return LAYOUT_HABIT;
+        else if (position == positionToChange.get() - 2)
+            return LAYOUT_TASK_EXTENDED;
+        else
+            return LAYOUT_TASK;
     }
 
     protected int getPositionDelay(int position) {
@@ -77,10 +91,14 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
                     R.layout.goal_in_list_title), context, activity);
             case LAYOUT_DESCRIPTION -> new GoalViewHolderDescription(createViewOfItem(parent,
                     R.layout.goal_in_list_description), context, activity);
-            case LAYOUT_HABIT -> new HabitExtendedViewHolder(createViewOfItem(parent,
+            case LAYOUT_HABIT -> new HabitViewHolder(createViewOfItem(parent,
+                    R.layout.fragment_habit_in_list), context, activity);
+            case LAYOUT_HABIT_EXTENDED -> new HabitExtendedViewHolder(createViewOfItem(parent,
                     R.layout.fragment_habit_in_list_extended), context, activity);
+            case LAYOUT_TASK_EXTENDED -> new TaskDataViewHolderExtended(createViewOfItem(parent,
+                    R.layout.fragment_task_in_list_extended), context, activity);
             default -> new TaskDataViewHolder(createViewOfItem(parent,
-                    R.layout.fragment_task_in_list), context,activity);
+                    R.layout.fragment_task_in_list), context, activity);
         };
     }
 
@@ -102,8 +120,15 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
                 holder.setEveryThing(goalData);
             }
             case LAYOUT_DESCRIPTION -> holder.setEveryThing(goalData);
-            case LAYOUT_HABIT -> holder.setEveryThing(habitsList.get(getPositionDelay(position)));
-            case LAYOUT_TASK -> holder.setEveryThing(fullTaskList.get(getPositionDelay(position) - habitsList.size()));
+            case LAYOUT_HABIT, LAYOUT_HABIT_EXTENDED -> {
+                holder.setEveryThing(habitsList.get(getPositionDelay(position)));
+                createListenerToExtendView(holder);
+            }
+            case LAYOUT_TASK, LAYOUT_TASK_EXTENDED -> {
+                holder.setEveryThing(fullTaskList.get(getPositionDelay(position) - habitsList.size()));
+                createListenerToExtendView(holder);
+            }
+
         }
     }
 
@@ -119,6 +144,34 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
             intent.putExtras(bundle);
             context.startActivity(intent);
             notifyItemChanged(0);
+        });
+    }
+
+    /**
+     * Creates listener to taskView in list
+     * When someone presses on a taskView it will expand or close
+     */
+    protected void createListenerToExtendView(@NonNull ICustomViewHolder holder) {
+        holder.itemView.setOnClickListener(v -> {
+
+            int positionAtomic = positionToChange.get();
+
+            // if no window is open
+            if (positionAtomic == -1) {
+                positionToChange.set(holder.getBindingAdapterPosition());
+                this.notifyItemChanged(holder.getBindingAdapterPosition());
+            } else {
+                int adapterPosition = holder.getBindingAdapterPosition();
+                this.notifyItemChanged(positionAtomic);
+
+                //if the window is open but we choose another
+                if (positionAtomic != adapterPosition) {
+                    positionToChange.set(adapterPosition);
+                    this.notifyItemChanged(positionAtomic);
+                } else
+                    positionToChange.set(-1);
+
+            }
         });
     }
 
