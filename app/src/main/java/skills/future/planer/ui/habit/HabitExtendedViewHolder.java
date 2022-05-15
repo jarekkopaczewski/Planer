@@ -138,6 +138,8 @@ public class HabitExtendedViewHolder extends ICustomViewHolder {
         if (goal != null){
             goalChip.setVisibility(View.VISIBLE);
             goalLabel.setVisibility(View.VISIBLE);
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 300, fragment.getResources().getDisplayMetrics());
+            constraintLayout.getLayoutParams().height=px;
             String goalText = goal.getTitle();
             if(goalText.length()>30){
                 goalText = goalText.substring(0,27)+"...";

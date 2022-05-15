@@ -10,10 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+
+import com.google.android.material.chip.Chip;
 
 import lombok.Getter;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -45,7 +51,7 @@ public class TaskDataViewHolder extends ICustomViewHolder {
     }
 
     @Override
-    public void setEveryThing(MixedRecyclerElement element) {
+    public void setEveryThing(MixedRecyclerElement element) throws Exception {
         if (element instanceof TaskData taskData) {
             setColor(taskData);
             setTextTitle(taskData);
@@ -126,5 +132,6 @@ public class TaskDataViewHolder extends ICustomViewHolder {
             }
         }
     }
+
 
 }

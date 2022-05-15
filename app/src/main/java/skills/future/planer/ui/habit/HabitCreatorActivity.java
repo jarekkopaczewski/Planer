@@ -195,7 +195,9 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
                     if(selectedGoal!=null) {
                         habit.setForeignKeyToGoal(selectedGoal.getGoalId());
-                        System.out.println("YAY");
+                    }
+                    if(goalSpinner.getSelectedIndex()==0){
+                        habit.setForeignKeyToGoal(null);
                     }
 
                     habitViewModel.insert(habit);
@@ -242,7 +244,9 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             calendar.get(Calendar.MINUTE));
                     if(selectedGoal!=null) {
                         habitData.setForeignKeyToGoal(selectedGoal.getGoalId());
-                        System.out.println("YAY");
+                    }
+                    if(goalSpinner.getSelectedIndex()==0){
+                        habitData.setForeignKeyToGoal(null);
                     }
                     habitViewModel.edit(habitData);
                 } catch (Exception dataBaseException) {

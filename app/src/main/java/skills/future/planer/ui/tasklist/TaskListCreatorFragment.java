@@ -252,6 +252,9 @@ public class TaskListCreatorFragment extends Fragment {
                         if(selectedGoal!=null) {
                             editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
                         }
+                        if(goalSpinner.getSelectedIndex()==0){
+                            editTask.setForeignKeyToGoal(null);
+                        }
                         sendTaskToDataBase(taskID, view1);
                     }
                 } else {
