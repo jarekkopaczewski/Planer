@@ -36,15 +36,17 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
 
     public void setEveryThing(GoalData goalData) {
 
+        mixedViewAdapter.setGoalData(goalData);
+
         goalsViewModel.getHabitsFromGoal(goalData.getGoalId())
                 .observe(fragment, goalDataListMap -> {
                     if (goalDataListMap.size() > 0)
-                        mixedViewAdapter.setHabitsList(goalData, new ArrayList<>(goalDataListMap.values()));
+                        mixedViewAdapter.setHabitsList(new ArrayList<>(goalDataListMap.values()));
                 });
         goalsViewModel.getTasksFromGoal(goalData.getGoalId())
                 .observe(fragment, goalDataListMap -> {
                     if (goalDataListMap.size() > 0)
-                        mixedViewAdapter.setFullTaskList(goalData, new ArrayList<>(goalDataListMap.values()));
+                        mixedViewAdapter.setFullTaskList(new ArrayList<>(goalDataListMap.values()));
                 });
     }
 }
