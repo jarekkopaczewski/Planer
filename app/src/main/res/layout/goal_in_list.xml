@@ -6,31 +6,10 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <TextView
-        android:id="@+id/goalTitleText2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:autofillHints="Dodaj tytuł"
-        android:background="@null"
-        android:fontFamily="@font/signika_regular"
-        android:gravity="center_vertical"
-        android:hint="@string/EditTextTitleHintt"
-        android:lines="2"
-        android:minHeight="48dp"
-        android:scrollHorizontally="false"
-        android:text="@string/GoalListHabitsAndTasksLabel"
-        android:textColor="@color/textColor"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
-
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginTop="30dp"
         android:alpha="0.2"
         android:backgroundTint="@color/imageTintColor_2"
         android:rotation="180"
@@ -52,8 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goalTitleText2"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import skills.future.planer.R;
-import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.habit.HabitExtendedViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
@@ -27,8 +27,10 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
     private final LayoutInflater layoutInflater;
     private final Context context;
     private final Fragment fragment;
+    private ArrayList<Integer> habitOrTaskList = new ArrayList<>();
     private List<MixedRecyclerElement> habitsList = new ArrayList<>();
-    private List<TaskData> fullTaskList = new ArrayList<>();
+    private List<MixedRecyclerElement> fullTaskList = new ArrayList<>();
+    private GoalData goalData;
 
     public MixedViewAdapter(Context context, Fragment fragment) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -46,7 +48,7 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 10;
     }
 
     @NonNull
@@ -70,22 +72,26 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
 
     @Override
     public void onBindViewHolder(ICustomViewHolder holder, final int position) {
-        if (holder.getItemViewType() == LAYOUT_HABIT) {
-            //holder.setEveryThing(habitsList.get(position));
-        } else {
-            //holder.setEveryThing(fullTaskList.get(position - habitsList.size()));
+        switch (holder.getItemViewType()) {
+            case LAYOUT_TITLE -> ((GoalViewHolderTitle) holder).setEveryThing(goalData);
+            case LAYOUT_DESCRIPTION -> ((GoalViewHolderDescription) holder).setEveryThing(goalData);
+            case LAYOUT_HABIT -> holder.setEveryThing(habitsList.get(position));
+            // case LAYOUT_TASK -> holder.setEveryThing(fullTaskList.get(position));
         }
     }
 
+
     @SuppressLint("NotifyDataSetChanged")
-    public void setHabitsList(List<MixedRecyclerElement> habitsList) {
+    public void setHabitsList(GoalData goalData, ArrayList<MixedRecyclerElement> habitsList) {
         this.habitsList = habitsList;
+        this.goalData = goalData;
         notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setFullTaskList(List<TaskData> fullTaskList) {
+    public void setFullTaskList(GoalData goalData, ArrayList<MixedRecyclerElement> fullTaskList) {
         this.fullTaskList = fullTaskList;
+        this.goalData = goalData;
         notifyDataSetChanged();
     }
 }

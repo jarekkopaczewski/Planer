@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import skills.future.planer.R;
+import skills.future.planer.db.goal.GoalData;
 
 
 public class GoalViewHolderDescription extends ICustomViewHolder {
@@ -19,5 +20,10 @@ public class GoalViewHolderDescription extends ICustomViewHolder {
         super(itemView);
         textDescription = itemView.findViewById(R.id.text_slideshow2);
         this.context = context;
+    }
+
+    @Override
+    public void setEveryThing(MixedRecyclerElement element) {
+        textDescription.setText(((GoalData) element).getDetails());
     }
 }

@@ -29,6 +29,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
     private final Context context;
     private final Fragment fragment;
     private List<HabitData> habitsList = new ArrayList<>();
+
     @SuppressLint("NotifyDataSetChanged")
     public void setHabitsList(List<HabitData> habitsList) {
         this.habitsList = habitsList;
