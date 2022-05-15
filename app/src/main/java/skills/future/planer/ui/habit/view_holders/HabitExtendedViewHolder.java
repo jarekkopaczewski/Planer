@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -57,6 +58,7 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
     @Override
     public void setEveryThing(MixedRecyclerElement element) {
         if (element instanceof HabitData habitData) {
+            title.setText(habitData.getTitle());
             setUpChipGroup(habitData);
             setUpCircularProgressIndicatorHabit(habitData);
             setUpCircularProgressIndicatorOfDays(habitData);
