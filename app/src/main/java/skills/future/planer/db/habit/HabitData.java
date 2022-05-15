@@ -20,11 +20,12 @@ import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.DataBaseException;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 
 @Getter
 @Setter
 @Entity
-public class HabitData {
+public class HabitData implements MixedRecyclerElement {
     @PrimaryKey(autoGenerate = true)
     private Long habitId;
     private String title;
@@ -167,7 +168,6 @@ public class HabitData {
     public CalendarDay getEndCalendarDay() {
         return endDay != 0 ? DatesParser.toCalendarDay(endDay) : null;
     }
-
 
     /**
      * Method set for givenDay opposite state of accomplish habit

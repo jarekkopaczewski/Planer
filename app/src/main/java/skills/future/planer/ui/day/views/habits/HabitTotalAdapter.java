@@ -39,7 +39,7 @@ public class HabitTotalAdapter extends RecyclerView.Adapter<HabitViewHolder> {
     @NonNull
     @Override
     public HabitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HabitViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_list),
+        return new HabitViewHolder(createViewOfItem(parent, R.layout.fragment_habit_in_day_list),
                 habitViewModel, this, context);
     }
 

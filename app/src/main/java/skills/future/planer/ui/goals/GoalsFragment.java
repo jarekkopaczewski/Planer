@@ -1,6 +1,7 @@
 package skills.future.planer.ui.goals;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,33 +11,44 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentGoalsBinding;
 import skills.future.planer.db.goal.GoalsViewModel;
-import skills.future.planer.db.habit.HabitViewModel;
+import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
+import skills.future.planer.ui.goals.pager.GoalTotalAdapter;
+import skills.future.planer.ui.habit.HabitCreatorActivity;
 
 public class GoalsFragment extends Fragment {
-    private GoalsViewModel goalsViewModel;
-    private GoalsFragmentViewModel homeViewModel;
     private FragmentGoalsBinding binding;
     private GoalTotalAdapter goalTotalAdapter;
-    private ViewPager2 totalGoalList;
     private TextView pagerCountText;
 
+    @SuppressLint("NonConstantResourceId")
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        homeViewModel = new ViewModelProvider(this).get(GoalsFragmentViewModel.class);
         binding = FragmentGoalsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        totalGoalList = binding.totalGoalList;
+        ViewPager2 totalGoalList = binding.totalGoalList;
         pagerCountText = binding.pagerCountText;
 
-        goalTotalAdapter = new GoalTotalAdapter(this.getContext(), this, new ViewModelProvider(this).get(HabitViewModel.class));
-        goalTotalAdapter.setLifecycle(getLifecycle());
+        binding.FABMenu.setOnMenuItemClickListener(id -> {
+            switch (id) {
+                case R.drawable.routine -> this.requireContext().startActivity(
+                        new Intent(this.getContext(), HabitCreatorActivity.class));
+                case R.drawable.task_list -> Navigation.findNavController(root)
+                        .navigate(GoalsFragmentDirections
+                                .actionNavHomeToTaskListCreatorFragment(-1));
+                case R.drawable.goal -> this.requireContext().startActivity(
+                        new Intent(this.requireContext(), GoalsCreatorActivity.class));
+            }
+        });
+
+        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+        goalTotalAdapter = new GoalTotalAdapter(this);
         goalTotalAdapter.setFragmentManager(getChildFragmentManager());
-        goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
         totalGoalList.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         totalGoalList.setAdapter(goalTotalAdapter);
         totalGoalList.setPageTransformer(new CustomTransformer());
@@ -53,9 +65,13 @@ public class GoalsFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                pagerCountText.setText(position+1 + "/" + goalTotalAdapter.getItemCount());
+                if (goalTotalAdapter.getItemCount() > 0)
+                    pagerCountText.setText(position + 1 + "/" + goalTotalAdapter.getItemCount());
+                else
+                    pagerCountText.setText("0/0");
             }
         };
+
 
         totalGoalList.registerOnPageChangeCallback(onPageChangeCallback);
         return root;

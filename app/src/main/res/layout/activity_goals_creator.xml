@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.goals.creator.GoalsCreatorActivity">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/saveFABGoalCreator"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:clickable="true"
+        android:contentDescription="@string/save_button_description"
+        android:foreground="@drawable/save"
+        android:foregroundGravity="fill_horizontal|center|fill_vertical"
+        android:foregroundTint="@color/imageTintColor"
+        android:scaleType="center"
+        android:text="@string/TaskListElementFabricButton"
+        android:tint="@color/imageTintColor"
+        app:backgroundTint="@color/second_color_30"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:alpha="0.1"
+                    android:background="@drawable/shadow"
+                    android:backgroundTint="@color/imageTintColor_2"
+                    android:rotationX="180"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <EditText
+                    android:id="@+id/titleEditText"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:autofillHints="Dodaj tytuł"
+                    android:background="@null"
+                    android:fontFamily="@font/signika_regular"
+                    android:hint="@string/goalCreatorTitleHint"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:minHeight="48dp"
+                    android:scrollHorizontally="false"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/detailsEditText"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="10dp"
+                    android:autofillHints="Dodaj opis"
+                    android:background="@null"
+                    android:fontFamily="@font/signika_regular"
+                    android:hint="@string/goalCreatorDetailsHint"
+                    android:inputType="textMultiLine"
+                    android:lines="2"
+                    android:minHeight="48dp"
+                    android:scrollHorizontally="false"
+                    android:textColor="@color/textColor"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
+
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:alpha="0"
+                    android:background="@drawable/shadow"
+                    android:backgroundTint="@color/imageTintColor"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detailsEditText"
+                    tools:ignore="ContentDescription" />
+
+                <View
+                    android:id="@+id/view4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/imageTintColor"
+                    android:backgroundTint="@color/imageTintColor_2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="15dp"
+                    android:alpha="0.2"
+                    android:background="@drawable/shadow"
+                    android:backgroundTint="@color/imageTintColor_2"
+                    android:rotationX="180"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view4"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/dateGoalCreatorLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:autofillHints="Dodaj tytuł"
+                    android:background="@null"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center_vertical"
+                    android:hint="@string/EditTextTitleHintt"
+                    android:lines="2"
+                    android:minHeight="48dp"
+                    android:scrollHorizontally="false"
+                    android:text="@string/goalCreatorDateLabel"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+                <TextView
+                    android:id="@+id/editTextDateGoal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="50dp"
+                    android:ems="10"
+                    android:fontFamily="@font/signika_regular"
+                    android:hint="@string/dateOfBeginGoalCreatorHint"
+                    android:inputType="date"
+                    android:textColor="@color/textColor"
+                    android:textSize="17sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dateGoalCreatorLabel" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
