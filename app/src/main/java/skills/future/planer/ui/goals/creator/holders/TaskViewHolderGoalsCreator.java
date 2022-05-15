@@ -1,4 +1,4 @@
-package skills.future.planer.ui.goals.creator;
+package skills.future.planer.ui.goals.creator.holders;
 
 import android.content.Context;
 import android.view.View;
