@@ -10,7 +10,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +37,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
     private final LayoutInflater layoutInflater;
     private final Context context;
+    private final ComponentActivity activity;
     private List<TaskData> filteredTaskList = new ArrayList<>();
     private List<TaskData> fullTaskList = new ArrayList<>();
     private List<TaskData> searchList = new ArrayList<>();
@@ -47,11 +50,11 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private ArrayList<String> filters = new ArrayList<>();
 
 
-
-    public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel) {
+    public TaskTotalAdapter(Context context, ComponentActivity activity) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
-        this.mTaskViewModel = mTaskViewModel;
+        this.activity = activity;
+        mTaskViewModel = new ViewModelProvider(activity).get(TaskDataViewModel.class);
     }
 
     @NonNull
@@ -61,10 +64,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         return switch (viewType) {
             case LAYOUT_BIG -> new TaskDataViewHolderExtended(
                     createViewOfItem(parent,
-                            R.layout.fragment_task_in_list_extended), context);
+                            R.layout.fragment_task_in_list_extended), context, activity);
             default -> new TaskDataViewHolder(
                     createViewOfItem(parent,
-                            R.layout.fragment_task_in_list), context);
+                            R.layout.fragment_task_in_list), context, activity);
         };
     }
 

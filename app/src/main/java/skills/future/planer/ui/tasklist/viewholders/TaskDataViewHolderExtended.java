@@ -7,6 +7,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
@@ -19,15 +20,13 @@ import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 import skills.future.planer.ui.tasklist.Colors;
 
 public class TaskDataViewHolderExtended extends TaskDataViewHolder {
-
-
     private final Context context;
     private final ImageView iconPriorities;
     private final ImageView iconTimePriority;
     private final TextView taskDescriptionView;
 
-    public TaskDataViewHolderExtended(View itemView, Context context) {
-        super(itemView, context);
+    public TaskDataViewHolderExtended(View itemView, Context context, ComponentActivity activity) {
+        super(itemView, context, activity);
         this.context = context;
         taskDescriptionView = itemView.findViewById(R.id.taskDescriptionView);
         iconPriorities = itemView.findViewById(R.id.iconPriorities);

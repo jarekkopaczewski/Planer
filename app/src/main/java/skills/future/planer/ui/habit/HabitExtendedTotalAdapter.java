@@ -47,7 +47,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
     @Override
     public HabitExtendedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new HabitExtendedViewHolder(createViewOfItem(parent,
-                R.layout.fragment_habit_in_list_extended), context, fragment);
+                R.layout.fragment_habit_in_list_extended), context, fragment.getActivity());
     }
 
     @NonNull
@@ -64,10 +64,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
 
-        editButton.setOnClickListener(e -> {
-            AnimateView.animateInOut(editButton, context);
-            context.startActivity(new Intent(context, HabitCreatorActivity.class));
-        });
+
 
 
         return itemView;
@@ -79,8 +76,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         if (habitsList != null) {
             HabitData current = habitsList.get(position);
             holder.setEveryThing(current);
-        } else // Covers the case of data not being ready yet.
-//            holder.getTitle().setText("No Word");
+        }
 
         createListenerToEditButton(holder, position);
         createListenerToTrashButton(holder, position);

@@ -11,7 +11,7 @@ import skills.future.planer.ui.goals.pager.recycler.ICustomViewHolder;
 import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 
 public class HabitViewHolder extends ICustomViewHolder {
-    private final TextView title;
+    protected final TextView title;
 
     public HabitViewHolder(@NonNull View itemView) {
         super(itemView);

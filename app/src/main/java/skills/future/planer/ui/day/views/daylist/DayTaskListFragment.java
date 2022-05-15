@@ -54,7 +54,7 @@ public class DayTaskListFragment extends Fragment {
      */
     private void createList() {
         RecyclerView listDay = binding.listTotalView;
-        taskDayAdapter = new TaskDayAdapter(this.getContext(),mTaskViewModel);
+        taskDayAdapter = new TaskDayAdapter(this.getContext(), getActivity());
         listDay.setAdapter(taskDayAdapter);
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
 

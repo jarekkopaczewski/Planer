@@ -28,7 +28,7 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
     private final Context context;
     private final GoalsViewModel goalsViewModel;
     private final Fragment fragment;
-    private MixedViewAdapter mixedViewAdapter;
+    private final MixedViewAdapter mixedViewAdapter;
 
     public GoalViewHolder(View itemView, Fragment fragment) {
         super(itemView);
@@ -38,7 +38,7 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
         this.context = fragment.getContext();
         this.goalsViewModel = new ViewModelProvider(fragment).get(GoalsViewModel.class);
         this.fragment = fragment;
-        mixedViewAdapter = new MixedViewAdapter(context, fragment);
+        mixedViewAdapter = new MixedViewAdapter(context, fragment.getActivity());
         RecyclerView list = itemView.findViewById(R.id.goalsList);
         list.setAdapter(mixedViewAdapter);
         list.setLayoutManager(new LinearLayoutManager(context));
