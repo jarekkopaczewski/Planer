@@ -22,10 +22,16 @@ public interface HabitDao {
     HabitData findById(Long id) throws Exception;
 
     /**
-     * @return all habits from database
+     * @return all habits from database in LiveData
      */
     @Query("SELECT * FROM HabitData")
     LiveData<List<HabitData>> getHabits();
+
+    /**
+     * @return all habits from database
+     */
+    @Query("SELECT * FROM HabitData")
+    List<HabitData> getAllHabitsList();
 
     /**
      * @param date date in long format

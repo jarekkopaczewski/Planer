@@ -11,9 +11,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.time.LocalDate;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
@@ -68,17 +66,9 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
 
     private void setUpCircularProgressIndicatorHabit(HabitData habitData) {
         circularProgressIndicatorHabit.setMaxProgress(100);
-        Date date = new Date(habitData.getBeginDay());
 
-        Calendar today = Calendar.getInstance();
-        today.clear(Calendar.HOUR); today.clear(Calendar.MINUTE); today.clear(Calendar.SECOND);
+        double currentProgress = countCurrentProgress(habitData);
 
-        Date todayDate = today.getTime();
-
-        long numberOfDays = TimeUnit.DAYS.convert(todayDate.getTime() - date.getTime(), TimeUnit.MILLISECONDS)+1;
-
-        double currentProgress = ((double) habitData.getNumberOfDaysWhereHabitsWasDone() / numberOfDays) * 100;
-        if (currentProgress > 100f) currentProgress = 100f;
         circularProgressIndicatorHabit.setCurrentProgress(currentProgress);
 
         circularProgressIndicatorHabit.setProgressTextAdapter(new TextAdapter());
@@ -90,19 +80,37 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.good));
     }
 
+    /**
+     * Counts the progression for the habit from the start date to today
+     */
+    private double countCurrentProgress(HabitData habitData) {
+        LocalDate today = LocalDate.now();
+
+        LocalDate beginDate = DatesParser.toLocalDate(habitData.getBeginCalendarDay());
+
+        double days = 0;
+        double doneHabitDays = 0;
+
+        for (LocalDate i = beginDate; i.isBefore(today) || i.isEqual(today); i = i.plusDays(1)) {
+            if (habitData.isDayOfWeekChecked(i)) {
+                days++;
+                if (habitData.isHabitDone(DatesParser.toCalendarDay(i)))
+                    doneHabitDays++;
+            }
+        }
+        return (doneHabitDays / days) * 100;
+    }
+
     private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
         if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
             circularProgressIndicatorHabitDay
                     .setCurrentProgress(DatesParser.countDifferenceBetweenDays(
-                            habitData.getBeginCalendarDay(), CalendarDay.today())+1);
-        else if(CalendarDay.today().isBefore(habitData.getBeginCalendarDay()))
+                            habitData.getBeginCalendarDay(), CalendarDay.today()) + 1);
+        else if (CalendarDay.today().isBefore(habitData.getBeginCalendarDay()))
             circularProgressIndicatorHabitDay.setCurrentProgress(0);
         else
             circularProgressIndicatorHabitDay.setCurrentProgress(1);
-                       /* ((double) habitData.getNumberOfDaysWhereHabitsWasDone()
-                        / (habitData.getNumberOfDaysWhereHabitsWasDone()
-                        + habitData.getNumberOfDaysWhereHabitsWasFailure())));*/
 
         HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
         habitTextAdapter.setMaxProgress(circularProgressIndicatorHabitDay.getMaxProgress());
