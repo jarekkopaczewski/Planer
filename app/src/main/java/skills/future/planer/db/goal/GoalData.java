@@ -10,11 +10,12 @@ import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 
 @Entity
 @Getter
 @Setter
-public class GoalData {
+public class GoalData implements MixedRecyclerElement {
     @PrimaryKey(autoGenerate = true)
     private Long goalId;
     private String title, details;

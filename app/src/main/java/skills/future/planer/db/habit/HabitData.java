@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.DataBaseException;
@@ -38,7 +37,6 @@ public class HabitData implements MixedRecyclerElement {
      */
     private HabitDuration habitDuration;
     private Long beginDay;
-    @Getter(AccessLevel.PACKAGE)
     private Long endDay;
     /**
      * string with status if habit was done, 1 -was done, 0 -no,
