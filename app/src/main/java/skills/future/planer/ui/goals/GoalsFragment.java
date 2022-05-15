@@ -17,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentGoalsBinding;
 import skills.future.planer.db.goal.GoalsViewModel;
+import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.goals.pager.GoalTotalAdapter;
 import skills.future.planer.ui.habit.HabitCreatorActivity;
 

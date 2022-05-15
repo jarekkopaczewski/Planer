@@ -23,7 +23,7 @@ import skills.future.planer.R;
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.goals.GoalsCreatorActivity;
+import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 
 @Setter
 public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {

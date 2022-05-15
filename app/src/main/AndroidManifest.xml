@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Planer">
         <activity
-            android:name=".ui.goals.GoalsCreatorActivity"
+            android:name=".ui.goals.creator.GoalsCreatorActivity"
             android:exported="false" />
 
         <service

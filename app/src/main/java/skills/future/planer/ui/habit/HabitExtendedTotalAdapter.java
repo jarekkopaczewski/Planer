@@ -80,7 +80,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
             HabitData current = habitsList.get(position);
             holder.setEveryThing(current);
         } else // Covers the case of data not being ready yet.
-            holder.getTitle().setText("No Word");
+//            holder.getTitle().setText("No Word");
 
         createListenerToEditButton(holder, position);
         createListenerToTrashButton(holder, position);
