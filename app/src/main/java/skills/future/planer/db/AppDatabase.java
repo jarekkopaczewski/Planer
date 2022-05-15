@@ -132,6 +132,8 @@ public abstract class AppDatabase extends RoomDatabase {
                 goal.setGoalId(goalsDao.insert(goal));
                 habitDao.insert(new HabitData("test", "1111111",
                         HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
+                habitDao.insert(new HabitData("testbezcelu", "1111111",
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
                 habitDao.insert(new HabitData("test2", "1111111",
                         HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
