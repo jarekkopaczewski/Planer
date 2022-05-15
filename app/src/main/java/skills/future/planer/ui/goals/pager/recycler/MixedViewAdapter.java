@@ -56,11 +56,11 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         };
     }
 
-    private int checkOrder(int position) {
+    protected int checkOrder(int position) {
         return position < habitsList.size() ? LAYOUT_HABIT : LAYOUT_TASK;
     }
 
-    private int getPositionDelay(int position) {
+    protected int getPositionDelay(int position) {
         return position - 2;
     }
 

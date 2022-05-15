@@ -16,13 +16,23 @@ public class MixedAdapterInGoalsCreator extends MixedViewAdapter {
         super(context, activity);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return checkOrder(position);
+    }
+
+    @Override
+    public int getItemCount() {
+        return habitsList.size() + fullTaskList.size();
+    }
+
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @NonNull
     @Override
     public ICustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return switch (viewType) {
             case LAYOUT_HABIT -> new HabitExtendedViewHolder(createViewOfItem(parent,
-                    R.layout.fragment_habit_in_day_list), context, activity);
+                    R.layout.fragment_habit_in_list_extended), context, activity);
             default -> new TaskViewHolderGoalsCreator(createViewOfItem(parent,
                     R.layout.fragment_task_in_list), context, activity);
         };
@@ -31,9 +41,11 @@ public class MixedAdapterInGoalsCreator extends MixedViewAdapter {
     @Override
     public void onBindViewHolder(ICustomViewHolder holder, final int position) {
         if (holder.getItemViewType() == LAYOUT_HABIT) {
-            holder.setEveryThing(habitsList.get(position));
+            if (habitsList.size() > 0)
+                holder.setEveryThing(habitsList.get(position));
         } else {
-            holder.setEveryThing(fullTaskList.get(position - habitsList.size()));
+            if (fullTaskList.size() > 0)
+                holder.setEveryThing(fullTaskList.get(position - habitsList.size()));
         }
     }
 }
