@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import java.util.List;

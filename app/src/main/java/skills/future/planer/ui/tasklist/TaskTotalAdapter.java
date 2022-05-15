@@ -13,6 +13,7 @@ import android.widget.Filterable;
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
@@ -83,6 +85,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         return filteredTaskList.get(position);
     }
 
+    @SneakyThrows
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TaskDataViewHolder holder, int position) {
@@ -135,7 +138,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
                     Navigation.findNavController(holder.itemView)
                             .navigate(TaskListFragmentDirections
-                                    .navToEditTaskListCreatorFragment(fullTaskList.get(position).getTaskDataId())));
+                                    .navToEditTaskListCreatorFragment(filteredTaskList.get(position).getTaskDataId())));
     }
 
     /**
@@ -153,7 +156,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        var task = fullTaskList.get(position);
+                        var task = filteredTaskList.get(position);
                         mTaskViewModel.deleteTaskData(task);
                     }
 

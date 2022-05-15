@@ -10,5 +10,5 @@ public abstract class ICustomViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    abstract public void setEveryThing(MixedRecyclerElement element);
+    abstract public void setEveryThing(MixedRecyclerElement element) throws Exception;
 }

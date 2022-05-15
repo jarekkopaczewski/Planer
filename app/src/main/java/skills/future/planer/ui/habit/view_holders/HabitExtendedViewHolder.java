@@ -3,9 +3,14 @@ package skills.future.planer.ui.habit.view_holders;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -16,6 +21,8 @@ import java.time.LocalDate;
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import lombok.Getter;
 import skills.future.planer.R;
+import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
@@ -29,15 +36,23 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
     private final ChipGroup chipGroup;
+    private final Chip goalChip;
+    private final ComponentActivity activity;
+    private final TextView goalLabel;
+    private final View constraintLayout;
 
 
-    public HabitExtendedViewHolder(View itemView, Context context, Activity activity) {
+    public HabitExtendedViewHolder(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
 
         circularProgressIndicatorHabit = itemView.findViewById(R.id.circularProgressIndicatorHabit);
         circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitDay);
         chipGroup = itemView.findViewById(R.id.chipGroupWeek);
         this.context = context;
+        this.activity=activity;
+        goalChip = itemView.findViewById(R.id.goalChip);
+        goalLabel = itemView.findViewById(R.id.goalText);
+        constraintLayout = itemView.findViewById(R.id.constraintLayout);
     }
 
 
@@ -49,6 +64,7 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
             setUpChipGroup(habitData);
             setUpCircularProgressIndicatorHabit(habitData);
             setUpCircularProgressIndicatorOfDays(habitData);
+            setUpGoalChip(habitData);
         }
     }
 
@@ -123,5 +139,26 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
             circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.mid));
         else
             circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.good));
+    }
+
+    private void setUpGoalChip(HabitData habitData){
+        GoalsViewModel goalsViewModel = new ViewModelProvider(activity).get(GoalsViewModel.class);
+        GoalData goal = goalsViewModel.findById(habitData.getForeignKeyToGoal());
+        if (goal != null){
+            goalChip.setVisibility(View.VISIBLE);
+            goalLabel.setVisibility(View.VISIBLE);
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 300, activity.getResources().getDisplayMetrics());
+            constraintLayout.getLayoutParams().height=px;
+            String goalText = goal.getTitle();
+            if(goalText.length()>30){
+                goalText = goalText.substring(0,27)+"...";
+            }
+            goalChip.setText(goalText);
+        }else {
+            goalChip.setVisibility(View.INVISIBLE);
+            goalLabel.setVisibility(View.INVISIBLE);
+            int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 220, activity.getResources().getDisplayMetrics());
+            constraintLayout.getLayoutParams().height=px;
+        }
     }
 }

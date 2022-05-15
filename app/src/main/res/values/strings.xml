@@ -78,4 +78,7 @@
     <string name="dateOfBeginGoalCreatorHint">data rozpoczęcia celu</string>
     <string name="goalCreatorDateLabel">Data rozpoczęcia celu:</string>
     <string name="GoalListHabitsAndTasksLabel">Nawyki i zadania:</string>
+    <string name="goalText">Cel</string>
+    <string name="choiceGoalText">Wybierz cel:</string>
+    <string name="noneGoal">brak</string>
 </resources>

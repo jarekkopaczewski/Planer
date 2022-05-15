@@ -20,6 +20,7 @@ import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
