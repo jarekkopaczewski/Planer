@@ -17,7 +17,7 @@ import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.habit.HabitExtendedViewHolder;
+import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
 public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {

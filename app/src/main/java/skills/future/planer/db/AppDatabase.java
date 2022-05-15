@@ -49,7 +49,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     Log.d(LOG_TAG, "Creating new database instance");
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                            .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
+                            .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
                 }
             }
         }

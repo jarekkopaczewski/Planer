@@ -20,7 +20,6 @@ import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -171,7 +170,6 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     daysChipGroupTwo.getCheckedChipIds().size() == 0) {
                 Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
             } else {
-                checkHabitsNumber();
                 try {
                     var tab = getResources().getStringArray(R.array.temp_array);
                     HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner
@@ -201,6 +199,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     }
 
                     habitViewModel.insert(habit);
+                    checkHabitsNumber();
                 } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
                 }
@@ -217,7 +216,6 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     && daysChipGroupTwo.getCheckedChipIds().size() == 0) {
                 Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
             } else {
-                checkHabitsNumber();
                 try {
                     var tab = getResources().getStringArray(R.array.temp_array);
                     HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner
@@ -287,16 +285,8 @@ public class HabitCreatorActivity extends AppCompatActivity {
     }
 
     private void checkHabitsNumber() {
-        habitViewModel.getAllHabits().observe(this, habit -> {
-            var list = new ArrayList<>(habit);
-            try {
-                if ((list.size() > 3)) {
-                    Toast.makeText(this, R.string.reminder_too_many_habits, Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        if (habitViewModel.getAllHabitsList().size() > 3)
+            Toast.makeText(this, R.string.reminder_too_many_habits, Toast.LENGTH_LONG).show();
     }
 
     private void setGoal(HabitData habitData){

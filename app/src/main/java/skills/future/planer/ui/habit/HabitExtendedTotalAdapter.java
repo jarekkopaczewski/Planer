@@ -22,6 +22,7 @@ import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
 
 public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtendedViewHolder> {
 
@@ -79,7 +80,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
             HabitData current = habitsList.get(position);
             holder.setEveryThing(current);
         } else // Covers the case of data not being ready yet.
-            holder.getTitle().setText("No Word");
+//            holder.getTitle().setText("No Word");
 
         createListenerToEditButton(holder, position);
         createListenerToTrashButton(holder, position);

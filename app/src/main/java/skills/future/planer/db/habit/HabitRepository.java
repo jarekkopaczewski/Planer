@@ -27,6 +27,13 @@ public class HabitRepository {
     }
 
     /**
+     * @return list of all habits
+     */
+    public List<HabitData> getAllHabitsList() {
+        return habitDao.getAllHabitsList();
+    }
+
+    /**
      * @return references to the habit list based on day
      */
     public LiveData<List<HabitData>> getAllHabitDataFromDay(long date) {
