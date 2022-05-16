@@ -1,6 +1,7 @@
 package skills.future.planer.ui.tasklist;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lombok.SneakyThrows;
 import skills.future.planer.R;
@@ -147,25 +149,35 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     protected void createListenerToTrashButton(@NonNull TaskDataViewHolder holder, int position) {
         if (holder.itemView.findViewById(R.id.trashImageView) != null)
             holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
-                Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
 
-                    }
+                builder.setTitle(R.string.confirm_deletion);
+                builder.setMessage(R.string.confirm_deletion_2);
+                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        var task = filteredTaskList.get(position);
+                        var task = fullTaskList.get(position);
                         mTaskViewModel.deleteTaskData(task);
                     }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
 
-                    }
+                        }
+                    });
+                    holder.itemView.startAnimation(animation);
+                    dialog.dismiss();
                 });
-                holder.itemView.startAnimation(animation);
+                builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss());
+                AlertDialog alert = builder.create();
+                alert.show();
             });
     }
 
@@ -296,11 +308,14 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
         //checks if filter by status
         if (status != -1) {
+            if(status==0)
             list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(status);
+            else
+                list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData_desc(status);
 
-            filterList = list.stream()
+            filterList = list2.stream()
                     .distinct()
-                    .filter(list2::contains)
+                    .filter(list::contains)
                     .collect(Collectors.toList());
         } else {
             filterList=list;
@@ -350,6 +365,13 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             filteredTaskList.clear();
             if(constraint.toString().length() > 0) {
                 filteredTaskList.addAll((ArrayList<TaskData>) filteredItems);
+//                System.out.println("--------------------------------"+ counter++);
+//                System.out.println("Lista filtrów:");
+//                filterList.forEach(s -> System.out.println(s.getTaskTitleText()));
+//                System.out.println("Lista search bar:");
+//                filteredItems.forEach(s -> System.out.println(s.getTaskTitleText()));
+//                System.out.println("Lista ostateczna:");
+//                filteredTaskList.forEach(s -> System.out.println(s.getTaskTitleText()));
                 filteredItems.clear();
             }else{
                 filteredTaskList.addAll((ArrayList<TaskData>) filterList);

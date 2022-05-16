@@ -25,12 +25,12 @@
 
     <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
         android:defaultValue="0xFF007E8F"
-        app:key="urgentNotImportant"
+        app:key="notUrgentImportant"
         app:title="Ważne niepilne" />
 
     <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
         android:defaultValue="0xFFC6A2CA"
-        app:key="notUrgentImportant"
+        app:key="urgentNotImportant"
         app:title="Nieważne pilne" />
 
     <com.jaredrummler.android.colorpicker.ColorPreferenceCompat

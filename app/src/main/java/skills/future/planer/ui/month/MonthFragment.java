@@ -35,22 +35,7 @@ import skills.future.planer.ui.AnimateView;
 public class MonthFragment extends Fragment {
 
     private static CalendarDay globalSelectedDate = null;
-    /**
-     * Calendar widget
-     */
-    private MaterialCalendarView materialCalendarView;
-
-    /**
-     * Databinding object
-     */
-    private FragmentMonthBinding binding;
-
-    /**
-     * TaskData view model
-     */
-    private TaskDataViewModel mWordViewModel;
     private final Executor executor = Executors.newSingleThreadExecutor();
-
     /**
      * HashSets with days with a specific number of dots
      */
@@ -58,7 +43,6 @@ public class MonthFragment extends Fragment {
     private final HashSet<CalendarDay> twoDot = new HashSet<>();
     private final HashSet<CalendarDay> threeDot = new HashSet<>();
     private final HashSet<CalendarDay> fourDot = new HashSet<>();
-
     /**
      * EventDecorators for specific number of dots
      */
@@ -66,7 +50,27 @@ public class MonthFragment extends Fragment {
     private final EventDecorator eventDecoratorTwo = new EventDecorator(twoDot, 2);
     private final EventDecorator eventDecoratorThree = new EventDecorator(threeDot, 3);
     private final EventDecorator eventDecoratorFour = new EventDecorator(fourDot, 4);
+    /**
+     * Calendar widget
+     */
+    private MaterialCalendarView materialCalendarView;
+    /**
+     * Databinding object
+     */
+    private FragmentMonthBinding binding;
+    /**
+     * TaskData view model
+     */
+    private TaskDataViewModel mWordViewModel;
     private ImageView todayIcon;
+
+    public static CalendarDay getGlobalSelectedDate() {
+        return globalSelectedDate;
+    }
+
+    public static void setGlobalSelectedDate(CalendarDay globalSelectedDate) {
+        MonthFragment.globalSelectedDate = globalSelectedDate;
+    }
 
     /**
      * View creation method.
@@ -77,11 +81,12 @@ public class MonthFragment extends Fragment {
 
         binding = FragmentMonthBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        
+
         materialCalendarView = binding.calendar;
         todayIcon = binding.todayIconMonth;
 
         AnimateView.singleAnimation(binding.monthCard, getContext(), R.anim.scalezoom);
+        AnimateView.singleAnimation(todayIcon, getContext(), R.anim.scalezoom);
 
 
         //setting current day as selected
@@ -208,9 +213,12 @@ public class MonthFragment extends Fragment {
             eventDecoratorTwo.setDates_tasks(twoDot);
             eventDecoratorThree.setDates_tasks(threeDot);
             eventDecoratorFour.setDates_tasks(fourDot);
-            if (isAdded())
+            try {
                 requireActivity().runOnUiThread(() -> materialCalendarView.invalidateDecorators());
-
+            } catch (IllegalStateException illegalStateException) {
+                illegalStateException.printStackTrace();
+                System.err.println("Nie działa kurwa");
+            }
         });
     }
 
@@ -223,14 +231,6 @@ public class MonthFragment extends Fragment {
             MonthFragment.setGlobalSelectedDate(today);
             setDateMarker(globalSelectedDate);
         });
-    }
-
-    public static CalendarDay getGlobalSelectedDate() {
-        return globalSelectedDate;
-    }
-
-    public static void setGlobalSelectedDate(CalendarDay globalSelectedDate) {
-        MonthFragment.globalSelectedDate = globalSelectedDate;
     }
 
     /**

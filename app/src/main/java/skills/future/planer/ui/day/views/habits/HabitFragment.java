@@ -1,5 +1,6 @@
 package skills.future.planer.ui.day.views.habits;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.stream.Collectors;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
@@ -23,6 +26,7 @@ import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.habit.HabitCreatorActivity;
 import skills.future.planer.ui.month.MonthFragment;
 
 
@@ -34,6 +38,7 @@ public class HabitFragment extends Fragment {
     private RecyclerView habitList;
     private TextView habitTextInfo;
     private CircularProgressIndicator circularProgressIndicator;
+    private FloatingActionButton fabHabitDay;
 
     public static HabitFragment newInstance() {
         return new HabitFragment();
@@ -47,9 +52,13 @@ public class HabitFragment extends Fragment {
 
         binding = FragmentHabitBinding.inflate(inflater, container, false);
 
-
         habitList = binding.habitList;
         habitTextInfo = binding.habitTextInfo;
+
+        fabHabitDay = binding.fabHabitDay;
+        fabHabitDay.setOnClickListener(e -> startActivity(new Intent(getActivity(), HabitCreatorActivity.class)));
+        AnimateView.singleAnimation(fabHabitDay, getContext(), R.anim.downup);
+
         habitTotalAdapter = new HabitTotalAdapter(this.getContext(), habitViewModel);
         habitDayViewModel.setHabitTotalAdapter(habitTotalAdapter);
         habitDayViewModel.setViewLifecycleOwner(this.getViewLifecycleOwner());
