@@ -36,12 +36,12 @@ public class GoalsFragment extends Fragment {
 
         binding.FABMenu.setOnMenuItemClickListener(id -> {
             switch (id) {
-                case R.drawable.routine -> this.requireContext().startActivity(
+                case R.drawable.habit_add -> this.requireContext().startActivity(
                         new Intent(this.getContext(), HabitCreatorActivity.class));
-                case R.drawable.task_list -> Navigation.findNavController(root)
+                case R.drawable.tas_add -> Navigation.findNavController(root)
                         .navigate(GoalsFragmentDirections
                                 .actionNavHomeToTaskListCreatorFragment(-1));
-                case R.drawable.goal -> this.requireContext().startActivity(
+                case R.drawable.goal_add -> this.requireContext().startActivity(
                         new Intent(this.requireContext(), GoalsCreatorActivity.class));
             }
         });

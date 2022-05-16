@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".ui.day.views.habits.HabitFragment">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabHabitDay"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom|end"
+        android:clickable="true"
+        android:contentDescription="@string/fabContentDescription"
+        android:foreground="@drawable/plus"
+        android:foregroundTint="@color/imageTintColor"
+        android:paddingBottom="70dp"
+        android:scaleType="center"
+        android:tint="@color/imageTintColor"
+        app:backgroundTint="@color/second_color_30"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        tools:ignore="SpeakableTextPresentCheck" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/habitList"
         android:layout_width="match_parent"

@@ -37,6 +37,10 @@
     <string name="theme_title">Domyślny motyw aplikacji</string>
     <string name="save_button_description">Zapisz zadanie</string>
     <string name="empty_description"> </string>
+    <string name="confirm_deletion">Potwierdź usunięcie</string>
+    <string name="confirm_deletion_2">Jesteś pewien że checsz usunąć?</string>
+    <string name="yes">Usuń</string>
+    <string name="no">Anuluj</string>
     <string name="large_text">
 
         "Material is the metaphor."
