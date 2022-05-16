@@ -1,8 +1,10 @@
 package skills.future.planer.ui.habit;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.ActivityHabitCreatorBinding;
@@ -49,8 +52,9 @@ public class HabitCreatorActivity extends AppCompatActivity {
     private PowerSpinnerView habitDurationSpinner;
     private PowerSpinnerView goalSpinner;
     private Chip MondayChip, TuesdayChip, WednesdayChip, ThursdayChip, FridayChip, SaturdayChip, SundayChip;
-    private int selectedGoalId = 0;
+    private GoalData selectedGoal;
 
+    @SuppressLint({"ResourceType", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,11 +81,14 @@ public class HabitCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, "brak");
             goalSpinner.setItems(list);
-            goalSpinner.selectItemByIndex(0);
+           // goalSpinner.selectItemByIndex(0);
         });
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
-            selectedGoalId = i;
+            String goalText = (String) goalSpinner.getText();
+            goalsViewModel.getAllGoals().observe(this, goalData -> {
+                selectedGoal = goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny().orElse(null);
+            });
         });
 
         // add on click & time change listener
@@ -125,6 +132,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     case Long -> habitDurationSpinner.selectItemByIndex(2);
                 }
                 calendar2.setTimeInMillis(habit.getBeginDay());
+                setGoal(habit);
                 saveButtonOnActionWhenEditing(habit);
                 setTitle("Edytor Nawyków");
             } catch (Exception e) {
@@ -138,7 +146,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     MonthFragment.getGlobalSelectedDate().getDay());
             timeEditText.setText(formatter.format(calendar.getTime()));
             editTextDateHabit.setText(formatterDate.format(calendar2.getTime()));
-
+            goalSpinner.setText(getResources().getString(R.string.noneGoal));
 
             // add save button listener & add conditions check
             saveHabitButtonSetUp();
@@ -146,6 +154,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
             setTitle(R.string.habitsTitle);
 
             habitDurationSpinner.selectItemByIndex(0);
+
         }
 
     }
@@ -182,8 +191,12 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             DatesParser.toLocalDate(calendar2.getTime()),
                             calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
-                    if (selectedGoalId != 0)
-                        habit.setForeignKeyToGoal((long) selectedGoalId);
+                    if(selectedGoal!=null) {
+                        habit.setForeignKeyToGoal(selectedGoal.getGoalId());
+                    }
+                    if(goalSpinner.getSelectedIndex()==0){
+                        habit.setForeignKeyToGoal(null);
+                    }
 
                     habitViewModel.insert(habit);
                     checkHabitsNumber();
@@ -227,6 +240,12 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     habitData.setNotificationTime(
                             calendar.get(Calendar.HOUR_OF_DAY),
                             calendar.get(Calendar.MINUTE));
+                    if(selectedGoal!=null) {
+                        habitData.setForeignKeyToGoal(selectedGoal.getGoalId());
+                    }
+                    if(goalSpinner.getSelectedIndex()==0){
+                        habitData.setForeignKeyToGoal(null);
+                    }
                     habitViewModel.edit(habitData);
                 } catch (Exception dataBaseException) {
                     dataBaseException.printStackTrace();
@@ -268,5 +287,33 @@ public class HabitCreatorActivity extends AppCompatActivity {
     private void checkHabitsNumber() {
         if (habitViewModel.getAllHabitsList().size() > 3)
             Toast.makeText(this, R.string.reminder_too_many_habits, Toast.LENGTH_LONG).show();
+    }
+
+    private void setGoal(HabitData habitData){
+        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+
+        goalsViewModel.getAllGoals().observe(this, goalData -> {
+            var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
+            list.add(0,"brak");
+            goalSpinner.setItems(list);
+            GoalData goalData1 = goalsViewModel.findById(habitData.getForeignKeyToGoal());
+            String title = null;
+            if(goalData1!=null){
+                title = goalsViewModel.findById(habitData.getForeignKeyToGoal()).getTitle();
+            }
+            if(title != null){
+                String finalTitle = title;
+                var find = IntStream.range(0,list.size())
+                        .filter(i -> finalTitle.equals(list.get(i)))
+                        .findAny()
+                        .orElse(-1);
+
+                if(find!=-1){
+                    goalSpinner.selectItemByIndex(find);
+                }
+            }else {
+                goalSpinner.selectItemByIndex(0);
+            }
+        });
     }
 }

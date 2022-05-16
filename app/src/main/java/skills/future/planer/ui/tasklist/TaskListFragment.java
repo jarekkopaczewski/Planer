@@ -51,7 +51,7 @@ public class TaskListFragment extends Fragment {
         View root = binding.getRoot();
 
         mWordViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), mWordViewModel);
+        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), mWordViewModel,this);
 
         listTotal = binding.listTotalView;
         listTotal.setAdapter(taskTotalAdapter);

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
@@ -63,6 +64,7 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         return itemView;
     }
 
+    @SneakyThrows
     @Override
     public void onBindViewHolder(ICustomViewHolder holder, final int position) {
         if (holder.getItemViewType() == LAYOUT_HABIT) {
