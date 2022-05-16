@@ -1,32 +1,24 @@
 package skills.future.planer.ui.tasklist;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
@@ -35,6 +27,7 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
 
@@ -64,6 +57,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     @NonNull
     @Override
     public TaskDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //noinspection SwitchStatementWithTooFewBranches
         return switch (viewType) {
             case LAYOUT_BIG -> new TaskDataViewHolderExtended(
                     createViewOfItem(parent,
@@ -91,7 +85,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     public void onBindViewHolder(@NonNull TaskDataViewHolder holder, int position) {
         if (filteredTaskList != null) {
             TaskData current = filteredTaskList.get(position);
-            holder.setEveryThing(current);
+            holder.setEveryThing((MixedRecyclerElement) current);
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
 
@@ -113,10 +107,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
             // if no window is open
             if (positionAtomic == -1) {
-                positionToChange.set(holder.getAdapterPosition());
-                this.notifyItemChanged(holder.getAdapterPosition());
+                positionToChange.set(holder.getBindingAdapterPosition());
+                this.notifyItemChanged(holder.getBindingAdapterPosition());
             } else {
-                int adapterPosition = holder.getAdapterPosition();
+                int adapterPosition = holder.getBindingAdapterPosition();
                 this.notifyItemChanged(positionAtomic);
 
                 //if the window is open but we choose another
@@ -307,11 +301,11 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         //checks if filter by status
         if (status != -1) {
             list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(status);
-            ArrayList list3 = (ArrayList) list.stream()
+
+            filterList = list.stream()
                     .distinct()
                     .filter(list2::contains)
                     .collect(Collectors.toList());
-            filterList=list3;
         } else {
             filterList=list;
         }
@@ -353,7 +347,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         }
 
         @SuppressLint("NotifyDataSetChanged")
-        @SuppressWarnings("unchecked")
         @Override
         public void publishResults(CharSequence constraint, FilterResults results) {
 

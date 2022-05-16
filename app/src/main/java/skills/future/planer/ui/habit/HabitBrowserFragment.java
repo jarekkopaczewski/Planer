@@ -33,8 +33,7 @@ public class HabitBrowserFragment extends Fragment {
         binding = FragmentHabitBrowserBinding.inflate(inflater, container, false);
         habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
         totalHabitList = binding.totalHabitList;
-        habitExtendedTotalAdapter = new HabitExtendedTotalAdapter(this.getContext(), habitViewModel,
-                this.getViewLifecycleOwner(), getActivity());
+        habitExtendedTotalAdapter = new HabitExtendedTotalAdapter(this.getContext(), this);
         totalHabitList.setAdapter(habitExtendedTotalAdapter);
         totalHabitList.setLayoutManager(new LinearLayoutManager(this.getContext()));
 

@@ -17,22 +17,20 @@ import skills.future.planer.db.task.TaskData;
 @Dao
 public interface GoalsDao {
     @Query("SELECT * FROM GoalData JOIN HabitData ON GoalData.goalId = HabitData.foreignKeyToGoal  WHERE goalId = :goalId")
-    LiveData<Map<GoalData, List<HabitData>>> getHabitsFromGoal(Long goalId);
-
+    LiveData<Map<GoalData, HabitData>> getHabitsFromGoal(Long goalId);
 
     @Transaction
     @Query("SELECT * FROM GoalData JOIN taskData ON GoalData.goalId = taskData.foreignKeyToGoal WHERE goalId = :goalId ")
-    LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId);
+    LiveData<Map<GoalData, TaskData>> getTasksFromGoal(Long goalId);
 
     /**
      * Method get GoalData with given id
      *
      * @param id of searched habitData
      * @return GoalData
-     * @throws Exception if sth is wrong xd
      */
     @Query("SELECT * FROM GoalData WHERE goalId = :id")
-    GoalData findById(Long id) throws Exception;
+    GoalData findById(Long id);
 
     /**
      * @return all goals from database

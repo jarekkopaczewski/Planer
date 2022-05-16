@@ -3,8 +3,13 @@ package skills.future.planer.db.goal;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.time.LocalDate;
+
 import lombok.Getter;
 import lombok.Setter;
+import skills.future.planer.tools.DatesParser;
 
 @Entity
 @Getter
@@ -13,10 +18,15 @@ public class GoalData {
     @PrimaryKey(autoGenerate = true)
     private Long goalId;
     private String title, details;
+    private Long date;
 
-    public GoalData(String title, String details) {
+    public GoalData() {
+    }
+
+    public GoalData(String title, String details, LocalDate localDate) {
         this.title = title;
         this.details = details;
+        this.date = DatesParser.toMilliseconds(localDate);
     }
 
     @Override
@@ -38,5 +48,17 @@ public class GoalData {
         result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
         result = 31 * result + (getDetails() != null ? getDetails().hashCode() : 0);
         return result;
+    }
+
+    public CalendarDay getDateCalendarDate() {
+        return date != 0 ? DatesParser.toCalendarDay(date) : null;
+    }
+
+    public void setDate(Long date) {
+        this.date = date;
+    }
+
+    public void setDate(LocalDate beginDay) {
+        this.date = DatesParser.toMilliseconds(beginDay);
     }
 }
