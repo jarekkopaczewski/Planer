@@ -9,6 +9,7 @@ public class ICustomViewHolder extends RecyclerView.ViewHolder {
     public ICustomViewHolder(@NonNull View itemView) {
         super(itemView);
     }
-    public void setEveryThing(MixedRecyclerElement element) {
+
+    public void setEveryThing(MixedRecyclerElement element) throws Exception {
     }
 }

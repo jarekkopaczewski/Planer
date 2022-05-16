@@ -241,6 +241,73 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/view10"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#716969" />
+
+            <View
+                android:id="@+id/view11"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000000" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="59dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/choiceGoalText"
+                    android:layout_width="21dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    android:autofillHints="Dodaj tytuł"
+                    android:background="@null"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center_vertical"
+                    android:hint="@string/EditTextTitleHintt"
+                    android:lines="2"
+                    android:minHeight="48dp"
+                    android:scrollHorizontally="false"
+                    android:text="@string/choiceGoalText"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextTitle2" />
+
+                <com.skydoves.powerspinner.PowerSpinnerView
+                    android:id="@+id/goalSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/background"
+                    android:fontFamily="@font/signika_regular"
+                    android:gravity="center|center_vertical"
+                    android:ellipsize="end"
+                    android:maxEms="7"
+                    android:singleLine="true"
+                    android:text="@string/noneGoal"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/editTextTitle2"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner"
+                    app:layout_constraintVertical_bias="0.0"
+                    app:spinner_arrow_gravity="end"
+                    app:spinner_divider_color="@color/imageTintColor"
+                    app:spinner_divider_show="true"
+                    app:spinner_divider_size="0.2dp" />
+            </LinearLayout>
+
+            <View
                 android:id="@+id/view3"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

@@ -12,6 +12,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
@@ -46,13 +49,15 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private final TaskDataViewModel mTaskViewModel;
     private ArrayList<TaskData> filteredItems = new ArrayList<>();
     private ArrayList<String> filters = new ArrayList<>();
+    private Fragment fragment;
 
 
 
-    public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel) {
+    public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel, Fragment fragment) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.mTaskViewModel = mTaskViewModel;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -62,7 +67,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         return switch (viewType) {
             case LAYOUT_BIG -> new TaskDataViewHolderExtended(
                     createViewOfItem(parent,
-                            R.layout.fragment_task_in_list_extended), context);
+                            R.layout.fragment_task_in_list_extended), context,fragment);
             default -> new TaskDataViewHolder(
                     createViewOfItem(parent,
                             R.layout.fragment_task_in_list), context);
@@ -81,6 +86,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         return filteredTaskList.get(position);
     }
 
+    @SneakyThrows
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TaskDataViewHolder holder, int position) {
@@ -133,7 +139,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
                     Navigation.findNavController(holder.itemView)
                             .navigate(TaskListFragmentDirections
-                                    .navToEditTaskListCreatorFragment(fullTaskList.get(position).getTaskDataId())));
+                                    .navToEditTaskListCreatorFragment(filteredTaskList.get(position).getTaskDataId())));
     }
 
     /**
@@ -154,11 +160,11 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
                         }
 
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            var task = fullTaskList.get(position);
-                            mTaskViewModel.deleteTaskData(task);
-                        }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        var task = fullTaskList.get(position);
+                        mTaskViewModel.deleteTaskData(task);
+                    }
 
                         @Override
                         public void onAnimationRepeat(Animation animation) {
@@ -301,15 +307,19 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
         //checks if filter by status
         if (status != -1) {
+            if(status==0)
             list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(status);
+            else
+                list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData_desc(status);
 
-            filterList = list.stream()
+            filterList = list2.stream()
                     .distinct()
-                    .filter(list2::contains)
+                    .filter(list::contains)
                     .collect(Collectors.toList());
         } else {
             filterList=list;
         }
+
         notifyDataSetChanged();
     }
 
@@ -354,6 +364,13 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             filteredTaskList.clear();
             if(constraint.toString().length() > 0) {
                 filteredTaskList.addAll((ArrayList<TaskData>) filteredItems);
+//                System.out.println("--------------------------------"+ counter++);
+//                System.out.println("Lista filtrów:");
+//                filterList.forEach(s -> System.out.println(s.getTaskTitleText()));
+//                System.out.println("Lista search bar:");
+//                filteredItems.forEach(s -> System.out.println(s.getTaskTitleText()));
+//                System.out.println("Lista ostateczna:");
+//                filteredTaskList.forEach(s -> System.out.println(s.getTaskTitleText()));
                 filteredItems.clear();
             }else{
                 filteredTaskList.addAll((ArrayList<TaskData>) filterList);

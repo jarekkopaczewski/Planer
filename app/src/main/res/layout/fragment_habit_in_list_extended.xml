@@ -2,8 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="300dp"
     android:layout_margin="5dp"
     android:background="@color/background"
     android:orientation="vertical">
@@ -28,6 +29,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/foreground">
+
+            <TextView
+                android:id="@+id/goalText"
+                android:layout_width="32dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                android:autoSizeTextType="none"
+                android:ellipsize="end"
+                android:fontFamily="@font/signika_regular"
+                android:foregroundGravity="center"
+                android:gravity="center|start"
+                android:maxLines="1"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/goalText"
+                android:textAlignment="viewStart"
+                android:textColor="@color/textColor"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorHabitDay"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/circularProgressIndicatorHabitDay"
+                app:layout_constraintVertical_bias="0.333" />
 
             <ImageView
                 android:id="@+id/trashImageViewHabit"
@@ -63,7 +90,7 @@
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/chipGroupWeek"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_weight="1"
                         android:visibility="visible"
                         tools:visibility="visible" />
@@ -113,7 +140,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:autoSizeTextType="none"
                 android:ellipsize="end"
@@ -129,16 +155,16 @@
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorHabitDay"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.586" />
+                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2"
+                app:layout_constraintVertical_bias="0.141" />
 
             <TextView
                 android:id="@+id/habitTitleTextViewExtended3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_width="95dp"
+                android:layout_height="17dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginBottom="2dp"
                 android:autoSizeTextType="none"
                 android:ellipsize="end"
@@ -154,15 +180,16 @@
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorHabit"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/circularProgressIndicatorHabitDay"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.586" />
+                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2"
+                app:layout_constraintVertical_bias="0.141" />
 
             <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
                 android:id="@+id/circularProgressIndicatorHabit"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 app:direction="clockwise"
                 app:drawDot="false"
@@ -171,10 +198,10 @@
                 app:gradientType="linear"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.945"
+                app:layout_constraintHorizontal_bias="0.91"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_bias="0.158"
                 app:progressBackgroundColor="@color/progress_background"
                 app:progressCap="round"
                 app:progressColor="@color/second_color_30"
@@ -195,16 +222,30 @@
                 app:gradientType="linear"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorHabit"
-                app:layout_constraintHorizontal_bias="0.462"
+                app:layout_constraintHorizontal_bias="0.461"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2"
-                app:layout_constraintVertical_bias="0.888"
+                app:layout_constraintVertical_bias="0.159"
                 app:progressBackgroundColor="@color/progress_background"
                 app:progressCap="round"
                 app:progressColor="@color/second_color_30"
                 app:progressStrokeWidth="10dp"
                 app:textColor="@color/imageTintColor"
                 app:textSize="18sp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/goalChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:maxEms="7"
+                android:singleLine="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/goalText"
+                app:layout_constraintTop_toBottomOf="@+id/circularProgressIndicatorHabitDay" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
