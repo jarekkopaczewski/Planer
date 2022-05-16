@@ -89,31 +89,30 @@ public abstract class AppDatabase extends RoomDatabase {
             habitDao.deleteAll();
             goalsDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-            CalendarDay day2 = CalendarDay.from(2022, 12, 21);
-            CalendarDay day3 = CalendarDay.from(2022, 12, 23);
-            CalendarDay day4 = CalendarDay.from(2022, 4, 7);
-            CalendarDay day5 = CalendarDay.from(2022, 4, 9);
-            CalendarDay day6 = CalendarDay.from(2022, 4, 26);
+            CalendarDay day2 = CalendarDay.from(2022, 5, 5);
+            CalendarDay day3 = CalendarDay.from(2022, 5, 23);
+            CalendarDay day4 = CalendarDay.from(2022, 5, 15);
+            CalendarDay day5 = CalendarDay.from(2022, 5, 30);
             var cal = Calendar.getInstance();
             int counter = 1;
 
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 3; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
                 word.setTaskDataId(mDao.insert(word));
                 counter++;
             }
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 3; i++) {
                 TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie nieważne i pilne" + counter, "", day2, day3);
                 word.setTaskDataId(mDao.insert(word));
                 counter++;
             }
-            for (int i = 0; i <= 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day2, day3);
+            for (int i = 0; i <= 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day4, day5);
                 word.setTaskDataId(mDao.insert(word));
                 counter++;
             }
-            for (int i = 0; i <= 1; i++) {
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day2, day3);
+            for (int i = 0; i <= 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day4, day5);
                 word.setTaskDataId(mDao.insert(word));
                 counter++;
             }

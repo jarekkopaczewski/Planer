@@ -46,6 +46,7 @@ public class HabitBrowserFragment extends Fragment {
                 HabitCreatorActivity.class)));
 
 
+
         return binding.getRoot();
     }
 

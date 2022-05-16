@@ -149,7 +149,6 @@
         android:background="@color/background"
         android:translationZ="-1dp"
         app:cardBackgroundColor="@color/background"
-        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/nestedScrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

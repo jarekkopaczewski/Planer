@@ -3,6 +3,8 @@ package skills.future.planer.ui.tasklist.viewholders;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,7 +65,25 @@ public class TaskDataViewHolder extends ICustomViewHolder {
             taskData.setStatus(checkBox.isChecked());
             //todo zamioenić ma TaskDataModelView
             var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
-            taskDataDao.editOne(taskData);
+
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.scalezoom3);
+
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    taskDataDao.editOne(taskData);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            itemView.startAnimation(animation);
         });
     }
 
@@ -83,7 +103,6 @@ public class TaskDataViewHolder extends ICustomViewHolder {
             color = Colors.getColorFromPreferences("notUrgentNotImportant", getContext());
 
         cardView.setCardBackgroundColor(color);
-//        detailImageView.setImageTintList(ColorStateList.valueOf(color));
         iconTaskCategory.setImageTintList(ColorStateList.valueOf(color));
     }
 

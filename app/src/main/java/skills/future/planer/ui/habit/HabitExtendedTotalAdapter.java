@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -111,15 +113,33 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
     private void createListenerToTrashButton(@NonNull HabitExtendedViewHolder holder, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle("Confirm deletion");
-        builder.setMessage("Are you sure?");
+        builder.setTitle(R.string.confirm_deletion);
+        builder.setMessage(R.string.confirm_deletion_2);
 
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            habitViewModel.delete(habitsList.get(position));
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    habitViewModel.delete(habitsList.get(position));
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            holder.itemView.startAnimation(animation);
             dialog.dismiss();
         });
 
-        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss());
 
         AlertDialog alert = builder.create();
         holder.itemView.findViewById(R.id.trashImageViewHabit).setOnClickListener(e -> alert.show());

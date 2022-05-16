@@ -168,7 +168,6 @@ public class HabitData {
         return endDay != 0 ? DatesParser.toCalendarDay(endDay) : null;
     }
 
-
     /**
      * Method set for givenDay opposite state of accomplish habit
      *

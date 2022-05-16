@@ -1,6 +1,7 @@
 package skills.future.planer.ui.tasklist;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -147,25 +147,35 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     protected void createListenerToTrashButton(@NonNull TaskDataViewHolder holder, int position) {
         if (holder.itemView.findViewById(R.id.trashImageView) != null)
             holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
-                Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
 
-                    }
+                builder.setTitle(R.string.confirm_deletion);
+                builder.setMessage(R.string.confirm_deletion_2);
+                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        var task = fullTaskList.get(position);
-                        mTaskViewModel.deleteTaskData(task);
-                    }
+                        }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            var task = fullTaskList.get(position);
+                            mTaskViewModel.deleteTaskData(task);
+                        }
 
-                    }
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    holder.itemView.startAnimation(animation);
+                    dialog.dismiss();
                 });
-                holder.itemView.startAnimation(animation);
+                builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss());
+                AlertDialog alert = builder.create();
+                alert.show();
             });
     }
 
@@ -301,12 +311,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
                     .distinct()
                     .filter(list2::contains)
                     .collect(Collectors.toList());
-
             filterList=list3;
         } else {
             filterList=list;
         }
-
         notifyDataSetChanged();
     }
 
