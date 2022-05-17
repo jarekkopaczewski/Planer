@@ -121,10 +121,23 @@ public abstract class AppDatabase extends RoomDatabase {
 
 
             try {
-                var goal = new GoalData("Cel " + 1, "opis", LocalDate.of(2022, 1, 1));
+                var goal = new GoalData("Cel " + 1, "Material is the metaphor. " +
+                        " A material metaphor is the unifying theory of a rationalized space and a system of motion." +
+                        " The material is grounded in tactile reality, inspired by the study of paper and ink, yet " +
+                        " technologically advanced and open to imagination and magic." +
+                        " Surfaces and edges of the material provide visual cues that are grounded in reality. The " +
+                        " use of familiar tactile attributes helps users quickly understand affordances. Yet the" +
+                        " flexibility of the material creates new affordances that supercede those in the physical " +
+                        " world, without breaking the rules of physics." +
+                        " The fundamentals of light, surface, and movement are key to conveying how objects move, " +
+                        " interact, and exist in space and in relation to each other. Realistic lighting shows " +
+                        " seams, divides space, and indicates moving parts." +
+                        " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
                 goal.setGoalId(goalsDao.insert(goal));
                 habitDao.insert(new HabitData("test", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
+                habitDao.insert(new HabitData("testbezcelu", "1111111",
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
                 habitDao.insert(new HabitData("test2", "1111111",
                         HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());

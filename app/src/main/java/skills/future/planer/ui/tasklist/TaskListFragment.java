@@ -51,7 +51,7 @@ public class TaskListFragment extends Fragment {
         View root = binding.getRoot();
 
         mWordViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), mWordViewModel,this);
+        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), this.getActivity());
 
         listTotal = binding.listTotalView;
         listTotal.setAdapter(taskTotalAdapter);
@@ -173,51 +173,47 @@ public class TaskListFragment extends Fragment {
          * Chip Group Listener
          * Searches by iDs and returns list of checked filters
          */
-        ChipGroup.OnCheckedStateChangeListener listener = new ChipGroup.OnCheckedStateChangeListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+        ChipGroup.OnCheckedStateChangeListener listener = (group, checkedIds) -> {
 
-                //list of checked chips ids
-                List<Integer> checked = binding.chipGroup.getCheckedChipIds();
+            //list of checked chips ids
+            List<Integer> checked = binding.chipGroup.getCheckedChipIds();
 
-                //filters = new ArrayList<>();
-                filters.clear();
+            //filters = new ArrayList<>();
+            filters.clear();
 
-                //getting chips ids
-                int work = binding.workChip.getId();
-                int private_chip = binding.privateChip.getId();
-                int urgent = binding.urgentChip.getId();
-                int not_urgent = binding.notUrgentChip.getId();
-                int important = binding.importantChip.getId();
-                int not_important = binding.notImportantChip.getId();
-                int notstatus = binding.notDoneTask.getId();
-                int status = binding.doneTask.getId();
+            //getting chips ids
+            int work = binding.workChip.getId();
+            int private_chip = binding.privateChip.getId();
+            int urgent = binding.urgentChip.getId();
+            int not_urgent = binding.notUrgentChip.getId();
+            int important = binding.importantChip.getId();
+            int not_important = binding.notImportantChip.getId();
+            int notstatus = binding.notDoneTask.getId();
+            int status = binding.doneTask.getId();
 
-                //compare them with checked ids
-                for (Integer id : checked) {
-                    if (id.equals(work)) filters.add(TaskCategory.Work.toString());
-                    if (id.equals(private_chip)) filters.add(TaskCategory.Private.toString());
-                    if (id.equals(urgent)) filters.add(TimePriority.Urgent.toString());
-                    if (id.equals(not_urgent)) filters.add(TimePriority.NotUrgent.toString());
-                    if (id.equals(important)) filters.add(Priorities.Important.toString());
-                    if (id.equals(not_important)) filters.add(Priorities.NotImportant.toString());
-                    if (id.equals(notstatus)) filters.add("NotDone");
-                    if (id.equals(status)) filters.add("Done");
+            //compare them with checked ids
+            for (Integer id : checked) {
+                if (id.equals(work)) filters.add(TaskCategory.Work.toString());
+                if (id.equals(private_chip)) filters.add(TaskCategory.Private.toString());
+                if (id.equals(urgent)) filters.add(TimePriority.Urgent.toString());
+                if (id.equals(not_urgent)) filters.add(TimePriority.NotUrgent.toString());
+                if (id.equals(important)) filters.add(Priorities.Important.toString());
+                if (id.equals(not_important)) filters.add(Priorities.NotImportant.toString());
+                if (id.equals(notstatus)) filters.add("NotDone");
+                if (id.equals(status)) filters.add("Done");
+            }
+            // System.out.println(filters);
+
+            //give list of filters to CategoryFilter
+            try {
+                taskTotalAdapter.CategoryFilter(filters);
+                if (binding.searchEditText.getText().toString().equals("")) {
+                    taskTotalAdapter.getFilter().filter("");
+                } else {
+                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
                 }
-               // System.out.println(filters);
-
-                //give list of filters to CategoryFilter
-                try {
-                    taskTotalAdapter.CategoryFilter(filters);
-                    if (binding.searchEditText.getText().toString().equals("")) {
-                        taskTotalAdapter.getFilter().filter("");
-                    }else {
-                        taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         };
 

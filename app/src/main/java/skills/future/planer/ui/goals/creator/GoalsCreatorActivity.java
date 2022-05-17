@@ -8,18 +8,24 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.ActivityGoalsCreatorBinding;
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
+import skills.future.planer.db.habit.HabitViewModel;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.goals.pager.recycler.MixedViewAdapter;
 import skills.future.planer.ui.month.MonthFragment;
 
 public class GoalsCreatorActivity extends AppCompatActivity {
@@ -29,7 +35,11 @@ public class GoalsCreatorActivity extends AppCompatActivity {
     private EditText titleEditText, detailEditText;
     private TextView editTextDateGoal;
     private GoalsViewModel goalsViewModel;
+    private HabitViewModel habitViewModel;
+    private TaskDataViewModel taskDataViewModel;
     private FloatingActionButton saveFAB;
+    private RecyclerView recyclerView;
+    private MixedViewAdapter mixedViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +71,27 @@ public class GoalsCreatorActivity extends AppCompatActivity {
         detailEditText = binding.detailsEditText;
         editTextDateGoal = binding.editTextDateGoal;
         saveFAB = binding.saveFABGoalCreator;
-        this.goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+        goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+        habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
+        taskDataViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
+        mixedViewAdapter = new MixedAdapterInGoalsCreator(this, this);
+        habitViewModel.getAllHabits()
+                .observe(this, habitData -> {
+                    if (habitData.size() > 0)
+                        mixedViewAdapter.setHabitsList(habitData.stream()
+                                .filter(habitData1 -> habitData1.getForeignKeyToGoal() == null)
+                                .collect(Collectors.toList()));
+                });
+        taskDataViewModel.getAllTaskData()
+                .observe(this, taskDataList -> {
+                    if (taskDataList.size() > 0)
+                        mixedViewAdapter.setFullTaskList(taskDataList.stream()
+                                .filter(taskData -> taskData.getForeignKeyToGoal() == null)
+                                .collect(Collectors.toList()));
+                });
+        recyclerView = binding.recyclerView2;
+        recyclerView.setAdapter(mixedViewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         setUpDate();
     }
 

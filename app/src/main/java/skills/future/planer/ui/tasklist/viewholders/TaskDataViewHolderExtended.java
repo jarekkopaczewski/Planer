@@ -7,12 +7,11 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.material.chip.Chip;
 
@@ -33,21 +32,21 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     private final ImageView iconTimePriority;
     private final TextView taskDescriptionView;
     private final Chip goalChip;
-    private final Fragment fragment;
+    private final ComponentActivity activity;
 
-    public TaskDataViewHolderExtended(View itemView, Context context, Fragment fragment) {
-        super(itemView, context);
+    public TaskDataViewHolderExtended(View itemView, Context context, ComponentActivity activity) {
+        super(itemView, context, activity);
         this.context = context;
         taskDescriptionView = itemView.findViewById(R.id.taskDescriptionView);
         iconPriorities = itemView.findViewById(R.id.iconPriorities);
         iconTimePriority = itemView.findViewById(R.id.iconTimePriority);
         goalChip = itemView.findViewById(R.id.goalChip);
-        this.fragment=fragment;
+        this.activity=activity;
     }
 
 
     @Override
-    public void setEveryThing(MixedRecyclerElement element) throws Exception {
+    public void setEveryThing(MixedRecyclerElement element) {
         if (element instanceof TaskData taskData) {
             super.setEveryThing(taskData);
             setIconPriority(taskData);
@@ -116,17 +115,17 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
         }
     }
 
-    private void setGoalChip(@NonNull TaskData task) throws Exception {
-        GoalsViewModel goalsViewModel = new ViewModelProvider(fragment).get(GoalsViewModel.class);
+    private void setGoalChip(@NonNull TaskData task) {
+        GoalsViewModel goalsViewModel = new ViewModelProvider(activity).get(GoalsViewModel.class);
         GoalData goal = goalsViewModel.findById(task.getForeignKeyToGoal());
-        if (goal != null){
+        if (goal != null) {
             goalChip.setVisibility(View.VISIBLE);
             String goalText = goal.getTitle();
-            if(goalText.length()>20){
-                goalText = goalText.substring(0,17)+"...";
+            if (goalText.length() > 20) {
+                goalText = goalText.substring(0, 17) + "...";
             }
             goalChip.setText(goalText);
-        }else {
+        } else {
             goalChip.setVisibility(View.INVISIBLE);
         }
 

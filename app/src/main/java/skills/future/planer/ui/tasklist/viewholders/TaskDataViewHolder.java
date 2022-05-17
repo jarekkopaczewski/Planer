@@ -9,20 +9,16 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
-
-import com.google.android.material.chip.Chip;
 
 import lombok.Getter;
 import skills.future.planer.R;
-import skills.future.planer.db.AppDatabase;
-import skills.future.planer.db.goal.GoalData;
-import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
@@ -33,14 +29,14 @@ import skills.future.planer.ui.tasklist.Colors;
 @Getter
 public class TaskDataViewHolder extends ICustomViewHolder {
     private final TextView title, date;
-    private final CheckBox checkBox;
+    protected final CheckBox checkBox;
     private final ImageView iconTaskCategory, detailImageView;
     private final CardView cardView;
     private final Context context;
     private final View item;
+    private final TaskDataViewModel taskDataViewModel;
 
-
-    public TaskDataViewHolder(View itemView, Context context) {
+    public TaskDataViewHolder(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
         this.context = context;
         this.item = itemView;
@@ -50,10 +46,11 @@ public class TaskDataViewHolder extends ICustomViewHolder {
         cardView = itemView.findViewById(R.id.colorMarkCardView);
         date = itemView.findViewById(R.id.taskDateTextView);
         detailImageView = itemView.findViewById(R.id.detailImageView);
+        this.taskDataViewModel = new ViewModelProvider(activity).get(TaskDataViewModel.class);
     }
 
     @Override
-    public void setEveryThing(MixedRecyclerElement element) throws Exception {
+    public void setEveryThing(MixedRecyclerElement element) {
         if (element instanceof TaskData taskData) {
             setColor(taskData);
             setTextTitle(taskData);
@@ -67,13 +64,12 @@ public class TaskDataViewHolder extends ICustomViewHolder {
      *
      * @param taskData which will be updated
      */
-    private void setCheckBoxListener(TaskData taskData) {
+    protected void setCheckBoxListener(TaskData taskData) {
         checkBox.setChecked(taskData.getStatus());
 
         checkBox.setOnClickListener(e -> {
             taskData.setStatus(checkBox.isChecked());
-            //todo zamioenić ma TaskDataModelView
-            var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
+
 
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.scalezoom3);
 
@@ -84,7 +80,7 @@ public class TaskDataViewHolder extends ICustomViewHolder {
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    taskDataDao.editOne(taskData);
+                    taskDataViewModel.edit(taskData);
                 }
 
                 @Override
@@ -151,6 +147,5 @@ public class TaskDataViewHolder extends ICustomViewHolder {
             }
         }
     }
-
 
 }

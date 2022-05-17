@@ -1,7 +1,6 @@
 package skills.future.planer.ui.habit;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,11 +27,11 @@ import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
 
 public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtendedViewHolder> {
-
     private final LayoutInflater layoutInflater;
     private final Context context;
     private final Fragment fragment;
     private List<HabitData> habitsList = new ArrayList<>();
+
     @SuppressLint("NotifyDataSetChanged")
     public void setHabitsList(List<HabitData> habitsList) {
         this.habitsList = habitsList;
@@ -49,7 +49,7 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
     @Override
     public HabitExtendedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new HabitExtendedViewHolder(createViewOfItem(parent,
-                R.layout.fragment_habit_in_list_extended), context, fragment);
+                R.layout.fragment_habit_in_list_extended), context, fragment.getActivity());
     }
 
     @NonNull
