@@ -19,7 +19,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
@@ -110,7 +109,6 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         return itemView;
     }
 
-    @SneakyThrows
     @Override
     public void onBindViewHolder(ICustomViewHolder holder, final int position) {
         switch (holder.getItemViewType()) {
@@ -132,8 +130,10 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setGoalData(GoalData goalData) {
         this.goalData = goalData;
+        notifyDataSetChanged();
     }
 
     private void createListenerToEditButton(@NonNull ICustomViewHolder holder) {
@@ -175,6 +175,7 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void createListenerToTrashButton(@NonNull ICustomViewHolder holder) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -182,6 +183,17 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         builder.setMessage("Jesteś pewien, że chcesz usunać?");
 
         builder.setPositiveButton("Usuń", (dialog, which) -> {
+            var view = new ViewModelProvider(activity).get(GoalsViewModel.class);
+            var habitMap = view.getHabitsFromGoalWithoutLiveData(goalData.getGoalId());
+            System.out.println("goalData= " + goalData.getGoalId());
+            habitMap.forEach((goalData1, habitData) -> System.out.println("goalData1 = " + goalData1.getGoalId() + "with: " + habitData.getForeignKeyToGoal()));
+            habitMap.values().stream()
+                    .filter(habitData -> habitData.getForeignKeyToGoal().equals(goalData.getGoalId()))
+                    .forEach(habitData -> habitData.setForeignKeyToGoal(null));
+            var taskMap = view.getTasksFromGoalWithoutLiveData(goalData.getGoalId());
+            taskMap.values().stream()
+                    .filter(habitData -> habitData.getForeignKeyToGoal().equals(goalData.getGoalId()))
+                    .forEach(habitData -> habitData.setForeignKeyToGoal(null));
             new ViewModelProvider(activity).get(GoalsViewModel.class).delete(goalData);
             dialog.dismiss();
         });

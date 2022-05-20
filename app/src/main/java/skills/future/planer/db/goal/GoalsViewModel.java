@@ -35,6 +35,14 @@ public class GoalsViewModel extends AndroidViewModel {
         return goalRepository.getTasksFromGoal(goalId);
     }
 
+    public Map<GoalData, HabitData> getHabitsFromGoalWithoutLiveData(Long goalId) {
+        return goalRepository.getHabitsFromGoalWithoutLiveData(goalId);
+    }
+
+    public Map<GoalData, TaskData> getTasksFromGoalWithoutLiveData(Long goalId) {
+        return goalRepository.getTasksFromGoalWithoutLiveData(goalId);
+    }
+
     /**
      * Method insert habit to database
      *
