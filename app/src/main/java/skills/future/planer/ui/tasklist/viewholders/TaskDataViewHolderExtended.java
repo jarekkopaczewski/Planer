@@ -7,11 +7,17 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.chip.Chip;
 
 import skills.future.planer.R;
+import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
@@ -25,13 +31,17 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     private final ImageView iconPriorities;
     private final ImageView iconTimePriority;
     private final TextView taskDescriptionView;
+    private final Chip goalChip;
+    private final ComponentActivity activity;
 
-    public TaskDataViewHolderExtended(View itemView, Context context) {
-        super(itemView, context);
+    public TaskDataViewHolderExtended(View itemView, Context context, ComponentActivity activity) {
+        super(itemView, context, activity);
         this.context = context;
         taskDescriptionView = itemView.findViewById(R.id.taskDescriptionView);
         iconPriorities = itemView.findViewById(R.id.iconPriorities);
         iconTimePriority = itemView.findViewById(R.id.iconTimePriority);
+        goalChip = itemView.findViewById(R.id.goalChip);
+        this.activity=activity;
     }
 
 
@@ -43,6 +53,7 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
             setIconTimePriority(taskData);
             setTaskDescriptionText(taskData);
             setColor(taskData);
+            setGoalChip(taskData);
         }
     }
 
@@ -102,6 +113,22 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
                         context.getResources(), R.drawable.snail, null));
             }
         }
+    }
+
+    private void setGoalChip(@NonNull TaskData task) {
+        GoalsViewModel goalsViewModel = new ViewModelProvider(activity).get(GoalsViewModel.class);
+        GoalData goal = goalsViewModel.findById(task.getForeignKeyToGoal());
+        if (goal != null) {
+            goalChip.setVisibility(View.VISIBLE);
+            String goalText = goal.getTitle();
+            if (goalText.length() > 20) {
+                goalText = goalText.substring(0, 17) + "...";
+            }
+            goalChip.setText(goalText);
+        } else {
+            goalChip.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     @Override

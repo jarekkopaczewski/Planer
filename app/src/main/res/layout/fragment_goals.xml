@@ -42,6 +42,8 @@
         android:foregroundTint="@color/imageTintColor"
         android:padding="5dp"
         android:translationZ="1dp"
+        app:barrierMargin="10dp"
+        app:distance="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.98"
@@ -53,6 +55,29 @@
         app:menu_icons="@array/menus"
         app:menu_open_duration="400"
         app:menu_orientation="vertical"
-        app:menu_radius="75dp" />
+        app:menu_radius="75dp"
+        app:menuIcon="plus" />
+
+<!--    <com.imangazaliev.circlemenu.CircleMenu
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        app:buttonColors="@array/menu_back_colors"
+        app:buttonIcons="@array/menus"
+        app:centerButtonColor="?colorAccent"
+        app:centerButtonIconColor="#ffffff"
+        app:distance="120dp"
+        app:iconsColor="?colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxAngle="140"
+        app:menuIcon="plus"
+        app:showSelectAnimation="false"
+        app:startAngle="-180" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

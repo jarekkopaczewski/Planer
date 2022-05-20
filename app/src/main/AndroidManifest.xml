@@ -12,8 +12,11 @@
         android:theme="@style/Theme.Planer">
         <activity
             android:name=".ui.goals.creator.GoalsCreatorActivity"
-            android:exported="false" />
-
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <service
             android:name=".notification.NotificationService"
             android:exported="false"

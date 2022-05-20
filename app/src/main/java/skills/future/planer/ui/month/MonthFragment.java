@@ -165,6 +165,7 @@ public class MonthFragment extends Fragment {
         });
     }
 
+
     /**
      * Creates lists for drawing dots
      */

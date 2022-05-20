@@ -17,7 +17,7 @@ import skills.future.planer.ui.month.MonthFragment;
 @Getter
 public class HabitViewHolder extends RecyclerView.ViewHolder {
     private final TextView title;
-    private final CheckBox checkBox;
+    protected final CheckBox checkBox;
     private final HabitViewModel habitViewModel;
     private final HabitTotalAdapter habitTotalAdapter;
     private final Context context;
@@ -39,12 +39,12 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
      */
     public void setEveryThing(HabitData habitData, int position) {
         title.setText(habitData.getTitle());
+        setCheckBoxListener(habitData, position);
+    }
+
+    protected void setCheckBoxListener(HabitData habitData, int position) {
         checkBox.setChecked(habitData.isHabitDone(MonthFragment.getGlobalSelectedDate()));
         checkBox.setOnClickListener(e -> {
-//            if (checkBox.isChecked())
-//                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.VISIBLE);
-//            else
-//                itemView.findViewById(R.id.doneImageViewHabit).setVisibility(View.INVISIBLE);
             try {
                 habitData.setHabitDoneIn(MonthFragment.getGlobalSelectedDate());
                 habitViewModel.edit(habitData);
@@ -53,17 +53,5 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
                 dataBaseException.printStackTrace();
             }
         });
-        // click on view change checkbox state
-//        itemView.setOnClickListener(e -> {
-//            AnimateView.animateInOut(itemView, context);
-//            checkBox.setChecked(!checkBox.isChecked());
-//            try {
-//                habitData.setHabitDoneIn(MonthFragment.getGlobalSelectedDate());
-//                habitViewModel.edit(habitData);
-//                habitTotalAdapter.notifyItemChanged(position);
-//            } catch (DataBaseException dataBaseException) {
-//                dataBaseException.printStackTrace();
-//            }
-//        });
     }
 }

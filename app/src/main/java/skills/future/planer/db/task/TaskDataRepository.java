@@ -1,7 +1,6 @@
 package skills.future.planer.db.task;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -45,6 +44,15 @@ public class TaskDataRepository {
      */
     void insert(TaskData taskData) {
         taskData.setTaskDataId(taskDataDao.insert(taskData));
+    }
+
+    /**
+     * Method edit taskData in database
+     *
+     * @param taskData which will be edited
+     */
+    void edit(TaskData taskData) {
+        taskDataDao.editOne(taskData);
     }
 
     /**
