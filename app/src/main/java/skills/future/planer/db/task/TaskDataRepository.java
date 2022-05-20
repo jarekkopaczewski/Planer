@@ -32,7 +32,7 @@ public class TaskDataRepository {
      *
      * @param application require to get AppDatabase reference
      */
-    TaskDataRepository(Application application) {
+    public TaskDataRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDataDao = db.taskDataTabDao();
     }
@@ -51,7 +51,7 @@ public class TaskDataRepository {
      *
      * @param taskData which will be edited
      */
-    void edit(TaskData taskData) {
+    public void edit(TaskData taskData) {
         taskDataDao.editOne(taskData);
     }
 

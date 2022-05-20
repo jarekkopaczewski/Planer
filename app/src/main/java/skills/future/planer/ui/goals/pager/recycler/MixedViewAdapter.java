@@ -184,16 +184,7 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
 
         builder.setPositiveButton("Usuń", (dialog, which) -> {
             var view = new ViewModelProvider(activity).get(GoalsViewModel.class);
-            var habitMap = view.getHabitsFromGoalWithoutLiveData(goalData.getGoalId());
-            System.out.println("goalData= " + goalData.getGoalId());
-            habitMap.forEach((goalData1, habitData) -> System.out.println("goalData1 = " + goalData1.getGoalId() + "with: " + habitData.getForeignKeyToGoal()));
-            habitMap.values().stream()
-                    .filter(habitData -> habitData.getForeignKeyToGoal().equals(goalData.getGoalId()))
-                    .forEach(habitData -> habitData.setForeignKeyToGoal(null));
-            var taskMap = view.getTasksFromGoalWithoutLiveData(goalData.getGoalId());
-            taskMap.values().stream()
-                    .filter(habitData -> habitData.getForeignKeyToGoal().equals(goalData.getGoalId()))
-                    .forEach(habitData -> habitData.setForeignKeyToGoal(null));
+
             new ViewModelProvider(activity).get(GoalsViewModel.class).delete(goalData);
             dialog.dismiss();
         });
