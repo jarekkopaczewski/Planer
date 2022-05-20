@@ -9,13 +9,14 @@ import skills.future.planer.ui.day.views.daylist.DayTaskListFragment;
 import skills.future.planer.ui.day.views.habits.HabitFragment;
 import skills.future.planer.ui.day.views.matrix.MatrixFragment;
 import skills.future.planer.ui.day.views.notepad.ScrollingFragment;
+import skills.future.planer.ui.day.views.summary.SummaryFragment;
 
 @Getter
 public class MyPagerAdapter extends FragmentPagerAdapter {
     private static final int NUM_ITEMS = 5;
     private final DayTaskListFragment taskListFragment = new DayTaskListFragment();
     private final MatrixFragment matrixFragment = new MatrixFragment();
-    private final ScrollingFragment scrollingFragment = new ScrollingFragment();
+    private final SummaryFragment summaryFragment = new SummaryFragment();
     private final ScrollingFragment scrollingFragment2 = new ScrollingFragment();
     private final HabitFragment habitFragment = new HabitFragment();
 
@@ -36,14 +37,14 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
             case 2 -> taskListFragment;
             case 3 -> habitFragment;
             case 4 -> scrollingFragment2;
-            default -> scrollingFragment;
+            default -> summaryFragment;
         };
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         return switch (position) {
-            case 0 -> "Notatki";
+            case 0 -> "Podsumowanie tygodnia";
             case 1 -> "Macierz";
             case 2 -> "Lista zadań";
             case 3 -> "Nawyki";

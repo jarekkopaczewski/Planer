@@ -1,5 +1,8 @@
 package skills.future.planer.ui.day.views.habits;
 
+import android.content.Context;
+
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 
@@ -8,6 +11,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.util.stream.Collectors;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
+import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
@@ -17,6 +21,7 @@ public class HabitDayViewModel extends ViewModel {
     private static HabitTotalAdapter habitTotalAdapter;
     private static LifecycleOwner viewLifecycleOwner;
     private static CircularProgressIndicator circularProgressIndicator;
+    private static Context context;
 
 
     /**
@@ -28,6 +33,7 @@ public class HabitDayViewModel extends ViewModel {
                         habits.stream().filter(habitData -> habitData
                                 .isDayOfWeekChecked(DatesParser.toLocalDate(date)))
                                 .collect(Collectors.toList())));
+
         habitViewModel.getAllHabitDataFromDay(date).observe(
                 viewLifecycleOwner, habitData -> {
                     Integer progressDone = 0;
@@ -39,18 +45,11 @@ public class HabitDayViewModel extends ViewModel {
                         progressAll += 1;
                     }
                     if (progressAll > 0.5)
-                        circularProgressIndicator.setCurrentProgress(((double) progressDone / progressAll) * 100.0f);
+                        circularProgressIndicator.setProgress(((double) progressDone / progressAll) * 100.0f, 100f);
                     else
-                        circularProgressIndicator.setCurrentProgress(100.0f);
-                    circularProgressIndicator.animate();
-                    circularProgressIndicator.setProgressTextAdapter(new TextAdapter());
+                        circularProgressIndicator.setProgress(100.0f, 100f);
 
-//                    if (circularProgressIndicator.getProgress() <= 40)
-//                        circularProgressIndicator.setProgressColor(ContextCompat.getColor(requireContext(), R.color.bad));
-//                    else if (circularProgressIndicator.getProgress() <= 75)
-//                        circularProgressIndicator.setProgressColor(ContextCompat.getColor(requireContext(), R.color.mid));
-//                    else
-//                        circularProgressIndicator.setProgressColor(ContextCompat.getColor(requireContext(), R.color.good));
+                    System.out.println(circularProgressIndicator);
                 });
     }
 
@@ -80,5 +79,11 @@ public class HabitDayViewModel extends ViewModel {
 
     public void setCircularProgress(CircularProgressIndicator circularProgressIndicator) {
         HabitDayViewModel.circularProgressIndicator = circularProgressIndicator;
+        circularProgressIndicator.setProgressColor(ContextCompat.getColor(context, R.color.mid));
+    }
+
+    public void setContext(Context context)
+    {
+        HabitDayViewModel.context = context;
     }
 }
