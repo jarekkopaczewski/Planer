@@ -28,6 +28,7 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
+import skills.future.planer.ui.habit.view_holders.HabitSimpleViewHolder;
 import skills.future.planer.ui.habit.view_holders.HabitViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
@@ -91,8 +92,8 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
                     R.layout.goal_in_list_title), context, activity);
             case LAYOUT_DESCRIPTION -> new GoalViewHolderDescription(createViewOfItem(parent,
                     R.layout.goal_in_list_description), context, activity);
-            case LAYOUT_HABIT -> new HabitViewHolder(createViewOfItem(parent,
-                    R.layout.fragment_habit_in_list), context, activity);
+            case LAYOUT_HABIT -> new HabitSimpleViewHolder(createViewOfItem(parent,
+                    R.layout.fragment_habit_in_list_simple), context, activity);
             case LAYOUT_HABIT_EXTENDED -> new HabitExtendedViewHolder(createViewOfItem(parent,
                     R.layout.fragment_habit_in_list_extended), context, activity);
             case LAYOUT_TASK_EXTENDED -> new TaskDataViewHolderExtended(createViewOfItem(parent,

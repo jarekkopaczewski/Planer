@@ -3,7 +3,9 @@ package skills.future.planer.ui.habit.view_holders;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -19,12 +21,14 @@ import skills.future.planer.ui.habit.HabitTextAdapter;
 public class HabitSimpleViewHolder extends HabitViewHolder {
 
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
+    private final TextView habitTitleTextViewSimple;
     private final Context context;
 
 
-    public HabitSimpleViewHolder(View itemView, Context context) {
-        super(itemView);
-        circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitDay);
+    public HabitSimpleViewHolder(View itemView, Context context, ComponentActivity activity) {
+        super( itemView, context, activity);
+        circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitSimple);
+        habitTitleTextViewSimple = itemView.findViewById(R.id.habitTitleTextViewSimple);
         this.context = context;
     }
 
@@ -34,6 +38,7 @@ public class HabitSimpleViewHolder extends HabitViewHolder {
     public void setEveryThing(MixedRecyclerElement element) {
         if (element instanceof HabitData habitData) {
             setUpCircularProgressIndicatorOfDays(habitData);
+            habitTitleTextViewSimple.setText(habitData.getTitle());
         }
     }
 
