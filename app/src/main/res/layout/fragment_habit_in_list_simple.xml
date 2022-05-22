@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:layout_margin="5dp"
     android:background="@color/background"
     android:orientation="vertical">
 
@@ -71,7 +70,7 @@
                 android:paddingStart="5dp"
                 android:paddingEnd="10dp"
                 android:text="Progres"
-                android:textAlignment="viewEnd"
+                android:textAlignment="viewStart"
                 android:textColor="@color/textColor"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -104,7 +103,7 @@
                 app:progressColor="@color/second_color_30"
                 app:progressStrokeWidth="10dp"
                 app:textColor="@color/imageTintColor"
-                app:textSize="18sp" />
+                app:textSize="13sp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
