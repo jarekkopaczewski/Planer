@@ -79,8 +79,8 @@
     <string name="reminder_too_many_habits">Masz za dużo nawyków!</string>
     <string name="goalCreatorTitleHint">Nazwa celu</string>
     <string name="goalCreatorDetailsHint">Opis celu</string>
-    <string name="dateOfBeginGoalCreatorHint">data rozpoczęcia celu</string>
-    <string name="goalCreatorDateLabel">Data rozpoczęcia celu:</string>
+    <string name="dateOfBeginGoalCreatorHint">data zakończenia celu</string>
+    <string name="goalCreatorDateLabel">Data zakończenia celu:</string>
     <string name="GoalListHabitsAndTasksLabel">Nawyki i zadania:</string>
     <string name="goalText">Cel</string>
     <string name="choiceGoalText">Wybierz cel:</string>

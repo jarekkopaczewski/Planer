@@ -58,7 +58,8 @@ public class GoalsFragment extends Fragment {
         totalGoalList.setOverScrollMode(2);
         totalGoalList.setPadding(50, 0, 50, 0);
         totalGoalList.setOffscreenPageLimit(3);
-        goalsViewModel.getAllGoals().observe(this.getViewLifecycleOwner(), goalData -> goalTotalAdapter.setGoalsList(goalData));
+        goalsViewModel.getAllGoals().observe(this.getViewLifecycleOwner(),
+                goalData -> goalTotalAdapter.setGoalsList(goalData));
 
         ViewPager2.OnPageChangeCallback onPageChangeCallback = new ViewPager2.OnPageChangeCallback() {
             @SuppressLint("SetTextI18n")

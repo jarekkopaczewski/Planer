@@ -35,6 +35,14 @@ public class GoalRepository {
         return goalsDao.getTasksFromGoal(goalId);
     }
 
+    Map<GoalData, HabitData> getHabitsFromGoalWithoutLiveData(Long goalId) {
+        return goalsDao.getHabitsFromGoalWithoutLiveData(goalId);
+    }
+
+    Map<GoalData, TaskData> getTasksFromGoalWithoutLiveData(Long goalId) {
+        return goalsDao.getTasksFromGoalWithoutLiveData(goalId);
+    }
+
     /**
      * Method insert habit to database
      *
