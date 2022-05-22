@@ -45,6 +45,7 @@ public class HabitData implements MixedRecyclerElement {
     private String dayChecking;
     private Long foreignKeyToGoal;
     private Long notificationTime;
+    private boolean notification_icon;
 
     public HabitData() {
         title = dayChecking = daysOfWeek = "";
