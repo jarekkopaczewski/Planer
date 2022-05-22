@@ -62,8 +62,7 @@ public class HabitViewHolder extends ICustomViewHolder {
     private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
         if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
-            circularProgressIndicatorHabitDay
-                    .setCurrentProgress(DatesParser.countDifferenceBetweenDays(
+            circularProgressIndicatorHabitDay.setCurrentProgress(DatesParser.countDifferenceBetweenDays(
                             habitData.getBeginCalendarDay(), CalendarDay.today()) + 1);
         else if (CalendarDay.today().isBefore(habitData.getBeginCalendarDay()))
             circularProgressIndicatorHabitDay.setCurrentProgress(0);
@@ -76,7 +75,7 @@ public class HabitViewHolder extends ICustomViewHolder {
 
         if (circularProgressIndicatorHabitDay.getProgress() / circularProgressIndicatorHabitDay.getMaxProgress() <= 0.4)
             circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.bad));
-        else if (circularProgressIndicatorHabitDay.getProgress() / circularProgressIndicatorHabitDay.getMaxProgress() <= 75)
+        else if (circularProgressIndicatorHabitDay.getProgress() / circularProgressIndicatorHabitDay.getMaxProgress() <= 0.75)
             circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.mid));
         else
             circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.good));
