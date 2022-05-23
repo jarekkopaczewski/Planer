@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import skills.future.planer.R;
@@ -35,8 +36,9 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
     @SuppressLint("NotifyDataSetChanged")
     public void setHabitsList(List<HabitData> habitsList) {
         this.habitsList = habitsList;
+        HabitComparator habitComparator = new HabitComparator();
+        habitsList.sort(habitComparator);
         notifyDataSetChanged();
-
     }
 
     public HabitExtendedTotalAdapter(Context context, Fragment fragment) {
@@ -65,9 +67,6 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabit), context, R.anim.scalezoom2);
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
         AnimateView.singleAnimation(itemView.findViewById(R.id.circularProgressIndicatorHabitDay), context, R.anim.scalezoom2);
-
-
-
 
         return itemView;
     }

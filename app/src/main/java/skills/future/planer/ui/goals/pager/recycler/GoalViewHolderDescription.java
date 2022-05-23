@@ -18,7 +18,7 @@ public class GoalViewHolderDescription extends ICustomViewHolder {
 
     public GoalViewHolderDescription(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
-        textDescription = itemView.findViewById(R.id.text_slideshow2);
+        textDescription = itemView.findViewById(R.id.summaryEditText);
         this.context = context;
     }
 
