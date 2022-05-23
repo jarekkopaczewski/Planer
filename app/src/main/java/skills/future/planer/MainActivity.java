@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private NavigationView navigationView;
+    private static boolean notification = false;
 
 
     /**
@@ -106,6 +107,20 @@ public class MainActivity extends AppCompatActivity {
             if (!navDrawer.isDrawerOpen(Gravity.LEFT)) navDrawer.openDrawer(Gravity.LEFT);
             else navDrawer.closeDrawer(Gravity.RIGHT);
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            Bundle bundle = getIntent().getExtras();
+            notification = bundle.containsKey("notification");
+            if (notification) {
+                bottomView.setSelectedItemId(R.id.nav_day);
+            }
+        } catch (NullPointerException ignore) {
+        }
     }
 
     @Override
@@ -173,4 +188,12 @@ public class MainActivity extends AppCompatActivity {
             notificationService = null;
         }
     };
+
+    public static boolean isNotification() {
+        return notification;
+    }
+
+    public static void setNotification(boolean notification) {
+        MainActivity.notification = notification;
+    }
 }

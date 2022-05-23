@@ -48,8 +48,8 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (sInstance == null) {
                     Log.d(LOG_TAG, "Creating new database instance");
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                            .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
+                                    AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
+                            .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
                 }
             }
         }
@@ -135,9 +135,9 @@ public abstract class AppDatabase extends RoomDatabase {
                         " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
                 goal.setGoalId(goalsDao.insert(goal));
                 habitDao.insert(new HabitData("test", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
+                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 1, goal.getGoalId()));
                 habitDao.insert(new HabitData("testbezcelu", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
+                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
                 habitDao.insert(new HabitData("test2", "1111111",
                         HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());

@@ -215,9 +215,7 @@ public class MonthFragment extends Fragment {
             eventDecoratorFour.setDates_tasks(fourDot);
             try {
                 requireActivity().runOnUiThread(() -> materialCalendarView.invalidateDecorators());
-            } catch (IllegalStateException illegalStateException) {
-                illegalStateException.printStackTrace();
-                System.err.println("Nie działa kurwa");
+            } catch (IllegalStateException ignore) {
             }
         });
     }
