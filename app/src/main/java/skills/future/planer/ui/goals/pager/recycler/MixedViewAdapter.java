@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
@@ -110,6 +111,7 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         return itemView;
     }
 
+    @SneakyThrows
     @Override
     public void onBindViewHolder(ICustomViewHolder holder, final int position) {
         switch (holder.getItemViewType()) {
