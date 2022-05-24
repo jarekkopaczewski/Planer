@@ -108,15 +108,15 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
     private void createListenerToTrashButton(HabitData habitData) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle("Confirm deletion");
-        builder.setMessage("Are you sure?");
+        builder.setTitle("Potwierdź usunięcie");
+        builder.setMessage("Jesteś pewien że chcesz usnąć?");
 
-        builder.setPositiveButton("Yes", (dialog, which) -> {
+        builder.setPositiveButton("Usuń", (dialog, which) -> {
             new ViewModelProvider(activity).get(HabitViewModel.class).delete(habitData);
             dialog.dismiss();
         });
 
-        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Anuluj", (dialog, which) -> dialog.dismiss());
 
         AlertDialog alert = builder.create();
         imageTrash.setOnClickListener(e -> alert.show());

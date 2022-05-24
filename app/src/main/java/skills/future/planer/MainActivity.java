@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         themePreferences();
 
-        createService();
+        // createService();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

@@ -20,6 +20,7 @@ import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.goals.pager.GoalTotalAdapter;
 import skills.future.planer.ui.habit.HabitCreatorActivity;
+import skills.future.planer.ui.tasklist.AddTaskActivity;
 
 public class GoalsFragment extends Fragment {
     private FragmentGoalsBinding binding;
@@ -36,13 +37,9 @@ public class GoalsFragment extends Fragment {
 
         binding.FABMenu.setOnMenuItemClickListener(id -> {
             switch (id) {
-                case R.drawable.habit_add -> this.requireContext().startActivity(
-                        new Intent(this.getContext(), HabitCreatorActivity.class));
-                case R.drawable.tas_add -> Navigation.findNavController(root)
-                        .navigate(GoalsFragmentDirections
-                                .actionNavHomeToTaskListCreatorFragment(-1));
-                case R.drawable.goal_add -> this.requireContext().startActivity(
-                        new Intent(this.requireContext(), GoalsCreatorActivity.class));
+                case R.drawable.habit_add -> this.requireContext().startActivity(new Intent(this.getContext(), HabitCreatorActivity.class));
+                case R.drawable.tas_add -> this.requireContext().startActivity(new Intent(this.getContext(), AddTaskActivity.class));
+                case R.drawable.goal_add -> this.requireContext().startActivity(new Intent(this.requireContext(), GoalsCreatorActivity.class));
             }
         });
 

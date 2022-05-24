@@ -1,6 +1,7 @@
 package skills.future.planer.ui.day.views.daylist;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.DayFragmentDirections;
+import skills.future.planer.ui.tasklist.AddTaskActivity;
 
 public class DayTaskListFragment extends Fragment {
 
@@ -67,9 +69,7 @@ public class DayTaskListFragment extends Fragment {
     private void createListenerForFab() {
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            Navigation.findNavController(view)
-                    .navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
-
+            this.requireContext().startActivity(new Intent(this.getContext(), AddTaskActivity.class));
         });
     }
 

@@ -50,6 +50,8 @@ public class GoalsCreatorActivity extends AppCompatActivity {
 
         setUpFields(binding);
 
+        setTitle("Kreator celów");
+
         var goalsIdToEdit = getIntent().getExtras();
         if (goalsIdToEdit != null) {
             var goal = goalsViewModel.findById(goalsIdToEdit.getLong("goalIdToEdit"));

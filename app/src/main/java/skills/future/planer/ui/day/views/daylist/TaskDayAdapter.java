@@ -1,6 +1,7 @@
 package skills.future.planer.ui.day.views.daylist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.day.DayFragmentDirections;
+import skills.future.planer.ui.tasklist.AddTaskActivity;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
@@ -48,14 +50,6 @@ public class TaskDayAdapter extends TaskTotalAdapter {
     @Override
     protected void createListenerToExtendView(@NonNull TaskDataViewHolder holder) {
         super.createListenerToExtendView(holder);
-    }
-
-    @Override
-    protected void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
-        if (holder.itemView.findViewById(R.id.detailImageView) != null)
-            holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
-                    Navigation.findNavController(holder.itemView)
-                            .navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(getFullTaskList().get(position).getTaskDataId())));
     }
 
     @Override

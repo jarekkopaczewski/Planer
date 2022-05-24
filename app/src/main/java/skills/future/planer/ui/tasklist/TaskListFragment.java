@@ -1,6 +1,7 @@
 package skills.future.planer.ui.tasklist;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +31,7 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.habit.HabitCreatorActivity;
 
 public class TaskListFragment extends Fragment {
 
@@ -86,7 +88,7 @@ public class TaskListFragment extends Fragment {
 
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            Navigation.findNavController(view).navigate(TaskListFragmentDirections.actionNavTaskListToTaskListCreatorFragment(-1));
+            this.requireContext().startActivity(new Intent(this.getContext(), AddTaskActivity.class));
         });
 
         binding.searchImageView.setOnClickListener(e -> {
