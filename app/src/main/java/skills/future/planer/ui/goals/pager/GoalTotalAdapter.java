@@ -58,6 +58,8 @@ public class GoalTotalAdapter extends RecyclerView.Adapter<GoalViewHolder> {
         }
     }
 
+    public long getItemKeyId(int position){ return goalsList.get(position).getGoalId(); }
+
     public long getItemId(int position) {
         return position;
     }

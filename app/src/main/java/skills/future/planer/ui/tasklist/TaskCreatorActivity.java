@@ -21,7 +21,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
@@ -84,27 +83,29 @@ public class TaskCreatorActivity extends AppCompatActivity {
 
     private void setUpValuesOnEdit() {
         try {
-            editTask = taskDataViewModel.findById(parameters.getLong("taskToEditId"));
-            taskTitleEditText.setText(editTask.getTaskTitleText());
-            taskDetailsEditText.setText(editTask.getTaskDetailsText());
-            switchPriorities.setChecked(editTask.getPriorities() == Priorities.NotImportant);
-            switchTimePriorities.setChecked(editTask.getTimePriority() == TimePriority.NotUrgent);
-            switchCategory.setChecked(editTask.getCategory() == TaskCategory.Work);
-            // ustawianie celi jest w observerze bo szybciej wykonywało się uzypełnianie niż
-            // wczytywała się baza
-            if (editTask.getStartingDate() != 0) {
-                switchDate.setChecked(true);
-                var beginDate = editTask.getStartingCalendarDate();
-                var endingDate = editTask.getEndingCalendarDate();
-                beginDayCalendar.set(beginDate.getYear(), beginDate.getMonth() - 1, beginDate.getDay());
-                endingDayCalendar.set(endingDate.getYear(), endingDate.getMonth() - 1, endingDate.getDay());
-                endingDateEditText.setText(DatesParser.toLocalDate(editTask.getEndingDate())
-                        .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-                beginDateEditText.setText(DatesParser.toLocalDate(editTask.getStartingDate())
-                        .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            if (!parameters.containsKey("goalId")) {
+                editTask = taskDataViewModel.findById(parameters.getLong("taskToEditId"));
+                taskTitleEditText.setText(editTask.getTaskTitleText());
+                taskDetailsEditText.setText(editTask.getTaskDetailsText());
+                switchPriorities.setChecked(editTask.getPriorities() == Priorities.NotImportant);
+                switchTimePriorities.setChecked(editTask.getTimePriority() == TimePriority.NotUrgent);
+                switchCategory.setChecked(editTask.getCategory() == TaskCategory.Work);
+                // ustawianie celi jest w observerze bo szybciej wykonywało się uzypełnianie niż
+                // wczytywała się baza
+                if (editTask.getStartingDate() != 0) {
+                    switchDate.setChecked(true);
+                    var beginDate = editTask.getStartingCalendarDate();
+                    var endingDate = editTask.getEndingCalendarDate();
+                    beginDayCalendar.set(beginDate.getYear(), beginDate.getMonth() - 1, beginDate.getDay());
+                    endingDayCalendar.set(endingDate.getYear(), endingDate.getMonth() - 1, endingDate.getDay());
+                    endingDateEditText.setText(DatesParser.toLocalDate(editTask.getEndingDate())
+                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                    beginDateEditText.setText(DatesParser.toLocalDate(editTask.getStartingDate())
+                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                }
+                setGoal();
+                setTitle(getString(R.string.task_editor_title));
             }
-            setGoal();
-            setTitle(getString(R.string.task_editor_title));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -121,6 +122,12 @@ public class TaskCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, "brak");
             goalSpinner.setItems(list);
+            try {
+                int selected = parameters.getInt("goalId");
+                goalSpinner.selectItemByIndex(selected + 1);
+            } catch (NullPointerException | IndexOutOfBoundsException exp) {
+                exp.printStackTrace();
+            }
         });
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
@@ -337,6 +344,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
 
     /**
      * Checks is starting and ending dates are correct
+     *
      * @return true if dates are correct
      */
     private boolean checkDateDependency() {
@@ -371,8 +379,11 @@ public class TaskCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, getString(R.string.empty));
             goalSpinner.setItems(list);
-            try{ goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle())); }
-            catch( NullPointerException exp) { goalSpinner.selectItemByIndex(0); }
+            try {
+                goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle()));
+            } catch (NullPointerException exp) {
+                goalSpinner.selectItemByIndex(0);
+            }
         });
     }
 

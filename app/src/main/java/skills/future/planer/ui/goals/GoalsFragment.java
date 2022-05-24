@@ -33,11 +33,24 @@ public class GoalsFragment extends Fragment {
 
         ViewPager2 totalGoalList = binding.totalGoalList;
         pagerCountText = binding.pagerCountText;
+        pagerCountText.setText("Cel: 0/0");
 
         binding.FABMenu.setOnMenuItemClickListener(id -> {
             switch (id) {
-                case R.drawable.habit_add -> this.requireContext().startActivity(new Intent(this.getContext(), HabitCreatorActivity.class));
-                case R.drawable.tas_add -> this.requireContext().startActivity(new Intent(this.getContext(), TaskCreatorActivity.class));
+                case R.drawable.habit_add -> {
+                    var intent = new Intent(this.getContext(), HabitCreatorActivity.class);
+                    var bundle = new Bundle();
+                    bundle.putInt("goalId", (int) totalGoalList.getCurrentItem());
+                    intent.putExtras(bundle);
+                    this.getContext().startActivity(intent);
+                }
+                case R.drawable.tas_add -> {
+                    var intent = new Intent(this.getContext(), TaskCreatorActivity.class);
+                    var bundle = new Bundle();
+                    bundle.putInt("goalId", (int) totalGoalList.getCurrentItem());
+                    intent.putExtras(bundle);
+                    this.getContext().startActivity(intent);
+                }
                 case R.drawable.goal_add -> this.requireContext().startActivity(new Intent(this.requireContext(), GoalsCreatorActivity.class));
             }
         });
