@@ -82,12 +82,16 @@ public class GoalsViewModel extends AndroidViewModel {
                     habitRepository.edit(habitData);
                 });
         var taskMap = getTasksFromGoalWithoutLiveData(goalData.getGoalId());
-        Objects.requireNonNull(taskMap.get(goalData)).stream()
-                .filter(taskData -> taskData.getForeignKeyToGoal().equals(goalData.getGoalId()))
-                .forEach(taskData -> {
-                    taskData.setForeignKeyToGoal(null);
-                    taskDataRepository.edit(taskData);
-                });
+        try {
+            Objects.requireNonNull(taskMap.get(goalData)).stream()
+                    .filter(taskData -> taskData.getForeignKeyToGoal().equals(goalData.getGoalId()))
+                    .forEach(taskData -> {
+                        taskData.setForeignKeyToGoal(null);
+                        taskDataRepository.edit(taskData);
+                    });
+        } catch (NullPointerException exp) {
+            exp.printStackTrace();
+        }
         goalRepository.delete(goalData);
     }
 

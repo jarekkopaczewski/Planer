@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,8 +19,7 @@ import skills.future.planer.R;
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.day.DayFragmentDirections;
-import skills.future.planer.ui.tasklist.AddTaskActivity;
+import skills.future.planer.ui.tasklist.TaskCreatorActivity;
 
 public class DayTaskListFragment extends Fragment {
 
@@ -69,7 +67,7 @@ public class DayTaskListFragment extends Fragment {
     private void createListenerForFab() {
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            this.requireContext().startActivity(new Intent(this.getContext(), AddTaskActivity.class));
+            this.requireContext().startActivity(new Intent(this.getContext(), TaskCreatorActivity.class));
         });
     }
 

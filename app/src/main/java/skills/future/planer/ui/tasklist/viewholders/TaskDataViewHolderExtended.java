@@ -28,7 +28,7 @@ import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
-import skills.future.planer.ui.tasklist.AddTaskActivity;
+import skills.future.planer.ui.tasklist.TaskCreatorActivity;
 import skills.future.planer.ui.tasklist.Colors;
 
 public class TaskDataViewHolderExtended extends TaskDataViewHolder {
@@ -76,7 +76,7 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
      */
     private void createListenerToEditButton(TaskData taskData) {
         detailImageView.setOnClickListener(e -> {
-            var intent = new Intent(activity, AddTaskActivity.class);
+            var intent = new Intent(activity, TaskCreatorActivity.class);
             var bundle = new Bundle();
             bundle.putLong("taskToEditId", taskData.getTaskDataId());
             intent.putExtras(bundle);

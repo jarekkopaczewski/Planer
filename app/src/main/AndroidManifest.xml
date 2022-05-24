@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Planer">
         <activity
-            android:name=".ui.tasklist.AddTaskActivity"
+            android:name=".ui.tasklist.TaskCreatorActivity"
             android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

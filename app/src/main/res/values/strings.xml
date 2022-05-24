@@ -87,4 +87,9 @@
     <string name="noneGoal">brak</string>
     <string name="task_creator_title">Kreator zadań</string>
     <string name="task_title_warning">Tytuł nie może być pusty!</string>
+    <string name="task_editor_title">Edytor Zadań</string>
+    <string name="empty_begin_date_error">Data rozpoczęcia zadania nie może być pusta</string>
+    <string name="end_date_task_error">Data zakończenia zadania nie może być pusta</string>
+    <string name="wrong_time_selection_error">Data zakończenia zadania nie może być wcześniej niż data jego rozpoczęcia!</string>
+    <string name="empty">brak</string>
 </resources>

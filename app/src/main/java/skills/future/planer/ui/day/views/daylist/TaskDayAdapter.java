@@ -1,21 +1,15 @@
 package skills.future.planer.ui.day.views.daylist;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import java.util.List;
 
-import skills.future.planer.R;
 import skills.future.planer.db.task.TaskData;
-import skills.future.planer.ui.day.DayFragmentDirections;
-import skills.future.planer.ui.tasklist.AddTaskActivity;
 import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 
