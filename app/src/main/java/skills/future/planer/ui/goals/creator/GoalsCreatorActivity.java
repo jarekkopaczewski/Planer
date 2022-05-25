@@ -57,6 +57,7 @@ public class GoalsCreatorActivity extends AppCompatActivity {
 
         var goalsIdToEdit = getIntent().getExtras();
         if (goalsIdToEdit != null) {
+            setTitle("Edytor celów");
             var goal = goalsViewModel.findById(goalsIdToEdit.getLong("goalIdToEdit"));
             titleEditText.setText(goal.getTitle());
             detailEditText.setText(goal.getDetails());
