@@ -1,9 +1,11 @@
 package skills.future.planer.ui.habit;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
@@ -149,6 +152,28 @@ public class HabitCreatorActivity extends AppCompatActivity {
             setUpDefaultHabit();
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) showDialog();
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDialog();
+    }
+
+    private void showDialog() {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+                .setIcon(R.drawable.warning)
+                .setTitle(R.string.exit_activity_warning_1)
+                .setMessage(R.string.exit_activity_warning_2)
+                .setPositiveButton(R.string.agree, (dialog, which) -> finish())
+                .setNegativeButton(R.string.disagree, null)
+                .show();
+    }
+
 
     private void setUpDefaultHabit() {
         // set current time & date

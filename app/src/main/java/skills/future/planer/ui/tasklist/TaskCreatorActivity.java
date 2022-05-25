@@ -1,8 +1,11 @@
 package skills.future.planer.ui.tasklist;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
@@ -79,6 +83,27 @@ public class TaskCreatorActivity extends AppCompatActivity {
         // if parameters != null -> edit == true
         saveBtnOnClickListenerSetter(parameters != null);
         if (parameters != null) setUpValuesOnEdit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) showDialog();
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDialog();
+    }
+
+    private void showDialog() {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+                .setIcon(R.drawable.warning)
+                .setTitle(R.string.exit_activity_warning_1)
+                .setMessage(R.string.exit_activity_warning_2)
+                .setPositiveButton(R.string.agree, (dialog, which) -> finish())
+                .setNegativeButton(R.string.disagree, null)
+                .show();
     }
 
     private void setUpValuesOnEdit() {

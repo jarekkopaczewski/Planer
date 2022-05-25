@@ -41,6 +41,8 @@
     <string name="confirm_deletion_2">Jesteś pewien że checsz usunąć?</string>
     <string name="yes">Usuń</string>
     <string name="no">Anuluj</string>
+    <string name="agree">Tak</string>
+    <string name="disagree">Nie</string>
     <string name="large_text">
 
         "Material is the metaphor."
@@ -92,4 +94,6 @@
     <string name="end_date_task_error">Data zakończenia zadania nie może być pusta</string>
     <string name="wrong_time_selection_error">Data zakończenia zadania nie może być wcześniej niż data jego rozpoczęcia!</string>
     <string name="empty">brak</string>
+    <string name="exit_activity_warning_1">Dane nie zostały zapisane!</string>
+    <string name="exit_activity_warning_2">Na pewno chcesz wyjść z edytora?</string>
 </resources>

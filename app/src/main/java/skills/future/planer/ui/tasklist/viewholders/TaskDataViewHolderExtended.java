@@ -19,10 +19,12 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import skills.future.planer.R;
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
+import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.priority.Priorities;
@@ -85,30 +87,29 @@ public class TaskDataViewHolderExtended extends TaskDataViewHolder {
     }
 
     /**
-     * Creates listener to edit button which delete task
+     * Creates listener to trash button which delete task
      */
     private void createListenerToTrashButton(TaskData taskData) {
         trashImageView.setOnClickListener(e -> {
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-
-            builder.setTitle(R.string.confirm_deletion);
-            builder.setMessage(R.string.confirm_deletion_2);
-            builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {}
-                    @Override
-                    public void onAnimationEnd(Animation animation) { new ViewModelProvider(activity).get(TaskDataViewModel.class).deleteTaskData(taskData); }
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {}
-                });
-                this.itemView.startAnimation(animation);
-                dialog.dismiss();
-            });
-            builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss());
-            AlertDialog alert = builder.create();
-            alert.show();
+            new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+                    .setIcon(R.drawable.warning)
+                    .setTitle(R.string.confirm_deletion)
+                    .setMessage(R.string.confirm_deletion_2)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {}
+                            @Override
+                            public void onAnimationEnd(Animation animation) { new ViewModelProvider(activity).get(TaskDataViewModel.class).deleteTaskData(taskData); }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {}
+                        });
+                        this.itemView.startAnimation(animation);
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+                    .show();
         });
     }
 
