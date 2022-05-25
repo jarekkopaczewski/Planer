@@ -3,35 +3,40 @@ package skills.future.planer.ui.tasklist.viewholders;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import lombok.Getter;
 import skills.future.planer.R;
-import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
-import skills.future.planer.ui.goals.ICustomViewHolder;
+import skills.future.planer.ui.goals.pager.recycler.ICustomViewHolder;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 import skills.future.planer.ui.tasklist.Colors;
 
 @Getter
 public class TaskDataViewHolder extends ICustomViewHolder {
     private final TextView title, date;
-    private final CheckBox checkBox;
+    protected final CheckBox checkBox;
     private final ImageView iconTaskCategory, detailImageView;
     private final CardView cardView;
     private final Context context;
     private final View item;
+    private final TaskDataViewModel taskDataViewModel;
 
-
-    public TaskDataViewHolder(View itemView, Context context) {
+    public TaskDataViewHolder(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
         this.context = context;
         this.item = itemView;
@@ -41,14 +46,17 @@ public class TaskDataViewHolder extends ICustomViewHolder {
         cardView = itemView.findViewById(R.id.colorMarkCardView);
         date = itemView.findViewById(R.id.taskDateTextView);
         detailImageView = itemView.findViewById(R.id.detailImageView);
+        this.taskDataViewModel = new ViewModelProvider(activity).get(TaskDataViewModel.class);
     }
 
     @Override
-    public void setEveryThing(TaskData taskData) {
-        setColor(taskData);
-        setTextTitle(taskData);
-        setIconCategory(taskData);
-        setCheckBoxListener(taskData);
+    public void setEveryThing(MixedRecyclerElement element) {
+        if (element instanceof TaskData taskData) {
+            setColor(taskData);
+            setTextTitle(taskData);
+            setIconCategory(taskData);
+            setCheckBoxListener(taskData);
+        }
     }
 
     /**
@@ -56,14 +64,31 @@ public class TaskDataViewHolder extends ICustomViewHolder {
      *
      * @param taskData which will be updated
      */
-    private void setCheckBoxListener(TaskData taskData) {
+    protected void setCheckBoxListener(TaskData taskData) {
         checkBox.setChecked(taskData.getStatus());
 
         checkBox.setOnClickListener(e -> {
             taskData.setStatus(checkBox.isChecked());
-            //todo zamioenić ma TaskDataModelView
-            var taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
-            taskDataDao.editOne(taskData);
+
+
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.scalezoom3);
+
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    taskDataViewModel.edit(taskData);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            itemView.startAnimation(animation);
         });
     }
 
@@ -83,7 +108,6 @@ public class TaskDataViewHolder extends ICustomViewHolder {
             color = Colors.getColorFromPreferences("notUrgentNotImportant", getContext());
 
         cardView.setCardBackgroundColor(color);
-//        detailImageView.setImageTintList(ColorStateList.valueOf(color));
         iconTaskCategory.setImageTintList(ColorStateList.valueOf(color));
     }
 
@@ -123,6 +147,5 @@ public class TaskDataViewHolder extends ICustomViewHolder {
             }
         }
     }
-
 
 }

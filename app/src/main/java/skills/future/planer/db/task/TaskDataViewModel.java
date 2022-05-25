@@ -79,11 +79,24 @@ public class TaskDataViewModel extends AndroidViewModel {
     }
 
     /**
+     * Method edit taskData in database
+     *
+     * @param taskData which will be edited
+     */
+    public void edit(TaskData taskData) {
+        mRepository.edit(taskData);
+    }
+
+    /**
      * Delegates deletion to TaskDataRepository
      *
      * @param taskData which will be deleted
      */
     public void deleteTaskData(TaskData taskData) {
         mRepository.deleteTaskData(taskData);
+    }
+
+    public TaskData findById(Long taskId) throws Exception {
+        return mRepository.findById(taskId);
     }
 }

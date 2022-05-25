@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.habit.HabitData;
@@ -33,13 +32,10 @@ public class GoalsDaoTest {
         Context context = ApplicationProvider.getApplicationContext();
         db = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).allowMainThreadQueries().build();
         goalsDao = db.goalsDao();
-        goal = new GoalData("tsego", "asfasf");
+        goal = new GoalData("tsego", "asfasf", LocalDate.of(2022, 1, 1));
         goal.setGoalId(goalsDao.insert(goal));
-        var cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 12);
-        cal.set(Calendar.MINUTE, 0);
         habit = new HabitData("test", "1111111", HabitDuration.Short,
-                LocalDate.of(2022, 1, 1), cal.getTimeInMillis(), goal.getGoalId());
+                LocalDate.of(2022, 1, 1), 12, 0, goal.getGoalId());
         habit.setHabitId(db.habitDao().insert(habit));
         taskData = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent,
                 "test", "", CalendarDay.from(2022, 1, 1), CalendarDay.from(2022, 1, 3), goal.getGoalId());

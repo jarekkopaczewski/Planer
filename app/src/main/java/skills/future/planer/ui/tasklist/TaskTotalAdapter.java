@@ -1,9 +1,9 @@
 package skills.future.planer.ui.tasklist;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +12,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.task.TaskData;
@@ -31,37 +34,45 @@ import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
 
 public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> implements Filterable {
 
     private final LayoutInflater layoutInflater;
-    private final Context context;
+    protected final Context context;
+    private final ComponentActivity activity;
     private List<TaskData> filteredTaskList = new ArrayList<>();
     private List<TaskData> fullTaskList = new ArrayList<>();
+    private List<TaskData> searchList = new ArrayList<>();
+    private List<TaskData> filterList = new ArrayList<>();
     private static final int LAYOUT_SMALL = 0;
     private static final int LAYOUT_BIG = 1;
     private final AtomicInteger positionToChange = new AtomicInteger(-1);
     private final TaskDataViewModel mTaskViewModel;
+    private ArrayList<TaskData> filteredItems = new ArrayList<>();
+    private ArrayList<String> filters = new ArrayList<>();
 
 
-    public TaskTotalAdapter(Context context, TaskDataViewModel mTaskViewModel) {
+    public TaskTotalAdapter(Context context, ComponentActivity activity) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
-        this.mTaskViewModel = mTaskViewModel;
+        this.activity = activity;
+        mTaskViewModel = new ViewModelProvider(activity).get(TaskDataViewModel.class);
     }
 
     @NonNull
     @Override
     public TaskDataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        //noinspection SwitchStatementWithTooFewBranches
         return switch (viewType) {
             case LAYOUT_BIG -> new TaskDataViewHolderExtended(
                     createViewOfItem(parent,
-                            R.layout.fragment_task_in_list_extended), context);
+                            R.layout.fragment_task_in_list_extended), context, activity);
             default -> new TaskDataViewHolder(
                     createViewOfItem(parent,
-                            R.layout.fragment_task_in_list), context);
+                            R.layout.fragment_task_in_list), context, activity);
         };
     }
 
@@ -77,18 +88,18 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         return filteredTaskList.get(position);
     }
 
+    @SneakyThrows
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull TaskDataViewHolder holder, int position) {
         if (filteredTaskList != null) {
             TaskData current = filteredTaskList.get(position);
-            holder.setEveryThing(current);
+            holder.setEveryThing((MixedRecyclerElement) current);
         } else // Covers the case of data not being ready yet.
             holder.getTitle().setText("No Word");
 
         createListenerToExtendView(holder);
-        createListenerToEditButton(holder, position);
-        createListenerToTrashButton(holder, position);
+        //createListenerToCheckBox(holder,position);
     }
 
     /**
@@ -102,10 +113,10 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
             // if no window is open
             if (positionAtomic == -1) {
-                positionToChange.set(holder.getAdapterPosition());
-                this.notifyItemChanged(holder.getAdapterPosition());
+                positionToChange.set(holder.getBindingAdapterPosition());
+                this.notifyItemChanged(holder.getBindingAdapterPosition());
             } else {
-                int adapterPosition = holder.getAdapterPosition();
+                int adapterPosition = holder.getBindingAdapterPosition();
                 this.notifyItemChanged(positionAtomic);
 
                 //if the window is open but we choose another
@@ -119,43 +130,24 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         });
     }
 
-    /**
-     * Creates listener to edit button which starts a TaskListCreatorFragment
-     */
-    protected void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
-        if (holder.itemView.findViewById(R.id.detailImageView) != null)
-            holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
-                    Navigation.findNavController(holder.itemView)
-                            .navigate(TaskListFragmentDirections
-                                    .navToEditTaskListCreatorFragment(fullTaskList.get(position).getTaskDataId())));
-    }
-
-    /**
-     * Creates listener to edit button which starts a TaskListCreatorFragment
-     */
-    protected void createListenerToTrashButton(@NonNull TaskDataViewHolder holder, int position) {
-        if (holder.itemView.findViewById(R.id.trashImageView) != null)
-            holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
-                Animation animation  = AnimationUtils.loadAnimation(context, R.anim.removetask);
-                animation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        var task = fullTaskList.get(position);
-                        mTaskViewModel.deleteTaskData(task);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                holder.itemView.startAnimation(animation);
+    @SuppressLint({"NotifyDataSetChanged"})
+    private void createListenerToCheckBox(@NonNull TaskDataViewHolder holder, int position) {
+        if (holder.itemView.findViewById(R.id.checkBoxTask) != null){
+            var task = fullTaskList.get(position);
+            holder.getCheckBox().setChecked(task.getStatus());
+            holder.itemView.findViewById(R.id.checkBoxTask).setOnClickListener(view -> {
+                task.setStatus(holder.getCheckBox().isChecked());
+                var taskDataDao = AppDatabase.getInstance(context).taskDataTabDao();
+                taskDataDao.editOne(task);
+                try {
+                    CategoryFilter(filters);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                notifyDataSetChanged();
+                //notifyItemChanged(position);
             });
+        }
     }
 
     @Override
@@ -199,6 +191,9 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         TaskCategory category = null;
         Priorities priorities = null;
         TimePriority timePriority = null;
+        int status = -1;
+        //this.filters=filters;
+
 
         //checking which filter is checked
         for (String filter : filters) {
@@ -220,10 +215,18 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             if (filter.equals(Priorities.NotImportant.toString())) {
                 priorities = Priorities.NotImportant;
             }
+            if (filter.equals("NotDone")) {
+                status = 0;
+            }
+            if (filter.equals("Done")) {
+                status = 1;
+            }
         }
 
         //list of filtered tasks
         List<TaskData> list = new ArrayList<>();
+        List<TaskData> list2;
+
 
         //checks which query to execute
         if (category == null && priorities == null && timePriority != null) {
@@ -248,12 +251,25 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(priorities, timePriority, category);
         }
         if (category == null && priorities == null && timePriority == null) {
-            list = fullTaskList;
+            list = AppDatabase.getInstance(context).taskDataTabDao().getTaskData2();
         }
 
-        filteredTaskList = list;
-        notifyDataSetChanged();
+        //checks if filter by status
+        if (status != -1) {
+            if(status==0)
+            list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData(status);
+            else
+                list2 = AppDatabase.getInstance(context).taskDataTabDao().getTaskData_desc(status);
 
+            filterList = list2.stream()
+                    .distinct()
+                    .filter(list::contains)
+                    .collect(Collectors.toList());
+        } else {
+            filterList=list;
+        }
+
+        notifyDataSetChanged();
     }
 
     /**
@@ -276,35 +292,41 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     private class TaskFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+           // CategoryFilter(filters);
             constraint = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
             if (constraint.toString().length() > 0) {
-                ArrayList<TaskData> filteredItems = new ArrayList<>();
 
-                for (int i = 0, l = filteredTaskList.size(); i < l; i++) {
-                    TaskData taskData = filteredTaskList.get(i);
+                for (int i = 0, l = filterList.size(); i < l; i++) {
+                    TaskData taskData = filterList.get(i);
                     if (taskData.getTaskTitleText().toLowerCase().contains(constraint))
                         filteredItems.add(taskData);
-                }
-                result.count = filteredItems.size();
-                result.values = filteredItems;
-            } else {
-                synchronized (this) {
-                    result.values = fullTaskList;
                 }
             }
             return result;
         }
 
         @SuppressLint("NotifyDataSetChanged")
-        @SuppressWarnings("unchecked")
         @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
+        public void publishResults(CharSequence constraint, FilterResults results) {
+
             filteredTaskList.clear();
-            filteredTaskList.addAll((ArrayList<TaskData>) results.values);
+            if(constraint.toString().length() > 0) {
+                filteredTaskList.addAll((ArrayList<TaskData>) filteredItems);
+//                System.out.println("--------------------------------"+ counter++);
+//                System.out.println("Lista filtrów:");
+//                filterList.forEach(s -> System.out.println(s.getTaskTitleText()));
+//                System.out.println("Lista search bar:");
+//                filteredItems.forEach(s -> System.out.println(s.getTaskTitleText()));
+//                System.out.println("Lista ostateczna:");
+//                filteredTaskList.forEach(s -> System.out.println(s.getTaskTitleText()));
+                filteredItems.clear();
+            }else{
+                filteredTaskList.addAll((ArrayList<TaskData>) filterList);
+            }
             notifyDataSetChanged();
         }
-    }
 
 
-}
+
+}}

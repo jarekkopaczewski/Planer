@@ -1,7 +1,6 @@
 package skills.future.planer.db.task;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -10,6 +9,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 
@@ -18,6 +18,11 @@ import skills.future.planer.db.task.enums.priority.TimePriority;
  * Class implement separation of concerns
  */
 public class TaskDataRepository {
+
+    TaskData findById(Long taskId) throws Exception {
+        return taskDataDao.findById(taskId);
+    }
+
     /**
      * Reference to taskDataDao
      */
@@ -33,7 +38,7 @@ public class TaskDataRepository {
      *
      * @param application require to get AppDatabase reference
      */
-    TaskDataRepository(Application application) {
+    public TaskDataRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDataDao = db.taskDataTabDao();
     }
@@ -45,6 +50,15 @@ public class TaskDataRepository {
      */
     void insert(TaskData taskData) {
         taskData.setTaskDataId(taskDataDao.insert(taskData));
+    }
+
+    /**
+     * Method edit taskData in database
+     *
+     * @param taskData which will be edited
+     */
+    public void edit(TaskData taskData) {
+        taskDataDao.editOne(taskData);
     }
 
     /**

@@ -1,74 +1,165 @@
 package skills.future.planer.ui.tasklist;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.stream.Collectors;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
-import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.task.TaskData;
-import skills.future.planer.db.task.TaskDataDao;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
+import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.month.MonthFragment;
 
-
-public class TaskListCreatorFragment extends Fragment {
+public class TaskCreatorActivity extends AppCompatActivity {
 
     private final Calendar endingDayCalendar = Calendar.getInstance(), beginDayCalendar = Calendar.getInstance();
     private TaskData editTask;
     private FragmentTaskListCreatorBinding binding;
-    private TaskDataDao taskDataDao;
     private FloatingActionButton saveButton;
     private EditText endingDateEditText, beginDateEditText, taskTitleEditText, taskDetailsEditText;
     private CalendarDay endingDay, beginDay;
     private SwitchCompat switchDate, switchPriorities, switchTimePriorities, switchCategory;
+    private PowerSpinnerView goalSpinner;
+    private GoalData selectedGoal;
+    private TaskDataViewModel taskDataViewModel;
+    private Bundle parameters;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentTaskListCreatorBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_task_list_creator);
+        binding = FragmentTaskListCreatorBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));
+        taskDataViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
+
+        editTask = new TaskData();
+
+        this.parameters = getIntent().getExtras();
+        setTitle(getString(R.string.task_creator_title));
 
         createEditDateFields();
         createSwitch();
 
-        // save btn
+        // binding
         saveButton = binding.saveCreatorButton;
-
-        // title and details edit texts
+        goalSpinner = binding.goalSpinner;
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
 
         setStartingDateByGlobalDate();
-
         processFabColor();
+        setUpGoals();
 
-        Long taskID = -1L;
-        taskID = getTaskIDFromFragmentArgument(taskID);
-        saveBtnOnClickListenerSetter(taskID);
+        // if parameters != null -> edit == true
+        saveBtnOnClickListenerSetter(parameters != null);
+        if (parameters != null) setUpValuesOnEdit();
+    }
 
-        return root;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) showDialog();
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDialog();
+    }
+
+    private void showDialog() {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+                .setIcon(R.drawable.warning)
+                .setTitle(R.string.exit_activity_warning_1)
+                .setMessage(R.string.exit_activity_warning_2)
+                .setPositiveButton(R.string.agree, (dialog, which) -> finish())
+                .setNegativeButton(R.string.disagree, null)
+                .show();
+    }
+
+    private void setUpValuesOnEdit() {
+        try {
+            if (!parameters.containsKey("goalId")) {
+                editTask = taskDataViewModel.findById(parameters.getLong("taskToEditId"));
+                taskTitleEditText.setText(editTask.getTaskTitleText());
+                taskDetailsEditText.setText(editTask.getTaskDetailsText());
+                switchPriorities.setChecked(editTask.getPriorities() == Priorities.NotImportant);
+                switchTimePriorities.setChecked(editTask.getTimePriority() == TimePriority.NotUrgent);
+                switchCategory.setChecked(editTask.getCategory() == TaskCategory.Work);
+                // ustawianie celi jest w observerze bo szybciej wykonywało się uzypełnianie niż
+                // wczytywała się baza
+                if (editTask.getStartingDate() != 0) {
+                    switchDate.setChecked(true);
+                    var beginDate = editTask.getStartingCalendarDate();
+                    var endingDate = editTask.getEndingCalendarDate();
+                    beginDayCalendar.set(beginDate.getYear(), beginDate.getMonth() - 1, beginDate.getDay());
+                    endingDayCalendar.set(endingDate.getYear(), endingDate.getMonth() - 1, endingDate.getDay());
+                    endingDateEditText.setText(DatesParser.toLocalDate(editTask.getEndingDate())
+                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                    beginDateEditText.setText(DatesParser.toLocalDate(editTask.getStartingDate())
+                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                }
+                setGoal();
+                setTitle(getString(R.string.task_editor_title));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gets goals from database and pass it to spinner
+     * Creates listener to goal selection
+     */
+    private void setUpGoals() {
+        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+
+        goalsViewModel.getAllGoals().observe(this, goalData -> {
+            var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
+            list.add(0, "brak");
+            goalSpinner.setItems(list);
+            try {
+                int selected = parameters.getInt("goalId");
+                goalSpinner.selectItemByIndex(selected + 1);
+            } catch (NullPointerException | IndexOutOfBoundsException exp) {
+                exp.printStackTrace();
+            }
+        });
+
+        goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
+            String goalText = (String) goalSpinner.getText();
+            goalsViewModel.getAllGoals().observe(this, goalData -> selectedGoal =
+                    goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny().orElse(null));
+        });
     }
 
     /**
@@ -117,18 +208,6 @@ public class TaskListCreatorFragment extends Fragment {
     }
 
     /**
-     * Checks is edit of task or create new task
-     */
-    private Long getTaskIDFromFragmentArgument(Long taskID) {
-        if (getArguments() != null) {
-            taskID = (Long) getArguments().get("idTaskToEdit");
-            if (taskID != -1)
-                loadDataFromTask(taskID);
-        }
-        return taskID;
-    }
-
-    /**
      * Creates switch listeners for changing icons
      */
     private void createSwitchIconListeners() {
@@ -155,50 +234,17 @@ public class TaskListCreatorFragment extends Fragment {
     }
 
     /**
-     * Gets TaskData from database, and sets fields of creatorFragment
-     */
-    private void loadDataFromTask(Long taskID) {
-        taskDataDao = AppDatabase.getInstance(this.getContext()).taskDataTabDao();
-        try {
-            editTask = taskDataDao.findById(taskID);
-            taskTitleEditText.setText(editTask.getTaskTitleText());
-            taskDetailsEditText.setText(editTask.getTaskDetailsText());
-
-            // types of task
-            if (editTask.getPriorities() == Priorities.NotImportant)
-                switchPriorities.setChecked(true);
-            if (editTask.getTimePriority() == TimePriority.NotUrgent)
-                switchTimePriorities.setChecked(true);
-            if (editTask.getCategory() == TaskCategory.Work)
-                switchCategory.setChecked(true);
-
-            //dates
-            if (editTask.getStartingDate() != 0) {
-                switchDate.setChecked(true);
-                var beginDate = editTask.getStartingCalendarDate();
-                var endingDate = editTask.getEndingCalendarDate();
-                beginDayCalendar.set(beginDate.getYear(), beginDate.getMonth() - 1, beginDate.getDay());
-                endingDayCalendar.set(endingDate.getYear(), endingDate.getMonth() - 1, endingDate.getDay());
-                updateBeginDateEditText();
-                updateEndingDateEditText();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Changes color of fab button
      */
     private void processFabColor() {
         if (!switchPriorities.isChecked() && !switchTimePriorities.isChecked())
-            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("urgentImportant", getContext())));
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("urgentImportant", this)));
         else if (switchPriorities.isChecked() && !switchTimePriorities.isChecked())
-            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("urgentNotImportant", getContext())));
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("urgentNotImportant", this)));
         else if (!switchPriorities.isChecked() && switchTimePriorities.isChecked())
-            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentImportant", getContext())));
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentImportant", this)));
         else if (switchPriorities.isChecked() && switchTimePriorities.isChecked())
-            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentNotImportant", getContext())));
+            saveButton.setBackgroundTintList(ColorStateList.valueOf(Colors.getColorFromPreferences("notUrgentNotImportant", this)));
     }
 
     /**
@@ -209,23 +255,26 @@ public class TaskListCreatorFragment extends Fragment {
      * But if task is edited
      * listener sends edited TaskData
      */
-    private void saveBtnOnClickListenerSetter(Long taskID) {
+    private void saveBtnOnClickListenerSetter(boolean edit) {
         saveButton.setOnClickListener(view1 -> {
-            AnimateView.animateInOut(saveButton, getContext());
-
+            AnimateView.animateInOut(saveButton, this);
             if (checkTitle(saveButton)) {
                 if (switchDate.isChecked()) {
                     if (checkDateDependency()) {
                         setTaskData();
                         editTask.setEndingCalendarDate(endingDay);
                         editTask.setStartingCalendarDate(beginDay);
-                        sendTaskToDataBase(taskID, view1);
+                        if (selectedGoal != null)
+                            editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
+                        if (goalSpinner.getSelectedIndex() == 0)
+                            editTask.setForeignKeyToGoal(null);
+                        sendTaskToDataBase(edit);
                     }
                 } else {
                     setTaskData();
                     editTask.setEndingDate(0);
                     editTask.setStartingDate(0);
-                    sendTaskToDataBase(taskID, view1);
+                    sendTaskToDataBase(edit);
                 }
             }
         });
@@ -235,8 +284,6 @@ public class TaskListCreatorFragment extends Fragment {
      * Gets data from creator components and sets to task
      */
     private void setTaskData() {
-        if (editTask == null)
-            editTask = new TaskData();
         editTask.setAllDataWithoutDates(
                 switchCategory.isChecked() ? TaskCategory.Work : TaskCategory.Private,
                 switchPriorities.isChecked() ? Priorities.NotImportant : Priorities.Important,
@@ -248,18 +295,11 @@ public class TaskListCreatorFragment extends Fragment {
     /**
      * Sends task to database depending on the creator type
      */
-    private void sendTaskToDataBase(Long taskID, View view1) {
-        //If the task is edited
-        if (taskID != -1)
-            taskDataDao.editOne(editTask);
-        else { //If the task is created
-            Bundle result = new Bundle();
-            result.putParcelable("bundleKey", editTask);
-            getParentFragmentManager().setFragmentResult("requestKey", result);
-        }
-        Navigation.findNavController(view1).navigateUp();
+    private void sendTaskToDataBase(boolean edit) {
+        if (edit) taskDataViewModel.edit(editTask);
+        else taskDataViewModel.insert(editTask);
+        finish();
     }
-
 
     /**
      * Checks title is empty
@@ -268,13 +308,9 @@ public class TaskListCreatorFragment extends Fragment {
      * @return true if title is not empty
      */
     private boolean checkTitle(FloatingActionButton saveButton) {
-        AnimateView.animateInOut(saveButton, getContext());
-
+        AnimateView.animateInOut(saveButton, this);
         if (taskTitleEditText.getText().toString().isEmpty()) {
-            Toast toast = Toast.makeText(this.getContext(),
-                    "Tytuł nie może być pusty!",
-                    Toast.LENGTH_SHORT);
-            toast.show();
+            Toast.makeText(this, R.string.task_title_warning, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -298,13 +334,13 @@ public class TaskListCreatorFragment extends Fragment {
             updateBeginDateEditText();
         };
         beginDateEditText.setOnClickListener(view12 ->
-                new DatePickerDialog(this.getContext(), date2,
+                new DatePickerDialog(this, date2,
                         beginDayCalendar.get(Calendar.YEAR),
                         beginDayCalendar.get(Calendar.MONTH),
                         beginDayCalendar.get(Calendar.DAY_OF_MONTH)
                 ).show());
         endingDateEditText.setOnClickListener(view12 ->
-                new DatePickerDialog(this.getContext(), date,
+                new DatePickerDialog(this, date,
                         endingDayCalendar.get(Calendar.YEAR),
                         endingDayCalendar.get(Calendar.MONTH),
                         endingDayCalendar.get(Calendar.DAY_OF_MONTH)
@@ -315,26 +351,20 @@ public class TaskListCreatorFragment extends Fragment {
      * Updates EndDateEditText
      */
     private void updateEndingDateEditText() {
-        LocalDate date = endingDayCalendar.getTime().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate date = endingDayCalendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         endingDay = CalendarDay.from(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-        String dateString = endingDay.getDay() + "." +
-                endingDay.getMonth() + "." +
-                endingDay.getYear();
-        endingDateEditText.setText(dateString);
+        endingDateEditText.setText(DatesParser.toLocalDate(endingDayCalendar.getTimeInMillis())
+                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
     }
 
     /**
      * Updates BeginDateEditText
      */
     private void updateBeginDateEditText() {
-        LocalDate date = beginDayCalendar.getTime().toInstant()
-                .atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate date = beginDayCalendar.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         beginDay = CalendarDay.from(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-        String dateString = beginDay.getDay() + "." +
-                beginDay.getMonth() + "." +
-                beginDay.getYear();
-        beginDateEditText.setText(dateString);
+        beginDateEditText.setText(DatesParser.toLocalDate(beginDayCalendar.getTimeInMillis())
+                .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
     }
 
     /**
@@ -343,23 +373,16 @@ public class TaskListCreatorFragment extends Fragment {
      * @return true if dates are correct
      */
     private boolean checkDateDependency() {
-
         if (beginDay == null) {
-            Toast.makeText(this.getContext(),
-                    "Data rozpoczęcia zadania nie może być pusta",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.empty_begin_date_error), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (endingDay == null) {
-            Toast.makeText(this.getContext(),
-                    "Data zakończenia zadania nie może być pusta",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.end_date_task_error), Toast.LENGTH_SHORT).show();
             return false;
         }
         if (checkDate(endingDay, beginDay)) {
-            Toast.makeText(this.getContext(),
-                    "Data zakończenia zadania nie może być wcześniej niż data jego rozpoczęcia!",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.wrong_time_selection_error), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -372,10 +395,21 @@ public class TaskListCreatorFragment extends Fragment {
         return firstDate.isBefore(secondDate);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    /**
+     * Find index of task goal
+     */
+    private void setGoal() {
+        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
+        goalsViewModel.getAllGoals().observe(this, goalData -> {
+            var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
+            list.add(0, getString(R.string.empty));
+            goalSpinner.setItems(list);
+            try {
+                goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle()));
+            } catch (NullPointerException exp) {
+                goalSpinner.selectItemByIndex(0);
+            }
+        });
     }
 
     @Override

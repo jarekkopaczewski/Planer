@@ -1,6 +1,7 @@
 package skills.future.planer.ui.day.views.daylist;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +19,7 @@ import skills.future.planer.R;
 import skills.future.planer.databinding.DayTaskListFragmentBinding;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.day.DayFragmentDirections;
+import skills.future.planer.ui.tasklist.TaskCreatorActivity;
 
 public class DayTaskListFragment extends Fragment {
 
@@ -54,7 +54,7 @@ public class DayTaskListFragment extends Fragment {
      */
     private void createList() {
         RecyclerView listDay = binding.listTotalView;
-        taskDayAdapter = new TaskDayAdapter(this.getContext(),mTaskViewModel);
+        taskDayAdapter = new TaskDayAdapter(this.getContext(), getActivity());
         listDay.setAdapter(taskDayAdapter);
         listDay.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -67,9 +67,7 @@ public class DayTaskListFragment extends Fragment {
     private void createListenerForFab() {
         binding.fab.setOnClickListener(view -> {
             AnimateView.animateInOut(binding.fab, getContext());
-            Navigation.findNavController(view)
-                    .navigate(DayFragmentDirections.actionNavDayToTaskListCreatorFragment(-1));
-
+            this.requireContext().startActivity(new Intent(this.getContext(), TaskCreatorActivity.class));
         });
     }
 

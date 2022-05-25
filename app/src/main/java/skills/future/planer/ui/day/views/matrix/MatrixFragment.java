@@ -90,7 +90,7 @@ public class MatrixFragment extends Fragment {
         gd.setAlpha(255);
         backgroundConstrains.get(0).setBackgroundDrawable(gd);
 
-        int[] colors2 = {Colors.getColorFromPreferences("urgentNotImportant", getContext()), 0x00ffffff, 0x00ffffff};
+        int[] colors2 = {Colors.getColorFromPreferences("notUrgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
         gd = new GradientDrawable(GradientDrawable.Orientation.BL_TR, colors2);
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);
@@ -99,7 +99,7 @@ public class MatrixFragment extends Fragment {
         gd.setAlpha(255);
         backgroundConstrains.get(1).setBackgroundDrawable(gd);
 
-        int[] colors3 = {Colors.getColorFromPreferences("notUrgentImportant", getContext()), 0x00ffffff, 0x00ffffff};
+        int[] colors3 = {Colors.getColorFromPreferences("urgentNotImportant", getContext()), 0x00ffffff, 0x00ffffff};
         gd = new GradientDrawable(GradientDrawable.Orientation.TL_BR, colors3);
         gd.setGradientType(RADIAL_GRADIENT);
         gd.setGradientRadius(1000f);

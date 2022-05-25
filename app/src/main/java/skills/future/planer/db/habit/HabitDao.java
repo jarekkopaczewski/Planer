@@ -22,21 +22,30 @@ public interface HabitDao {
     HabitData findById(Long id) throws Exception;
 
     /**
-     * @return all habits from database
+     * @return all habits from database in LiveData
      */
     @Query("SELECT * FROM HabitData")
     LiveData<List<HabitData>> getHabits();
+
+    /**
+     * @return all habits from database
+     */
+    @Query("SELECT * FROM HabitData")
+    List<HabitData> getAllHabitsList();
 
     /**
      * @param date date in long format
      * @return all habits with specified date
      */
     @Query("SELECT * FROM HabitData WHERE :date >= beginDay AND :date <= endDay")
-    LiveData<List<HabitData>> getHabitsByDate(long date);
+    LiveData<List<HabitData>> getHabitDataByDate(long date);
 
-    @Query(" SELECT MIN( notificationTime - :time)" +
-            " FROM HabitData WHERE (notificationTime - :time) >0")
-    Long getNextNotification(long time) throws Exception;
+    /**
+     * @param date date in long format
+     * @return all habits with specified date
+     */
+    @Query("SELECT * FROM HabitData WHERE :date >= beginDay AND :date <= endDay")
+    List<HabitData> getHabitDataByDateList(long date);
 
     /**
      * Method insert given habit to database

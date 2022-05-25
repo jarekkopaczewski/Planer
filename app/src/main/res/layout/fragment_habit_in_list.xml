@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="@color/background"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/taskCard"
+        android:id="@+id/taskCardExtended"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
@@ -28,34 +25,17 @@
             android:layout_height="match_parent"
             android:background="@color/foreground">
 
-            <ImageView
-                android:id="@+id/doneImageViewHabit"
-                android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:layout_marginStart="-5dp"
-                android:layout_marginEnd="-5dp"
-                android:alpha="0.5"
-                android:backgroundTint="@color/imageTintColor"
-                android:scaleType="fitXY"
-                android:translationZ="2dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/line"
-                app:tint="@color/imageTintColor" />
-
             <TextView
-                android:id="@+id/habitTitleTextView"
+                android:id="@+id/habitTitleTextViewExtended"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginBottom="2dp"
                 android:autoSizeTextType="none"
                 android:ellipsize="end"
                 android:fontFamily="@font/signika_regular"
+                android:foregroundGravity="center"
                 android:gravity="center|start"
                 android:maxLines="1"
                 android:paddingStart="5dp"
@@ -64,23 +44,56 @@
                 android:textColor="@color/textColor"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/habitBoxTask"
+                app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorHabitDay"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.086" />
 
-            <CheckBox
-                android:id="@+id/habitBoxTask"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
-                android:buttonTint="@drawable/check_box_tint"
+            <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+                android:id="@+id/circularProgressIndicatorHabit"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                app:direction="clockwise"
+                app:drawDot="false"
+                app:enableProgressAnimation="true"
+                app:gradientEndColor="@color/progress_gradient"
+                app:gradientType="linear"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="TouchTargetSizeCheck" />
+                app:layout_constraintVertical_bias="0.158"
+                app:progressBackgroundColor="@color/progress_background"
+                app:progressCap="round"
+                app:progressColor="@color/second_color_30"
+                app:progressStrokeWidth="2dp"
+                app:textColor="@color/imageTintColor"
+                app:textSize="14sp" />
+
+            <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+                android:id="@+id/circularProgressIndicatorHabitDay"
+                android:layout_width="50dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                app:direction="clockwise"
+                app:drawDot="false"
+                app:enableProgressAnimation="true"
+                app:gradientEndColor="@color/progress_gradient"
+                app:gradientType="sweep"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorHabit"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.159"
+                app:progressBackgroundColor="@color/progress_background"
+                app:progressCap="round"
+                app:progressColor="@color/second_color_30"
+                app:progressStrokeWidth="2dp"
+                app:textColor="@color/imageTintColor"
+                app:textSize="14sp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

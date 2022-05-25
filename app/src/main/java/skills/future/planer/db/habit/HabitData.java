@@ -15,16 +15,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import skills.future.planer.db.DataBaseException;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 
 @Getter
 @Setter
 @Entity
-public class HabitData {
+public class HabitData implements MixedRecyclerElement {
     @PrimaryKey(autoGenerate = true)
     private Long habitId;
     private String title;
@@ -37,7 +37,6 @@ public class HabitData {
      */
     private HabitDuration habitDuration;
     private Long beginDay;
-    @Getter(AccessLevel.PACKAGE)
     private Long endDay;
     /**
      * string with status if habit was done, 1 -was done, 0 -no,
@@ -46,6 +45,7 @@ public class HabitData {
     private String dayChecking;
     private Long foreignKeyToGoal;
     private Long notificationTime;
+    private boolean notification_icon;
 
     public HabitData() {
         title = dayChecking = daysOfWeek = "";
@@ -67,6 +67,8 @@ public class HabitData {
         var cal2 = Calendar.getInstance();
         cal2.set(Calendar.HOUR_OF_DAY, 0);
         cal2.set(Calendar.MINUTE, 0);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
         this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
     }
 
@@ -82,8 +84,10 @@ public class HabitData {
         cal.set(Calendar.HOUR_OF_DAY, hour);
         cal.set(Calendar.MINUTE, minutes);
         var cal2 = Calendar.getInstance();
-        cal2.set(Calendar.HOUR_OF_DAY, 1);
+        cal2.set(Calendar.HOUR_OF_DAY, 0);
         cal2.set(Calendar.MINUTE, 0);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
         this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
         this.foreignKeyToGoal = foreignKeyToGoal;
     }
@@ -164,12 +168,6 @@ public class HabitData {
         return endDay != 0 ? DatesParser.toCalendarDay(endDay) : null;
     }
 
-    public Calendar getNotificationTimeCalendar() {
-        var cal = Calendar.getInstance();
-        cal.setTimeInMillis(notificationTime);
-        return cal;
-    }
-
     /**
      * Method set for givenDay opposite state of accomplish habit
      *
@@ -201,7 +199,7 @@ public class HabitData {
     public boolean isHabitDone(CalendarDay globalSelectedDate) {
         int dif = (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(beginDay),
                 DatesParser.toLocalDate(globalSelectedDate));
-        if (dif >= 0 && dif <= habitDuration.getDaysNumber())
+        if (dif >= 0 && dif < habitDuration.getDaysNumber())
             return dayChecking.charAt(dif) == '1';
         return false;
     }
@@ -222,5 +220,17 @@ public class HabitData {
             endDay = DatesParser.toMilliseconds(DatesParser.toLocalDate(beginDay).plusDays(habitDuration.getDaysNumber() - 1));
             this.habitDuration = habitDuration;
         }
+    }
+
+    public void setNotificationTime(int hours, int minutes) {
+        var cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, hours);
+        cal.set(Calendar.MINUTE, minutes);
+        var cal2 = Calendar.getInstance();
+        cal2.set(Calendar.HOUR_OF_DAY, 0);
+        cal2.set(Calendar.MINUTE, 0);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
+        this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
     }
 }

@@ -37,6 +37,12 @@
     <string name="theme_title">Domyślny motyw aplikacji</string>
     <string name="save_button_description">Zapisz zadanie</string>
     <string name="empty_description"> </string>
+    <string name="confirm_deletion">Potwierdź usunięcie</string>
+    <string name="confirm_deletion_2">Jesteś pewien że checsz usunąć?</string>
+    <string name="yes">Usuń</string>
+    <string name="no">Anuluj</string>
+    <string name="agree">Tak</string>
+    <string name="disagree">Nie</string>
     <string name="large_text">
 
         "Material is the metaphor."
@@ -59,8 +65,35 @@
     <string name="important">Ważne</string>
     <string name="not_urgent">Niepilne</string>
     <string name="not_important">Nieważne</string>
+    <string name="doneTask">Zrobione</string>
+    <string name="notDoneTask">Niezrobione</string>
     <string name="habits">Nawyki</string>
     <string name="habitsTitle">Kreator nawyków</string>
     <string name="habit_error_1">Tytuł nie może być pusty!</string>
     <string name="habit_error_2">Wybierz przynajmniej jeden dzień!</string>
+    <string name="local_service_started">start</string>
+    <string name="title_of_notification_singular">Przypomnienie o nawyku</string>
+    <string name="time_of_realization_habit">Czas na realizację twojego nawyku: </string>
+    <string name="title_reminder_about_habit_singular">Przypomnienie o niepotwierdzonym nawyku</string>
+    <string name="title_reminder_about_habit_plural">Przypomnienie o niepotwierdzonych nawykach</string>
+    <string name="reminder_about_habit_singular">Dzień zbliża się ku końcowi, a dalej masz niezrealizowny nawyk</string>
+    <string name="reminder_about_habit_plural">Dzień zbliża się ku końcowi, a dalej masz niezrealizowne nawyki</string>
+    <string name="reminder_too_many_habits">Masz za dużo nawyków!</string>
+    <string name="goalCreatorTitleHint">Nazwa celu</string>
+    <string name="goalCreatorDetailsHint">Opis celu</string>
+    <string name="dateOfBeginGoalCreatorHint">data zakończenia celu</string>
+    <string name="goalCreatorDateLabel">Data zakończenia celu:</string>
+    <string name="GoalListHabitsAndTasksLabel">Nawyki i zadania:</string>
+    <string name="goalText">Cel</string>
+    <string name="choiceGoalText">Wybierz cel:</string>
+    <string name="noneGoal">brak</string>
+    <string name="task_creator_title">Kreator zadań</string>
+    <string name="task_title_warning">Tytuł nie może być pusty!</string>
+    <string name="task_editor_title">Edytor Zadań</string>
+    <string name="empty_begin_date_error">Data rozpoczęcia zadania nie może być pusta</string>
+    <string name="end_date_task_error">Data zakończenia zadania nie może być pusta</string>
+    <string name="wrong_time_selection_error">Data zakończenia zadania nie może być wcześniej niż data jego rozpoczęcia!</string>
+    <string name="empty">brak</string>
+    <string name="exit_activity_warning_1">Dane nie zostały zapisane!</string>
+    <string name="exit_activity_warning_2">Na pewno chcesz wyjść z edytora?</string>
 </resources>

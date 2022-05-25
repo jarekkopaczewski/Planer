@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="menus">
-        <item>@drawable/task_list</item>
-        <item>@drawable/routine</item>
+        <item>@drawable/tas_add</item>
+        <item>@drawable/habit_add</item>
+        <item>@drawable/goal_add</item>
     </array>
 
     <array name="menu_back_colors">
         <item>@color/second_color_30</item>
-        <item>@color/second_color_30</item>
+        <item>@color/f1</item>
+        <item>@color/f4</item>
     </array>
 
 </resources>

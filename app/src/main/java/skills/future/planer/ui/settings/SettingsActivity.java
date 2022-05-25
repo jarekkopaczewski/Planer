@@ -1,23 +1,21 @@
 package skills.future.planer.ui.settings;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.ListPreference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import java.util.Objects;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.SettingsActivityBinding;
-import skills.future.planer.ui.habit.HabitCreatorActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String KEY_PREF_THEME = "themes";
+    public static final String KEY_PREF_TIME = "time_picker";
     private SettingsActivityBinding binding;
 
     @Override
@@ -26,6 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         binding = SettingsActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
 
         // change navigation bar color
         getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));
@@ -44,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
+    public static class SettingsFragment extends me.philio.preferencecompatextended.PreferenceFragmentCompat {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -57,11 +56,12 @@ public class SettingsActivity extends AppCompatActivity {
          * gets value and sets theme value
          */
         private void setTheme() {
-            ListPreference listPreference = findPreference("themes");
+            ListPreference listPreference = findPreference(KEY_PREF_THEME);
             Objects.requireNonNull(listPreference).setOnPreferenceChangeListener((preference, newValue) -> {
                 AppCompatDelegate.setDefaultNightMode(Integer.parseInt((String) newValue));
                 return true;
             });
         }
+
     }
 }

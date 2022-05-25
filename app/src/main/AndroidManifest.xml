@@ -2,12 +2,35 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="skills.future.planer">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Planer">
+        <activity
+            android:name=".ui.tasklist.TaskCreatorActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.goals.creator.GoalsCreatorActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <service
+            android:name=".notification.NotificationService"
+            android:exported="false"
+            android:launchMode="singleTop" />
+
         <activity
             android:name=".SplashActivity"
             android:exported="true">
@@ -36,8 +59,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Planer.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.Planer.NoActionBar" />
     </application>
 
 </manifest>

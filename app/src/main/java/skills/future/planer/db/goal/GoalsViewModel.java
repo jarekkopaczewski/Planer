@@ -8,16 +8,23 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.habit.HabitRepository;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataRepository;
 
 public class GoalsViewModel extends AndroidViewModel {
     private final GoalRepository goalRepository;
+    private final HabitRepository habitRepository;
+    private final TaskDataRepository taskDataRepository;
 
     public GoalsViewModel(@NonNull Application application) {
         super(application);
         goalRepository = new GoalRepository(application);
+        this.habitRepository = new HabitRepository(application);
+        this.taskDataRepository = new TaskDataRepository(application);
     }
 
     /**
@@ -27,12 +34,20 @@ public class GoalsViewModel extends AndroidViewModel {
         return goalRepository.getAllGoals();
     }
 
-    public LiveData<Map<GoalData, List<HabitData>>> getHabitsFromGoal(Long goalId) {
+    public LiveData<Map<GoalData, HabitData>> getHabitsFromGoal(Long goalId) {
         return goalRepository.getHabitsFromGoal(goalId);
     }
 
     public LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId) {
         return goalRepository.getTasksFromGoal(goalId);
+    }
+
+    public Map<GoalData, HabitData> getHabitsFromGoalWithoutLiveData(Long goalId) {
+        return goalRepository.getHabitsFromGoalWithoutLiveData(goalId);
+    }
+
+    public Map<GoalData, List<TaskData>> getTasksFromGoalWithoutLiveData(Long goalId) {
+        return goalRepository.getTasksFromGoalWithoutLiveData(goalId);
     }
 
     /**
@@ -59,10 +74,28 @@ public class GoalsViewModel extends AndroidViewModel {
      * @param goalData which will be deleted
      */
     public void delete(GoalData goalData) {
+        var habitMap = getHabitsFromGoalWithoutLiveData(goalData.getGoalId());
+        habitMap.values().stream()
+                .filter(habitData -> habitData.getForeignKeyToGoal().equals(goalData.getGoalId()))
+                .forEach(habitData -> {
+                    habitData.setForeignKeyToGoal(null);
+                    habitRepository.edit(habitData);
+                });
+        var taskMap = getTasksFromGoalWithoutLiveData(goalData.getGoalId());
+        try {
+            Objects.requireNonNull(taskMap.get(goalData)).stream()
+                    .filter(taskData -> taskData.getForeignKeyToGoal().equals(goalData.getGoalId()))
+                    .forEach(taskData -> {
+                        taskData.setForeignKeyToGoal(null);
+                        taskDataRepository.edit(taskData);
+                    });
+        } catch (NullPointerException exp) {
+            exp.printStackTrace();
+        }
         goalRepository.delete(goalData);
     }
 
-    public GoalData findById(Long goalId) throws Exception {
+    public GoalData findById(Long goalId) {
         return goalRepository.findById(goalId);
     }
 }

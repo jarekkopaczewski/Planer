@@ -12,7 +12,7 @@ public class HabitRepository {
     private final HabitDao habitDao;
     private LiveData<List<HabitData>> liveListHabits;
 
-    HabitRepository(Application application) {
+    public HabitRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         this.habitDao = db.habitDao();
     }
@@ -20,32 +20,48 @@ public class HabitRepository {
     /**
      * @return reference to list of all habits
      */
-    LiveData<List<HabitData>> getAllHabits() {
+    public LiveData<List<HabitData>> getAllHabits() {
         if (liveListHabits == null)
             liveListHabits = habitDao.getHabits();
         return liveListHabits;
     }
 
     /**
+     * @return list of all habits
+     */
+    public List<HabitData> getAllHabitsList() {
+        return habitDao.getAllHabitsList();
+    }
+
+    /**
      * @return references to the habit list based on day
      */
-    LiveData<List<HabitData>> getAllHabitDataFromDay(long date) {
-        return habitDao.getHabitsByDate(date);
+    public LiveData<List<HabitData>> getAllHabitDataFromDay(long date) {
+        return habitDao.getHabitDataByDate(date);
+    }
+
+    /**
+     * @return references to the habit list based on day
+     */
+    public List<HabitData> getAllHabitDataFromDayList(long date) {
+        return habitDao.getHabitDataByDateList(date);
     }
 
     /**
      * Method insert habit to database
+     *
      * @param habitData which will be inserted
      */
-    void insert(HabitData habitData){
+    public void insert(HabitData habitData) {
         habitData.setHabitId(habitDao.insert(habitData));
     }
 
     /**
      * Method edit habit in database
+     *
      * @param habitData which will be updated
      */
-    void edit(HabitData habitData){
+    public void edit(HabitData habitData) {
         habitDao.editOne(habitData);
     }
 
@@ -54,7 +70,7 @@ public class HabitRepository {
      *
      * @param habitData which will be deleted
      */
-    void delete(HabitData habitData) {
+    public void delete(HabitData habitData) {
         habitDao.deleteOne(habitData);
     }
 

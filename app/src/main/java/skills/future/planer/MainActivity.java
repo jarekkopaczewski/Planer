@@ -1,9 +1,13 @@
 package skills.future.planer;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,17 +27,25 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import java.util.Calendar;
 
+import lombok.SneakyThrows;
 import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.habit.HabitDao;
+import skills.future.planer.notification.NotificationService;
 import skills.future.planer.ui.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
+
 
     private static BottomNavigationView bottomView;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private NavigationView navigationView;
+    private int numberOfNotDoneHabits;
+
 
     /**
      * Displays version of application in "Settings menu"
@@ -48,11 +60,48 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if habit has to be completed - shows notification on bottom bar and in habit list
+     */
+    private void checkHabitDotNotification(BottomNavigationView bottomView, AppDatabase appDatabase) {
+        numberOfNotDoneHabits = 0;
+        var cal2 = Calendar.getInstance();
+        cal2.set(Calendar.HOUR_OF_DAY, 0);
+        cal2.set(Calendar.MINUTE, 0);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
+        HabitDao habitDao = appDatabase.habitDao();
+        habitDao.getHabitDataByDate(Calendar.getInstance().getTimeInMillis())
+                .observe((this), habitDataList -> {
+                    habitDataList.forEach(habitData -> {
+                        if (!habitData.isHabitDone(CalendarDay.today()) &&
+                                habitData.getNotificationTime() < (Calendar.getInstance().getTimeInMillis()) - cal2.getTimeInMillis()) {
+                            numberOfNotDoneHabits++;
+                            if (!habitData.isNotification_icon()) {
+                                habitData.setNotification_icon(true);
+                                appDatabase.habitDao().editOne(habitData);
+                            }
+                        }
+                    });
+                    var badge = bottomView.getOrCreateBadge(R.id.nav_day);
+                    if (numberOfNotDoneHabits > 0) {
+                        badge.setNumber(numberOfNotDoneHabits);
+                        badge.setVisible(true);
+                        numberOfNotDoneHabits = 0;
+                    } else {
+                        badge.setVisible(false);
+                    }
+                });
+    }
+
+    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         themePreferences();
+
+        createService();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -61,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         navigationView = binding.navView;
         bottomView = binding.appBarMain.bottomBar;
+
         MaterialToolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,13 +126,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
+
         // set up bottom bar
+        checkHabitDotNotification(bottomView, appDatabase);
         AppBarConfiguration bottomAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_month, R.id.nav_day, R.id.nav_task_list).build();
         NavController bottomNavController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, bottomNavController, bottomAppBarConfiguration);
         NavigationUI.setupWithNavController(bottomView, bottomNavController);
-
-        AppDatabase appDatabase = AppDatabase.getInstance(this);
 
         // change navigation bar color
         getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));
@@ -97,8 +148,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // set/read settings
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //startService(new Intent(this, NotificationService.class));
+    }
 
+    // set/read settings
     private void themePreferences() {
         PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -134,4 +190,27 @@ public class MainActivity extends AppCompatActivity {
     public static BottomNavigationView getBottomView() {
         return bottomView;
     }
+
+    /**
+     * Binding service to run in background
+     */
+    private NotificationService notificationService;
+
+    private void createService() {
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        startService(serviceIntent);
+        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            notificationService = ((NotificationService.LocalBinder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            notificationService = null;
+        }
+    };
 }

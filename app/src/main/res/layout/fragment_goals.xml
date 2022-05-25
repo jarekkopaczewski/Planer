@@ -10,29 +10,85 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/totalGoalList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="2dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:scrollbars="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView11" />
 
     <TextView
         android:id="@+id/pagerCountText"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
         android:fontFamily="@font/signika_regular"
         android:gravity="center|start"
         android:paddingStart="17dp"
-        app:layout_constraintBottom_toTopOf="@+id/totalGoalList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:alpha="0.15"
+        android:backgroundTint="@color/imageTintColor_2"
+        android:rotation="180"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pagerCountText"
+        app:srcCompat="@drawable/shadow"
+        tools:ignore="ContentDescription" />
+
+    <com.akki.circlemenu.CircleMenu
+        android:id="@+id/FABMenu"
+        android:layout_width="70dp"
+        android:layout_height="300dp"
+        android:foregroundTint="@color/imageTintColor"
+        android:padding="5dp"
+        app:barrierMargin="10dp"
+        app:distance="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.98"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_goneMarginBottom="10dp"
+        app:menuIcon="plus"
+        app:menu_background_color="@array/menu_back_colors"
+        app:menu_close_duration="300"
+        app:menu_icons="@array/menus"
+        app:menu_open_duration="400"
+        app:menu_orientation="vertical"
+        app:menu_radius="75dp" />
+
+    <!--    <com.imangazaliev.circlemenu.CircleMenu
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        app:buttonColors="@array/menu_back_colors"
+        app:buttonIcons="@array/menus"
+        app:centerButtonColor="?colorAccent"
+        app:centerButtonIconColor="#ffffff"
+        app:distance="120dp"
+        app:iconsColor="?colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxAngle="140"
+        app:menuIcon="plus"
+        app:showSelectAnimation="false"
+        app:startAngle="-180" />-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
