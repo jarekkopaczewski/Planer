@@ -3,6 +3,7 @@ package skills.future.planer.ui.tasklist;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
 public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> implements Filterable {
 
     private final LayoutInflater layoutInflater;
-    private final Context context;
+    protected final Context context;
     private final ComponentActivity activity;
     private List<TaskData> filteredTaskList = new ArrayList<>();
     private List<TaskData> fullTaskList = new ArrayList<>();
@@ -98,10 +99,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             holder.getTitle().setText("No Word");
 
         createListenerToExtendView(holder);
-        createListenerToEditButton(holder, position);
-        createListenerToTrashButton(holder, position);
         //createListenerToCheckBox(holder,position);
-
     }
 
     /**
@@ -132,55 +130,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         });
     }
 
-    /**
-     * Creates listener to edit button which starts a TaskListCreatorFragment
-     */
-    protected void createListenerToEditButton(@NonNull TaskDataViewHolder holder, int position) {
-        if (holder.itemView.findViewById(R.id.detailImageView) != null)
-            holder.itemView.findViewById(R.id.detailImageView).setOnClickListener(e ->
-                    Navigation.findNavController(holder.itemView)
-                            .navigate(TaskListFragmentDirections
-                                    .navToEditTaskListCreatorFragment(filteredTaskList.get(position).getTaskDataId())));
-    }
-
-    /**
-     * Creates listener to edit button which starts a TaskListCreatorFragment
-     */
-    protected void createListenerToTrashButton(@NonNull TaskDataViewHolder holder, int position) {
-        if (holder.itemView.findViewById(R.id.trashImageView) != null)
-            holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> {
-                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
-
-                builder.setTitle(R.string.confirm_deletion);
-                builder.setMessage(R.string.confirm_deletion_2);
-                builder.setPositiveButton(R.string.yes, (dialog, which) -> {
-                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        var task = fullTaskList.get(position);
-                        mTaskViewModel.deleteTaskData(task);
-                    }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    });
-                    holder.itemView.startAnimation(animation);
-                    dialog.dismiss();
-                });
-                builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss());
-                AlertDialog alert = builder.create();
-                alert.show();
-            });
-    }
-
     @SuppressLint({"NotifyDataSetChanged"})
     private void createListenerToCheckBox(@NonNull TaskDataViewHolder holder, int position) {
         if (holder.itemView.findViewById(R.id.checkBoxTask) != null){
@@ -200,7 +149,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
             });
         }
     }
-
 
     @Override
     public int getItemViewType(int position) {

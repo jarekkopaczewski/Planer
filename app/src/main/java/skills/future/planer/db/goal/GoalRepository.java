@@ -31,7 +31,7 @@ public class GoalRepository {
         return goalsDao.getHabitsFromGoal(goalId);
     }
 
-    LiveData<Map<GoalData, TaskData>> getTasksFromGoal(Long goalId) {
+    LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId) {
         return goalsDao.getTasksFromGoal(goalId);
     }
 
@@ -39,7 +39,7 @@ public class GoalRepository {
         return goalsDao.getHabitsFromGoalWithoutLiveData(goalId);
     }
 
-    Map<GoalData, TaskData> getTasksFromGoalWithoutLiveData(Long goalId) {
+    Map<GoalData, List<TaskData>> getTasksFromGoalWithoutLiveData(Long goalId) {
         return goalsDao.getTasksFromGoalWithoutLiveData(goalId);
     }
 

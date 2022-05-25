@@ -1,7 +1,9 @@
 package skills.future.planer.ui.goals.creator;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -50,8 +53,11 @@ public class GoalsCreatorActivity extends AppCompatActivity {
 
         setUpFields(binding);
 
+        setTitle("Kreator celów");
+
         var goalsIdToEdit = getIntent().getExtras();
         if (goalsIdToEdit != null) {
+            setTitle("Edytor celów");
             var goal = goalsViewModel.findById(goalsIdToEdit.getLong("goalIdToEdit"));
             titleEditText.setText(goal.getTitle());
             detailEditText.setText(goal.getDetails());
@@ -64,6 +70,29 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             saveFABSetUp();
         }
         editTextDateGoal.setText(formatterDate.format(calendar.getTime()));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            showDialog();
+        }
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDialog();
+    }
+
+    private void showDialog() {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+                .setIcon(R.drawable.warning)
+                .setTitle(R.string.exit_activity_warning_1)
+                .setMessage(R.string.exit_activity_warning_2)
+                .setPositiveButton(R.string.agree, (dialog, which) -> finish())
+                .setNegativeButton(R.string.disagree, null)
+                .show();
     }
 
     private void setUpFields(ActivityGoalsCreatorBinding binding) {

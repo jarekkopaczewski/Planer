@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import skills.future.planer.R;
@@ -20,6 +19,7 @@ import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.goals.pager.GoalTotalAdapter;
 import skills.future.planer.ui.habit.HabitCreatorActivity;
+import skills.future.planer.ui.tasklist.TaskCreatorActivity;
 
 public class GoalsFragment extends Fragment {
     private FragmentGoalsBinding binding;
@@ -33,16 +33,25 @@ public class GoalsFragment extends Fragment {
 
         ViewPager2 totalGoalList = binding.totalGoalList;
         pagerCountText = binding.pagerCountText;
+        pagerCountText.setText("Cel: 0/0");
 
         binding.FABMenu.setOnMenuItemClickListener(id -> {
             switch (id) {
-                case R.drawable.habit_add -> this.requireContext().startActivity(
-                        new Intent(this.getContext(), HabitCreatorActivity.class));
-                case R.drawable.tas_add -> Navigation.findNavController(root)
-                        .navigate(GoalsFragmentDirections
-                                .actionNavHomeToTaskListCreatorFragment(-1));
-                case R.drawable.goal_add -> this.requireContext().startActivity(
-                        new Intent(this.requireContext(), GoalsCreatorActivity.class));
+                case R.drawable.habit_add -> {
+                    var intent = new Intent(this.getContext(), HabitCreatorActivity.class);
+                    var bundle = new Bundle();
+                    bundle.putInt("goalId", (int) totalGoalList.getCurrentItem());
+                    intent.putExtras(bundle);
+                    this.getContext().startActivity(intent);
+                }
+                case R.drawable.tas_add -> {
+                    var intent = new Intent(this.getContext(), TaskCreatorActivity.class);
+                    var bundle = new Bundle();
+                    bundle.putInt("goalId", (int) totalGoalList.getCurrentItem());
+                    intent.putExtras(bundle);
+                    this.getContext().startActivity(intent);
+                }
+                case R.drawable.goal_add -> this.requireContext().startActivity(new Intent(this.requireContext(), GoalsCreatorActivity.class));
             }
         });
 

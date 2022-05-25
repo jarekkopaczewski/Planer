@@ -8,11 +8,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,6 +29,7 @@ import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.task.TaskData;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
@@ -180,22 +185,28 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
 
     @SuppressLint("NotifyDataSetChanged")
     private void createListenerToTrashButton(@NonNull ICustomViewHolder holder) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        builder.setTitle("Potwierdź usunięcie");
-        builder.setMessage("Jesteś pewien, że chcesz usunać?");
-
-        builder.setPositiveButton("Usuń", (dialog, which) -> {
-            var view = new ViewModelProvider(activity).get(GoalsViewModel.class);
-
-            new ViewModelProvider(activity).get(GoalsViewModel.class).delete(goalData);
-            dialog.dismiss();
+        var view =  holder.itemView.findViewById(R.id.trashImageView);
+        view.setOnClickListener(e -> {
+            new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+                    .setIcon(R.drawable.warning)
+                    .setTitle(R.string.confirm_deletion)
+                    .setMessage(R.string.confirm_deletion_2)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        Animation animation = AnimationUtils.loadAnimation(context, R.anim.zoomout);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {}
+                            @Override
+                            public void onAnimationEnd(Animation animation) { new ViewModelProvider(activity).get(GoalsViewModel.class).delete(goalData); }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {}
+                        });
+                        holder.itemView.startAnimation(animation);
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+                    .show();
         });
-
-        builder.setNegativeButton("Anuluj", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog alert = builder.create();
-        holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> alert.show());
     }
 
     @SuppressLint("NotifyDataSetChanged")

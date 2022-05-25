@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitRepository;
@@ -37,7 +38,7 @@ public class GoalsViewModel extends AndroidViewModel {
         return goalRepository.getHabitsFromGoal(goalId);
     }
 
-    public LiveData<Map<GoalData, TaskData>> getTasksFromGoal(Long goalId) {
+    public LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId) {
         return goalRepository.getTasksFromGoal(goalId);
     }
 
@@ -45,7 +46,7 @@ public class GoalsViewModel extends AndroidViewModel {
         return goalRepository.getHabitsFromGoalWithoutLiveData(goalId);
     }
 
-    public Map<GoalData, TaskData> getTasksFromGoalWithoutLiveData(Long goalId) {
+    public Map<GoalData, List<TaskData>> getTasksFromGoalWithoutLiveData(Long goalId) {
         return goalRepository.getTasksFromGoalWithoutLiveData(goalId);
     }
 
@@ -81,12 +82,16 @@ public class GoalsViewModel extends AndroidViewModel {
                     habitRepository.edit(habitData);
                 });
         var taskMap = getTasksFromGoalWithoutLiveData(goalData.getGoalId());
-        taskMap.values().stream()
-                .filter(taskData -> taskData.getForeignKeyToGoal().equals(goalData.getGoalId()))
-                .forEach(taskData -> {
-                    taskData.setForeignKeyToGoal(null);
-                    taskDataRepository.edit(taskData);
-                });
+        try {
+            Objects.requireNonNull(taskMap.get(goalData)).stream()
+                    .filter(taskData -> taskData.getForeignKeyToGoal().equals(goalData.getGoalId()))
+                    .forEach(taskData -> {
+                        taskData.setForeignKeyToGoal(null);
+                        taskDataRepository.edit(taskData);
+                    });
+        } catch (NullPointerException exp) {
+            exp.printStackTrace();
+        }
         goalRepository.delete(goalData);
     }
 

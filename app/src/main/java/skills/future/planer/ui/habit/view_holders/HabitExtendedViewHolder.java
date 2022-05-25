@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import lombok.Getter;
 import skills.future.planer.R;
@@ -22,6 +25,7 @@ import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
+import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 import skills.future.planer.ui.habit.HabitCreatorActivity;
 
@@ -106,19 +110,26 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
     }
 
     private void createListenerToTrashButton(HabitData habitData) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        builder.setTitle("Confirm deletion");
-        builder.setMessage("Are you sure?");
-
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            new ViewModelProvider(activity).get(HabitViewModel.class).delete(habitData);
-            dialog.dismiss();
+        imageTrash.setOnClickListener(e -> {
+            new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+                    .setIcon(R.drawable.warning)
+                    .setTitle(R.string.confirm_deletion)
+                    .setMessage(R.string.confirm_deletion_2)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
+                        animation.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {}
+                            @Override
+                            public void onAnimationEnd(Animation animation) { new ViewModelProvider(activity).get(HabitViewModel.class).delete(habitData); }
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {}
+                        });
+                        this.itemView.startAnimation(animation);
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+                    .show();
         });
-
-        builder.setNegativeButton("No", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog alert = builder.create();
-        imageTrash.setOnClickListener(e -> alert.show());
     }
 }
