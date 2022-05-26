@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
@@ -15,12 +16,13 @@ import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.tools.DatesParser;
+import skills.future.planer.ui.month.MonthFragment;
 
 public class HabitDayViewModel extends ViewModel {
     private static HabitViewModel habitViewModel;
     private static HabitTotalAdapter habitTotalAdapter;
     private static LifecycleOwner viewLifecycleOwner;
-    private static CircularProgressIndicator circularProgressIndicator;
+    private static CircularProgressIndicator progressBar;
     private static Context context;
 
 
@@ -29,27 +31,27 @@ public class HabitDayViewModel extends ViewModel {
      */
     public void updateDate(CalendarDay date) {
         habitViewModel.getAllHabitDataFromDay(date)
-                .observe(viewLifecycleOwner, habits -> habitTotalAdapter.setHabitsList(
-                        habits.stream().filter(habitData -> habitData
-                                .isDayOfWeekChecked(DatesParser.toLocalDate(date)))
-                                .collect(Collectors.toList())));
+                .observe(viewLifecycleOwner, habits -> {
 
-        habitViewModel.getAllHabitDataFromDay(date).observe(
-                viewLifecycleOwner, habitData -> {
-                    Integer progressDone = 0;
-                    Integer progressAll = 0;
-                    for (HabitData habit : habitData.stream().filter(habits -> habits
-                            .isDayOfWeekChecked(DatesParser.toLocalDate(date)))
-                            .collect(Collectors.toList())) {
-                        progressDone += (habit.isHabitDone(date) ? 1 : 0);
-                        progressAll += 1;
+                    List<HabitData> list = habits.stream().filter(habitData -> habitData
+                                    .isDayOfWeekChecked(DatesParser.toLocalDate(date)))
+                            .collect(Collectors.toList());
+
+                    float value = (list.stream()
+                            .filter(h -> h.isHabitDone(MonthFragment.getGlobalSelectedDate())).count()
+                            / (float) list.size()) * 100f;
+
+                    progressBar.setCurrentProgress(value);
+
+                    if (value <= 40.0f) {
+                        progressBar.setProgressColor(ContextCompat.getColor(context, R.color.bad));
+                    } else if (value <= 75.0f) {
+                        progressBar.setProgressColor(ContextCompat.getColor(context, R.color.mid));
+                    } else {
+                        progressBar.setProgressColor(ContextCompat.getColor(context, R.color.good));
                     }
-                    if (progressAll > 0.5)
-                        circularProgressIndicator.setProgress(((double) progressDone / progressAll) * 100.0f, 100f);
-                    else
-                        circularProgressIndicator.setProgress(100.0f, 100f);
 
-                    System.out.println(circularProgressIndicator);
+                    habitTotalAdapter.setHabitsList(list);
                 });
     }
 
@@ -77,13 +79,11 @@ public class HabitDayViewModel extends ViewModel {
         HabitDayViewModel.habitTotalAdapter = habitTotalAdapter;
     }
 
-    public void setCircularProgress(CircularProgressIndicator circularProgressIndicator) {
-        HabitDayViewModel.circularProgressIndicator = circularProgressIndicator;
-        circularProgressIndicator.setProgressColor(ContextCompat.getColor(context, R.color.mid));
+    public void setContext(Context context) {
+        HabitDayViewModel.context = context;
     }
 
-    public void setContext(Context context)
-    {
-        HabitDayViewModel.context = context;
+    public static void setProgressBar(CircularProgressIndicator progressBar) {
+        HabitDayViewModel.progressBar = progressBar;
     }
 }
