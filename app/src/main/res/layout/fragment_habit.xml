@@ -46,10 +46,7 @@
             app:drawDot="false"
             app:enableProgressAnimation="true"
             app:gradientEndColor="@color/progress_gradient"
-            app:gradientType="linear"
             app:progressBackgroundColor="@color/progress_background"
-            app:progressCap="round"
-            app:progressColor="@color/second_color_30"
             app:progressStrokeWidth="30dp"
             app:textColor="@color/imageTintColor"
             app:textSize="40sp" />
