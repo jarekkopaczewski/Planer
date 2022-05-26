@@ -62,40 +62,17 @@ public class HabitFragment extends Fragment {
 
         setUpProgressIndicator();
         habitDayViewModel.setCircularProgress(circularProgressIndicator);
-
+        habitDayViewModel.setStatus(binding.textView5);
         return binding.getRoot();
     }
 
     private void setUpProgressIndicator() {
         AnimateView.singleAnimation(circularProgressIndicator, getContext(), R.anim.scalezoom2);
 
-        /// set observer if sth on habitList was changed
-//        habitViewModel.getAllHabitDataFromDay(MonthFragment.getGlobalSelectedDate()).observe(
-//                this.getViewLifecycleOwner(), habitData -> {
-//                    Integer progressDone = 0;
-//                    Integer progressAll = 0;
-//                    for (HabitData habit : habitData.stream().filter(habits -> habits
-//                            .isDayOfWeekChecked(DatesParser.toLocalDate(MonthFragment.getGlobalSelectedDate())))
-//                            .collect(Collectors.toList())) {
-//                        progressDone += (habit.isHabitDone(MonthFragment.getGlobalSelectedDate()) ? 1 : 0);
-//                        progressAll += 1;
-//                    }
-//                    if (progressAll > 0.5)
-//                    {
-//                        circularProgressIndicator.setCurrentProgress(((double) progressDone / progressAll) * 100.0f);
-//                        System.out.println(circularProgressIndicator.getProgress());
-//                    }
-//                    else
-//                        circularProgressIndicator.setCurrentProgress(100.0f);
-//
-//                    updateColor();
-//                });
-
         circularProgressIndicator.setMaxProgress(100.0f);
         circularProgressIndicator.animate();
         circularProgressIndicator.setProgressTextAdapter(new TextAdapter());
 
-        System.out.println(circularProgressIndicator);
 
         circularProgressIndicator.setOnProgressChangeListener((e, f)->{
             if (e <= 40.0f) {
@@ -107,28 +84,6 @@ public class HabitFragment extends Fragment {
             }
         });
     }
-
-//    public void updateColor()
-//    {
-//        System.out.println("Fragment observwer");
-//        System.out.println(circularProgressIndicator.getProgress());
-//
-//        if (circularProgressIndicator.getProgress() <= 40.0f)
-//        {
-//            circularProgressIndicator.setProgressColor(ContextCompat.getColor(context, R.color.bad));
-//            System.out.println(ContextCompat.getColor(context, R.color.bad));
-//        }
-//        else if (circularProgressIndicator.getProgress() <= 75.0f)
-//        {
-//            circularProgressIndicator.setProgressColor(ContextCompat.getColor(context, R.color.mid));
-//            System.out.println(ContextCompat.getColor(context, R.color.mid));
-//        }
-//        else
-//        {
-//            circularProgressIndicator.setProgressColor(ContextCompat.getColor(context, R.color.good));
-//            System.out.println(ContextCompat.getColor(context, R.color.good));
-//        }
-//    }
 
     @Override
     public void onResume() {
