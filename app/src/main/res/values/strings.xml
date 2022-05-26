@@ -96,5 +96,5 @@
     <string name="empty">brak</string>
     <string name="exit_activity_warning_1">Dane nie zostały zapisane!</string>
     <string name="exit_activity_warning_2">Na pewno chcesz wyjść z edytora?</string>
-    <string name="day_habit_no_habits_info">Brak nawyków tego dnia</string>
+    <string name="day_habit_no_habits_info">Nie posiadasz dzisiaj żadnych nawyków</string>
 </resources>
