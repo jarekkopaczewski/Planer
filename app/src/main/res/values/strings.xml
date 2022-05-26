@@ -82,7 +82,7 @@
     <string name="goalCreatorTitleHint">Nazwa celu</string>
     <string name="goalCreatorDetailsHint">Opis celu</string>
     <string name="dateOfBeginGoalCreatorHint">data zakończenia celu</string>
-    <string name="goalCreatorDateLabel">Data zakończenia celu:</string>
+    <string name="goalCreatorDateLabel">Data osiągnięcia celu:</string>
     <string name="GoalListHabitsAndTasksLabel">Nawyki i zadania:</string>
     <string name="goalText">Cel</string>
     <string name="choiceGoalText">Wybierz cel:</string>
