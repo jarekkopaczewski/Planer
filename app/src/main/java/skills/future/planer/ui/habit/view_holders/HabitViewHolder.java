@@ -61,9 +61,10 @@ public class HabitViewHolder extends ICustomViewHolder {
 
     private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
-        if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
-            circularProgressIndicatorHabitDay.setCurrentProgress(DatesParser.countDifferenceBetweenDays(
-                            habitData.getBeginCalendarDay(), CalendarDay.today()) + 1);
+        if( CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
+            circularProgressIndicatorHabitDay.setCurrentProgress(habitData.getHabitDuration().getDaysNumber());
+        else if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
+            circularProgressIndicatorHabitDay.setCurrentProgress(DatesParser.countDifferenceBetweenDays(habitData.getBeginCalendarDay(), CalendarDay.today()) + 1);
         else if (CalendarDay.today().isBefore(habitData.getBeginCalendarDay()))
             circularProgressIndicatorHabitDay.setCurrentProgress(0);
         else
@@ -85,9 +86,15 @@ public class HabitViewHolder extends ICustomViewHolder {
      * Counts the progression for the habit from the start date to today
      */
     private double countCurrentProgress(HabitData habitData) {
-        LocalDate today = LocalDate.now();
-
+        LocalDate today;
         LocalDate beginDate = DatesParser.toLocalDate(habitData.getBeginCalendarDay());
+
+        if( CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
+            today =  DatesParser.toLocalDate(habitData.getEndCalendarDay());
+        else if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
+            today = LocalDate.now();
+        else
+            return 0.0;
 
         double days = 0;
         double doneHabitDays = 0;
