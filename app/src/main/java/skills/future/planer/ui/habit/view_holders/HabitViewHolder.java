@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -26,7 +27,7 @@ public class HabitViewHolder extends ICustomViewHolder {
     private final Context context;
     private final HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
 
-    public HabitViewHolder(View itemView, Context context) {
+    public HabitViewHolder(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
         this.context = context;
         title = itemView.findViewById(R.id.habitTitleTextViewExtended);

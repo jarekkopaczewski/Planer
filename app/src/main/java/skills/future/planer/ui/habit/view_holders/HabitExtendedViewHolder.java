@@ -40,7 +40,7 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
 
 
     public HabitExtendedViewHolder(View itemView, Context context, ComponentActivity activity) {
-        super(itemView, context);
+        super(itemView, context, activity);
         chipGroup = itemView.findViewById(R.id.chipGroupWeek);
         this.context = context;
         this.activity = activity;

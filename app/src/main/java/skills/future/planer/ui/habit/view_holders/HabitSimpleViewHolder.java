@@ -27,7 +27,7 @@ public class HabitSimpleViewHolder extends HabitViewHolder {
 
 
     public HabitSimpleViewHolder(View itemView, Context context, ComponentActivity activity) {
-        super(itemView, context);
+        super(itemView, context, activity);
         circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitSimple);
         habitTitleTextViewSimple = itemView.findViewById(R.id.habitTitleTextViewSimple);
         this.context = context;
