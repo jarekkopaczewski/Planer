@@ -82,7 +82,7 @@
     <string name="goalCreatorTitleHint">Nazwa celu</string>
     <string name="goalCreatorDetailsHint">Opis celu</string>
     <string name="dateOfBeginGoalCreatorHint">data zakończenia celu</string>
-    <string name="goalCreatorDateLabel">Data zakończenia celu:</string>
+    <string name="goalCreatorDateLabel">Data osiągnięcia celu:</string>
     <string name="GoalListHabitsAndTasksLabel">Nawyki i zadania:</string>
     <string name="goalText">Cel</string>
     <string name="choiceGoalText">Wybierz cel:</string>
@@ -97,4 +97,4 @@
     <string name="exit_activity_warning_1">Dane nie zostały zapisane!</string>
     <string name="exit_activity_warning_2">Na pewno chcesz wyjść z edytora?</string>
     <string name="noGoals">Cel: 0/0</string>
-</resources>
+    <string name="day_habit_no_habits_info">Nie posiadasz dzisiaj żadnych nawyków</string>
