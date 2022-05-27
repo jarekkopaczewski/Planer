@@ -1,8 +1,6 @@
 package skills.future.planer.ui.tasklist;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -80,9 +78,14 @@ public class TaskCreatorActivity extends AppCompatActivity {
         processFabColor();
         setUpGoals();
 
-        // if parameters != null -> edit == true
-        saveBtnOnClickListenerSetter(parameters != null);
-        if (parameters != null) setUpValuesOnEdit();
+        boolean edit = false;
+        if (parameters != null) {
+            if (!parameters.containsKey("goalId")) {
+                edit = true;
+                setUpValuesOnEdit();
+            }
+        }
+        saveBtnOnClickListenerSetter(edit);
     }
 
     @Override
