@@ -1,6 +1,9 @@
 package skills.future.planer.ui.day.views.habits;
 
 import android.content.Context;
+import android.widget.TextView;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
@@ -23,6 +26,7 @@ public class HabitDayViewModel extends ViewModel {
     private static HabitTotalAdapter habitTotalAdapter;
     private static LifecycleOwner viewLifecycleOwner;
     private static CircularProgressIndicator progressBar;
+    private static TextView status;
     private static Context context;
 
 
@@ -52,6 +56,14 @@ public class HabitDayViewModel extends ViewModel {
                     }
 
                     habitTotalAdapter.setHabitsList(list);
+
+                    if (habits.size() == 0) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        status.setVisibility(View.VISIBLE);
+                    } else {
+                        progressBar.setVisibility(View.VISIBLE);
+                        status.setVisibility(View.INVISIBLE);
+                    }
                 });
     }
 
@@ -85,5 +97,9 @@ public class HabitDayViewModel extends ViewModel {
 
     public static void setProgressBar(CircularProgressIndicator progressBar) {
         HabitDayViewModel.progressBar = progressBar;
+    }
+
+    public static void setStatus(TextView status) {
+        HabitDayViewModel.status = status;
     }
 }
