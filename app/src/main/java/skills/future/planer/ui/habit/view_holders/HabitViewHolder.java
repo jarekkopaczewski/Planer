@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -25,8 +24,9 @@ public class HabitViewHolder extends ICustomViewHolder {
     private final CircularProgressIndicator circularProgressIndicatorHabit;
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
+    private final HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
 
-    public HabitViewHolder(View itemView, Context context, ComponentActivity activity) {
+    public HabitViewHolder(View itemView, Context context) {
         super(itemView);
         this.context = context;
         title = itemView.findViewById(R.id.habitTitleTextViewExtended);
@@ -36,11 +36,10 @@ public class HabitViewHolder extends ICustomViewHolder {
 
     @Override
     public void setEveryThing(MixedRecyclerElement element) {
-        if (element instanceof HabitData habitData) {
-            this.title.setText(habitData.getTitle());
-            setUpCircularProgressIndicatorHabit(habitData);
-            setUpCircularProgressIndicatorOfDays(habitData);
-        }
+        HabitData h = (HabitData) element;
+        this.title.setText(h.getTitle());
+        setUpCircularProgressIndicatorHabit(h);
+        setUpCircularProgressIndicatorOfDays(h);
     }
 
     private void setUpCircularProgressIndicatorHabit(HabitData habitData) {
@@ -51,9 +50,9 @@ public class HabitViewHolder extends ICustomViewHolder {
         circularProgressIndicatorHabit.setCurrentProgress(currentProgress);
 
         circularProgressIndicatorHabit.setProgressTextAdapter(new TextAdapter());
-        if (circularProgressIndicatorHabit.getProgress() <= 40)
+        if (circularProgressIndicatorHabit.getProgress() <= 40.0)
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.bad));
-        else if (circularProgressIndicatorHabit.getProgress() <= 75)
+        else if (circularProgressIndicatorHabit.getProgress() <= 75.0)
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.mid));
         else
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.good));
@@ -61,7 +60,8 @@ public class HabitViewHolder extends ICustomViewHolder {
 
     private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
-        if( CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
+
+        if (CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
             circularProgressIndicatorHabitDay.setCurrentProgress(habitData.getHabitDuration().getDaysNumber());
         else if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
             circularProgressIndicatorHabitDay.setCurrentProgress(DatesParser.countDifferenceBetweenDays(habitData.getBeginCalendarDay(), CalendarDay.today()) + 1);
@@ -70,7 +70,6 @@ public class HabitViewHolder extends ICustomViewHolder {
         else
             circularProgressIndicatorHabitDay.setCurrentProgress(1);
 
-        HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
         habitTextAdapter.setMaxProgress(circularProgressIndicatorHabitDay.getMaxProgress());
         circularProgressIndicatorHabitDay.setProgressTextAdapter(habitTextAdapter);
 
@@ -89,8 +88,8 @@ public class HabitViewHolder extends ICustomViewHolder {
         LocalDate today;
         LocalDate beginDate = DatesParser.toLocalDate(habitData.getBeginCalendarDay());
 
-        if( CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
-            today =  DatesParser.toLocalDate(habitData.getEndCalendarDay());
+        if (CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
+            today = DatesParser.toLocalDate(habitData.getEndCalendarDay());
         else if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
             today = LocalDate.now();
         else

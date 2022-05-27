@@ -37,13 +37,13 @@ public class HabitBrowserFragment extends Fragment {
         totalHabitList.setAdapter(habitExtendedTotalAdapter);
         totalHabitList.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        habitViewModel.getAllHabits().observe(this.getViewLifecycleOwner(), habitData ->
-                habitExtendedTotalAdapter.setHabitsList(habitData));
+        habitViewModel.getAllHabits().observe(this.getViewLifecycleOwner(),
+                habitData -> habitExtendedTotalAdapter.setHabitsList(habitData));
+
         AnimateView.singleAnimation(binding.addHabitFab, getContext(), R.anim.downup);
 
-        binding.addHabitFab.setOnClickListener(e -> startActivity(new Intent(getActivity(),
-                HabitCreatorActivity.class)));
-
+        binding.addHabitFab.setOnClickListener(
+                e -> startActivity(new Intent(getActivity(), HabitCreatorActivity.class)));
 
 
         return binding.getRoot();

@@ -1,7 +1,6 @@
 package skills.future.planer.ui.habit.view_holders;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitViewModel;
-import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 import skills.future.planer.ui.habit.HabitCreatorActivity;
 
@@ -42,7 +40,7 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
 
 
     public HabitExtendedViewHolder(View itemView, Context context, ComponentActivity activity) {
-        super(itemView, context, activity);
+        super(itemView, context);
         chipGroup = itemView.findViewById(R.id.chipGroupWeek);
         this.context = context;
         this.activity = activity;
@@ -57,13 +55,13 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
     @SuppressLint("ResourceAsColor")
     @Override
     public void setEveryThing(MixedRecyclerElement element) {
-        super.setEveryThing(element);
-        if (element instanceof HabitData habitData) {
-            setUpChipGroup(habitData);
-            setUpGoalChip(habitData);
-            createListenerToEditButton(habitData);
-            createListenerToTrashButton(habitData);
-        }
+        HabitData h = (HabitData) element;
+        super.setEveryThing(h);
+        setUpChipGroup(h);
+        setUpGoalChip(h);
+        createListenerToEditButton(h);
+        createListenerToTrashButton(h);
+
     }
 
     private void setUpChipGroup(HabitData habitData) {
@@ -105,31 +103,34 @@ public class HabitExtendedViewHolder extends HabitViewHolder {
             bundle.putLong("habitToEditId", habitData.getHabitId());
             intent.putExtras(bundle);
             activity.startActivity(intent);
-            //notifyItemChanged(position);
         });
     }
 
     private void createListenerToTrashButton(HabitData habitData) {
-        imageTrash.setOnClickListener(e -> {
-            new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
-                    .setIcon(R.drawable.warning)
-                    .setTitle(R.string.confirm_deletion)
-                    .setMessage(R.string.confirm_deletion_2)
-                    .setPositiveButton(R.string.yes, (dialog, which) -> {
-                        Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
-                        animation.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {}
-                            @Override
-                            public void onAnimationEnd(Animation animation) { new ViewModelProvider(activity).get(HabitViewModel.class).delete(habitData); }
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {}
-                        });
-                        this.itemView.startAnimation(animation);
-                        dialog.dismiss();
-                    })
-                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
+        imageTrash.setOnClickListener(e -> new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+                .setIcon(R.drawable.warning)
+                .setTitle(R.string.confirm_deletion)
+                .setMessage(R.string.confirm_deletion_2)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.removetask);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            new ViewModelProvider(activity).get(HabitViewModel.class).delete(habitData);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+                    this.itemView.startAnimation(animation);
+                    dialog.dismiss();
+                })
+                .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+                .show());
     }
 }

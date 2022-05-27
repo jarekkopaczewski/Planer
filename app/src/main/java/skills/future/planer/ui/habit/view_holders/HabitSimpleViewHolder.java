@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
+
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
@@ -26,7 +27,7 @@ public class HabitSimpleViewHolder extends HabitViewHolder {
 
 
     public HabitSimpleViewHolder(View itemView, Context context, ComponentActivity activity) {
-        super( itemView, context, activity);
+        super(itemView, context);
         circularProgressIndicatorHabitDay = itemView.findViewById(R.id.circularProgressIndicatorHabitSimple);
         habitTitleTextViewSimple = itemView.findViewById(R.id.habitTitleTextViewSimple);
         this.context = context;
