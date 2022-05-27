@@ -108,7 +108,7 @@ public class GoalsFragment extends Fragment {
 
 
         fabTask.setOnClickListener(v -> {
-            var intent = new Intent(this.getContext(), HabitCreatorActivity.class);
+            var intent = new Intent(this.getContext(), TaskCreatorActivity.class);
             var bundle = new Bundle();
             bundle.putInt("goalId", totalGoalList.getCurrentItem());
             intent.putExtras(bundle);
@@ -116,7 +116,7 @@ public class GoalsFragment extends Fragment {
         });
 
         fabHabit.setOnClickListener(v -> {
-            var intent = new Intent(this.getContext(), TaskCreatorActivity.class);
+            var intent = new Intent(this.getContext(), HabitCreatorActivity.class);
             var bundle = new Bundle();
             bundle.putInt("goalId", totalGoalList.getCurrentItem());
             intent.putExtras(bundle);

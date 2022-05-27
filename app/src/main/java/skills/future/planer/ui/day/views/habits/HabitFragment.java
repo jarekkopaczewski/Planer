@@ -75,27 +75,6 @@ public class HabitFragment extends Fragment {
 
     }
 
-//    public void updateColor()
-//    {
-//        System.out.println("Fragment observwer");
-//        System.out.println(circularProgressIndicator.getProgress());
-//
-//        if (circularProgressIndicator.getProgress() <= 40.0f)
-//        {
-//            circularProgressIndicator.setProgressColor(ContextCompat.getColor(context, R.color.bad));
-//            System.out.println(ContextCompat.getColor(context, R.color.bad));
-//        }
-//        else if (circularProgressIndicator.getProgress() <= 75.0f)
-//        {
-//            circularProgressIndicator.setProgressColor(ContextCompat.getColor(context, R.color.mid));
-//            System.out.println(ContextCompat.getColor(context, R.color.mid));
-//        }
-//        else
-//        {
-//            circularProgressIndicator.setProgressColor(ContextCompat.getColor(context, R.color.good));
-//            System.out.println(ContextCompat.getColor(context, R.color.good));
-//        }
-//    }
 
     @Override
     public void onResume() {
