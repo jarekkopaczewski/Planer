@@ -90,8 +90,11 @@ public class TaskCreatorActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home) showDialog();
-        return false;
+        if (menuItem.getItemId() == android.R.id.home){
+            showDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 
     @Override
