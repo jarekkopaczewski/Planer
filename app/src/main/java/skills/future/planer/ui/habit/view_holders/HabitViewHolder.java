@@ -23,7 +23,7 @@ import skills.future.planer.ui.habit.HabitTextAdapter;
 public class HabitViewHolder extends ICustomViewHolder {
     protected final TextView title;
     private final CircularProgressIndicator circularProgressIndicatorHabit;
-    private final CircularProgressIndicator circularProgressIndicatorHabitDay;
+    protected CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
     private final HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
 

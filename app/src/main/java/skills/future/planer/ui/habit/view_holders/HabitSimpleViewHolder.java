@@ -21,7 +21,6 @@ import skills.future.planer.ui.habit.HabitTextAdapter;
 @Getter
 public class HabitSimpleViewHolder extends HabitViewHolder {
 
-    private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final TextView habitTitleTextViewSimple;
     private final Context context;
 
