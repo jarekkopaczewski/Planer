@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import lombok.Getter;
 import skills.future.planer.R;
 import skills.future.planer.db.DataBaseException;
@@ -43,13 +45,7 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
     public void setEveryThing(HabitData habitData, int position) {
         title.setText(habitData.getTitle());
         setCheckBoxListener(habitData, position);
-
-        //checking if display notification icon
-        if(habitData.isNotification_icon()){
-            notification_icon.setVisibility(View.VISIBLE);
-        }else {
-            notification_icon.setVisibility(View.INVISIBLE);
-        }
+        setNotification_icon(habitData);
     }
 
     protected void setCheckBoxListener(HabitData habitData, int position) {
@@ -64,5 +60,20 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
                 dataBaseException.printStackTrace();
             }
         });
+    }
+
+    /**
+     * Sets notification icon if current day is selected and it's habit notification time
+     * @param habitData habit data
+     */
+    private void setNotification_icon(HabitData habitData){
+        //getting selected day in calendar to compare with today
+        CalendarDay calendarDay = MonthFragment.getGlobalSelectedDate();
+        //checks to display notification icon
+        if(habitData.isNotification_icon() && calendarDay.getDate().equals(CalendarDay.today().getDate())){
+            notification_icon.setVisibility(View.VISIBLE);
+        }else {
+            notification_icon.setVisibility(View.INVISIBLE);
+        }
     }
 }
