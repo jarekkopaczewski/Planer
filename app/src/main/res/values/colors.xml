@@ -23,8 +23,8 @@
     <color name="f2">#FF715397</color>
     <color name="progress_gradient">#DCDCDC</color>
     <color name="progress_background">#FF000000</color>
-    <color name="good">#00E676</color>
-    <color name="mid">#FFFB00</color>
-    <color name="bad">#FF1744</color>
+    <color name="good">#8EF3C2</color>
+    <color name="mid">#FAF88E</color>
+    <color name="bad">#FD899F</color>
     <color name="scroll">#00FF1744</color>
 </resources>

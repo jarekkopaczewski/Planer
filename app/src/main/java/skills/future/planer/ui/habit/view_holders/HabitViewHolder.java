@@ -43,7 +43,7 @@ public class HabitViewHolder extends ICustomViewHolder {
         setUpCircularProgressIndicatorOfDays(h);
     }
 
-    private void setUpCircularProgressIndicatorHabit(HabitData habitData) {
+    protected void setUpCircularProgressIndicatorHabit(HabitData habitData) {
         circularProgressIndicatorHabit.setMaxProgress(100);
 
         double currentProgress = countCurrentProgress(habitData);
@@ -59,7 +59,7 @@ public class HabitViewHolder extends ICustomViewHolder {
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.good));
     }
 
-    private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
+    protected void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
 
         if (CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
@@ -86,20 +86,21 @@ public class HabitViewHolder extends ICustomViewHolder {
      * Counts the progression for the habit from the start date to today
      */
     private double countCurrentProgress(HabitData habitData) {
-        LocalDate today;
+        LocalDate checkDate = LocalDate.now();
         LocalDate beginDate = DatesParser.toLocalDate(habitData.getBeginCalendarDay());
 
         if (CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
-            today = DatesParser.toLocalDate(habitData.getEndCalendarDay());
-        else if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
-            today = LocalDate.now();
+            checkDate = DatesParser.toLocalDate(habitData.getEndCalendarDay());
+        else if( LocalDate.now() == DatesParser.toLocalDate(habitData.getBeginCalendarDay()))
+            if (habitData.isHabitDone(habitData.getBeginCalendarDay()))
+                return 100D;
         else
             return 0.0;
 
         double days = 0;
         double doneHabitDays = 0;
 
-        for (LocalDate i = beginDate; i.isBefore(today) || i.isEqual(today); i = i.plusDays(1)) {
+        for (LocalDate i = beginDate; i.isBefore(checkDate) || i.isEqual(checkDate); i = i.plusDays(1)) {
             if (habitData.isDayOfWeekChecked(i)) {
                 days++;
                 if (habitData.isHabitDone(DatesParser.toCalendarDay(i)))
