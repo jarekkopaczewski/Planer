@@ -73,4 +73,12 @@ public class DatesParser {
         cal.set(Calendar.YEAR, day.getYear());
         return formatterDate.format(cal.getTime());
     }
+
+    public static Calendar toCalendar(CalendarDay day) {
+        var cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, day.getDay());
+        cal.set(Calendar.MONTH, day.getMonth() - 1);
+        cal.set(Calendar.YEAR, day.getYear());
+        return cal;
+    }
 }

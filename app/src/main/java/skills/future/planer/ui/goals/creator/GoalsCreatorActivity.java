@@ -1,7 +1,5 @@
 package skills.future.planer.ui.goals.creator;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -15,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,11 +29,12 @@ import skills.future.planer.db.habit.HabitViewModel;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.goals.pager.recycler.MixedViewAdapter;
-import skills.future.planer.ui.month.MonthFragment;
 
 public class GoalsCreatorActivity extends AppCompatActivity {
     private final SimpleDateFormat formatterDate =
             new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+    private final SimpleDateFormat formatter =
+            new SimpleDateFormat("LLLL yyyy", Locale.getDefault());
     private final Calendar calendar = Calendar.getInstance();
     private EditText titleEditText, detailEditText;
     private TextView editTextDateGoal;
@@ -43,6 +44,7 @@ public class GoalsCreatorActivity extends AppCompatActivity {
     private FloatingActionButton saveFAB;
     private RecyclerView recyclerView;
     private MixedViewAdapter mixedViewAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +66,12 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             calendar.setTimeInMillis(goal.getDate());
             saveFABSetUp(goal);
         } else {
-            calendar.set(MonthFragment.getGlobalSelectedDate().getYear(),
-                    MonthFragment.getGlobalSelectedDate().getMonth() - 1,
-                    MonthFragment.getGlobalSelectedDate().getDay());
+            calendar.set(CalendarDay.today().getYear(),
+                    CalendarDay.today().getMonth() - 1,
+                    CalendarDay.today().getDay());
             saveFABSetUp();
         }
-        editTextDateGoal.setText(formatterDate.format(calendar.getTime()));
+        editTextDateGoal.setText(formatter.format(calendar.getTime()));
     }
 
     @Override
@@ -126,14 +128,23 @@ public class GoalsCreatorActivity extends AppCompatActivity {
     }
 
     private void setUpDate() {
-        DatePickerDialog.OnDateSetListener date = (datePicker, y, m, d) -> {
-            calendar.set(y, m, d, 0, 0);
-            editTextDateGoal.setText(formatterDate.format(calendar.getTime()));
+        MonthPickerDialog.OnDateSetListener date = (y, m) -> {
+            calendar.set(y, m, 1, 0, 0);
+            editTextDateGoal.setText(formatter.format(calendar.getTime()));
         };
 
-        editTextDateGoal.setOnClickListener(e -> new DatePickerDialog(this,
-                date, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show());
+
+        editTextDateGoal.setOnClickListener(e ->  new MonthPickerDialog.Builder(this,
+                (selectedMonth, selectedYear) -> {
+                calendar.set(selectedYear, selectedMonth, 1, 0, 0);
+                editTextDateGoal.setText(formatter.format(calendar.getTime()));
+                }
+                , calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH))
+                .setMinYear(CalendarDay.today().getYear())
+                .setMaxYear(CalendarDay.today().getYear()+100)
+                .setTitle(getResources().getString(R.string.goal_month_picker_title))
+                .build()
+                .show());
     }
 
     private void saveFABSetUp() {
@@ -141,10 +152,13 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             if (titleEditText.getText() == null || titleEditText.getText().length() <= 0)
                 Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
             else {
+                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth() - 1)
+                    Toast.makeText(this, R.string.goal_error_date, Toast.LENGTH_SHORT).show();
+                else {
                 var goal = new GoalData(titleEditText.getText().toString(),
                         detailEditText.getText().toString(), DatesParser.toLocalDate(calendar.getTime()));
                 goalsViewModel.insert(goal);
-                finish();
+                finish();}
             }
         });
     }
@@ -154,12 +168,15 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             if (titleEditText.getText() == null || titleEditText.getText().length() <= 0)
                 Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
             else {
+                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth() - 1)
+                    Toast.makeText(this, R.string.goal_error_date, Toast.LENGTH_SHORT).show();
+                else{
                 goal.setTitle(titleEditText.getText().toString());
                 goal.setDetails(detailEditText.getText().toString());
                 goal.setDate(DatesParser.toLocalDate(calendar.getTime()));
                 goalsViewModel.edit(goal);
                 finish();
-            }
+            }}
         });
     }
 }

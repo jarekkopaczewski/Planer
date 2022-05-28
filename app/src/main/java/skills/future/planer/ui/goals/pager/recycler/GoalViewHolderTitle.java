@@ -7,11 +7,14 @@ import android.widget.TextView;
 import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Random;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import skills.future.planer.R;
 import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
 
 public class GoalViewHolderTitle extends ICustomViewHolder {
@@ -19,6 +22,8 @@ public class GoalViewHolderTitle extends ICustomViewHolder {
     private final TextView goalTitle;
     private final Context context;
     private final TextView goalDate;
+    private final SimpleDateFormat formatter =
+            new SimpleDateFormat("LLLL yyyy", Locale.getDefault());
 
     public GoalViewHolderTitle(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
@@ -46,6 +51,6 @@ public class GoalViewHolderTitle extends ICustomViewHolder {
         goalTitle.setText(goalData.getTitle());
         //TODO podczepić liczenie progresu
         progressBar.setCurrentProgress(new Random().nextInt(100));
-        this.goalDate.setText(goalData.getDateCalendarDate().getDate().toString());
+        this.goalDate.setText(formatter.format(DatesParser.toCalendar(goalData.getDateCalendarDate()).getTime()));
     }
 }
