@@ -1,7 +1,6 @@
 package skills.future.planer.ui.day.views.habits;
 
 import android.content.Context;
-import android.widget.TextView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -37,12 +36,13 @@ public class HabitDayViewModel extends ViewModel {
         habitViewModel.getAllHabitDataFromDay(date)
                 .observe(viewLifecycleOwner, habits -> {
 
-                    List<HabitData> list = habits.stream().filter(habitData -> habitData
-                                    .isDayOfWeekChecked(DatesParser.toLocalDate(date)))
+                    List<HabitData> list = habits.stream()
+                            .filter(habitData -> habitData.isDayOfWeekChecked(DatesParser.toLocalDate(date)))
                             .collect(Collectors.toList());
 
                     float value = (list.stream()
-                            .filter(h -> h.isHabitDone(MonthFragment.getGlobalSelectedDate())).count()
+                            .filter(h -> h.isHabitDone(MonthFragment.getGlobalSelectedDate()))
+                            .count()
                             / (float) list.size()) * 100f;
 
                     progressBar.setCurrentProgress(value);
@@ -55,15 +55,14 @@ public class HabitDayViewModel extends ViewModel {
                         progressBar.setProgressColor(ContextCompat.getColor(context, R.color.good));
                     }
 
-                    habitTotalAdapter.setHabitsList(list);
-
-                    if (habits.size() == 0) {
+                    if (list.size() == 0) {
                         progressBar.setVisibility(View.INVISIBLE);
                         status.setVisibility(View.VISIBLE);
                     } else {
                         progressBar.setVisibility(View.VISIBLE);
                         status.setVisibility(View.INVISIBLE);
                     }
+                    habitTotalAdapter.setHabitsList(list);
                 });
     }
 
