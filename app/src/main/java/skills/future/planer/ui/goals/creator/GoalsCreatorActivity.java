@@ -76,10 +76,11 @@ public class GoalsCreatorActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home) {
+        if (menuItem.getItemId() == android.R.id.home){
             showDialog();
+            return true;
         }
-        return false;
+        return super.onOptionsItemSelected(menuItem);
     }
 
     @Override

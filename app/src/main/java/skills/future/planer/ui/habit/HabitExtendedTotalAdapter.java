@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,10 +32,13 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
 
     @SuppressLint("NotifyDataSetChanged")
     public void setHabitsList(List<HabitData> habitsList) {
-        this.habitsList = habitsList;
+        int size = this.habitsList.size();
+        this.habitsList.clear();
+        notifyItemRangeRemoved(0, size);
+        this.habitsList.addAll(habitsList);
         HabitComparator habitComparator = new HabitComparator();
-        habitsList.sort(habitComparator);
-        notifyDataSetChanged();
+        this.habitsList.sort(habitComparator);
+        notifyItemRangeInserted(0, this.habitsList.size());
     }
 
     @NonNull
@@ -51,7 +53,6 @@ public class HabitExtendedTotalAdapter extends RecyclerView.Adapter<HabitExtende
         View itemView;
         itemView = layoutInflater.inflate(layoutType, parent, false);
         AnimateView.singleAnimation(itemView, context, R.anim.scalezoom);
-        ImageView editButton = itemView.findViewById(R.id.editImageHabit);
 
         itemView.setOnClickListener(e -> AnimateView.animateInOut(itemView, context));
 

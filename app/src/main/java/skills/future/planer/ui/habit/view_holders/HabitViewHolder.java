@@ -25,6 +25,7 @@ public class HabitViewHolder extends ICustomViewHolder {
     private final CircularProgressIndicator circularProgressIndicatorHabit;
     private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final Context context;
+    private final HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
 
     public HabitViewHolder(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
@@ -36,11 +37,10 @@ public class HabitViewHolder extends ICustomViewHolder {
 
     @Override
     public void setEveryThing(MixedRecyclerElement element) {
-        if (element instanceof HabitData habitData) {
-            this.title.setText(habitData.getTitle());
-            setUpCircularProgressIndicatorHabit(habitData);
-            setUpCircularProgressIndicatorOfDays(habitData);
-        }
+        HabitData h = (HabitData) element;
+        this.title.setText(h.getTitle());
+        setUpCircularProgressIndicatorHabit(h);
+        setUpCircularProgressIndicatorOfDays(h);
     }
 
     private void setUpCircularProgressIndicatorHabit(HabitData habitData) {
@@ -51,9 +51,9 @@ public class HabitViewHolder extends ICustomViewHolder {
         circularProgressIndicatorHabit.setCurrentProgress(currentProgress);
 
         circularProgressIndicatorHabit.setProgressTextAdapter(new TextAdapter());
-        if (circularProgressIndicatorHabit.getProgress() <= 40)
+        if (circularProgressIndicatorHabit.getProgress() <= 40.0)
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.bad));
-        else if (circularProgressIndicatorHabit.getProgress() <= 75)
+        else if (circularProgressIndicatorHabit.getProgress() <= 75.0)
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.mid));
         else
             circularProgressIndicatorHabit.setProgressColor(ContextCompat.getColor(context, R.color.good));
@@ -61,15 +61,16 @@ public class HabitViewHolder extends ICustomViewHolder {
 
     private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
         circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
-        if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
-            circularProgressIndicatorHabitDay.setCurrentProgress(DatesParser.countDifferenceBetweenDays(
-                            habitData.getBeginCalendarDay(), CalendarDay.today()) + 1);
+
+        if (CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
+            circularProgressIndicatorHabitDay.setCurrentProgress(habitData.getHabitDuration().getDaysNumber());
+        else if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
+            circularProgressIndicatorHabitDay.setCurrentProgress(DatesParser.countDifferenceBetweenDays(habitData.getBeginCalendarDay(), CalendarDay.today()) + 1);
         else if (CalendarDay.today().isBefore(habitData.getBeginCalendarDay()))
             circularProgressIndicatorHabitDay.setCurrentProgress(0);
         else
             circularProgressIndicatorHabitDay.setCurrentProgress(1);
 
-        HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
         habitTextAdapter.setMaxProgress(circularProgressIndicatorHabitDay.getMaxProgress());
         circularProgressIndicatorHabitDay.setProgressTextAdapter(habitTextAdapter);
 
@@ -85,9 +86,15 @@ public class HabitViewHolder extends ICustomViewHolder {
      * Counts the progression for the habit from the start date to today
      */
     private double countCurrentProgress(HabitData habitData) {
-        LocalDate today = LocalDate.now();
-
+        LocalDate today;
         LocalDate beginDate = DatesParser.toLocalDate(habitData.getBeginCalendarDay());
+
+        if (CalendarDay.today().isAfter(habitData.getEndCalendarDay()))
+            today = DatesParser.toLocalDate(habitData.getEndCalendarDay());
+        else if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
+            today = LocalDate.now();
+        else
+            return 0.0;
 
         double days = 0;
         double doneHabitDays = 0;
