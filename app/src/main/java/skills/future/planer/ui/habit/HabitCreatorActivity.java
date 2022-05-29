@@ -1,7 +1,6 @@
 package skills.future.planer.ui.habit;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -55,6 +54,35 @@ public class HabitCreatorActivity extends AppCompatActivity {
     private Chip MondayChip, TuesdayChip, WednesdayChip, ThursdayChip, FridayChip, SaturdayChip, SundayChip;
     private GoalData selectedGoal;
 
+    /**
+     * HabitData object to be set/edited in activity
+     */
+    private HabitData habitData;
+
+    /**
+     * Clone of habitData used to compare
+     */
+    private HabitData openedHabitData;
+
+    /**
+     * True - habit is edited, false - habit is created
+     */
+    private boolean edition = false;
+
+    /**
+     * String of habit reminder time taken from textView
+     */
+    private String habit_reminder_time;
+
+    /**
+     * String of habit start date taken from textView
+     */
+    private String habit_date_start;
+
+
+    public HabitCreatorActivity() {
+    }
+
     @SuppressLint({"ResourceType", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +110,6 @@ public class HabitCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, "brak");
             goalSpinner.setItems(list);
-            try {
-                int selected = parameters.getInt("goalId");
-                goalSpinner.selectItemByIndex(selected + 1);
-            } catch (NullPointerException | IndexOutOfBoundsException exp) {
-                exp.printStackTrace();
-            }
         });
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
@@ -114,6 +136,8 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
         if (parameters != null) {
             try {
+                //parameters are loaded - habit is edited
+                edition=true;
                 if (!parameters.containsKey("goalId")) {
                     HabitData habit = habitViewModel.findById(parameters.getLong("habitToEditId"));
                     int hours = (int) (habit.getNotificationTime() / 3600000);
@@ -125,6 +149,12 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     timeEditText.setText(formatter.format(calendar.getTime()));
                     editTextDateHabit.setText(DatesParser.toLocalDate(habit.getBeginCalendarDay())
                             .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+
+                    //setting strings to compare
+                    habit_reminder_time = formatter.format(calendar.getTime());
+                    habit_date_start=DatesParser.toLocalDate(habit.getBeginCalendarDay())
+                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
                     var days = habit.getDaysOfWeek();
                     MondayChip.setChecked(days.charAt(0) == '1');
                     TuesdayChip.setChecked(days.charAt(1) == '1');
@@ -140,7 +170,13 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     }
                     calendar2.setTimeInMillis(habit.getBeginDay());
                     setGoal(habit);
-                    saveButtonOnActionWhenEditing(habit);
+
+                    //setting global field
+                    habitData = habit;
+                    //setting clone to compare
+                    openedHabitData = habit.clone();
+
+                    saveButtonOnActionWhenEditing();
                     setTitle("Edytor Nawyków");
                 } else {
                     setUpDefaultHabit();
@@ -167,14 +203,19 @@ public class HabitCreatorActivity extends AppCompatActivity {
         showDialog();
     }
 
+    /**
+     * Shows warning dialog if edition has been detected
+     */
     private void showDialog() {
-        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
-                .setIcon(R.drawable.warning)
-                .setTitle(R.string.exit_activity_warning_1)
-                .setMessage(R.string.exit_activity_warning_2)
-                .setPositiveButton(R.string.agree, (dialog, which) -> finish())
-                .setNegativeButton(R.string.disagree, null)
-                .show();
+        if(checkEdit()){
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+                    .setIcon(R.drawable.warning)
+                    .setTitle(R.string.exit_activity_warning_1)
+                    .setMessage(R.string.exit_activity_warning_2)
+                    .setPositiveButton(R.string.agree, (dialog, which) -> finish())
+                    .setNegativeButton(R.string.disagree, null)
+                    .show();
+        }else finish();
     }
 
 
@@ -244,50 +285,15 @@ public class HabitCreatorActivity extends AppCompatActivity {
         });
     }
 
-    private void saveButtonOnActionWhenEditing(HabitData habitData) {
+    /**
+     * Saves habit if all HabitData fields are correct
+     */
+    private void saveButtonOnActionWhenEditing() {
         saveCreatorButtonHabit.setOnClickListener(e -> {
-            if (editTextTitle.getText() == null || editTextTitle.getText().length() <= 0) {
-                Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
-            } else if (daysChipGroupOne.getCheckedChipIds().size() == 0
-                    && daysChipGroupTwo.getCheckedChipIds().size() == 0) {
-                Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
-            } else {
-                try {
-                    var tab = getResources().getStringArray(R.array.temp_array);
-                    HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner
-                            .getSelectedIndex()].split(" ")[0])) {
-                        case 21 -> HabitDuration.UltraShort;
-                        case 90 -> HabitDuration.Short;
-                        case 120 -> HabitDuration.Long;
-                        default -> throw new IllegalStateException("Unexpected value: " +
-                                Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0]));
-                    };
-                    habitData.editHabitDur(duration);
-                    String weekDays = (MondayChip.isChecked() ? "1" : "0") +
-                            (TuesdayChip.isChecked() ? "1" : "0") +
-                            (WednesdayChip.isChecked() ? "1" : "0") +
-                            (ThursdayChip.isChecked() ? "1" : "0") +
-                            (FridayChip.isChecked() ? "1" : "0") +
-                            (SaturdayChip.isChecked() ? "1" : "0") +
-                            (SundayChip.isChecked() ? "1" : "0");
-                    habitData.editDaysOfWeek(weekDays);
-                    habitData.setTitle(editTextTitle.getText().toString());
-                    habitData.setBeginLocalDay(DatesParser.toLocalDate(calendar2.getTime()));
-                    habitData.setNotificationTime(
-                            calendar.get(Calendar.HOUR_OF_DAY),
-                            calendar.get(Calendar.MINUTE));
-                    if (selectedGoal != null) {
-                        habitData.setForeignKeyToGoal(selectedGoal.getGoalId());
-                    }
-                    if (goalSpinner.getSelectedIndex() == 0) {
-                        habitData.setForeignKeyToGoal(null);
-                    }
-                    habitViewModel.edit(habitData);
-                } catch (Exception dataBaseException) {
-                    dataBaseException.printStackTrace();
-                }
-                finish();
-            }
+           if(loadDatafromActivity()) {
+               habitViewModel.edit(habitData);
+               finish();
+           }
         });
     }
 
@@ -337,5 +343,71 @@ public class HabitCreatorActivity extends AppCompatActivity {
                 goalSpinner.selectItemByIndex(0);
             }
         });
+    }
+
+    /**
+     * Checks if data has been edited
+     * @return true - is edited, is not edited
+     */
+    private boolean checkEdit(){
+        boolean isEdited =true;
+        if(edition && loadDatafromActivity()) {
+            isEdited = !(habitData.equals(openedHabitData) &&
+                    habit_date_start.equals(editTextDateHabit.getText().toString()) &&
+            habit_reminder_time.equals(timeEditText.getText().toString()));
+        }
+        return isEdited;
+    }
+
+    /**
+     * Loads and converts data from activity, sets habitData fields
+     * @return true - data have been set
+     */
+    private boolean loadDatafromActivity(){
+        if (editTextTitle.getText() == null || editTextTitle.getText().length() <= 0) {
+            Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (daysChipGroupOne.getCheckedChipIds().size() == 0
+                && daysChipGroupTwo.getCheckedChipIds().size() == 0) {
+            Toast.makeText(this, R.string.habit_error_2, Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            try {
+                var tab = getResources().getStringArray(R.array.temp_array);
+                HabitDuration duration = switch (Integer.parseInt(tab[habitDurationSpinner
+                        .getSelectedIndex()].split(" ")[0])) {
+                    case 21 -> HabitDuration.UltraShort;
+                    case 90 -> HabitDuration.Short;
+                    case 120 -> HabitDuration.Long;
+                    default -> throw new IllegalStateException("Unexpected value: " +
+                            Integer.parseInt(tab[habitDurationSpinner.getSelectedIndex()].split(" ")[0]));
+                };
+                habitData.editHabitDur(duration);
+                String weekDays = (MondayChip.isChecked() ? "1" : "0") +
+                        (TuesdayChip.isChecked() ? "1" : "0") +
+                        (WednesdayChip.isChecked() ? "1" : "0") +
+                        (ThursdayChip.isChecked() ? "1" : "0") +
+                        (FridayChip.isChecked() ? "1" : "0") +
+                        (SaturdayChip.isChecked() ? "1" : "0") +
+                        (SundayChip.isChecked() ? "1" : "0");
+                habitData.editDaysOfWeek(weekDays);
+                habitData.setTitle(editTextTitle.getText().toString());
+                habitData.setBeginLocalDay(DatesParser.toLocalDate(calendar2.getTime()));
+                habitData.setNotificationTime(
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE));
+                if (selectedGoal != null) {
+                    habitData.setForeignKeyToGoal(selectedGoal.getGoalId());
+                }
+                if (goalSpinner.getSelectedIndex() == 0) {
+                    habitData.setForeignKeyToGoal(null);
+                }
+                return true;
+            } catch (Exception dataBaseException) {
+                dataBaseException.printStackTrace();
+            }
+        }
+        return false;
     }
 }

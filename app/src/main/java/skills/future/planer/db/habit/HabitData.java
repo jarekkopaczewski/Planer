@@ -4,6 +4,7 @@ package skills.future.planer.db.habit;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Stream.generate;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -24,7 +25,7 @@ import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 @Getter
 @Setter
 @Entity
-public class HabitData implements MixedRecyclerElement {
+public class HabitData implements MixedRecyclerElement, Cloneable {
     @PrimaryKey(autoGenerate = true)
     private Long habitId;
     private String title;
@@ -232,5 +233,53 @@ public class HabitData implements MixedRecyclerElement {
         cal2.set(Calendar.SECOND, 0);
         cal2.set(Calendar.MILLISECOND, 0);
         this.notificationTime = cal.getTimeInMillis() - cal2.getTimeInMillis();
+    }
+
+    /**
+     * Compares two habitData objects
+     * Checking fields except dates
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HabitData habitData = (HabitData) o;
+
+        if (notification_icon != habitData.notification_icon) {return false;}
+        if (habitId != null ? !habitId.equals(habitData.habitId) : habitData.habitId != null){return false;}
+        if (title != null ? !title.equals(habitData.title) : habitData.title != null){return false;}
+        if (daysOfWeek != null ? !daysOfWeek.equals(habitData.daysOfWeek) : habitData.daysOfWeek != null){return false;}
+        if (habitDuration != habitData.habitDuration){return false;}
+        if (dayChecking != null ? !dayChecking.equals(habitData.dayChecking) : habitData.dayChecking != null){return false;}
+        if (foreignKeyToGoal != null ? !foreignKeyToGoal.equals(habitData.foreignKeyToGoal) : habitData.foreignKeyToGoal != null){return false;}
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = habitId != null ? habitId.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (daysOfWeek != null ? daysOfWeek.hashCode() : 0);
+        result = 31 * result + (habitDuration != null ? habitDuration.hashCode() : 0);
+        result = 31 * result + (beginDay != null ? beginDay.hashCode() : 0);
+        result = 31 * result + (endDay != null ? endDay.hashCode() : 0);
+        result = 31 * result + (dayChecking != null ? dayChecking.hashCode() : 0);
+        result = 31 * result + (foreignKeyToGoal != null ? foreignKeyToGoal.hashCode() : 0);
+        result = 31 * result + (notificationTime != null ? notificationTime.hashCode() : 0);
+        result = 31 * result + (notification_icon ? 1 : 0);
+        return result;
+    }
+
+    @NonNull
+    @Override
+    public HabitData clone() {
+        try {
+            HabitData clone = (HabitData) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
