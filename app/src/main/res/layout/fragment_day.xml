@@ -57,7 +57,8 @@
         app:mcv_selectionMode="single"
         app:mcv_showOtherDates="all"
         app:mcv_showWeekDays="true"
-        app:mcv_tileSize="0dp">
+        app:mcv_tileSize="0dp"
+        app:mcv_monthLabels="@array/months">
 
     </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
 
