@@ -3,7 +3,6 @@ package skills.future.planer.db;
 import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -43,17 +42,14 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract GoalsDao goalsDao();
 
     public static AppDatabase getInstance(final Context context/*, final AppExecutors executors*/) {
+
+
         if (sInstance == null) {
-            synchronized (AppDatabase.class) {
-                if (sInstance == null) {
-                    Log.d(LOG_TAG, "Creating new database instance");
-                    sInstance = Room.databaseBuilder(context.getApplicationContext(),
+            sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                            .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
-                }
-            }
+                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
         }
-        Log.d(LOG_TAG, "Getting the database instance");
+
         return sInstance;
     }
 
