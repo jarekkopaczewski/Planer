@@ -38,6 +38,7 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
     implementation 'com.github.antonKozyriatskyi:CircularProgressIndicator:1.3.0'
     implementation 'me.philio:preferencecompatextended:1.2.2'
+    implementation 'io.github.ShawnLin013:number-picker:2.4.13'
     // Android preferences
     implementation 'com.codesgood:justifiedtextview:1.1.0'
     implementation 'com.github.alokverma:circle-menu:1.1'
