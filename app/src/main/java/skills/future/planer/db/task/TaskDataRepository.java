@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 
@@ -17,6 +18,11 @@ import skills.future.planer.db.task.enums.priority.TimePriority;
  * Class implement separation of concerns
  */
 public class TaskDataRepository {
+
+    TaskData findById(Long taskId) throws Exception {
+        return taskDataDao.findById(taskId);
+    }
+
     /**
      * Reference to taskDataDao
      */
@@ -32,7 +38,7 @@ public class TaskDataRepository {
      *
      * @param application require to get AppDatabase reference
      */
-    TaskDataRepository(Application application) {
+    public TaskDataRepository(Application application) {
         AppDatabase db = AppDatabase.getInstance(application);
         taskDataDao = db.taskDataTabDao();
     }
@@ -51,7 +57,7 @@ public class TaskDataRepository {
      *
      * @param taskData which will be edited
      */
-    void edit(TaskData taskData) {
+    public void edit(TaskData taskData) {
         taskDataDao.editOne(taskData);
     }
 

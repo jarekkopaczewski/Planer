@@ -16,12 +16,19 @@ import skills.future.planer.db.task.TaskData;
 
 @Dao
 public interface GoalsDao {
-    @Query("SELECT * FROM GoalData JOIN HabitData ON GoalData.goalId = HabitData.foreignKeyToGoal  WHERE goalId = :goalId")
+    @Query("SELECT * FROM GoalData JOIN HabitData ON GoalData.goalId = HabitData.foreignKeyToGoal  WHERE GoalData.goalId = :goalId")
     LiveData<Map<GoalData, HabitData>> getHabitsFromGoal(Long goalId);
 
     @Transaction
-    @Query("SELECT * FROM GoalData JOIN taskData ON GoalData.goalId = taskData.foreignKeyToGoal WHERE goalId = :goalId ")
-    LiveData<Map<GoalData, TaskData>> getTasksFromGoal(Long goalId);
+    @Query("SELECT * FROM GoalData JOIN taskData ON GoalData.goalId = taskData.foreignKeyToGoal WHERE GoalData.goalId = :goalId ")
+    LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId);
+
+    @Query("SELECT * FROM GoalData JOIN HabitData ON GoalData.goalId = HabitData.foreignKeyToGoal  WHERE GoalData.goalId = :goalId")
+    Map<GoalData, HabitData> getHabitsFromGoalWithoutLiveData(Long goalId);
+
+    @Transaction
+    @Query("SELECT * FROM GoalData JOIN taskData ON GoalData.goalId = taskData.foreignKeyToGoal WHERE GoalData.goalId = :goalId ")
+    Map<GoalData, List<TaskData>> getTasksFromGoalWithoutLiveData(Long goalId);
 
     /**
      * Method get GoalData with given id

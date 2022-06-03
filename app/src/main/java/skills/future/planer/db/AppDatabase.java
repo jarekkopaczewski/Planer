@@ -3,7 +3,6 @@ package skills.future.planer.db;
 import android.content.Context;
 import android.icu.util.Calendar;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -28,7 +27,7 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
-@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 7)
+@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 8)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
@@ -43,17 +42,14 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract GoalsDao goalsDao();
 
     public static AppDatabase getInstance(final Context context/*, final AppExecutors executors*/) {
+
+
         if (sInstance == null) {
-            synchronized (AppDatabase.class) {
-                if (sInstance == null) {
-                    Log.d(LOG_TAG, "Creating new database instance");
-                    sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                                    AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                            .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
-                }
-            }
+            sInstance = Room.databaseBuilder(context.getApplicationContext(),
+                            AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
         }
-        Log.d(LOG_TAG, "Getting the database instance");
+
         return sInstance;
     }
 
@@ -135,9 +131,9 @@ public abstract class AppDatabase extends RoomDatabase {
                         " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
                 goal.setGoalId(goalsDao.insert(goal));
                 habitDao.insert(new HabitData("test", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 1, goal.getGoalId()));
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
                 habitDao.insert(new HabitData("testbezcelu", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
                 habitDao.insert(new HabitData("test2", "1111111",
                         HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());

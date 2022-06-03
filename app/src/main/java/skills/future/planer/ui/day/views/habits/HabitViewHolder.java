@@ -3,9 +3,12 @@ package skills.future.planer.ui.day.views.habits;
 import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import lombok.Getter;
 import skills.future.planer.R;
@@ -21,6 +24,7 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
     private final HabitViewModel habitViewModel;
     private final HabitTotalAdapter habitTotalAdapter;
     private final Context context;
+    private final ImageView notification_icon;
 
     public HabitViewHolder(View itemView, HabitViewModel habitViewModel, HabitTotalAdapter habitTotalAdapter, Context context) {
         super(itemView);
@@ -29,6 +33,7 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
         checkBox = itemView.findViewById(R.id.habitBoxTask);
         this.habitTotalAdapter = habitTotalAdapter;
         this.context = context;
+        this.notification_icon=itemView.findViewById(R.id.notification_dot);
     }
 
     /**
@@ -40,6 +45,7 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
     public void setEveryThing(HabitData habitData, int position) {
         title.setText(habitData.getTitle());
         setCheckBoxListener(habitData, position);
+        setNotification_icon(habitData);
     }
 
     protected void setCheckBoxListener(HabitData habitData, int position) {
@@ -47,11 +53,27 @@ public class HabitViewHolder extends RecyclerView.ViewHolder {
         checkBox.setOnClickListener(e -> {
             try {
                 habitData.setHabitDoneIn(MonthFragment.getGlobalSelectedDate());
+                habitData.setNotification_icon(false);
                 habitViewModel.edit(habitData);
                 habitTotalAdapter.notifyItemChanged(position);
             } catch (DataBaseException dataBaseException) {
                 dataBaseException.printStackTrace();
             }
         });
+    }
+
+    /**
+     * Sets notification icon if current day is selected and it's habit notification time
+     * @param habitData habit data
+     */
+    private void setNotification_icon(HabitData habitData){
+        //getting selected day in calendar to compare with today
+        CalendarDay calendarDay = MonthFragment.getGlobalSelectedDate();
+        //checks to display notification icon
+        if(habitData.isNotification_icon() && calendarDay.getDate().equals(CalendarDay.today().getDate())){
+            notification_icon.setVisibility(View.VISIBLE);
+        }else {
+            notification_icon.setVisibility(View.INVISIBLE);
+        }
     }
 }

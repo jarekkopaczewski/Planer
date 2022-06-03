@@ -31,8 +31,16 @@ public class GoalRepository {
         return goalsDao.getHabitsFromGoal(goalId);
     }
 
-    LiveData<Map<GoalData, TaskData>> getTasksFromGoal(Long goalId) {
+    LiveData<Map<GoalData, List<TaskData>>> getTasksFromGoal(Long goalId) {
         return goalsDao.getTasksFromGoal(goalId);
+    }
+
+    Map<GoalData, HabitData> getHabitsFromGoalWithoutLiveData(Long goalId) {
+        return goalsDao.getHabitsFromGoalWithoutLiveData(goalId);
+    }
+
+    Map<GoalData, List<TaskData>> getTasksFromGoalWithoutLiveData(Long goalId) {
+        return goalsDao.getTasksFromGoalWithoutLiveData(goalId);
     }
 
     /**

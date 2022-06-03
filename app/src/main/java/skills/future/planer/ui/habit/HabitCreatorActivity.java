@@ -1,10 +1,11 @@
 package skills.future.planer.ui.habit;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
@@ -23,7 +25,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import skills.future.planer.R;
 import skills.future.planer.databinding.ActivityHabitCreatorBinding;
@@ -81,7 +82,12 @@ public class HabitCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, "brak");
             goalSpinner.setItems(list);
-           // goalSpinner.selectItemByIndex(0);
+            try {
+                int selected = parameters.getInt("goalId");
+                goalSpinner.selectItemByIndex(selected + 1);
+            } catch (NullPointerException | IndexOutOfBoundsException exp) {
+                exp.printStackTrace();
+            }
         });
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
@@ -108,55 +114,85 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
         if (parameters != null) {
             try {
-                HabitData habit = habitViewModel.findById(parameters.getLong("habitToEditId"));
-                int hours = (int) (habit.getNotificationTime() / 3600000);
-                int minute = (int) ((habit.getNotificationTime() / 60000) % 60);
+                if (!parameters.containsKey("goalId")) {
+                    HabitData habit = habitViewModel.findById(parameters.getLong("habitToEditId"));
+                    int hours = (int) (habit.getNotificationTime() / 3600000);
+                    int minute = (int) ((habit.getNotificationTime() / 60000) % 60);
 
-                calendar.set(Calendar.HOUR_OF_DAY, hours);
-                calendar.set(Calendar.MINUTE, minute);
-                editTextTitle.setText(habit.getTitle());
-                timeEditText.setText(formatter.format(calendar.getTime()));
-                editTextDateHabit.setText(DatesParser.toLocalDate(habit.getBeginCalendarDay())
-                        .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-                var days = habit.getDaysOfWeek();
-                MondayChip.setChecked(days.charAt(0) == '1');
-                TuesdayChip.setChecked(days.charAt(1) == '1');
-                WednesdayChip.setChecked(days.charAt(2) == '1');
-                ThursdayChip.setChecked(days.charAt(3) == '1');
-                FridayChip.setChecked(days.charAt(4) == '1');
-                SaturdayChip.setChecked(days.charAt(5) == '1');
-                SundayChip.setChecked(days.charAt(6) == '1');
-                switch (habit.getHabitDuration()) {
-                    case UltraShort -> habitDurationSpinner.selectItemByIndex(0);
-                    case Short -> habitDurationSpinner.selectItemByIndex(1);
-                    case Long -> habitDurationSpinner.selectItemByIndex(2);
+                    calendar.set(Calendar.HOUR_OF_DAY, hours);
+                    calendar.set(Calendar.MINUTE, minute);
+                    editTextTitle.setText(habit.getTitle());
+                    timeEditText.setText(formatter.format(calendar.getTime()));
+                    editTextDateHabit.setText(DatesParser.toLocalDate(habit.getBeginCalendarDay())
+                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                    var days = habit.getDaysOfWeek();
+                    MondayChip.setChecked(days.charAt(0) == '1');
+                    TuesdayChip.setChecked(days.charAt(1) == '1');
+                    WednesdayChip.setChecked(days.charAt(2) == '1');
+                    ThursdayChip.setChecked(days.charAt(3) == '1');
+                    FridayChip.setChecked(days.charAt(4) == '1');
+                    SaturdayChip.setChecked(days.charAt(5) == '1');
+                    SundayChip.setChecked(days.charAt(6) == '1');
+                    switch (habit.getHabitDuration()) {
+                        case UltraShort -> habitDurationSpinner.selectItemByIndex(0);
+                        case Short -> habitDurationSpinner.selectItemByIndex(1);
+                        case Long -> habitDurationSpinner.selectItemByIndex(2);
+                    }
+                    calendar2.setTimeInMillis(habit.getBeginDay());
+                    setGoal(habit);
+                    saveButtonOnActionWhenEditing(habit);
+                    setTitle("Edytor Nawyków");
+                } else {
+                    setUpDefaultHabit();
                 }
-                calendar2.setTimeInMillis(habit.getBeginDay());
-                setGoal(habit);
-                saveButtonOnActionWhenEditing(habit);
-                setTitle("Edytor Nawyków");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         } else {
-            // set current time & date
-            calendar2.set(MonthFragment.getGlobalSelectedDate().getYear(),
-                    MonthFragment.getGlobalSelectedDate().getMonth() - 1,
-                    MonthFragment.getGlobalSelectedDate().getDay());
-            timeEditText.setText(formatter.format(calendar.getTime()));
-            editTextDateHabit.setText(formatterDate.format(calendar2.getTime()));
-            goalSpinner.setText(getResources().getString(R.string.noneGoal));
-
-            // add save button listener & add conditions check
-            saveHabitButtonSetUp();
-
-            setTitle(R.string.habitsTitle);
-
-            habitDurationSpinner.selectItemByIndex(0);
-
+            setUpDefaultHabit();
         }
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home){
+            showDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public void onBackPressed() {
+        showDialog();
+    }
+
+    private void showDialog() {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+                .setIcon(R.drawable.warning)
+                .setTitle(R.string.exit_activity_warning_1)
+                .setMessage(R.string.exit_activity_warning_2)
+                .setPositiveButton(R.string.agree, (dialog, which) -> finish())
+                .setNegativeButton(R.string.disagree, null)
+                .show();
+    }
+
+
+    private void setUpDefaultHabit() {
+        // set current time & date
+        calendar2.set(MonthFragment.getGlobalSelectedDate().getYear(),
+                MonthFragment.getGlobalSelectedDate().getMonth() - 1,
+                MonthFragment.getGlobalSelectedDate().getDay());
+        timeEditText.setText(formatter.format(calendar.getTime()));
+        editTextDateHabit.setText(formatterDate.format(calendar2.getTime()));
+        goalSpinner.setText(getResources().getString(R.string.noneGoal));
+
+        // add save button listener & add conditions check
+        saveHabitButtonSetUp();
+
+        setTitle(R.string.habitsTitle);
+
+        habitDurationSpinner.selectItemByIndex(0);
     }
 
     /**
@@ -191,10 +227,10 @@ public class HabitCreatorActivity extends AppCompatActivity {
                             DatesParser.toLocalDate(calendar2.getTime()),
                             calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
 
-                    if(selectedGoal!=null) {
+                    if (selectedGoal != null) {
                         habit.setForeignKeyToGoal(selectedGoal.getGoalId());
                     }
-                    if(goalSpinner.getSelectedIndex()==0){
+                    if (goalSpinner.getSelectedIndex() == 0) {
                         habit.setForeignKeyToGoal(null);
                     }
 
@@ -240,10 +276,10 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     habitData.setNotificationTime(
                             calendar.get(Calendar.HOUR_OF_DAY),
                             calendar.get(Calendar.MINUTE));
-                    if(selectedGoal!=null) {
+                    if (selectedGoal != null) {
                         habitData.setForeignKeyToGoal(selectedGoal.getGoalId());
                     }
-                    if(goalSpinner.getSelectedIndex()==0){
+                    if (goalSpinner.getSelectedIndex() == 0) {
                         habitData.setForeignKeyToGoal(null);
                     }
                     habitViewModel.edit(habitData);
@@ -289,29 +325,15 @@ public class HabitCreatorActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.reminder_too_many_habits, Toast.LENGTH_LONG).show();
     }
 
-    private void setGoal(HabitData habitData){
+    private void setGoal(HabitData habitData) {
         GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
-
         goalsViewModel.getAllGoals().observe(this, goalData -> {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
-            list.add(0,"brak");
+            list.add(0, getString(R.string.empty));
             goalSpinner.setItems(list);
-            GoalData goalData1 = goalsViewModel.findById(habitData.getForeignKeyToGoal());
-            String title = null;
-            if(goalData1!=null){
-                title = goalsViewModel.findById(habitData.getForeignKeyToGoal()).getTitle();
-            }
-            if(title != null){
-                String finalTitle = title;
-                var find = IntStream.range(0,list.size())
-                        .filter(i -> finalTitle.equals(list.get(i)))
-                        .findAny()
-                        .orElse(-1);
-
-                if(find!=-1){
-                    goalSpinner.selectItemByIndex(find);
-                }
-            }else {
+            try {
+                goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(habitData.getForeignKeyToGoal()).getTitle()));
+            } catch (NullPointerException exp) {
                 goalSpinner.selectItemByIndex(0);
             }
         });

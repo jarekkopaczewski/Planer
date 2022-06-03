@@ -9,4 +9,18 @@
         <item>1</item>
         <item>-1</item>
     </string-array>
+    <string-array name="months">
+        <item>styczeń</item>
+        <item>luty</item>
+        <item>marzec</item>
+        <item>kwiecień</item>
+        <item>maj</item>
+        <item>czerwiec</item>
+        <item>lipiec</item>
+        <item>sierpień</item>
+        <item>wrzesień</item>
+        <item>październik</item>
+        <item>listopad</item>
+        <item>grudzień</item>
+    </string-array>
 </resources>

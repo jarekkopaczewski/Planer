@@ -1,18 +1,21 @@
 package skills.future.planer.ui.goals.pager.recycler;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,7 +31,7 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
-import skills.future.planer.ui.habit.view_holders.HabitViewHolder;
+import skills.future.planer.ui.habit.view_holders.HabitSimpleViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
 
@@ -91,8 +94,8 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
                     R.layout.goal_in_list_title), context, activity);
             case LAYOUT_DESCRIPTION -> new GoalViewHolderDescription(createViewOfItem(parent,
                     R.layout.goal_in_list_description), context, activity);
-            case LAYOUT_HABIT -> new HabitViewHolder(createViewOfItem(parent,
-                    R.layout.fragment_habit_in_list), context, activity);
+            case LAYOUT_HABIT -> new HabitSimpleViewHolder(createViewOfItem(parent,
+                    R.layout.fragment_habit_in_list_simple), context, activity);
             case LAYOUT_HABIT_EXTENDED -> new HabitExtendedViewHolder(createViewOfItem(parent,
                     R.layout.fragment_habit_in_list_extended), context, activity);
             case LAYOUT_TASK_EXTENDED -> new TaskDataViewHolderExtended(createViewOfItem(parent,
@@ -132,8 +135,10 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setGoalData(GoalData goalData) {
         this.goalData = goalData;
+        notifyDataSetChanged();
     }
 
     private void createListenerToEditButton(@NonNull ICustomViewHolder holder) {
@@ -175,21 +180,34 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void createListenerToTrashButton(@NonNull ICustomViewHolder holder) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        var view = holder.itemView.findViewById(R.id.trashImageView);
+        view.setOnClickListener(e -> new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+                .setIcon(R.drawable.warning)
+                .setTitle(R.string.confirm_deletion)
+                .setMessage(R.string.confirm_deletion_2)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.zoomout);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
 
-        builder.setTitle("Potwierdź usunięcie");
-        builder.setMessage("Jesteś pewien, że chcesz usunać?");
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            new ViewModelProvider(activity).get(GoalsViewModel.class).delete(goalData);
+                        }
 
-        builder.setPositiveButton("Usuń", (dialog, which) -> {
-            new ViewModelProvider(activity).get(GoalsViewModel.class).delete(goalData);
-            dialog.dismiss();
-        });
-
-        builder.setNegativeButton("Anuluj", (dialog, which) -> dialog.dismiss());
-
-        AlertDialog alert = builder.create();
-        holder.itemView.findViewById(R.id.trashImageView).setOnClickListener(e -> alert.show());
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+                    holder.itemView.startAnimation(animation);
+                    dialog.dismiss();
+                })
+                .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+                .show());
     }
 
     @SuppressLint("NotifyDataSetChanged")

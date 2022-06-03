@@ -61,7 +61,8 @@
                         app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Large"
                         app:mcv_selectionColor="@color/second_color_30"
                         app:mcv_selectionMode="single"
-                        app:mcv_showOtherDates="all">
+                        app:mcv_showOtherDates="all"
+                        app:mcv_monthLabels="@array/months">
 
                     </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
                 </androidx.cardview.widget.CardView>

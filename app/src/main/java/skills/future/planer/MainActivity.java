@@ -27,10 +27,13 @@ import androidx.preference.PreferenceManager;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import java.util.Calendar;
 
 import lombok.SneakyThrows;
 import skills.future.planer.databinding.ActivityMainBinding;
 import skills.future.planer.db.AppDatabase;
+import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.notification.NotificationService;
 import skills.future.planer.ui.settings.SettingsActivity;
 
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavigationView navigationView;
     private static boolean notification = false;
+    private int numberOfNotDoneHabits;
 
 
     /**
@@ -55,6 +59,40 @@ public class MainActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Checks if habit has to be completed - shows notification on bottom bar and in habit list
+     */
+    private void checkHabitDotNotification(BottomNavigationView bottomView, AppDatabase appDatabase) {
+        numberOfNotDoneHabits = 0;
+        var cal2 = Calendar.getInstance();
+        cal2.set(Calendar.HOUR_OF_DAY, 0);
+        cal2.set(Calendar.MINUTE, 0);
+        cal2.set(Calendar.SECOND, 0);
+        cal2.set(Calendar.MILLISECOND, 0);
+        HabitDao habitDao = appDatabase.habitDao();
+        habitDao.getHabitDataByDate(Calendar.getInstance().getTimeInMillis())
+                .observe((this), habitDataList -> {
+                    habitDataList.forEach(habitData -> {
+                        if (!habitData.isHabitDone(CalendarDay.today()) &&
+                                habitData.getNotificationTime() < (Calendar.getInstance().getTimeInMillis()) - cal2.getTimeInMillis()) {
+                            numberOfNotDoneHabits++;
+                            if (!habitData.isNotification_icon()) {
+                                habitData.setNotification_icon(true);
+                                appDatabase.habitDao().editOne(habitData);
+                            }
+                        }
+                    });
+                    var badge = bottomView.getOrCreateBadge(R.id.nav_day);
+                    if (numberOfNotDoneHabits > 0) {
+                        badge.setNumber(numberOfNotDoneHabits);
+                        badge.setVisible(true);
+                        numberOfNotDoneHabits = 0;
+                    } else {
+                        badge.setVisible(false);
+                    }
+                });
     }
 
     @SneakyThrows
@@ -73,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         navigationView = binding.navView;
         bottomView = binding.appBarMain.bottomBar;
+
         MaterialToolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -88,13 +127,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        AppDatabase appDatabase = AppDatabase.getInstance(this);
+
         // set up bottom bar
+        checkHabitDotNotification(bottomView, appDatabase);
         AppBarConfiguration bottomAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_month, R.id.nav_day, R.id.nav_task_list).build();
         NavController bottomNavController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, bottomNavController, bottomAppBarConfiguration);
         NavigationUI.setupWithNavController(bottomView, bottomNavController);
-
-        AppDatabase appDatabase = AppDatabase.getInstance(this);
 
         // change navigation bar color
         getWindow().setNavigationBarColor(getColor(R.color.navigationBarColor));

@@ -41,6 +41,8 @@
     <string name="confirm_deletion_2">Jesteś pewien że checsz usunąć?</string>
     <string name="yes">Usuń</string>
     <string name="no">Anuluj</string>
+    <string name="agree">Tak</string>
+    <string name="disagree">Nie</string>
     <string name="large_text">
 
         "Material is the metaphor."
@@ -79,10 +81,23 @@
     <string name="reminder_too_many_habits">Masz za dużo nawyków!</string>
     <string name="goalCreatorTitleHint">Nazwa celu</string>
     <string name="goalCreatorDetailsHint">Opis celu</string>
-    <string name="dateOfBeginGoalCreatorHint">data rozpoczęcia celu</string>
-    <string name="goalCreatorDateLabel">Data rozpoczęcia celu:</string>
+    <string name="dateOfBeginGoalCreatorHint">data osiągnięcia celu</string>
+    <string name="goalCreatorDateLabel">Data osiągnięcia celu:</string>
     <string name="GoalListHabitsAndTasksLabel">Nawyki i zadania:</string>
     <string name="goalText">Cel</string>
     <string name="choiceGoalText">Wybierz cel:</string>
     <string name="noneGoal">brak</string>
+    <string name="task_creator_title">Kreator zadań</string>
+    <string name="task_title_warning">Tytuł nie może być pusty!</string>
+    <string name="task_editor_title">Edytor Zadań</string>
+    <string name="empty_begin_date_error">Data rozpoczęcia zadania nie może być pusta</string>
+    <string name="end_date_task_error">Data zakończenia zadania nie może być pusta</string>
+    <string name="wrong_time_selection_error">Data zakończenia zadania nie może być wcześniej niż data jego rozpoczęcia!</string>
+    <string name="empty">brak</string>
+    <string name="exit_activity_warning_1">Dane nie zostały zapisane!</string>
+    <string name="exit_activity_warning_2">Na pewno chcesz wyjść z edytora?</string>
+    <string name="noGoals">Cel: 0/0</string>
+    <string name="day_habit_no_habits_info">Nie posiadasz dzisiaj żadnych nawyków</string>
+    <string name="goal_month_picker_title">Kiedy planujesz osiągnąć swój cel?</string>
+    <string name="goal_error_date">Niepoprawna data osiągnięcia celu!</string>
 </resources>

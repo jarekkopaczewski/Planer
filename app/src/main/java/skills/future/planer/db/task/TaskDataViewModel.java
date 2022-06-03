@@ -95,4 +95,8 @@ public class TaskDataViewModel extends AndroidViewModel {
     public void deleteTaskData(TaskData taskData) {
         mRepository.deleteTaskData(taskData);
     }
+
+    public TaskData findById(Long taskId) throws Exception {
+        return mRepository.findById(taskId);
+    }
 }

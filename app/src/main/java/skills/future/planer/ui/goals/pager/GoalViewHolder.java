@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import lombok.Getter;
 import skills.future.planer.R;
@@ -42,11 +43,15 @@ public class GoalViewHolder extends RecyclerView.ViewHolder {
                 .observe(fragment, goalDataListMap -> {
                     if (goalDataListMap.size() > 0)
                         mixedViewAdapter.setHabitsList(new ArrayList<>(goalDataListMap.values()));
+                    else
+                        mixedViewAdapter.setHabitsList(new ArrayList<>());
                 });
         goalsViewModel.getTasksFromGoal(goalData.getGoalId())
                 .observe(fragment, goalDataListMap -> {
                     if (goalDataListMap.size() > 0)
-                        mixedViewAdapter.setFullTaskList(new ArrayList<>(goalDataListMap.values()));
+                        mixedViewAdapter.setFullTaskList(new ArrayList<>(Objects.requireNonNull(goalDataListMap.get(goalData))));
+                    else
+                        mixedViewAdapter.setFullTaskList(new ArrayList<>());
                 });
     }
 }

@@ -45,6 +45,7 @@ public class HabitData implements MixedRecyclerElement {
     private String dayChecking;
     private Long foreignKeyToGoal;
     private Long notificationTime;
+    private boolean notification_icon;
 
     public HabitData() {
         title = dayChecking = daysOfWeek = "";
@@ -198,7 +199,7 @@ public class HabitData implements MixedRecyclerElement {
     public boolean isHabitDone(CalendarDay globalSelectedDate) {
         int dif = (int) ChronoUnit.DAYS.between(DatesParser.toLocalDate(beginDay),
                 DatesParser.toLocalDate(globalSelectedDate));
-        if (dif >= 0 && dif <= habitDuration.getDaysNumber())
+        if (dif >= 0 && dif < habitDuration.getDaysNumber())
             return dayChecking.charAt(dif) == '1';
         return false;
     }
