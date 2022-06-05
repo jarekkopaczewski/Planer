@@ -20,6 +20,7 @@ public class GoalData implements MixedRecyclerElement {
     private Long goalId;
     private String title, details;
     private Long date;
+    private Long starting_date;
 
     public GoalData() {
     }

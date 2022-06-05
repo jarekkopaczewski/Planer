@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.stream.Collectors;
 
+import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListCreatorBinding;
 import skills.future.planer.db.goal.GoalData;
@@ -50,7 +52,14 @@ public class TaskCreatorActivity extends AppCompatActivity {
     private GoalData selectedGoal;
     private TaskDataViewModel taskDataViewModel;
     private Bundle parameters;
+    private TaskData edition_copy;
+    private String endingDateOnStart;
+    private String beginDateOnStart;
+    private boolean edit = false;
+    private TextView textView;
+    private boolean start = false;
 
+    @SneakyThrows
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +73,6 @@ public class TaskCreatorActivity extends AppCompatActivity {
 
         this.parameters = getIntent().getExtras();
         setTitle(getString(R.string.task_creator_title));
-
-        createEditDateFields();
         createSwitch();
 
         // binding
@@ -73,19 +80,27 @@ public class TaskCreatorActivity extends AppCompatActivity {
         goalSpinner = binding.goalSpinner;
         taskTitleEditText = binding.EditTextTitle;
         taskDetailsEditText = binding.EditTextDetails;
+        textView = binding.textView;
 
-        setStartingDateByGlobalDate();
+
+        createEditDateFields();
         processFabColor();
-        setUpGoals();
+        setGoal();
 
-        boolean edit = false;
+
         if (parameters != null) {
             if (!parameters.containsKey("goalId")) {
                 edit = true;
                 setUpValuesOnEdit();
+                beginDateOnStart = beginDateEditText.getText().toString();
+                endingDateOnStart = endingDateEditText.getText().toString();
+                edition_copy = (TaskData) editTask.clone();
             }
-        }
+        }else start = true;
         saveBtnOnClickListenerSetter(edit);
+        if(editTask.getStartingDate()!=0 && !edit) {
+            setStartingDateByGlobalDate();
+        }
     }
 
     @Override
@@ -103,13 +118,15 @@ public class TaskCreatorActivity extends AppCompatActivity {
     }
 
     private void showDialog() {
-        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
-                .setIcon(R.drawable.warning)
-                .setTitle(R.string.exit_activity_warning_1)
-                .setMessage(R.string.exit_activity_warning_2)
-                .setPositiveButton(R.string.agree, (dialog, which) -> finish())
-                .setNegativeButton(R.string.disagree, null)
-                .show();
+        if(checkEdit() || start) {
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+                    .setIcon(R.drawable.warning)
+                    .setTitle(R.string.exit_activity_warning_1)
+                    .setMessage(R.string.exit_activity_warning_2)
+                    .setPositiveButton(R.string.agree, (dialog, which) -> finish())
+                    .setNegativeButton(R.string.disagree, null)
+                    .show();
+        }else finish();
     }
 
     private void setUpValuesOnEdit() {
@@ -123,22 +140,26 @@ public class TaskCreatorActivity extends AppCompatActivity {
                 switchCategory.setChecked(editTask.getCategory() == TaskCategory.Work);
                 // ustawianie celi jest w observerze bo szybciej wykonywało się uzypełnianie niż
                 // wczytywała się baza
-                if (editTask.getStartingDate() != 0) {
-                    switchDate.setChecked(true);
-                    var beginDate = editTask.getStartingCalendarDate();
-                    var endingDate = editTask.getEndingCalendarDate();
-                    beginDayCalendar.set(beginDate.getYear(), beginDate.getMonth() - 1, beginDate.getDay());
-                    endingDayCalendar.set(endingDate.getYear(), endingDate.getMonth() - 1, endingDate.getDay());
-                    endingDateEditText.setText(DatesParser.toLocalDate(editTask.getEndingDate())
-                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-                    beginDateEditText.setText(DatesParser.toLocalDate(editTask.getStartingDate())
-                            .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-                }
+                setUpDatesOnEdit();
                 setGoal();
                 setTitle(getString(R.string.task_editor_title));
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setUpDatesOnEdit(){
+        if (editTask.getStartingDate() != 0) {
+            switchDate.setChecked(true);
+            var beginDate = editTask.getStartingCalendarDate();
+            var endingDate = editTask.getEndingCalendarDate();
+            beginDayCalendar.set(beginDate.getYear(), beginDate.getMonth() - 1, beginDate.getDay());
+            endingDayCalendar.set(endingDate.getYear(), endingDate.getMonth() - 1, endingDate.getDay());
+            endingDateEditText.setText(DatesParser.toLocalDate(editTask.getEndingDate())
+                    .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            beginDateEditText.setText(DatesParser.toLocalDate(editTask.getStartingDate())
+                    .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
         }
     }
 
@@ -193,6 +214,8 @@ public class TaskCreatorActivity extends AppCompatActivity {
         endingDateEditText = binding.editTextEndDate;
         endingDateEditText.setVisibility(View.INVISIBLE);
 
+        textView.setVisibility(View.INVISIBLE);
+
         datePickers();
     }
 
@@ -208,6 +231,11 @@ public class TaskCreatorActivity extends AppCompatActivity {
         switchDate.setOnCheckedChangeListener((compoundButton, b) -> {
                     beginDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
                     endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
+                    textView.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
+                    if(editTask.getStartingDate()==0 && b){
+                        updateEndingDateEditText();
+                        updateBeginDateEditText();
+                    }
                 }
         );
         createSwitchIconListeners();
@@ -416,11 +444,39 @@ public class TaskCreatorActivity extends AppCompatActivity {
                 goalSpinner.selectItemByIndex(0);
             }
         });
+
+        goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
+            String goalText = (String) goalSpinner.getText();
+            goalsViewModel.getAllGoals().observe(this, goalData -> selectedGoal =
+                    goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny().orElse(null));
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         processFabColor();
+    }
+
+    private boolean checkEdit(){
+        if(edit){
+            setTaskData();
+            if(switchDate.isChecked()) {
+                updateEndingDateEditText();
+                updateBeginDateEditText();
+            }else {
+                beginDateEditText.setText("");
+                endingDateEditText.setText("");
+                editTask.setEndingDate(0);
+                editTask.setStartingDate(0);
+            }
+            if (selectedGoal != null)
+                editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
+            if (goalSpinner.getSelectedIndex() == 0)
+                editTask.setForeignKeyToGoal(null);
+            return !(editTask.equals2(edition_copy) &&
+                    endingDateOnStart.equals(endingDateEditText.getText().toString()) &&
+                    beginDateOnStart.equals(beginDateEditText.getText().toString()));
+        }else return false;
     }
 }
