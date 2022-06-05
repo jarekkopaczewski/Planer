@@ -131,7 +131,7 @@ public abstract class AppDatabase extends RoomDatabase {
                         " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
                 goal.setGoalId(goalsDao.insert(goal));
                 habitDao.insert(new HabitData("test", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 1, goal.getGoalId()));
                 habitDao.insert(new HabitData("testbezcelu", "1111111",
                         HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
                 habitDao.insert(new HabitData("test2", "1111111",
