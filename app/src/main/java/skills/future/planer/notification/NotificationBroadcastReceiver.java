@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.core.app.NotificationManagerCompat;
 
@@ -18,12 +17,14 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
     private final Executor backgroundExecutor = Executors.newSingleThreadExecutor();
 
+    /**
+     * Receives notification information and shows it
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         final PendingResult pendingResult = goAsync();
         backgroundExecutor.execute(() -> {
             try {
-                Log.println(Log.ASSERT, "test", "Jestem w broadcascie");
                 try {
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
                     Notification notification = intent.getParcelableExtra(NOTIFICATION);

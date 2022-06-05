@@ -10,22 +10,32 @@ import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitRepository;
 import skills.future.planer.tools.DatesParser;
 
-public record NotificationFactory(Context context,
-                                  HabitRepository habitRepository) {
+public class NotificationFactory {
 
     private static final String CHANNEL_ID = "100";
     private static final String CHANNEL_NAME = "Habit Channel";
     private static final String CHANNEL_DESCRIPTION = "Channel of Planer application";
 
     private static int notificationId = 1;
+    private final Context context;
+    private final HabitRepository habitRepository;
 
+    public NotificationFactory(Context context, HabitRepository habitRepository) {
+        this.context = context;
+        this.habitRepository = habitRepository;
+    }
+
+    /**
+     * Counts not done habits for date
+     *
+     * @return - number of not done habits
+     */
     private long countNotDoneNotification(LocalDate date) {
         return habitRepository.getAllHabitDataFromDayList(DatesParser.toMilliseconds(date))
                 .stream()
                 .filter(habitData -> !habitData.isHabitDone(DatesParser.toCalendarDay(date)))
                 .count();
     }
-
 
     /**
      * Generates Notification depending on type
@@ -50,7 +60,9 @@ public record NotificationFactory(Context context,
         return null;
     }
 
-
+    /**
+     * Creates notification channel
+     */
     private void createHabitNotificationChannel() {
         var channel = new NotificationChannel(
                 CHANNEL_ID,

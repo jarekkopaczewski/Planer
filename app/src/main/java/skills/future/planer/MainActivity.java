@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -106,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
 
         createService();
 
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -152,25 +154,50 @@ public class MainActivity extends AppCompatActivity {
             else navDrawer.closeDrawer(Gravity.RIGHT);
         });
 
+        askForBatteryPermission();
+        checkBundleNavigation();
+
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    /**
+     * Checks if battery optimization is enabled
+     */
+    private void askForBatteryPermission() {
+        Intent intent = new Intent();
+        String packageName = getPackageName();
+        PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+        if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Make move if someone click notification
+     */
+    private void checkBundleNavigation() {
         try {
             Bundle bundle = getIntent().getExtras();
-            notification = bundle.containsKey("notification");
+            notification = bundle.containsKey("move");
             if (notification) {
+                getIntent().removeExtra("move");
                 bottomView.setSelectedItemId(R.id.nav_day);
+                notification = false;
             }
         } catch (NullPointerException ignore) {
         }
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        checkBundleNavigation();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        //startService(new Intent(this, NotificationService.class));
     }
 
     // set/read settings
@@ -216,12 +243,14 @@ public class MainActivity extends AppCompatActivity {
     private NotificationService notificationService;
 
     private void createService() {
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        startService(serviceIntent);
-        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        if (!NotificationService.serviceRunning) {
+            Intent serviceIntent = new Intent(this, NotificationService.class);
+            startService(serviceIntent);
+            bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             notificationService = ((NotificationService.LocalBinder) service).getService();

@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleService;
@@ -31,19 +30,20 @@ import skills.future.planer.ui.settings.SettingsActivity;
 
 public class NotificationService extends LifecycleService {
 
+    public static Boolean serviceRunning = false;
+
+    private static final long oneDayInMilliseconds = 86400000;
+    private static final Object mutex = new Object();
 
     private NotificationFactory notificationFactory;
     private HabitRepository habitRepository;
 
+    private PendingIntent pendingIntent;
     private final IBinder binder = new LocalBinder();
     private SharedPreferences sharedPref;
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     private AlarmManager alarmManager;
-    private PendingIntent pendingIntent;
-    private static final long oneDayInMilliseconds = 86400000;
 
-
-    private static final Object mutex = new Object();
 
     public class LocalBinder extends Binder {
         public NotificationService getService() {
@@ -73,11 +73,12 @@ public class NotificationService extends LifecycleService {
 
         habitChangeObserver();
         summaryListener();
+        serviceRunning = true;
     }
 
 
     /**
-     * Recreates the notification queue after a habit change
+     * Starts process of scheduling notification when habit change
      */
     private void habitChangeObserver() {
         habitRepository.getAllHabitDataFromDay(Calendar.getInstance().getTimeInMillis())
@@ -88,36 +89,18 @@ public class NotificationService extends LifecycleService {
     }
 
     /**
-     * Recreates the notification queue after day change
+     * Starts process of scheduling notification when something run it
      */
     private Runnable habitRunnable() {
         return () -> {
-
-            Log.println(Log.ASSERT, "Service", "Jestem w runnable");
-            var calendarTime = Calendar.getInstance();
-            var time = calendarTime.getTimeInMillis();
-
-            calendarTime.set(Calendar.HOUR_OF_DAY, 0);
-            calendarTime.set(Calendar.MINUTE, 0);
-            calendarTime.set(Calendar.SECOND, 0);
-
-            var deltaTime = time - calendarTime.getTimeInMillis();
-
-            synchronized (mutex) {
-                cancelAlarmManager();
-
-                Optional<HabitData> minHabit = habitRepository.getAllHabitDataFromDayList(Calendar.getInstance().getTimeInMillis())
-                        .stream()
-                        .filter(habitData -> habitData.isDayOfWeekChecked(DatesParser.toLocalDate(time)))
-                        .filter(habitData -> habitData.getNotificationTime() - deltaTime > 0)
-                        .filter(habitData -> !habitData.isHabitDone(CalendarDay.today()))
-                        .min(Comparator.comparing(HabitData::getNotificationTime));
-
-                checkWhichNotificationShouldBeGenerated(calendarTime, time, deltaTime, minHabit);
-            }
+            var list = habitRepository.getAllHabitDataFromDayList(Calendar.getInstance().getTimeInMillis());
+            findWhichNotificationShouldBeGenerated(list);
         };
     }
 
+    /**
+     * Finds the earliest notification for current time
+     */
     private void findWhichNotificationShouldBeGenerated(List<HabitData> habitDataList) {
         var calendarTime = Calendar.getInstance();
         var time = calendarTime.getTimeInMillis();
@@ -125,19 +108,22 @@ public class NotificationService extends LifecycleService {
         calendarTime.set(Calendar.HOUR_OF_DAY, 0);
         calendarTime.set(Calendar.MINUTE, 0);
         calendarTime.set(Calendar.SECOND, 0);
+        calendarTime.set(Calendar.MILLISECOND, 0);
         var deltaTime = time - calendarTime.getTimeInMillis();
 
         synchronized (mutex) {
-            cancelAlarmManager();
             Optional<HabitData> minHabit = habitDataList.stream()
                     .filter(habitData -> habitData.isDayOfWeekChecked(DatesParser.toLocalDate(time)))
                     .filter(habitData -> habitData.getNotificationTime() - deltaTime > 0)
                     .filter(habitData -> !habitData.isHabitDone(CalendarDay.today())).min(Comparator.comparing(HabitData::getNotificationTime));
 
-            checkWhichNotificationShouldBeGenerated(calendarTime, time, deltaTime, minHabit);
+            setAlarmManagerOnSpecificDate(calendarTime, time, deltaTime, minHabit);
         }
     }
 
+    /**
+     * Counts time for habits summary
+     */
     private long countTimeToHabitSummary(SharedPreferences sharedPref) {
         int time_str = sharedPref.getInt(SettingsActivity.KEY_PREF_TIME, 72000);
         var summaryTime = Calendar.getInstance();
@@ -154,6 +140,9 @@ public class NotificationService extends LifecycleService {
         return summaryTime.getTimeInMillis() - calendarTime.getTimeInMillis();
     }
 
+    /**
+     * Schedules alarm manager which will wake up a broadcast receiver for specific date
+     */
     private void setAlarmManager(boolean daySummary, HabitData habitToNotify, long time, LocalDate date) {
         var myNotification = notificationFactory.generateNewNotification(
                 daySummary,
@@ -167,26 +156,33 @@ public class NotificationService extends LifecycleService {
             notificationIntent.putExtra(NotificationBroadcastReceiver.NOTIFICATION, myNotification.getNotification());
         }
 
+        cancelAlarmManager();
+
         pendingIntent = PendingIntent.getBroadcast(
                 this,
                 0,
                 notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
 
-        Log.println(Log.ASSERT, "Notification", "Powiadomienie ustalono na czas: " + time);
         alarmManager.setExact(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + time,
                 pendingIntent);
     }
 
+    /**
+     * Cancels current alarm manager
+     */
     private synchronized void cancelAlarmManager() {
         if (pendingIntent != null) {
             alarmManager.cancel(pendingIntent);
         }
     }
 
-    private void checkWhichNotificationShouldBeGenerated(Calendar calendarTime, long time, long deltaTime, Optional<HabitData> minHabit) {
+    /**
+     * Checks which timer should be scheduled
+     */
+    private void setAlarmManagerOnSpecificDate(Calendar calendarTime, long time, long deltaTime, Optional<HabitData> minHabit) {
         long habitSummaryTime = countTimeToHabitSummary(sharedPref);
         LocalDate currentDate = LocalDate.now();
 
@@ -208,6 +204,9 @@ public class NotificationService extends LifecycleService {
         }
     }
 
+    /**
+     * Checks is needed to generate notification for next day/days
+     */
     private void checkNextDay(@NonNull LocalDate date, long timeToNextDay) {
         LocalDate nextDay = date.plusDays(1);
 
@@ -228,8 +227,6 @@ public class NotificationService extends LifecycleService {
             long habitSummaryTime = countTimeToHabitSummary(sharedPref);
             if (minHabit.isPresent()) {
                 HabitData hd = minHabit.get();
-                Log.println(Log.ASSERT, "Podsumowanie", String.valueOf(habitSummaryTime));
-                Log.println(Log.ASSERT, "Nawyk", String.valueOf(hd.getNotificationTime()));
                 if (hd.getNotificationTime() < habitSummaryTime)
                     setAlarmManager(false, hd, timeToNextDay + hd.getNotificationTime(), nextDay);
                 else
@@ -241,7 +238,7 @@ public class NotificationService extends LifecycleService {
     }
 
     /**
-     * Recreates the summary notification after time change
+     * Recreates the summary notification after edit summary time in settings
      */
     private void summaryListener() {
         preferenceChangeListener = (sharedPreferences, key) -> {
@@ -253,7 +250,7 @@ public class NotificationService extends LifecycleService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        Log.println(Log.ASSERT, "Service", "Jestem w serwisie");
+        serviceRunning = true;
         Executors.newSingleThreadExecutor().execute(habitRunnable());
         return START_STICKY;
     }
@@ -261,7 +258,7 @@ public class NotificationService extends LifecycleService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.println(Log.ASSERT, "Death", "Ktoś mnie zabił");
+        serviceRunning = false;
     }
 }
 

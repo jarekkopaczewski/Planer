@@ -2,7 +2,6 @@ package skills.future.planer.notification;
 
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 
@@ -44,31 +43,9 @@ public class MyNotification extends android.app.Notification {
     private void createNotificationIntent() {
 
         Intent notificationIntent = new Intent(context.getApplicationContext(), MainActivity.class);
-        notificationIntent.putExtra("notification", true);
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        pendingIntent = PendingIntent.getActivity(context.getApplicationContext(), notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-        // Create an Intent for the activity you want to start
-        Intent resultIntent = new Intent(context.getApplicationContext(), MainActivity.class);
-
-        // Create the TaskStackBuilder and add the intent, which inflates the back stack
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addNextIntentWithParentStack(resultIntent);
-
-        // Get the PendingIntent containing the entire back stack
-       /* Bundle bundle = new Bundle();
-        bundle.putBoolean("notification", true);
-        pendingIntent =
-                stackBuilder.getPendingIntent(notificationId,
-                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE, bundle);*/
-
-
-//        pendingIntent = new NavDeepLinkBuilder(context)
-//                .setComponentName(MainActivity.class)
-//                .setGraph(R.navigation.mobile_navigation)
-//                .setDestination(R.id.nav_month)
-//                .setArguments(bundle)
-//                .createPendingIntent();
+        notificationIntent.putExtra("move", true);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        pendingIntent = PendingIntent.getActivity(context.getApplicationContext(), notificationId, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private void setNotificationSettings(HabitData habitData) {
@@ -87,7 +64,7 @@ public class MyNotification extends android.app.Notification {
                 .setSmallIcon(R.drawable.today_icon)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_REMINDER)
-                /*.setContentIntent(pendingIntent)*/
+                .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
         if (moreThanOne)
             builder.setContentTitle(context.getText(R.string.title_reminder_about_habit_plural))
