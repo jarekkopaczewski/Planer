@@ -3,12 +3,15 @@ package skills.future.planer.db.task;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.util.Objects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +27,7 @@ import skills.future.planer.ui.goals.pager.recycler.MixedRecyclerElement;
 @Getter
 @Setter
 @Entity(tableName = "taskData")
-public class TaskData implements Parcelable, MixedRecyclerElement {
+public class TaskData implements Parcelable, MixedRecyclerElement, Cloneable {
     /**
      * task id
      */
@@ -275,6 +278,32 @@ public class TaskData implements Parcelable, MixedRecyclerElement {
         result = 31 * result + (int) (getStartingDate() ^ (getStartingDate() >>> 32));
         result = 31 * result + (int) (getEndingDate() ^ (getEndingDate() >>> 32));
         return result;
+    }
+
+
+    public boolean equals2(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TaskData taskData = (TaskData) o;
+
+        //if (getStartingDate() != taskData.getStartingDate()) return false;
+        //if (getEndingDate() != taskData.getEndingDate()) return false;
+        if (!getTaskDataId().equals(taskData.getTaskDataId())) return false;
+        if (!getStatus().equals(taskData.getStatus())) return false;
+        if (getCategory() != taskData.getCategory()) return false;
+        if (getPriorities() != taskData.getPriorities()) return false;
+        if (getTimePriority() != taskData.getTimePriority()) return false;
+        if (!Objects.equals(getForeignKeyToGoal(), taskData.getForeignKeyToGoal())) return false;
+        if (getTaskTitleText() != null ? !getTaskTitleText().equals(taskData.getTaskTitleText()) : taskData.getTaskTitleText() != null)
+            return false;
+        return getTaskDetailsText() != null ? getTaskDetailsText().equals(taskData.getTaskDetailsText()) : taskData.getTaskDetailsText() == null;
+    }
+
+    @NonNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     /**
