@@ -20,6 +20,8 @@ import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
+import skills.future.planer.db.summary.SummaryDao;
+import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
@@ -27,7 +29,8 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
-@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 8)
+@Database(entities = {TaskData.class, HabitData.class, GoalData.class, SummaryData.class},
+        exportSchema = false, version = 8)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
@@ -41,12 +44,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract GoalsDao goalsDao();
 
+    public abstract SummaryDao summaryDao();
+
     public static AppDatabase getInstance(final Context context/*, final AppExecutors executors*/) {
 
 
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
+                    AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
                     .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
         }
 
