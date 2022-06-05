@@ -15,92 +15,50 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.chip.ChipGroup;
-
-import java.util.ArrayList;
-import java.util.List;
-
-
 import lombok.SneakyThrows;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentTaskListBinding;
-import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.db.task.enums.category.TaskCategory;
 import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.tasklist.filters_chain.TaskCategoryFilter;
+import skills.future.planer.ui.tasklist.filters_chain.TaskDoneFilter;
+import skills.future.planer.ui.tasklist.filters_chain.TaskPriorityFilter;
+import skills.future.planer.ui.tasklist.filters_chain.TaskTimePriorityFilter;
 
 public class TaskListFragment extends Fragment {
 
-    private RecyclerView listTotal;
     private TaskTotalAdapter taskTotalAdapter;
     private FragmentTaskListBinding binding;
-    private TaskDataViewModel mWordViewModel;
-    private ArrayList<String> filters;
 
-    public TaskListFragment() {
-    }
 
-    @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"})
+    @SuppressLint({"SetTextI18n"})
     @SneakyThrows
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentTaskListBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 
-        mWordViewModel = new ViewModelProvider(this).get(TaskDataViewModel.class);
-        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), this.getActivity());
-
-        listTotal = binding.listTotalView;
-        listTotal.setAdapter(taskTotalAdapter);
-
-       // mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), taskData -> taskTotalAdapter.setFilteredTaskList(taskData));
-
-        //list of filters
-        filters = new ArrayList<>();
-        //filter on not done tasks on start
-        filters.add("NotDone");
+        taskTotalAdapter = new TaskTotalAdapter(this.getContext(), this.getActivity(), new TaskDoneFilter(false));
         binding.notDoneTask.setChecked(true);
+        RecyclerView listTotal1 = binding.listTotalView;
+        listTotal1.setAdapter(taskTotalAdapter);
 
-        mWordViewModel.getAllTaskData().observe(this.getViewLifecycleOwner(), listTotal -> {
-            try {
-                taskTotalAdapter.setFilteredTaskList(listTotal);
-                taskTotalAdapter.CategoryFilter(filters);
-                taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        new ViewModelProvider(this).get(TaskDataViewModel.class).getAllTaskData().observe(this.getViewLifecycleOwner(), listTotal -> {
+            taskTotalAdapter.setDisplayedList(listTotal);
+            //taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
         });
 
-        listTotal.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
+        listTotal1.setLayoutManager(new LinearLayoutManager(this.getContext(),
+                RecyclerView.VERTICAL, false));
 
-        // fab enter animation
-        AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
-
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            TaskData result = bundle.getParcelable("bundleKey");
-            mWordViewModel.insert(result);
-        });
-
-        binding.fab.setOnClickListener(view -> {
-            AnimateView.animateInOut(binding.fab, getContext());
-            this.requireContext().startActivity(new Intent(this.getContext(), TaskCreatorActivity.class));
-        });
+        setUpFAB();
 
         binding.searchImageView.setOnClickListener(e -> {
             AnimateView.animateInOut(binding.searchImageView, this.getContext());
             taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
         });
-
-//        binding.searchEditText.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-//            @Override
-//            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-//                binding.searchEditText.setText("");
-//            }
-//        });
-
 
         binding.searchEditText.addTextChangedListener(new TextWatcher() {
 
@@ -109,7 +67,7 @@ public class TaskListFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (binding.searchEditText.getText().toString().equals("")) {
                     taskTotalAdapter.getFilter().filter("");
-                }else {
+                } else {
                     taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
                 }
             }
@@ -124,10 +82,24 @@ public class TaskListFragment extends Fragment {
                                       int before, int count) {
             }
         });
+        setUpChips();
+        return binding.getRoot();
+    }
 
-        /*
-         * Chips OnClick Listeners
-         */
+    private void setUpFAB() {
+        // fab enter animation
+        AnimateView.singleAnimation(binding.fab, getContext(), R.anim.downup);
+
+        binding.fab.setOnClickListener(view -> {
+            AnimateView.animateInOut(binding.fab, getContext());
+            this.requireContext().startActivity(new Intent(this.getContext(), TaskCreatorActivity.class));
+        });
+    }
+
+    /**
+     * Chips OnClick Listeners
+     */
+    private void setUpChips() {
         binding.workChip.setOnClickListener(view -> {
             if (binding.privateChip.isChecked())
                 binding.privateChip.setChecked(false);
@@ -168,59 +140,41 @@ public class TaskListFragment extends Fragment {
                 binding.notDoneTask.setChecked(false);
         });
 
-
         /*
          * Chip Group Listener
          * Searches by iDs and returns list of checked filters
          */
-        ChipGroup.OnCheckedStateChangeListener listener = (group, checkedIds) -> {
-
-            //list of checked chips ids
-            List<Integer> checked = binding.chipGroup.getCheckedChipIds();
-
-            //filters = new ArrayList<>();
-            filters.clear();
-
-            //getting chips ids
-            int work = binding.workChip.getId();
-            int private_chip = binding.privateChip.getId();
-            int urgent = binding.urgentChip.getId();
-            int not_urgent = binding.notUrgentChip.getId();
-            int important = binding.importantChip.getId();
-            int not_important = binding.notImportantChip.getId();
-            int notstatus = binding.notDoneTask.getId();
-            int status = binding.doneTask.getId();
-
+        binding.chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            taskTotalAdapter.cleanFilters();
             //compare them with checked ids
-            for (Integer id : checked) {
-                if (id.equals(work)) filters.add(TaskCategory.Work.toString());
-                if (id.equals(private_chip)) filters.add(TaskCategory.Private.toString());
-                if (id.equals(urgent)) filters.add(TimePriority.Urgent.toString());
-                if (id.equals(not_urgent)) filters.add(TimePriority.NotUrgent.toString());
-                if (id.equals(important)) filters.add(Priorities.Important.toString());
-                if (id.equals(not_important)) filters.add(Priorities.NotImportant.toString());
-                if (id.equals(notstatus)) filters.add("NotDone");
-                if (id.equals(status)) filters.add("Done");
+            for (Integer id : binding.chipGroup.getCheckedChipIds()) {
+                if (id.equals(binding.workChip.getId()))
+                    taskTotalAdapter.addFilter(new TaskCategoryFilter(TaskCategory.Work));
+                if (id.equals(binding.privateChip.getId()))
+                    taskTotalAdapter.addFilter(new TaskCategoryFilter(TaskCategory.Private));
+                if (id.equals(binding.urgentChip.getId()))
+                    taskTotalAdapter.addFilter(new TaskTimePriorityFilter(TimePriority.Urgent));
+                if (id.equals(binding.notUrgentChip.getId()))
+                    taskTotalAdapter.addFilter(new TaskTimePriorityFilter(TimePriority.NotUrgent));
+                if (id.equals(binding.importantChip.getId()))
+                    taskTotalAdapter.addFilter(new TaskPriorityFilter(Priorities.Important));
+                if (id.equals(binding.notImportantChip.getId()))
+                    taskTotalAdapter.addFilter(new TaskPriorityFilter(Priorities.NotImportant));
+                if (id.equals(binding.notDoneTask.getId()))
+                    taskTotalAdapter.addFilter(new TaskDoneFilter(false));
+                if (id.equals(binding.doneTask.getId()))
+                    taskTotalAdapter.addFilter(new TaskDoneFilter(true));
             }
-            // System.out.println(filters);
 
             //give list of filters to CategoryFilter
-            try {
-                taskTotalAdapter.CategoryFilter(filters);
-                if (binding.searchEditText.getText().toString().equals("")) {
-                    taskTotalAdapter.getFilter().filter("");
-                } else {
-                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+            taskTotalAdapter.CategoryFilter();
+            if (binding.searchEditText.getText().toString().equals("")) {
+                taskTotalAdapter.getFilter().filter("");
+            } else {
+                taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
             }
-        };
-
-        binding.chipGroup.setOnCheckedStateChangeListener(listener);
-
-
-        return root;
+        });
     }
 
     @SneakyThrows
