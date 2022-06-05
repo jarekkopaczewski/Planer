@@ -69,7 +69,7 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             saveFABSetUp(goal);
         } else {
             calendar.set(CalendarDay.today().getYear(),
-                    CalendarDay.today().getMonth() - 1,
+                    CalendarDay.today().getMonth(),
                     CalendarDay.today().getDay());
             saveFABSetUp();
         }
@@ -156,11 +156,12 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             if (titleEditText.getText() == null || titleEditText.getText().length() <= 0)
                 Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
             else {
-                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth() - 1)
+                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth())
                     Toast.makeText(this, R.string.goal_error_date, Toast.LENGTH_SHORT).show();
                 else {
                 var goal = new GoalData(titleEditText.getText().toString(),
                         detailEditText.getText().toString(), DatesParser.toLocalDate(calendar.getTime()));
+                goal.setStarting_date(DatesParser.toMilliseconds(CalendarDay.today()));
                 goalsViewModel.insert(goal);
                 finish();}
             }
@@ -172,7 +173,7 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             if (titleEditText.getText() == null || titleEditText.getText().length() <= 0)
                 Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
             else {
-                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth() - 1)
+                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth())
                     Toast.makeText(this, R.string.goal_error_date, Toast.LENGTH_SHORT).show();
                 else{
                     goal.setTitle(titleEditText.getText().toString());
