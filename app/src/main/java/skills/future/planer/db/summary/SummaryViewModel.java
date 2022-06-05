@@ -25,6 +25,13 @@ public class SummaryViewModel extends AndroidViewModel {
         return summaryRepository.getAllSummaries();
     }
 
+    /**
+     * example you want month summary from january, requires parameters are: localDate(2022.1.1) and MonthSummary
+     *
+     * @param date        specify from which period is summary required
+     * @param summaryType what type of summary is required
+     * @return list of summaries
+     */
     public List<SummaryData> getSummary(LocalDate date, SummaryType summaryType) {
         return summaryRepository.getSummary(date, summaryType);
     }
