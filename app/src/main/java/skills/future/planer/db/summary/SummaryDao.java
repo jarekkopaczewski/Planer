@@ -12,6 +12,7 @@ import java.util.List;
 
 @Dao
 public interface SummaryDao {
+
     /**
      * Method get summaryData with given id
      *
@@ -20,6 +21,15 @@ public interface SummaryDao {
      */
     @Query("SELECT * FROM SummaryData WHERE summaryId = :id")
     SummaryData findById(Long id);
+
+    @Query("SELECT * FROM SummaryData WHERE year = :year and summaryType = \"yearSummary\"")
+    List<SummaryData> getYearSummary(int year);
+
+    @Query("SELECT * FROM SummaryData WHERE year = :year and month = :month and summaryType = \"monthSummary\"")
+    List<SummaryData> getMonthSummary(int year, int month);
+
+    @Query("SELECT * FROM SummaryData WHERE year = :year and weekNumber =:weekNumber and  summaryType = \"weekSummary\"")
+    List<SummaryData> getWeekSummary(int year, int weekNumber);
 
     /**
      * @return all summaries from database in LiveData

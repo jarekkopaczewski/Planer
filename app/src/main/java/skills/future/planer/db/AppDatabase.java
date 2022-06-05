@@ -22,6 +22,7 @@ import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.summary.SummaryDao;
 import skills.future.planer.db.summary.SummaryData;
+import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
@@ -30,7 +31,7 @@ import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
 @Database(entities = {TaskData.class, HabitData.class, GoalData.class, SummaryData.class},
-        exportSchema = false, version = 8)
+        exportSchema = false, version = 10)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
@@ -74,6 +75,7 @@ public abstract class AppDatabase extends RoomDatabase {
         private final TaskDataDao mDao;
         private final HabitDao habitDao;
         private final GoalsDao goalsDao;
+        private final SummaryDao summaryDao;
         //String[] words = {"dolphin", "crocodile", "cobra"};
 
         PopulateDbAsync(AppDatabase db) {
@@ -81,6 +83,7 @@ public abstract class AppDatabase extends RoomDatabase {
             mDao = db.taskDataTabDao();
             habitDao = db.habitDao();
             goalsDao = db.goalsDao();
+            summaryDao = db.summaryDao();
         }
 
         @Override
@@ -151,6 +154,9 @@ public abstract class AppDatabase extends RoomDatabase {
                 e.printStackTrace();
             }
 
+            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu roku", DatesParser.toLocalDate(day), SummaryType.yearSummary));
+            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day), SummaryType.monthSummary));
+            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu tygodnia", DatesParser.toLocalDate(day), SummaryType.weekSummary));
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
 //                mDao.insert(word);

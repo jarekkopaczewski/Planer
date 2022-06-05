@@ -4,6 +4,8 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import java.util.List;
 
 import skills.future.planer.db.AppDatabase;
@@ -21,6 +23,14 @@ public class SummaryRepository {
      */
     LiveData<List<SummaryData>> getAllSummaries() {
         return summaryDao.getSummary();
+    }
+
+    public List<SummaryData> getSummary(LocalDate date, SummaryType summaryType) {
+        return switch (summaryType) {
+            case yearSummary -> summaryDao.getYearSummary(date.getYear());
+            case monthSummary -> summaryDao.getMonthSummary(date.getYear(), date.getMonthValue());
+            case weekSummary -> summaryDao.getWeekSummary(date.getYear(), date.get(ChronoField.ALIGNED_WEEK_OF_YEAR));
+        };
     }
 
     /**

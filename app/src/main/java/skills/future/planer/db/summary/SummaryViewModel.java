@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import lombok.NonNull;
@@ -20,8 +21,12 @@ public class SummaryViewModel extends AndroidViewModel {
     /**
      * @return reference to list of all summaries
      */
-    public LiveData<List<SummaryData>> getAllGoals() {
+    public LiveData<List<SummaryData>> getAllSummary() {
         return summaryRepository.getAllSummaries();
+    }
+
+    public List<SummaryData> getSummary(LocalDate date, SummaryType summaryType) {
+        return summaryRepository.getSummary(date, summaryType);
     }
 
     /**
