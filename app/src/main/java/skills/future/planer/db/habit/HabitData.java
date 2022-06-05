@@ -275,9 +275,7 @@ public class HabitData implements MixedRecyclerElement, Cloneable {
     @Override
     public HabitData clone() {
         try {
-            HabitData clone = (HabitData) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
-            return clone;
+            return (HabitData) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
