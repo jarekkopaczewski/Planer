@@ -3,6 +3,7 @@
     package="skills.future.planer">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +29,7 @@
 
         <service
             android:name=".notification.NotificationService"
+            android:enabled="true"
             android:exported="false"
             android:launchMode="singleTop" />
 
@@ -60,6 +62,14 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Planer.NoActionBar" />
+
+        <receiver
+            android:name=".notification.NotificationBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.NOTIFY" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

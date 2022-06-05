@@ -28,7 +28,9 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import java.util.Calendar;
+import java.util.Objects;
 
 import lombok.SneakyThrows;
 import skills.future.planer.databinding.ActivityMainBinding;
@@ -104,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         createService();
 
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
         MaterialToolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -123,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         // set up corner menu
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow).setOpenableLayout(drawer).build();
+        assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
