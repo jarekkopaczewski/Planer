@@ -34,23 +34,30 @@ public class HabitViewModel extends AndroidViewModel {
         return habitRepository.getAllHabits();
     }
 
-    public LiveData<List<HabitData>> getAllHabitDataFromDay(CalendarDay date) {
+    public LiveData<List<HabitData>> getAllHabitDataFromDayLiveData(CalendarDay date) {
         return habitRepository.getAllHabitDataFromDay(DatesParser.toMilliseconds(date));
     }
 
+    public List<HabitData> getAllHabitDataFromDay(CalendarDay date) {
+        return habitRepository.getAllHabitDataFromDayList(DatesParser.toMilliseconds(date));
+    }
+
+
     /**
      * Method insert habit to database
+     *
      * @param habitData which will be inserted
      */
-    public void insert(HabitData habitData){
+    public void insert(HabitData habitData) {
         habitRepository.insert(habitData);
     }
 
     /**
      * Method edit habit in database
+     *
      * @param habitData which will be updated
      */
-    public void edit(HabitData habitData){
+    public void edit(HabitData habitData) {
         habitRepository.edit(habitData);
     }
 

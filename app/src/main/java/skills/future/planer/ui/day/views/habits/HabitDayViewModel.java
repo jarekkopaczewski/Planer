@@ -33,38 +33,41 @@ public class HabitDayViewModel extends ViewModel {
      * Sets observer for list for concrete day
      */
     public void updateDate(CalendarDay date) {
-        habitViewModel.getAllHabitDataFromDay(date)
-                .observe(viewLifecycleOwner, habits -> {
+        List<HabitData> list = habitViewModel.getAllHabitDataFromDay(date).stream()
+                .filter(habitData -> habitData.isDayOfWeekChecked(DatesParser.toLocalDate(date)))
+                .collect(Collectors.toList());
 
-                    List<HabitData> list = habits.stream()
-                            .filter(habitData -> habitData.isDayOfWeekChecked(DatesParser.toLocalDate(date)))
-                            .collect(Collectors.toList());
+        if (list.size() == 0) {
+            progressBar.setVisibility(View.INVISIBLE);
+            status.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+            status.setVisibility(View.INVISIBLE);
+        }
+        habitTotalAdapter.setHabitsList(list);
 
-                    float value = (list.stream()
-                            .filter(h -> h.isHabitDone(MonthFragment.getGlobalSelectedDate()))
-                            .count()
-                            / (float) list.size()) * 100f;
+        habitViewModel.getAllHabitDataFromDayLiveData(date).observe(viewLifecycleOwner, habits -> {
+            List<HabitData> list2 = habits.stream()
+                    .filter(habitData -> habitData.isDayOfWeekChecked(DatesParser.toLocalDate(date)))
+                    .collect(Collectors.toList());
+            float value = (list2.stream()
+                    .filter(h -> h.isHabitDone(MonthFragment.getGlobalSelectedDate()))
+                    .count()
+                    / (float) list2.size()) * 100f;
+            progressBar.setCurrentProgress(value);
 
-                    progressBar.setCurrentProgress(value);
+            if (value <= 40.0f)
+                progressBar.setProgressColor(ContextCompat.getColor(context, R.color.bad));
+            else if (value <= 75.0f)
+                progressBar.setProgressColor(ContextCompat.getColor(context, R.color.mid));
+            else
+                progressBar.setProgressColor(ContextCompat.getColor(context, R.color.good));
 
-                    if (value <= 40.0f) {
-                        progressBar.setProgressColor(ContextCompat.getColor(context, R.color.bad));
-                    } else if (value <= 75.0f) {
-                        progressBar.setProgressColor(ContextCompat.getColor(context, R.color.mid));
-                    } else {
-                        progressBar.setProgressColor(ContextCompat.getColor(context, R.color.good));
-                    }
+        });
 
-                    if (list.size() == 0) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        status.setVisibility(View.VISIBLE);
-                    } else {
-                        progressBar.setVisibility(View.VISIBLE);
-                        status.setVisibility(View.INVISIBLE);
-                    }
-                    habitTotalAdapter.setHabitsList(list);
-                });
+
     }
+
 
     public HabitViewModel getHabitViewModel() {
         return habitViewModel;

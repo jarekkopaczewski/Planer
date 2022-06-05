@@ -21,7 +21,6 @@ import skills.future.planer.ui.habit.HabitTextAdapter;
 @Getter
 public class HabitSimpleViewHolder extends HabitViewHolder {
 
-    private final CircularProgressIndicator circularProgressIndicatorHabitDay;
     private final TextView habitTitleTextViewSimple;
     private final Context context;
 
@@ -43,26 +42,4 @@ public class HabitSimpleViewHolder extends HabitViewHolder {
         }
     }
 
-    private void setUpCircularProgressIndicatorOfDays(HabitData habitData) {
-        circularProgressIndicatorHabitDay.setMaxProgress(habitData.getHabitDuration().getDaysNumber());
-        if (CalendarDay.today().isAfter(habitData.getBeginCalendarDay()))
-            circularProgressIndicatorHabitDay
-                    .setCurrentProgress(DatesParser.countDifferenceBetweenDays(
-                            habitData.getBeginCalendarDay(), CalendarDay.today()) + 1);
-        else if (CalendarDay.today().isBefore(habitData.getBeginCalendarDay()))
-            circularProgressIndicatorHabitDay.setCurrentProgress(0);
-        else
-            circularProgressIndicatorHabitDay.setCurrentProgress(1);
-
-        HabitTextAdapter habitTextAdapter = new HabitTextAdapter();
-        habitTextAdapter.setMaxProgress(circularProgressIndicatorHabitDay.getMaxProgress());
-        circularProgressIndicatorHabitDay.setProgressTextAdapter(habitTextAdapter);
-
-        if (circularProgressIndicatorHabitDay.getProgress() / circularProgressIndicatorHabitDay.getMaxProgress() <= 0.4)
-            circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.bad));
-        else if (circularProgressIndicatorHabitDay.getProgress() / circularProgressIndicatorHabitDay.getMaxProgress() <= 75)
-            circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.mid));
-        else
-            circularProgressIndicatorHabitDay.setProgressColor(ContextCompat.getColor(context, R.color.good));
-    }
 }
