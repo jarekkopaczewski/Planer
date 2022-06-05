@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum SummaryType {
-    yearSummary(1), monthSummary(2), weekSummary(2);
+    yearSummary(1), monthSummary(2), weekSummary(3);
     private final int type;
 
     SummaryType(int type) {
