@@ -18,9 +18,6 @@
             app:popEnterAnim="@android:anim/cycle_interpolator"
             app:popExitAnim="@android:anim/cycle_interpolator" />
         <action
-            android:id="@+id/action_nav_home_to_nav_slideshow"
-            app:destination="@id/nav_slideshow" />
-        <action
             android:id="@+id/action_nav_home_to_habitCreatorFragment"
             app:destination="@id/nav_habit_creator" />
         <action
@@ -34,11 +31,6 @@
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_summary_browser" />
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="skills.future.planer.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_month"
         android:name="skills.future.planer.ui.month.MonthFragment"

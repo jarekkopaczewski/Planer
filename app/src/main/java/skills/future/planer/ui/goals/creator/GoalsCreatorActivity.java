@@ -31,8 +31,6 @@ import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.goals.pager.recycler.MixedViewAdapter;
 
 public class GoalsCreatorActivity extends AppCompatActivity {
-    private final SimpleDateFormat formatterDate =
-            new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
     private final SimpleDateFormat formatter =
             new SimpleDateFormat("LLLL yyyy", Locale.getDefault());
     private final Calendar calendar = Calendar.getInstance();
@@ -44,6 +42,8 @@ public class GoalsCreatorActivity extends AppCompatActivity {
     private FloatingActionButton saveFAB;
     private RecyclerView recyclerView;
     private MixedViewAdapter mixedViewAdapter;
+    private GoalData goalData;
+    private boolean edition;
 
 
     @Override
@@ -61,13 +61,15 @@ public class GoalsCreatorActivity extends AppCompatActivity {
         if (goalsIdToEdit != null) {
             setTitle("Edytor celów");
             var goal = goalsViewModel.findById(goalsIdToEdit.getLong("goalIdToEdit"));
+            goalData = goal;
+            edition = true;
             titleEditText.setText(goal.getTitle());
             detailEditText.setText(goal.getDetails());
             calendar.setTimeInMillis(goal.getDate());
             saveFABSetUp(goal);
         } else {
             calendar.set(CalendarDay.today().getYear(),
-                    CalendarDay.today().getMonth() - 1,
+                    CalendarDay.today().getMonth(),
                     CalendarDay.today().getDay());
             saveFABSetUp();
         }
@@ -89,13 +91,15 @@ public class GoalsCreatorActivity extends AppCompatActivity {
     }
 
     private void showDialog() {
-        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
-                .setIcon(R.drawable.warning)
-                .setTitle(R.string.exit_activity_warning_1)
-                .setMessage(R.string.exit_activity_warning_2)
-                .setPositiveButton(R.string.agree, (dialog, which) -> finish())
-                .setNegativeButton(R.string.disagree, null)
-                .show();
+        if(checkEdit()) {
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
+                    .setIcon(R.drawable.warning)
+                    .setTitle(R.string.exit_activity_warning_1)
+                    .setMessage(R.string.exit_activity_warning_2)
+                    .setPositiveButton(R.string.agree, (dialog, which) -> finish())
+                    .setNegativeButton(R.string.disagree, null)
+                    .show();
+        }else finish();
     }
 
     private void setUpFields(ActivityGoalsCreatorBinding binding) {
@@ -152,11 +156,12 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             if (titleEditText.getText() == null || titleEditText.getText().length() <= 0)
                 Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
             else {
-                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth() - 1)
+                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth())
                     Toast.makeText(this, R.string.goal_error_date, Toast.LENGTH_SHORT).show();
                 else {
                 var goal = new GoalData(titleEditText.getText().toString(),
                         detailEditText.getText().toString(), DatesParser.toLocalDate(calendar.getTime()));
+                goal.setStarting_date(DatesParser.toMilliseconds(CalendarDay.today()));
                 goalsViewModel.insert(goal);
                 finish();}
             }
@@ -168,15 +173,25 @@ public class GoalsCreatorActivity extends AppCompatActivity {
             if (titleEditText.getText() == null || titleEditText.getText().length() <= 0)
                 Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
             else {
-                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth() - 1)
+                if (calendar.get(Calendar.YEAR) == CalendarDay.today().getYear() && calendar.get(Calendar.MONTH) < CalendarDay.today().getMonth())
                     Toast.makeText(this, R.string.goal_error_date, Toast.LENGTH_SHORT).show();
                 else{
-                goal.setTitle(titleEditText.getText().toString());
-                goal.setDetails(detailEditText.getText().toString());
-                goal.setDate(DatesParser.toLocalDate(calendar.getTime()));
-                goalsViewModel.edit(goal);
-                finish();
+                    goal.setTitle(titleEditText.getText().toString());
+                    goal.setDetails(detailEditText.getText().toString());
+                    goal.setDate(DatesParser.toLocalDate(calendar.getTime()));
+                    goalsViewModel.edit(goal);
+                    finish();
             }}
         });
+    }
+
+    private boolean checkEdit(){
+        boolean isEdited =true;
+        if(edition) {
+           isEdited = !(titleEditText.getText().toString().equals(goalData.getTitle()) &&
+                    detailEditText.getText().toString().equals(goalData.getDetails()) &&
+                    DatesParser.toMilliseconds(DatesParser.toLocalDate(calendar.getTime())).equals(goalData.getDate()));
+        }
+        return isEdited;
     }
 }
