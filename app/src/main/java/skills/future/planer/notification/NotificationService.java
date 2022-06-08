@@ -117,7 +117,7 @@ public class NotificationService extends LifecycleService {
                     .filter(habitData -> habitData.getNotificationTime() - deltaTime > 0)
                     .filter(habitData -> !habitData.isHabitDone(CalendarDay.today())).min(Comparator.comparing(HabitData::getNotificationTime));
 
-            setAlarmManagerOnSpecificDate(calendarTime, time, deltaTime, minHabit);
+            setAlarmManagerOnSpecificDate(calendarTime, time, deltaTime, minHabit, habitDataList.size());
         }
     }
 
@@ -182,7 +182,8 @@ public class NotificationService extends LifecycleService {
     /**
      * Checks which timer should be scheduled
      */
-    private void setAlarmManagerOnSpecificDate(Calendar calendarTime, long time, long deltaTime, Optional<HabitData> minHabit) {
+    private void setAlarmManagerOnSpecificDate(Calendar calendarTime, long time, long deltaTime,
+                                               Optional<HabitData> minHabit, int size) {
         long habitSummaryTime = countTimeToHabitSummary(sharedPref);
         LocalDate currentDate = LocalDate.now();
 
@@ -195,12 +196,13 @@ public class NotificationService extends LifecycleService {
         } else {
             if (habitSummaryTime - deltaTime > 0)
                 setAlarmManager(true, null, habitSummaryTime - deltaTime, currentDate);
-            else {
+            else if (size != 0) {
                 calendarTime.set(Calendar.HOUR_OF_DAY, 24);
                 calendarTime.set(Calendar.MINUTE, 0);
                 calendarTime.set(Calendar.SECOND, 0);
                 checkNextDay(currentDate, calendarTime.getTimeInMillis() - time);
             }
+
         }
     }
 
