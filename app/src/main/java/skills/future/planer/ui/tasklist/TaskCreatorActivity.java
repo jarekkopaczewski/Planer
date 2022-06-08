@@ -85,27 +85,28 @@ public class TaskCreatorActivity extends AppCompatActivity {
 
         createEditDateFields();
         processFabColor();
-        setGoal();
 
+        if (parameters != null && !parameters.containsKey("goalId")) {
+            edit = true;
+            setUpValuesOnEdit();
+            beginDateOnStart = beginDateEditText.getText().toString();
+            endingDateOnStart = endingDateEditText.getText().toString();
+            edition_copy = (TaskData) editTask.clone();
 
-        if (parameters != null) {
-            if (!parameters.containsKey("goalId")) {
-                edit = true;
-                setUpValuesOnEdit();
-                beginDateOnStart = beginDateEditText.getText().toString();
-                endingDateOnStart = endingDateEditText.getText().toString();
-                edition_copy = (TaskData) editTask.clone();
-            }
-        }else start = true;
+        } else
+            start = true;
+
         saveBtnOnClickListenerSetter(edit);
-        if(editTask.getStartingDate()!=0 && !edit) {
+
+        if (editTask.getStartingDate() != 0 && !edit)
             setStartingDateByGlobalDate();
-        }
+
+        setUpGoals();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home){
+        if (menuItem.getItemId() == android.R.id.home) {
             showDialog();
             return true;
         }
@@ -118,7 +119,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
     }
 
     private void showDialog() {
-        if(checkEdit() || start) {
+        if (checkEdit() || start) {
             new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
                     .setIcon(R.drawable.warning)
                     .setTitle(R.string.exit_activity_warning_1)
@@ -126,7 +127,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
                     .setPositiveButton(R.string.agree, (dialog, which) -> finish())
                     .setNegativeButton(R.string.disagree, null)
                     .show();
-        }else finish();
+        } else finish();
     }
 
     private void setUpValuesOnEdit() {
@@ -141,7 +142,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
                 // ustawianie celi jest w observerze bo szybciej wykonywało się uzypełnianie niż
                 // wczytywała się baza
                 setUpDatesOnEdit();
-                setGoal();
+                setUpGoals();
                 setTitle(getString(R.string.task_editor_title));
             }
         } catch (Exception e) {
@@ -149,7 +150,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
         }
     }
 
-    private void setUpDatesOnEdit(){
+    private void setUpDatesOnEdit() {
         if (editTask.getStartingDate() != 0) {
             switchDate.setChecked(true);
             var beginDate = editTask.getStartingCalendarDate();
@@ -174,12 +175,21 @@ public class TaskCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, "brak");
             goalSpinner.setItems(list);
-            try {
-                int selected = parameters.getInt("goalId");
-                goalSpinner.selectItemByIndex(selected + 1);
-            } catch (NullPointerException | IndexOutOfBoundsException exp) {
-                exp.printStackTrace();
+            if (!edit && parameters != null) {
+                try {
+                    int selected = parameters.getInt("goalId");
+                    goalSpinner.selectItemByIndex(selected + 1);
+                } catch (NullPointerException | IndexOutOfBoundsException exp) {
+                    exp.printStackTrace();
+                }
+            } else {
+                try {
+                    goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle()));
+                } catch (NullPointerException exp) {
+                    goalSpinner.selectItemByIndex(0);
+                }
             }
+
         });
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
@@ -232,7 +242,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
                     beginDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
                     endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
                     textView.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
-                    if(editTask.getStartingDate()==0 && b){
+                    if (editTask.getStartingDate() == 0 && b) {
                         updateEndingDateEditText();
                         updateBeginDateEditText();
                     }
@@ -298,20 +308,25 @@ public class TaskCreatorActivity extends AppCompatActivity {
                         setTaskData();
                         editTask.setEndingCalendarDate(endingDay);
                         editTask.setStartingCalendarDate(beginDay);
-                        if (selectedGoal != null)
-                            editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
-                        if (goalSpinner.getSelectedIndex() == 0)
-                            editTask.setForeignKeyToGoal(null);
+                        setForeignKeyToGoal();
                         sendTaskToDataBase(edit);
                     }
                 } else {
                     setTaskData();
+                    setForeignKeyToGoal();
                     editTask.setEndingDate(0);
                     editTask.setStartingDate(0);
                     sendTaskToDataBase(edit);
                 }
             }
         });
+    }
+
+    private void setForeignKeyToGoal() {
+        if (selectedGoal != null)
+            editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
+        if (goalSpinner.getSelectedIndex() == 0)
+            editTask.setForeignKeyToGoal(null);
     }
 
     /**
@@ -429,54 +444,28 @@ public class TaskCreatorActivity extends AppCompatActivity {
         return firstDate.isBefore(secondDate);
     }
 
-    /**
-     * Find index of task goal
-     */
-    private void setGoal() {
-        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
-        goalsViewModel.getAllGoals().observe(this, goalData -> {
-            var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
-            list.add(0, getString(R.string.empty));
-            goalSpinner.setItems(list);
-            try {
-                goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle()));
-            } catch (NullPointerException exp) {
-                goalSpinner.selectItemByIndex(0);
-            }
-        });
-
-        goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
-            String goalText = (String) goalSpinner.getText();
-            goalsViewModel.getAllGoals().observe(this, goalData -> selectedGoal =
-                    goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny().orElse(null));
-        });
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         processFabColor();
     }
 
-    private boolean checkEdit(){
-        if(edit){
+    private boolean checkEdit() {
+        if (edit) {
             setTaskData();
-            if(switchDate.isChecked()) {
+            if (switchDate.isChecked()) {
                 updateEndingDateEditText();
                 updateBeginDateEditText();
-            }else {
+            } else {
                 beginDateEditText.setText("");
                 endingDateEditText.setText("");
                 editTask.setEndingDate(0);
                 editTask.setStartingDate(0);
             }
-            if (selectedGoal != null)
-                editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
-            if (goalSpinner.getSelectedIndex() == 0)
-                editTask.setForeignKeyToGoal(null);
+            setForeignKeyToGoal();
             return !(editTask.equals2(edition_copy) &&
                     endingDateOnStart.equals(endingDateEditText.getText().toString()) &&
                     beginDateOnStart.equals(beginDateEditText.getText().toString()));
-        }else return false;
+        } else return false;
     }
 }
