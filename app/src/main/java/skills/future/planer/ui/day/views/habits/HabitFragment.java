@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentHabitBinding;
 import skills.future.planer.db.habit.HabitViewModel;
@@ -30,7 +29,7 @@ public class HabitFragment extends Fragment {
     private FragmentHabitBinding binding;
     private HabitTotalAdapter habitTotalAdapter;
     private RecyclerView habitList;
-    private CircularProgressIndicator progressBar;
+
     private FloatingActionButton fabHabitDay;
     private Context context;
 
@@ -46,34 +45,23 @@ public class HabitFragment extends Fragment {
         context = requireContext();
         binding = FragmentHabitBinding.inflate(inflater, container, false);
 
-        progressBar = binding.circularProgressIndicator;
         habitList = binding.habitList;
         fabHabitDay = binding.fabHabitDay;
         fabHabitDay.setOnClickListener(e -> startActivity(new Intent(getActivity(), HabitCreatorActivity.class)));
         AnimateView.singleAnimation(fabHabitDay, getContext(), R.anim.downup);
 
-        habitTotalAdapter = new HabitTotalAdapter(this.getContext(), habitViewModel);
+        habitTotalAdapter = new HabitTotalAdapter(this.getContext(), habitViewModel, habitDayViewModel);
         habitDayViewModel.setHabitTotalAdapter(habitTotalAdapter);
         habitDayViewModel.setViewLifecycleOwner(this.getViewLifecycleOwner());
         habitList.setAdapter(habitTotalAdapter);
         habitList.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        setUpProgressIndicatorSettings();
+
         habitDayViewModel.setStatus(binding.textView5);
         return binding.getRoot();
     }
 
-    private void setUpProgressIndicatorSettings() {
-        AnimateView.singleAnimation(progressBar, getContext(), R.anim.scalezoom2);
 
-        progressBar.setMaxProgress(100.0f);
-        progressBar.animate();
-        progressBar.setProgressTextAdapter(new TextAdapter());
-
-        habitDayViewModel.setContext(context);
-        habitDayViewModel.setProgressBar(progressBar);
-
-    }
 
 
     @Override
