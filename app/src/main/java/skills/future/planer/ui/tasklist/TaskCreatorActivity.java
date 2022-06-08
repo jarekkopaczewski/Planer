@@ -298,20 +298,25 @@ public class TaskCreatorActivity extends AppCompatActivity {
                         setTaskData();
                         editTask.setEndingCalendarDate(endingDay);
                         editTask.setStartingCalendarDate(beginDay);
-                        if (selectedGoal != null)
-                            editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
-                        if (goalSpinner.getSelectedIndex() == 0)
-                            editTask.setForeignKeyToGoal(null);
+                        setForeignKeyToGoal();
                         sendTaskToDataBase(edit);
                     }
                 } else {
                     setTaskData();
+                    setForeignKeyToGoal();
                     editTask.setEndingDate(0);
                     editTask.setStartingDate(0);
                     sendTaskToDataBase(edit);
                 }
             }
         });
+    }
+
+    private void setForeignKeyToGoal(){
+        if (selectedGoal != null)
+            editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
+        if (goalSpinner.getSelectedIndex() == 0)
+            editTask.setForeignKeyToGoal(null);
     }
 
     /**
@@ -470,10 +475,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
                 editTask.setEndingDate(0);
                 editTask.setStartingDate(0);
             }
-            if (selectedGoal != null)
-                editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
-            if (goalSpinner.getSelectedIndex() == 0)
-                editTask.setForeignKeyToGoal(null);
+            setForeignKeyToGoal();
             return !(editTask.equals2(edition_copy) &&
                     endingDateOnStart.equals(endingDateEditText.getText().toString()) &&
                     beginDateOnStart.equals(beginDateEditText.getText().toString()));
