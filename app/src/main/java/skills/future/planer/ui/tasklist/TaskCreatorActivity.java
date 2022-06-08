@@ -95,7 +95,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
                 beginDateOnStart = beginDateEditText.getText().toString();
                 endingDateOnStart = endingDateEditText.getText().toString();
                 edition_copy = (TaskData) editTask.clone();
-            }
+            }else start = true;
         }else start = true;
         saveBtnOnClickListenerSetter(edit);
         if(editTask.getStartingDate()!=0 && !edit) {
