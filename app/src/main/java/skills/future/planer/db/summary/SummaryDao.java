@@ -28,6 +28,12 @@ public interface SummaryDao {
     @Query("SELECT * FROM SummaryData WHERE year = :year and month = :month and summaryType = \"monthSummary\"")
     List<SummaryData> getMonthSummary(int year, int month);
 
+    @Query("SELECT * FROM SummaryData WHERE year = :year and summaryType = \"monthSummary\"")
+    List<SummaryData> getMonthsFromYearSummary(int year);
+
+    @Query("SELECT * FROM SummaryData WHERE year = :year and month = :month and summaryType = \"weekSummary\"")
+    List<SummaryData> getWeeksFromMonthSummary(int year, int month);
+
     @Query("SELECT * FROM SummaryData WHERE year = :year and weekNumber =:weekNumber and  summaryType = \"weekSummary\"")
     List<SummaryData> getWeekSummary(int year, int weekNumber);
 

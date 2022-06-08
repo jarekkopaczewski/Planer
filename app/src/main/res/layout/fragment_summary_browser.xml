@@ -8,7 +8,7 @@
     tools:context=".ui.summary.SummaryFragment">
 
     <com.shawnlin.numberpicker.NumberPicker
-        android:id="@+id/number_picker"
+        android:id="@+id/yearPicker"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_centerInParent="true"
@@ -28,13 +28,14 @@
         app:np_value="2022"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <androidx.viewpager2.widget.ViewPager2
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/summaryBrowserRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/number_picker" />
+        app:layout_constraintTop_toBottomOf="@+id/yearPicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

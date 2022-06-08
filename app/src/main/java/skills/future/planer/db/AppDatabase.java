@@ -53,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(),
                     AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
+                    .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
         }
 
         return sInstance;
@@ -94,6 +94,7 @@ public abstract class AppDatabase extends RoomDatabase {
             mDao.deleteAll();
             habitDao.deleteAll();
             goalsDao.deleteAll();
+            summaryDao.deleteAll();
             CalendarDay day = CalendarDay.today();
             CalendarDay day2 = CalendarDay.from(2022, 5, 5);
             CalendarDay day3 = CalendarDay.from(2022, 5, 23);
@@ -155,8 +156,18 @@ public abstract class AppDatabase extends RoomDatabase {
             }
 
             summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu roku", DatesParser.toLocalDate(day), SummaryType.yearSummary));
+            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu roku", DatesParser.toLocalDate(day), SummaryType.yearSummary));
+            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu roku", DatesParser.toLocalDate(day), SummaryType.yearSummary));
             summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day), SummaryType.monthSummary));
             summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu tygodnia", DatesParser.toLocalDate(day), SummaryType.weekSummary));
+
+            for( int i = 1; i < 3; i++)
+            {
+                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).plusMonths(i), SummaryType.monthSummary));
+                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).minusMonths(i), SummaryType.monthSummary));
+                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).plusMonths(i).plusYears(1), SummaryType.monthSummary));
+                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).minusMonths(i).minusYears(1), SummaryType.monthSummary));
+            }
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
 //                mDao.insert(word);
@@ -191,6 +202,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "4ninu","",day4,day4);
                 mDao.insert(word);
             }*/
+
             return null;
         }
     }
