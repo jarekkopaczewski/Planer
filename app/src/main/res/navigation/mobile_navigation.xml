@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_goals">
         <action
             android:id="@+id/action_nav_home_to_nav_gallery"
-            app:destination="@id/nav_gallery"
+            app:destination="@id/nav_summary"
             app:enterAnim="@android:anim/cycle_interpolator"
             app:exitAnim="@android:anim/cycle_interpolator"
             app:popEnterAnim="@android:anim/cycle_interpolator"
@@ -26,10 +26,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="skills.future.planer.ui.gallery.GalleryFragment"
+        android:id="@+id/nav_summary"
+        android:name="skills.future.planer.ui.summary.SummaryFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_summary_browser" />
 
     <fragment
         android:id="@+id/nav_month"

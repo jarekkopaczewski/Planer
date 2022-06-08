@@ -34,6 +34,20 @@ public class SummaryRepository {
     }
 
     /**
+     * @return return all months summary from given year
+     */
+    List<SummaryData> getMonthsFromYearSummary(int year){
+        return summaryDao.getMonthsFromYearSummary(year);
+    }
+
+    /**
+     * @return return all months summary from given year and month
+     */
+    List<SummaryData> getWeeksFromMonthSummary(int year, int month){
+        return summaryDao.getWeeksFromMonthSummary(year, month);
+    }
+
+    /**
      * Method insert summary to database
      *
      * @param summaryData which will be inserted
