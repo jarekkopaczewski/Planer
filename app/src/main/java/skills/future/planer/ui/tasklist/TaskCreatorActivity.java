@@ -85,7 +85,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
 
         createEditDateFields();
         processFabColor();
-        setGoal();
+
 
 
         if (parameters != null) {
@@ -101,6 +101,8 @@ public class TaskCreatorActivity extends AppCompatActivity {
         if(editTask.getStartingDate()!=0 && !edit) {
             setStartingDateByGlobalDate();
         }
+
+        setUpGoals();
     }
 
     @Override
@@ -141,7 +143,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
                 // ustawianie celi jest w observerze bo szybciej wykonywało się uzypełnianie niż
                 // wczytywała się baza
                 setUpDatesOnEdit();
-                setGoal();
+                setUpGoals();
                 setTitle(getString(R.string.task_editor_title));
             }
         } catch (Exception e) {
@@ -174,12 +176,21 @@ public class TaskCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, "brak");
             goalSpinner.setItems(list);
+            if(!edit && parameters!=null){
             try {
                 int selected = parameters.getInt("goalId");
                 goalSpinner.selectItemByIndex(selected + 1);
             } catch (NullPointerException | IndexOutOfBoundsException exp) {
                 exp.printStackTrace();
             }
+            }else {
+                try {
+                    goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle()));
+                } catch (NullPointerException exp) {
+                    goalSpinner.selectItemByIndex(0);
+                }
+            }
+
         });
 
         goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
@@ -432,29 +443,6 @@ public class TaskCreatorActivity extends AppCompatActivity {
      */
     private boolean checkDate(CalendarDay firstDate, CalendarDay secondDate) {
         return firstDate.isBefore(secondDate);
-    }
-
-    /**
-     * Find index of task goal
-     */
-    private void setGoal() {
-        GoalsViewModel goalsViewModel = new ViewModelProvider(this).get(GoalsViewModel.class);
-        goalsViewModel.getAllGoals().observe(this, goalData -> {
-            var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
-            list.add(0, getString(R.string.empty));
-            goalSpinner.setItems(list);
-            try {
-                goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle()));
-            } catch (NullPointerException exp) {
-                goalSpinner.selectItemByIndex(0);
-            }
-        });
-
-        goalSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s, i1, t1) -> {
-            String goalText = (String) goalSpinner.getText();
-            goalsViewModel.getAllGoals().observe(this, goalData -> selectedGoal =
-                    goalData.stream().filter(item -> item.getTitle().equals(goalText)).findAny().orElse(null));
-        });
     }
 
     @Override
