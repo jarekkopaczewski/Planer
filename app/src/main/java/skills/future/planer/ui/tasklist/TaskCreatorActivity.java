@@ -87,26 +87,26 @@ public class TaskCreatorActivity extends AppCompatActivity {
         processFabColor();
 
         if (parameters != null && !parameters.containsKey("goalId")) {
-                edit = true;
-                setUpValuesOnEdit();
-                beginDateOnStart = beginDateEditText.getText().toString();
-                endingDateOnStart = endingDateEditText.getText().toString();
-                edition_copy = (TaskData) editTask.clone();
-           
-        }else 
+            edit = true;
+            setUpValuesOnEdit();
+            beginDateOnStart = beginDateEditText.getText().toString();
+            endingDateOnStart = endingDateEditText.getText().toString();
+            edition_copy = (TaskData) editTask.clone();
+
+        } else
             start = true;
-        
+
         saveBtnOnClickListenerSetter(edit);
-        
-        if(editTask.getStartingDate()!=0 && !edit) 
+
+        if (editTask.getStartingDate() != 0 && !edit)
             setStartingDateByGlobalDate();
-        
+
         setUpGoals();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home){
+        if (menuItem.getItemId() == android.R.id.home) {
             showDialog();
             return true;
         }
@@ -119,7 +119,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
     }
 
     private void showDialog() {
-        if(checkEdit() || start) {
+        if (checkEdit() || start) {
             new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
                     .setIcon(R.drawable.warning)
                     .setTitle(R.string.exit_activity_warning_1)
@@ -127,7 +127,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
                     .setPositiveButton(R.string.agree, (dialog, which) -> finish())
                     .setNegativeButton(R.string.disagree, null)
                     .show();
-        }else finish();
+        } else finish();
     }
 
     private void setUpValuesOnEdit() {
@@ -150,7 +150,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
         }
     }
 
-    private void setUpDatesOnEdit(){
+    private void setUpDatesOnEdit() {
         if (editTask.getStartingDate() != 0) {
             switchDate.setChecked(true);
             var beginDate = editTask.getStartingCalendarDate();
@@ -175,14 +175,14 @@ public class TaskCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, "brak");
             goalSpinner.setItems(list);
-            if(!edit && parameters!=null){
-            try {
-                int selected = parameters.getInt("goalId");
-                goalSpinner.selectItemByIndex(selected + 1);
-            } catch (NullPointerException | IndexOutOfBoundsException exp) {
-                exp.printStackTrace();
-            }
-            }else {
+            if (!edit && parameters != null) {
+                try {
+                    int selected = parameters.getInt("goalId");
+                    goalSpinner.selectItemByIndex(selected + 1);
+                } catch (NullPointerException | IndexOutOfBoundsException exp) {
+                    exp.printStackTrace();
+                }
+            } else {
                 try {
                     goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(editTask.getForeignKeyToGoal()).getTitle()));
                 } catch (NullPointerException exp) {
@@ -242,7 +242,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
                     beginDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
                     endingDateEditText.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
                     textView.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
-                    if(editTask.getStartingDate()==0 && b){
+                    if (editTask.getStartingDate() == 0 && b) {
                         updateEndingDateEditText();
                         updateBeginDateEditText();
                     }
@@ -322,7 +322,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
         });
     }
 
-    private void setForeignKeyToGoal(){
+    private void setForeignKeyToGoal() {
         if (selectedGoal != null)
             editTask.setForeignKeyToGoal(selectedGoal.getGoalId());
         if (goalSpinner.getSelectedIndex() == 0)
@@ -450,13 +450,13 @@ public class TaskCreatorActivity extends AppCompatActivity {
         processFabColor();
     }
 
-    private boolean checkEdit(){
-        if(edit){
+    private boolean checkEdit() {
+        if (edit) {
             setTaskData();
-            if(switchDate.isChecked()) {
+            if (switchDate.isChecked()) {
                 updateEndingDateEditText();
                 updateBeginDateEditText();
-            }else {
+            } else {
                 beginDateEditText.setText("");
                 endingDateEditText.setText("");
                 editTask.setEndingDate(0);
@@ -466,6 +466,6 @@ public class TaskCreatorActivity extends AppCompatActivity {
             return !(editTask.equals2(edition_copy) &&
                     endingDateOnStart.equals(endingDateEditText.getText().toString()) &&
                     beginDateOnStart.equals(beginDateEditText.getText().toString()));
-        }else return false;
+        } else return false;
     }
 }

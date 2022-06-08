@@ -139,7 +139,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
             try {
                 //parameters are loaded - habit is edited
                 if (!parameters.containsKey("goalId")) {
-                    edition=true;
+                    edition = true;
                     HabitData habit = habitViewModel.findById(parameters.getLong("habitToEditId"));
                     int hours = (int) (habit.getNotificationTime() / 3600000);
                     int minute = (int) ((habit.getNotificationTime() / 60000) % 60);
@@ -153,7 +153,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
                     //setting strings to compare
                     habit_reminder_time = formatter.format(calendar.getTime());
-                    habit_date_start=DatesParser.toLocalDate(habit.getBeginCalendarDay())
+                    habit_date_start = DatesParser.toLocalDate(habit.getBeginCalendarDay())
                             .format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
                     var days = habit.getDaysOfWeek();
@@ -192,7 +192,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
-        if (menuItem.getItemId() == android.R.id.home){
+        if (menuItem.getItemId() == android.R.id.home) {
             showDialog();
             return true;
         }
@@ -208,7 +208,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
      * Shows warning dialog if edition has been detected
      */
     private void showDialog() {
-        if(checkEdit()){
+        if (checkEdit()) {
             new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
                     .setIcon(R.drawable.warning)
                     .setTitle(R.string.exit_activity_warning_1)
@@ -216,7 +216,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
                     .setPositiveButton(R.string.agree, (dialog, which) -> finish())
                     .setNegativeButton(R.string.disagree, null)
                     .show();
-        }else finish();
+        } else finish();
     }
 
 
@@ -292,10 +292,10 @@ public class HabitCreatorActivity extends AppCompatActivity {
      */
     private void saveButtonOnActionWhenEditing() {
         saveCreatorButtonHabit.setOnClickListener(e -> {
-           if(loadDatafromActivity()) {
-               habitViewModel.edit(habitData);
-               finish();
-           }
+            if (loadDatafromActivity()) {
+                habitViewModel.edit(habitData);
+                finish();
+            }
         });
     }
 
@@ -339,7 +339,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, getString(R.string.empty));
             goalSpinner.setItems(list);
-            if(!edition && parameters != null){
+            if (!edition && parameters != null) {
                 try {
                     int selected = parameters.getInt("goalId");
                     goalSpinner.selectItemByIndex(selected + 1);
@@ -347,35 +347,38 @@ public class HabitCreatorActivity extends AppCompatActivity {
                 } catch (NullPointerException | IndexOutOfBoundsException exp) {
                     exp.printStackTrace();
                 }
-            }else{
+            } else {
                 try {
-                goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(habitData.getForeignKeyToGoal()).getTitle()));
-            } catch (NullPointerException exp) {
-                goalSpinner.selectItemByIndex(0);
-            }}
+                    goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(habitData.getForeignKeyToGoal()).getTitle()));
+                } catch (NullPointerException exp) {
+                    goalSpinner.selectItemByIndex(0);
+                }
+            }
 
         });
     }
 
     /**
      * Checks if data has been edited
+     *
      * @return true - is edited, is not edited
      */
-    private boolean checkEdit(){
-        boolean isEdited =true;
-        if(edition && loadDatafromActivity()) {
+    private boolean checkEdit() {
+        boolean isEdited = true;
+        if (edition && loadDatafromActivity()) {
             isEdited = !(habitData.equals(openedHabitData) &&
                     habit_date_start.equals(editTextDateHabit.getText().toString()) &&
-            habit_reminder_time.equals(timeEditText.getText().toString()));
+                    habit_reminder_time.equals(timeEditText.getText().toString()));
         }
         return isEdited;
     }
 
     /**
      * Loads and converts data from activity, sets habitData fields
+     *
      * @return true - data have been set
      */
-    private boolean loadDatafromActivity(){
+    private boolean loadDatafromActivity() {
         if (editTextTitle.getText() == null || editTextTitle.getText().length() <= 0) {
             Toast.makeText(this, R.string.habit_error_1, Toast.LENGTH_SHORT).show();
             return false;
