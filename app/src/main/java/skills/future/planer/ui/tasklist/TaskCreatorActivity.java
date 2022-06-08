@@ -86,22 +86,21 @@ public class TaskCreatorActivity extends AppCompatActivity {
         createEditDateFields();
         processFabColor();
 
-
-
-        if (parameters != null) {
-            if (!parameters.containsKey("goalId")) {
+        if (parameters != null && !parameters.containsKey("goalId")) {
                 edit = true;
                 setUpValuesOnEdit();
                 beginDateOnStart = beginDateEditText.getText().toString();
                 endingDateOnStart = endingDateEditText.getText().toString();
                 edition_copy = (TaskData) editTask.clone();
-            }else start = true;
-        }else start = true;
+           
+        }else 
+            start = true;
+        
         saveBtnOnClickListenerSetter(edit);
-        if(editTask.getStartingDate()!=0 && !edit) {
+        
+        if(editTask.getStartingDate()!=0 && !edit) 
             setStartingDateByGlobalDate();
-        }
-
+        
         setUpGoals();
     }
 
