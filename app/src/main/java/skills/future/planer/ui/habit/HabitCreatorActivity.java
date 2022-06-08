@@ -53,6 +53,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
     private PowerSpinnerView goalSpinner;
     private Chip MondayChip, TuesdayChip, WednesdayChip, ThursdayChip, FridayChip, SaturdayChip, SundayChip;
     private GoalData selectedGoal;
+    private Bundle parameters;
 
     /**
      * HabitData object to be set/edited in activity
@@ -102,7 +103,7 @@ public class HabitCreatorActivity extends AppCompatActivity {
         editTextTitle = binding.editTextTitle;
         goalSpinner = binding.spinner2;
 
-        Bundle parameters = getIntent().getExtras();
+        parameters = getIntent().getExtras();
         // sets first item selected in check boxes
         habitDurationSpinner = binding.spinner;
 
@@ -137,8 +138,8 @@ public class HabitCreatorActivity extends AppCompatActivity {
         if (parameters != null) {
             try {
                 //parameters are loaded - habit is edited
-                edition=true;
                 if (!parameters.containsKey("goalId")) {
+                    edition=true;
                     HabitData habit = habitViewModel.findById(parameters.getLong("habitToEditId"));
                     int hours = (int) (habit.getNotificationTime() / 3600000);
                     int minute = (int) ((habit.getNotificationTime() / 60000) % 60);
@@ -226,7 +227,8 @@ public class HabitCreatorActivity extends AppCompatActivity {
                 MonthFragment.getGlobalSelectedDate().getDay());
         timeEditText.setText(formatter.format(calendar.getTime()));
         editTextDateHabit.setText(formatterDate.format(calendar2.getTime()));
-        goalSpinner.setText(getResources().getString(R.string.noneGoal));
+        //goalSpinner.setText(getResources().getString(R.string.noneGoal));
+        setGoal(habitData);
 
         // add save button listener & add conditions check
         saveHabitButtonSetUp();
@@ -337,11 +339,21 @@ public class HabitCreatorActivity extends AppCompatActivity {
             var list = goalData.stream().map(GoalData::getTitle).collect(Collectors.toList());
             list.add(0, getString(R.string.empty));
             goalSpinner.setItems(list);
-            try {
+            if(!edition && parameters != null){
+                try {
+                    int selected = parameters.getInt("goalId");
+                    goalSpinner.selectItemByIndex(selected + 1);
+                    System.out.println(selected);
+                } catch (NullPointerException | IndexOutOfBoundsException exp) {
+                    exp.printStackTrace();
+                }
+            }else{
+                try {
                 goalSpinner.selectItemByIndex(list.indexOf(goalsViewModel.findById(habitData.getForeignKeyToGoal()).getTitle()));
             } catch (NullPointerException exp) {
                 goalSpinner.selectItemByIndex(0);
-            }
+            }}
+
         });
     }
 
