@@ -144,7 +144,7 @@ public class NotificationService extends LifecycleService {
      * Schedules alarm manager which will wake up a broadcast receiver for specific date
      */
     private void setAlarmManager(boolean daySummary, HabitData habitToNotify, long time, LocalDate date) {
-        var myNotification = notificationFactory.generateNewNotification(
+        var myNotification = notificationFactory.generateNewNotificationHabit(
                 daySummary,
                 habitToNotify,
                 date);

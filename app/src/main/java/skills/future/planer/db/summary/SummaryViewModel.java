@@ -15,7 +15,7 @@ public class SummaryViewModel extends AndroidViewModel {
 
     public SummaryViewModel(@NonNull Application application) {
         super(application);
-        summaryRepository = new SummaryRepository(application);
+        summaryRepository = new SummaryRepository(application.getApplicationContext());
     }
 
     /**

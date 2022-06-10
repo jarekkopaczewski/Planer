@@ -1,6 +1,6 @@
 package skills.future.planer.db.summary;
 
-import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
@@ -13,7 +13,7 @@ import skills.future.planer.db.AppDatabase;
 public class SummaryRepository {
     private final SummaryDao summaryDao;
 
-    public SummaryRepository(Application application) {
+    public SummaryRepository(Context application) {
         AppDatabase db = AppDatabase.getInstance(application);
         this.summaryDao = db.summaryDao();
     }
@@ -27,7 +27,6 @@ public class SummaryRepository {
 
     public List<SummaryData> getSummary(LocalDate date, SummaryType summaryType) {
         return switch (summaryType) {
-            case yearSummary -> summaryDao.getYearSummary(date.getYear());
             case monthSummary -> summaryDao.getMonthSummary(date.getYear(), date.getMonthValue());
             case weekSummary -> summaryDao.getWeekSummary(date.getYear(), date.get(ChronoField.ALIGNED_WEEK_OF_YEAR));
         };
@@ -52,7 +51,7 @@ public class SummaryRepository {
      *
      * @param summaryData which will be inserted
      */
-    void insert(SummaryData summaryData) {
+    public void insert(SummaryData summaryData) {
         summaryData.setSummaryId(summaryDao.insert(summaryData));
     }
 

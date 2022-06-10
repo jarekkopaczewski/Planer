@@ -11,8 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.shawnlin.numberpicker.NumberPicker;
-
 import skills.future.planer.databinding.FragmentSummaryBrowserBinding;
 import skills.future.planer.db.summary.SummaryViewModel;
 import skills.future.planer.ui.summary.adapter.SummaryTotalAdapter;
@@ -23,7 +21,7 @@ public class SummaryFragment extends Fragment {
     private FragmentSummaryBrowserBinding binding;
     private RecyclerView summaryBrowserRecycler;
     private SummaryTotalAdapter summaryTotalAdapter;
-    private NumberPicker yearPicker;
+    private com.shawnlin.numberpicker.NumberPicker yearPicker;
     private int currentYear;
 
     public SummaryFragment() {
