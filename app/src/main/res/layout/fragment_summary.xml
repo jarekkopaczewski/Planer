@@ -45,42 +45,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/nestedScrollView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@color/background"
-                    android:fillViewport="true"
-                    android:paddingBottom="5dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    app:layout_constraintVertical_bias="0.0">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <com.codesgood.views.JustifiedTextView
-                            android:id="@+id/summaryEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="#00F4F4F4"
-                            android:enabled="false"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            android:text="@string/large_text"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-                </androidx.core.widget.NestedScrollView>
-
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
@@ -90,113 +54,96 @@
                     android:layout_marginEnd="10dp"
                     android:background="@color/background"
                     android:fontFamily="@font/signika_regular"
-                    android:text="Co osiągnąłem/am w tym tygodniu?"
+                    android:text="@string/week_summary_text1"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/nestedScrollView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@color/background"
-                    android:fillViewport="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3"
-                    app:layout_constraintVertical_bias="0.0">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.codesgood.views.JustifiedTextView
-                            android:id="@+id/summaryEditText2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="#00F4F4F4"
-                            android:enabled="false"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            android:text="@string/large_text"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                </androidx.core.widget.NestedScrollView>
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="10dp"
                     android:background="@color/background"
                     android:fontFamily="@font/signika_regular"
-                    android:text="Co odpuściłem/am?"
+                    android:text="@string/week_summary_text2"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/nestedScrollView2" />
+                    app:layout_constraintTop_toBottomOf="@+id/summaryEditText" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:fontFamily="@font/signika_regular"
-                    android:text="Nad czym chcę jeszcze popracować?"
+                    android:text="@string/week_summary_text3"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/nestedScrollView3"
+                    app:layout_constraintTop_toBottomOf="@+id/summaryEditText3"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/nestedScroll3"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="10dp"
+                <com.codesgood.views.JustifiedTextView
+                    android:id="@+id/summaryEditText3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
                     android:background="@color/background"
-                    android:fillViewport="true"
+                    android:enabled="false"
+                    android:justificationMode="inter_word"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/large_text"
+                    android:textAlignment="center"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+                <com.codesgood.views.JustifiedTextView
+                    android:id="@+id/summaryEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:background="#00F4F4F4"
+                    android:enabled="false"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/large_text"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@+id/textView3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+                <com.codesgood.views.JustifiedTextView
+                    android:id="@+id/summaryEditText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:background="#00F4F4F4"
+                    android:enabled="false"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="@string/large_text"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView4"
-                    app:layout_constraintVertical_bias="0.0">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.codesgood.views.JustifiedTextView
-                            android:id="@+id/summaryEditText3"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="@color/background"
-                            android:enabled="false"
-                            android:justificationMode="inter_word"
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            android:text="@string/large_text"
-                            android:textAlignment="center"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-                </androidx.core.widget.NestedScrollView>
+                    app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

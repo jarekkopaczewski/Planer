@@ -100,4 +100,8 @@
     <string name="day_habit_no_habits_info">Nie posiadasz dzisiaj żadnych nawyków</string>
     <string name="goal_month_picker_title">Kiedy planujesz osiągnąć swój cel?</string>
     <string name="goal_error_date">Niepoprawna data osiągnięcia celu!</string>
+    <string name="week_summary_text1">Co osiągnąłem/am w tym tygodniu?</string>
+    <string name="week_summary_text2">Co odpuściłem/am?</string>
+    <string name="week_summary_text3">Nad czym chcę jeszcze popracować?</string>
+
 </resources>
