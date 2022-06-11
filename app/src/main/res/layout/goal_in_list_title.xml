@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="130dp"
     android:layout_margin="5dp">
 
 
@@ -11,11 +11,15 @@
         android:id="@+id/trashImageView"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="32dp"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintStart_toEndOf="@+id/goal_date"
+        app:layout_constraintTop_toBottomOf="@+id/circularProgressIndicatorGoal"
+        app:layout_constraintVertical_bias="0.571"
         app:srcCompat="@drawable/trash"
         app:tint="@color/imageTintColor_2"
         tools:ignore="ContentDescription" />
@@ -24,11 +28,12 @@
         android:id="@+id/editImageBtn"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/trashImageView"
-        app:layout_constraintTop_toBottomOf="@+id/date_title"
+        app:layout_constraintTop_toBottomOf="@+id/circularProgressIndicatorGoal"
+        app:layout_constraintVertical_bias="0.571"
         app:srcCompat="@drawable/pencil"
         app:tint="@color/imageTintColor_2"
         tools:ignore="ContentDescription" />
@@ -82,9 +87,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="43dp"
-        android:text="Data zakończenia celu:"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/goalCreatorDateLabel"
+        app:layout_constraintBottom_toTopOf="@+id/goal_date"
         app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorGoal"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,14 +98,11 @@
         android:id="@+id/goal_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="43dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicatorGoal"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/date_title"
-        app:layout_constraintTop_toBottomOf="@+id/goalTitleText" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

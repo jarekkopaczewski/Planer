@@ -7,11 +7,15 @@ import android.widget.TextView;
 import androidx.activity.ComponentActivity;
 import androidx.core.content.ContextCompat;
 
-import java.util.Random;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator;
 import skills.future.planer.R;
 import skills.future.planer.db.goal.GoalData;
+import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.day.views.habits.TextAdapter;
 
 public class GoalViewHolderTitle extends ICustomViewHolder {
@@ -19,6 +23,8 @@ public class GoalViewHolderTitle extends ICustomViewHolder {
     private final TextView goalTitle;
     private final Context context;
     private final TextView goalDate;
+    private final SimpleDateFormat formatter =
+            new SimpleDateFormat("LLLL yyyy", Locale.getDefault());
 
     public GoalViewHolderTitle(View itemView, Context context, ComponentActivity activity) {
         super(itemView);
@@ -44,8 +50,22 @@ public class GoalViewHolderTitle extends ICustomViewHolder {
     public void setEveryThing(MixedRecyclerElement element) {
         GoalData goalData = (GoalData) element;
         goalTitle.setText(goalData.getTitle());
-        //TODO podczepić liczenie progresu
-        progressBar.setCurrentProgress(new Random().nextInt(100));
-        this.goalDate.setText(goalData.getDateCalendarDate().getDate().toString());
+        progressBar.setCurrentProgress(countCurrentProgress(goalData));
+        this.goalDate.setText(formatter.format(DatesParser.toCalendar(goalData.getDateCalendarDate()).getTime()));
+    }
+
+    /**
+     * Counts goal's progress in time.
+     * @param goalData goal to count the progress
+     * @return value of progress bar <0,100>
+     */
+    public double countCurrentProgress(GoalData goalData){
+        double a = DatesParser.toMilliseconds(CalendarDay.today()) - goalData.getStarting_date();
+        double b = goalData.getDate() - goalData.getStarting_date();
+        double progress = a*100/b;
+        if(progress >= 100){
+            return 100;
+        }
+        return  progress;
     }
 }

@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +31,9 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
 import java.util.Calendar;
+import java.util.Objects;
 
 import lombok.SneakyThrows;
 import skills.future.planer.databinding.ActivityMainBinding;
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private NavigationView navigationView;
+    private static boolean notification = false;
     private int numberOfNotDoneHabits;
 
 
@@ -113,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
         MaterialToolbar toolbar = binding.appBarMain.toolbar;
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -121,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 .findFragmentById(R.id.nav_host_fragment_content_main);
 
         // set up corner menu
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow).setOpenableLayout(drawer).build();
+        assert navHostFragment != null;
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_summary, R.id.nav_habit_creator).setOpenableLayout(drawer).build();
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -146,12 +153,51 @@ public class MainActivity extends AppCompatActivity {
             if (!navDrawer.isDrawerOpen(Gravity.LEFT)) navDrawer.openDrawer(Gravity.LEFT);
             else navDrawer.closeDrawer(Gravity.RIGHT);
         });
+
+        askForBatteryPermission();
+        checkBundleNavigation();
+
+    }
+
+    /**
+     * Checks if battery optimization is enabled
+     */
+    private void askForBatteryPermission() {
+        Intent intent = new Intent();
+        String packageName = getPackageName();
+        PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+        if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Make move if someone click notification
+     */
+    private void checkBundleNavigation() {
+        try {
+            Bundle bundle = getIntent().getExtras();
+            notification = bundle.containsKey("move");
+            if (notification) {
+                getIntent().removeExtra("move");
+                bottomView.setSelectedItemId(R.id.nav_day);
+                notification = false;
+            }
+        } catch (NullPointerException ignore) {
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkBundleNavigation();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        //startService(new Intent(this, NotificationService.class));
     }
 
     // set/read settings
@@ -197,12 +243,14 @@ public class MainActivity extends AppCompatActivity {
     private NotificationService notificationService;
 
     private void createService() {
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        startService(serviceIntent);
-        bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        if (!NotificationService.serviceRunning) {
+            Intent serviceIntent = new Intent(this, NotificationService.class);
+            startService(serviceIntent);
+            bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             notificationService = ((NotificationService.LocalBinder) service).getService();
@@ -213,4 +261,12 @@ public class MainActivity extends AppCompatActivity {
             notificationService = null;
         }
     };
+
+    public static boolean isNotification() {
+        return notification;
+    }
+
+    public static void setNotification(boolean notification) {
+        MainActivity.notification = notification;
+    }
 }

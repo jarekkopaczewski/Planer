@@ -34,7 +34,7 @@
             android:layout_margin="10dp"
             android:layout_weight="14" />
 
-        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+     <!--   <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
             android:id="@+id/circularProgressIndicator"
             android:layout_width="200dp"
             android:layout_height="200dp"
@@ -49,7 +49,7 @@
             app:progressBackgroundColor="@color/progress_background"
             app:progressStrokeWidth="30dp"
             app:textColor="@color/imageTintColor"
-            app:textSize="40sp" />
+            app:textSize="40sp" />-->
 
     </LinearLayout>
 

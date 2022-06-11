@@ -1,7 +1,6 @@
 package skills.future.planer.ui.goals.pager.recycler;
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,12 +28,10 @@ import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsViewModel;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.task.TaskData;
-import skills.future.planer.db.task.TaskDataViewModel;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.goals.creator.GoalsCreatorActivity;
 import skills.future.planer.ui.habit.view_holders.HabitExtendedViewHolder;
 import skills.future.planer.ui.habit.view_holders.HabitSimpleViewHolder;
-import skills.future.planer.ui.habit.view_holders.HabitViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
 
@@ -185,28 +182,32 @@ public class MixedViewAdapter extends RecyclerView.Adapter<ICustomViewHolder> {
 
     @SuppressLint("NotifyDataSetChanged")
     private void createListenerToTrashButton(@NonNull ICustomViewHolder holder) {
-        var view =  holder.itemView.findViewById(R.id.trashImageView);
-        view.setOnClickListener(e -> {
-            new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
-                    .setIcon(R.drawable.warning)
-                    .setTitle(R.string.confirm_deletion)
-                    .setMessage(R.string.confirm_deletion_2)
-                    .setPositiveButton(R.string.yes, (dialog, which) -> {
-                        Animation animation = AnimationUtils.loadAnimation(context, R.anim.zoomout);
-                        animation.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {}
-                            @Override
-                            public void onAnimationEnd(Animation animation) { new ViewModelProvider(activity).get(GoalsViewModel.class).delete(goalData); }
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {}
-                        });
-                        holder.itemView.startAnimation(animation);
-                        dialog.dismiss();
-                    })
-                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
+        var view = holder.itemView.findViewById(R.id.trashImageView);
+        view.setOnClickListener(e -> new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+                .setIcon(R.drawable.warning)
+                .setTitle(R.string.confirm_deletion)
+                .setMessage(R.string.confirm_deletion_2)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.zoomout);
+                    animation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            new ViewModelProvider(activity).get(GoalsViewModel.class).delete(goalData);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+                    holder.itemView.startAnimation(animation);
+                    dialog.dismiss();
+                })
+                .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+                .show());
     }
 
     @SuppressLint("NotifyDataSetChanged")
