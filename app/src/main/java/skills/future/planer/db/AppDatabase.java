@@ -1,7 +1,6 @@
 package skills.future.planer.db;
 
 import android.content.Context;
-import android.icu.util.Calendar;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
@@ -13,21 +12,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.time.LocalDate;
-
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
-import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.summary.SummaryDao;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
-import skills.future.planer.db.task.enums.category.TaskCategory;
-import skills.future.planer.db.task.enums.priority.Priorities;
-import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
 @Database(entities = {TaskData.class, HabitData.class, GoalData.class, SummaryData.class},
@@ -52,8 +45,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                    AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                    .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
+                            AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
         }
 
         return sInstance;
@@ -155,9 +148,6 @@ public abstract class AppDatabase extends RoomDatabase {
 //                e.printStackTrace();
 //            }
 
-            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu roku", DatesParser.toLocalDate(day), SummaryType.yearSummary));
-            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu roku", DatesParser.toLocalDate(day), SummaryType.yearSummary));
-            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu roku", DatesParser.toLocalDate(day), SummaryType.yearSummary));
             summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day), SummaryType.monthSummary));
             summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu tygodnia", DatesParser.toLocalDate(day), SummaryType.weekSummary));
 

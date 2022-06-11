@@ -41,6 +41,7 @@ import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.notification.NotificationService;
 import skills.future.planer.ui.settings.SettingsActivity;
+import skills.future.planer.ui.summary.generator.SummaryService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         themePreferences();
 
         createService();
+
+        startService(new Intent(this, SummaryService.class));
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
