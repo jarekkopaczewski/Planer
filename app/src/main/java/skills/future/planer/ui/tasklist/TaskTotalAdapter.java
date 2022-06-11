@@ -78,7 +78,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
      */
     protected void createListenerToExtendView(@NonNull TaskDataViewHolder holder) {
         holder.itemView.setOnClickListener(v -> {
-
             int positionAtomic = positionToChange.get();
 
             // if no window is open
@@ -95,7 +94,6 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
                     this.notifyItemChanged(positionAtomic);
                 } else
                     positionToChange.set(-1);
-
             }
         });
     }
@@ -122,13 +120,11 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
 
     /**
      * Filter for task's category
-     *
-     * @throws Exception exception
      */
     @SuppressLint("NotifyDataSetChanged")
     public void CategoryFilter() {
-        filteredList = filter != null ? filter.filter(fullList) : fullList;
-        displayedList.addAll(filteredList);
+        filteredList.clear();
+        filteredList.addAll(filter != null ? filter.filter(fullList) : fullList);
         notifyDataSetChanged();
     }
 
@@ -140,9 +136,7 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
     @Override
     public Filter getFilter() {
         if (textFilter == null)
-            textFilter = new TaskFilter(filteredList, fullList);
-        textFilter.fullList = fullList;
-        textFilter.filteredList = filteredList;
+            textFilter = new TaskFilter();
         return textFilter;
     }
 
@@ -163,23 +157,17 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
      */
     private class TaskFilter extends Filter {
         private final List<TaskData> filteredItems = new ArrayList<>();
-        List<TaskData> filteredList, fullList;
-
-        public TaskFilter(List<TaskData> filteredList, List<TaskData> fullList) {
-            this.filteredList = filteredList;
-            this.fullList = fullList;
-        }
-
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             // CategoryFilter(filters);
+            filteredItems.clear();
             constraint = constraint.toString().toLowerCase();
             FilterResults result = new FilterResults();
             if (constraint.toString().length() > 0) {
 
-                for (int i = 0, l = this.fullList.size(); i < l; i++) {
-                    TaskData taskData = this.fullList.get(i);
+                for (int i = 0, l = filteredList.size(); i < l; i++) {
+                    TaskData taskData = filteredList.get(i);
                     if (taskData.getTaskTitleText().toLowerCase().contains(constraint))
                         filteredItems.add(taskData);
                 }
@@ -191,12 +179,12 @@ public class TaskTotalAdapter extends RecyclerView.Adapter<TaskDataViewHolder> i
         @Override
         public void publishResults(CharSequence constraint, FilterResults results) {
 
+            displayedList.clear();
             if (constraint.toString().length() > 0) {
                 displayedList.addAll((ArrayList<TaskData>) filteredItems);
-                filteredItems.clear();
+
             } else {
-                displayedList.clear();
-                displayedList.addAll((ArrayList<TaskData>) this.filteredList);
+                displayedList.addAll((ArrayList<TaskData>) filteredList);
             }
             notifyDataSetChanged();
         }

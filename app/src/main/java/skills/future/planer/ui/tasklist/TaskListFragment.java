@@ -29,7 +29,6 @@ import skills.future.planer.ui.tasklist.filters_chain.TaskPriorityFilter;
 import skills.future.planer.ui.tasklist.filters_chain.TaskTimePriorityFilter;
 
 public class TaskListFragment extends Fragment {
-
     private TaskTotalAdapter taskTotalAdapter;
     private FragmentTaskListBinding binding;
 
@@ -45,10 +44,11 @@ public class TaskListFragment extends Fragment {
         RecyclerView listTotal1 = binding.listTotalView;
         listTotal1.setAdapter(taskTotalAdapter);
 
-        new ViewModelProvider(this).get(TaskDataViewModel.class).getAllTaskData().observe(this.getViewLifecycleOwner(), listTotal -> {
-            taskTotalAdapter.setDisplayedList(listTotal);
-            //taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
-        });
+        new ViewModelProvider(this).get(TaskDataViewModel.class).getAllTaskData()
+                .observe(this.getViewLifecycleOwner(), listTotal -> {
+                    taskTotalAdapter.setDisplayedList(listTotal);
+                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
+                });
 
         listTotal1.setLayoutManager(new LinearLayoutManager(this.getContext(),
                 RecyclerView.VERTICAL, false));
@@ -65,11 +65,7 @@ public class TaskListFragment extends Fragment {
             @SneakyThrows
             @Override
             public void afterTextChanged(Editable s) {
-                if (binding.searchEditText.getText().toString().equals("")) {
-                    taskTotalAdapter.getFilter().filter("");
-                } else {
-                    taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
-                }
+                taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
             }
 
             @Override
@@ -83,6 +79,7 @@ public class TaskListFragment extends Fragment {
             }
         });
         setUpChips();
+        filtering();
         return binding.getRoot();
     }
 
@@ -144,37 +141,34 @@ public class TaskListFragment extends Fragment {
          * Chip Group Listener
          * Searches by iDs and returns list of checked filters
          */
-        binding.chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            taskTotalAdapter.cleanFilters();
-            //compare them with checked ids
-            for (Integer id : binding.chipGroup.getCheckedChipIds()) {
-                if (id.equals(binding.workChip.getId()))
-                    taskTotalAdapter.addFilter(new TaskCategoryFilter(TaskCategory.Work));
-                if (id.equals(binding.privateChip.getId()))
-                    taskTotalAdapter.addFilter(new TaskCategoryFilter(TaskCategory.Private));
-                if (id.equals(binding.urgentChip.getId()))
-                    taskTotalAdapter.addFilter(new TaskTimePriorityFilter(TimePriority.Urgent));
-                if (id.equals(binding.notUrgentChip.getId()))
-                    taskTotalAdapter.addFilter(new TaskTimePriorityFilter(TimePriority.NotUrgent));
-                if (id.equals(binding.importantChip.getId()))
-                    taskTotalAdapter.addFilter(new TaskPriorityFilter(Priorities.Important));
-                if (id.equals(binding.notImportantChip.getId()))
-                    taskTotalAdapter.addFilter(new TaskPriorityFilter(Priorities.NotImportant));
-                if (id.equals(binding.notDoneTask.getId()))
-                    taskTotalAdapter.addFilter(new TaskDoneFilter(false));
-                if (id.equals(binding.doneTask.getId()))
-                    taskTotalAdapter.addFilter(new TaskDoneFilter(true));
-            }
+        binding.chipGroup.setOnCheckedStateChangeListener((group, checkedIds) -> filtering());
+    }
 
-            //give list of filters to CategoryFilter
+    private void filtering() {
+        taskTotalAdapter.cleanFilters();
+        //compare them with checked ids
+        for (Integer id : binding.chipGroup.getCheckedChipIds()) {
+            if (id.equals(binding.workChip.getId()))
+                taskTotalAdapter.addFilter(new TaskCategoryFilter(TaskCategory.Work));
+            if (id.equals(binding.privateChip.getId()))
+                taskTotalAdapter.addFilter(new TaskCategoryFilter(TaskCategory.Private));
+            if (id.equals(binding.urgentChip.getId()))
+                taskTotalAdapter.addFilter(new TaskTimePriorityFilter(TimePriority.Urgent));
+            if (id.equals(binding.notUrgentChip.getId()))
+                taskTotalAdapter.addFilter(new TaskTimePriorityFilter(TimePriority.NotUrgent));
+            if (id.equals(binding.importantChip.getId()))
+                taskTotalAdapter.addFilter(new TaskPriorityFilter(Priorities.Important));
+            if (id.equals(binding.notImportantChip.getId()))
+                taskTotalAdapter.addFilter(new TaskPriorityFilter(Priorities.NotImportant));
+            if (id.equals(binding.notDoneTask.getId()))
+                taskTotalAdapter.addFilter(new TaskDoneFilter(false));
+            if (id.equals(binding.doneTask.getId()))
+                taskTotalAdapter.addFilter(new TaskDoneFilter(true));
+        }
 
-            taskTotalAdapter.CategoryFilter();
-            if (binding.searchEditText.getText().toString().equals("")) {
-                taskTotalAdapter.getFilter().filter("");
-            } else {
-                taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
-            }
-        });
+        //give list of filters to CategoryFilter
+        taskTotalAdapter.CategoryFilter();
+        taskTotalAdapter.getFilter().filter(binding.searchEditText.getText());
     }
 
     @SneakyThrows
