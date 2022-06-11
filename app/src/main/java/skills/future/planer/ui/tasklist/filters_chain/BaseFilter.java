@@ -5,7 +5,7 @@ import java.util.List;
 import skills.future.planer.db.task.TaskData;
 
 public abstract class BaseFilter {
-    private BaseFilter next;
+    private BaseFilter next = null;
 
     public void setNext(BaseFilter handler) {
         if (next != null)
@@ -16,7 +16,7 @@ public abstract class BaseFilter {
 
     public List<TaskData> filter(List<TaskData> tasks) {
         if (next != null)
-            return validate(next.validate(tasks));
+            return next.filter(validate(tasks));
         else
             return validate(tasks);
     }
