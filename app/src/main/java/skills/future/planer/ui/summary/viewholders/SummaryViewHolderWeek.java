@@ -29,10 +29,12 @@ import skills.future.planer.ui.summary.SummaryEditorActivity;
 public class SummaryViewHolderWeek extends SummaryViewHolder  {
     private final SimpleDateFormat formatterDate = new SimpleDateFormat("dd.MM", Locale.getDefault());
     private CardView cardViewSummaryWeek;
+    private ImageView detailImageViewWeek;
 
     public SummaryViewHolderWeek(@NonNull View itemView, Context context) {
         super(itemView, context);
         this.cardViewSummaryWeek = itemView.findViewById(R.id.cardViewSummaryWeek);
+        this.detailImageViewWeek = itemView.findViewById(R.id.detailImageViewWeek);
     }
 
     @SuppressLint({"SetTextI18n"})
@@ -58,14 +60,25 @@ public class SummaryViewHolderWeek extends SummaryViewHolder  {
             nameTextView.setText("Tydzień od " + formatterDate.format(date.getTime()) + " do " + formatterDate.format(date2.getTime()));
         }
 
-        if(detailImageView != null)
-            detailImageView.setOnClickListener(e->{
-                AnimateView.animateInOut(detailImageView, context);
+        if(detailImageViewWeek != null)
+            detailImageViewWeek.setOnClickListener(e->{
+                AnimateView.animateInOut(detailImageViewWeek, context);
                 var intent = new Intent(this.getContext(), SummaryEditorActivity.class);
                 var bundle = new Bundle();
-                bundle.putInt("summaryId", summaryData.getSummaryId().intValue());
+                bundle.putLong("summaryId", summaryData.getSummaryId());
+                bundle.putBoolean("editable", true);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             });
+
+        itemView.setOnClickListener(e->{
+            AnimateView.animateInOut(itemView, context);
+            var intent = new Intent(this.getContext(), SummaryEditorActivity.class);
+            var bundle = new Bundle();
+            bundle.putLong("summaryId", summaryData.getSummaryId());
+            bundle.putBoolean("editable", false);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+        });
     }
 }

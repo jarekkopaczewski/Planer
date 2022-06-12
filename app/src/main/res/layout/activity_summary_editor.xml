@@ -7,6 +7,18 @@
     android:background="@color/background"
     tools:context=".ui.summary.SummaryEditorActivity">
 
+    <ImageView
+        android:id="@+id/isEditedImage"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="15dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/summaryTitleText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pencil"
+        app:tint="@color/imageTintColor_2" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/editSummaryFab2"
         style="@style/Widget.AppCompat.Button"
@@ -29,7 +41,7 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/summaryTitleText"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
@@ -49,7 +61,7 @@
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/summaryTitleText"
         app:srcCompat="@drawable/shadow" />
 
     <androidx.core.widget.NestedScrollView
@@ -61,7 +73,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+        app:layout_constraintTop_toBottomOf="@+id/summaryTitleText">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,7 +105,7 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/summaryEditText"
+                            android:id="@+id/summaryAchievementsText2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="#00F4F4F4"
@@ -144,7 +156,7 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/summaryEditText2"
+                            android:id="@+id/summaryNotFinishedText2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="8dp"
@@ -213,7 +225,7 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/summaryEditText3"
+                            android:id="@+id/summaryToWorkOutText2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="8dp"
