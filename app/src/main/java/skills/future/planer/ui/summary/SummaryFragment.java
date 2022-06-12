@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Calendar;
 
+import skills.future.planer.R;
 import skills.future.planer.databinding.FragmentSummaryBrowserBinding;
 import skills.future.planer.db.summary.SummaryViewModel;
+import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.summary.adapter.SummaryTotalAdapter;
 
 public class SummaryFragment extends Fragment {
@@ -48,6 +50,8 @@ public class SummaryFragment extends Fragment {
         // set min/max value in year picker
         yearPicker.setMaxValue(Calendar.getInstance().get(Calendar.YEAR)+1);
         yearPicker.setMinValue(summaryViewModel.getMinimumYear()-1);
+
+        AnimateView.animateInOut(yearPicker, getContext());
 
         return root;
     }

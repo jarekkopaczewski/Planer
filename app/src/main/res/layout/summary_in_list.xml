@@ -25,23 +25,24 @@
 
             <ImageView
                 android:id="@+id/detailImageView3"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/pencil"
+                app:srcCompat="@drawable/search"
                 app:tint="@color/imageTintColor_2" />
 
             <TextView
                 android:id="@+id/summaryNameText"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="25dp"
                 android:layout_marginEnd="5dp"
                 android:fontFamily="@font/signika_regular"
                 android:text="summary name"
+                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/detailImageView3"
                 app:layout_constraintStart_toStartOf="parent"

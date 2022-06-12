@@ -26,10 +26,9 @@ import skills.future.planer.ui.summary.SummaryEditorActivity;
 
 @Getter
 public class SummaryViewHolder extends RecyclerView.ViewHolder {
-    private TextView nameTextView;
-    private ImageView detailImageView;
+    protected TextView nameTextView;
+    protected ImageView detailImageView;
     protected Context context;
-    private final SimpleDateFormat formatterDate = new SimpleDateFormat("dd.MM", Locale.getDefault());
 
     public SummaryViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
@@ -45,25 +44,16 @@ public class SummaryViewHolder extends RecyclerView.ViewHolder {
     @SuppressLint("SetTextI18n")
     public void setEverything(SummaryData summaryData)
     {
-        Calendar date = Calendar.getInstance();
-        date.set(summaryData.getYear(), summaryData.getMonth(), 1);
-        date.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
-        date.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-
-        Calendar date2 = Calendar.getInstance();
-        date2.set(summaryData.getYear(), summaryData.getMonth(), 1);
-        date2.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
-        date2.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-
-        if( summaryData.getSummaryType() == SummaryType.monthSummary )
-            nameTextView.setText(context.getResources().getStringArray(R.array.months)[summaryData.getMonth()-1]);
-        else if( summaryData.getSummaryType() == SummaryType.weekSummary )
-            nameTextView.setText("Tydzień od " + formatterDate.format(date.getTime()) + " do " + formatterDate.format(date2.getTime()));
+        if( summaryData.getSummaryType() == SummaryType.monthSummary ){
+            var text = context.getResources().getStringArray(R.array.months)[summaryData.getMonth()-1];
+            String upper = text.substring(0, 1).toUpperCase() + text.substring(1);
+            nameTextView.setText(upper);
+        }
 
         if(detailImageView != null)
             detailImageView.setOnClickListener(e->{
-                AnimateView.animateInOut(detailImageView, context);
-                context.startActivity(new Intent(this.getContext(), SummaryEditorActivity.class));
+                AnimateView.singleAnimation(detailImageView, context, R.anim.rotate2);
+                itemView.callOnClick();
             });
     }
 }

@@ -19,6 +19,16 @@ public class SummaryViewModel extends AndroidViewModel {
     }
 
     /**
+     * get month summary from year
+     * @param year
+     * @param month
+     * @return
+     */
+    public List<SummaryData> getMonthSummary(int year, int month){
+        return summaryRepository.getMonthSummary(year, month);
+    }
+
+    /**
      * Get min year in database
      * @return
      */

@@ -51,12 +51,8 @@ public class SummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHolder>
     @Override
     public SummaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return switch (viewType) {
-            case LAYOUT_BIG -> new SummaryViewHolderExtended(
-                    createViewOfItem(parent,
-                            R.layout.summary_in_list_extended), context, fragment);
-            default -> new SummaryViewHolder(
-                    createViewOfItem(parent,
-                            R.layout.summary_in_list), context);
+            case LAYOUT_BIG -> new SummaryViewHolderExtended(createViewOfItem(parent, R.layout.summary_in_list_extended), context, fragment);
+            default -> new SummaryViewHolder(createViewOfItem(parent, R.layout.summary_in_list), context);
         };
     }
 
