@@ -24,7 +24,7 @@ public class DayTaskListViewModel extends ViewModel {
     public void updateDate(CalendarDay date) {
         taskDataViewModel.getAllTaskDataFromDay(date)
                 .observe(viewLifecycleOwner,
-                        taskData -> taskDayAdapter.setFilteredTaskList(taskData));
+                        taskData -> taskDayAdapter.setDisplayedList(taskData));
     }
 
     public void setTaskDayAdapter(TaskTotalAdapter taskDayAdapter) {

@@ -78,12 +78,6 @@ public class TaskDataDaoTest {
     }
 
     @Test
-    public void testGetTaskData1() {
-        List<TaskData> exp = new ArrayList<>(Arrays.asList(taskData,taskData2));
-        assertEquals(exp,userDao.getTaskData(Priorities.Important,TimePriority.Urgent));
-    }
-
-    @Test
     public void deleteOne() {
         userDao.deleteOne(taskData);
         List<TaskData> exp = new ArrayList<>(Collections.singletonList(taskData2));

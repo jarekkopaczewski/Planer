@@ -16,7 +16,7 @@ import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
 public class TaskDayAdapter extends TaskTotalAdapter {
 
     public TaskDayAdapter(Context context, ComponentActivity activity) {
-        super(context, activity);
+        super(context, activity, null);
     }
 
     @NonNull
@@ -29,11 +29,6 @@ public class TaskDayAdapter extends TaskTotalAdapter {
     @Override
     protected View createViewOfItem(@NonNull ViewGroup parent, int layoutType) {
         return super.createViewOfItem(parent, layoutType);
-    }
-
-    @Override
-    public TaskData getTaskDataAtPosition(int position) {
-        return super.getTaskDataAtPosition(position);
     }
 
     @Override
@@ -52,13 +47,8 @@ public class TaskDayAdapter extends TaskTotalAdapter {
     }
 
     @Override
-    public void setFilteredTaskList(List<TaskData> words) {
-        super.setFilteredTaskList(words);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return super.getItemId(position);
+    public void setDisplayedList(List<TaskData> words) {
+        super.setDisplayedList(words);
     }
 
     @Override
