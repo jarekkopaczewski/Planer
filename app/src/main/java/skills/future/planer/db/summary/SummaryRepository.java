@@ -19,6 +19,14 @@ public class SummaryRepository {
     }
 
     /**
+     * Get min year in database
+     * @return
+     */
+    public int getMinimumYear(){
+        return summaryDao.getMinimumYear();
+    }
+
+    /**
      * @return reference to list of all summaries
      */
     LiveData<List<SummaryData>> getAllSummaries() {

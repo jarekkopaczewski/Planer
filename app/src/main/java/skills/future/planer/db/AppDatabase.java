@@ -12,15 +12,22 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.summary.SummaryDao;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
 @Database(entities = {TaskData.class, HabitData.class, GoalData.class, SummaryData.class},
@@ -46,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
+                    .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
         }
 
         return sInstance;
@@ -84,80 +91,83 @@ public abstract class AppDatabase extends RoomDatabase {
             // Start the app with a clean database every time.
             // Not needed if you only populate the database
             // when it is first created
-//            mDao.deleteAll();
-//            habitDao.deleteAll();
-//            goalsDao.deleteAll();
+            mDao.deleteAll();
+            habitDao.deleteAll();
+            goalsDao.deleteAll();
             summaryDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-//            CalendarDay day2 = CalendarDay.from(2022, 5, 5);
-//            CalendarDay day3 = CalendarDay.from(2022, 5, 23);
-//            CalendarDay day4 = CalendarDay.from(2022, 5, 15);
-//            CalendarDay day5 = CalendarDay.from(2022, 5, 30);
-//            var cal = Calendar.getInstance();
-//            int counter = 1;
-//
-//            for (int i = 0; i < 3; i++) {
-//                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
-//                word.setTaskDataId(mDao.insert(word));
-//                counter++;
-//            }
-//            for (int i = 0; i < 3; i++) {
-//                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie nieważne i pilne" + counter, "", day2, day3);
-//                word.setTaskDataId(mDao.insert(word));
-//                counter++;
-//            }
-//            for (int i = 0; i <= 3; i++) {
-//                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day4, day5);
-//                word.setTaskDataId(mDao.insert(word));
-//                counter++;
-//            }
-//            for (int i = 0; i <= 3; i++) {
-//                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day4, day5);
-//                word.setTaskDataId(mDao.insert(word));
-//                counter++;
-//            }
-//
-//
-//            try {
-//                var goal = new GoalData("Cel " + 1, "Material is the metaphor. " +
-//                        " A material metaphor is the unifying theory of a rationalized space and a system of motion." +
-//                        " The material is grounded in tactile reality, inspired by the study of paper and ink, yet " +
-//                        " technologically advanced and open to imagination and magic." +
-//                        " Surfaces and edges of the material provide visual cues that are grounded in reality. The " +
-//                        " use of familiar tactile attributes helps users quickly understand affordances. Yet the" +
-//                        " flexibility of the material creates new affordances that supercede those in the physical " +
-//                        " world, without breaking the rules of physics." +
-//                        " The fundamentals of light, surface, and movement are key to conveying how objects move, " +
-//                        " interact, and exist in space and in relation to each other. Realistic lighting shows " +
-//                        " seams, divides space, and indicates moving parts." +
-//                        " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
-//                goal.setGoalId(goalsDao.insert(goal));
-//                habitDao.insert(new HabitData("test", "1111111",
-//                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 1, goal.getGoalId()));
-//                habitDao.insert(new HabitData("testbezcelu", "1111111",
-//                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
-//                habitDao.insert(new HabitData("test2", "1111111",
-//                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
-//                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
-//                word.setTaskDataId(mDao.insert(word));
-//
-//                var goal2 =
-//                        new GoalData("Cel " + "agagasg", "opisasgasgagasg", LocalDate.of(2022, 2, 1));
-//                goal2.setGoalId(goalsDao.insert(goal2));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            CalendarDay day2 = CalendarDay.from(2022, 5, 5);
+            CalendarDay day3 = CalendarDay.from(2022, 5, 23);
+            CalendarDay day4 = CalendarDay.from(2022, 5, 15);
+            CalendarDay day5 = CalendarDay.from(2022, 5, 30);
+            var cal = Calendar.getInstance();
+            int counter = 1;
 
-            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day), SummaryType.monthSummary));
-            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu tygodnia", DatesParser.toLocalDate(day), SummaryType.weekSummary));
-
-            for( int i = 1; i < 3; i++)
-            {
-                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).plusMonths(i), SummaryType.monthSummary));
-                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).minusMonths(i), SummaryType.monthSummary));
-                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).plusMonths(i).plusYears(1), SummaryType.monthSummary));
-                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).minusMonths(i).minusYears(1), SummaryType.monthSummary));
+            for (int i = 0; i < 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
+                word.setTaskDataId(mDao.insert(word));
+                counter++;
             }
+            for (int i = 0; i < 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie nieważne i pilne" + counter, "", day2, day3);
+                word.setTaskDataId(mDao.insert(word));
+                counter++;
+            }
+            for (int i = 0; i <= 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day4, day5);
+                word.setTaskDataId(mDao.insert(word));
+                counter++;
+            }
+            for (int i = 0; i <= 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day4, day5);
+                word.setTaskDataId(mDao.insert(word));
+                counter++;
+            }
+
+
+            try {
+                var goal = new GoalData("Cel " + 1, "Material is the metaphor. " +
+                        " A material metaphor is the unifying theory of a rationalized space and a system of motion." +
+                        " The material is grounded in tactile reality, inspired by the study of paper and ink, yet " +
+                        " technologically advanced and open to imagination and magic." +
+                        " Surfaces and edges of the material provide visual cues that are grounded in reality. The " +
+                        " use of familiar tactile attributes helps users quickly understand affordances. Yet the" +
+                        " flexibility of the material creates new affordances that supercede those in the physical " +
+                        " world, without breaking the rules of physics." +
+                        " The fundamentals of light, surface, and movement are key to conveying how objects move, " +
+                        " interact, and exist in space and in relation to each other. Realistic lighting shows " +
+                        " seams, divides space, and indicates moving parts." +
+                        " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
+                goal.setGoalId(goalsDao.insert(goal));
+                habitDao.insert(new HabitData("test", "1111111",
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 1, goal.getGoalId()));
+                habitDao.insert(new HabitData("testbezcelu", "1111111",
+                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
+                habitDao.insert(new HabitData("test2", "1111111",
+                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
+                word.setTaskDataId(mDao.insert(word));
+
+                var goal2 =
+                        new GoalData("Cel " + "agagasg", "opisasgasgagasg", LocalDate.of(2022, 2, 1));
+                goal2.setGoalId(goalsDao.insert(goal2));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            LocalDate localDate = DatesParser.toLocalDate(day).minusMonths(5);
+
+            for( int i = 1; i < 8; i++)
+            {
+                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", localDate.plusMonths(i), SummaryType.monthSummary));
+            }
+
+            LocalDate localDate2 = DatesParser.toLocalDate(day).minusMonths(5);
+            for( int i = 1; i < 30; i++)
+            {
+                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", localDate2.plusDays(i*7), SummaryType.weekSummary));
+            }
+
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
 //                mDao.insert(word);

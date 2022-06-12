@@ -40,14 +40,10 @@ public class SummaryViewHolderExtended extends SummaryViewHolder{
         weekRecyclerView.setAdapter(weekSummaryTotalAdapter);
         weekRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
 
-        // zmienic na tygodnie -> teraz wczytuje wszystko
-        summaryViewModel.getAllSummary().observe(fragment.getViewLifecycleOwner(), listTotal -> {
-            try {
-                Random rnd  = new Random();
-                weekSummaryTotalAdapter.setData(listTotal.subList(0, rnd.nextInt(4)));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            weekSummaryTotalAdapter.setData(summaryViewModel.getWeeksFromMonthSummary(summaryData.getYear(), summaryData.getMonth()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

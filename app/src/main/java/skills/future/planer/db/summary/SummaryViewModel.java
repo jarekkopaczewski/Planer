@@ -19,6 +19,14 @@ public class SummaryViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get min year in database
+     * @return
+     */
+    public int getMinimumYear(){
+        return summaryRepository.getMinimumYear();
+    }
+
+    /**
      * @return reference to list of all summaries
      */
     public LiveData<List<SummaryData>> getAllSummary() {

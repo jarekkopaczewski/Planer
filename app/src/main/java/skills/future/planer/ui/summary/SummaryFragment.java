@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Calendar;
+
 import skills.future.planer.databinding.FragmentSummaryBrowserBinding;
 import skills.future.planer.db.summary.SummaryViewModel;
 import skills.future.planer.ui.summary.adapter.SummaryTotalAdapter;
@@ -42,6 +44,10 @@ public class SummaryFragment extends Fragment {
         summaryBrowserRecycler.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
         loadSummaries();
         yearPicker.setOnValueChangedListener((X,D,DD)-> loadSummaries());
+
+        // set min/max value in year picker
+        yearPicker.setMaxValue(Calendar.getInstance().get(Calendar.YEAR)+1);
+        yearPicker.setMinValue(summaryViewModel.getMinimumYear()-1);
 
         return root;
     }
