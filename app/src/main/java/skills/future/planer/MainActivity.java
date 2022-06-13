@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -170,8 +169,7 @@ public class MainActivity extends AppCompatActivity {
         String packageName = getPackageName();
         PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
         if (!pm.isIgnoringBatteryOptimizations(packageName)) {
-            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+            intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
             startActivity(intent);
         }
     }
