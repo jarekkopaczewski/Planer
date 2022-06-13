@@ -36,12 +36,14 @@ public class SummaryViewHolderWeek extends SummaryViewHolder {
     @SuppressLint({"SetTextI18n"})
     public void setEverything(SummaryData summaryData) {
         Calendar date = Calendar.getInstance();
-        date.set(summaryData.getYear(), summaryData.getMonth(), 1);
+        date.set(Calendar.YEAR, summaryData.getYear());
+        date.setFirstDayOfWeek(Calendar.MONDAY);
         date.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
         date.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 
         Calendar date2 = Calendar.getInstance();
-        date2.set(summaryData.getYear(), summaryData.getMonth(), 1);
+        date2.set(Calendar.YEAR, summaryData.getYear());
+        date2.setFirstDayOfWeek(Calendar.MONDAY);
         date2.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
         date2.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
