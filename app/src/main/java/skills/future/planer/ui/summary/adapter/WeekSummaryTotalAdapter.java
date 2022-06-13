@@ -15,18 +15,18 @@ import java.util.List;
 import skills.future.planer.R;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.summary.viewholders.SummaryViewHolder;
+import skills.future.planer.ui.summary.viewholders.SummaryViewHolderWeek;
 
-public class WeekSummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHolder> {
+public class WeekSummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHolderWeek> {
 
     protected final Context context;
     private final LayoutInflater layoutInflater;
-    private List<SummaryData> monthSummaryList;
+    private List<SummaryData> weekSummaryList;
 
     public WeekSummaryTotalAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
-        monthSummaryList = new ArrayList<>();
+        weekSummaryList = new ArrayList<>();
     }
 
     @NonNull
@@ -39,28 +39,34 @@ public class WeekSummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHol
 
     @NonNull
     @Override
-    public SummaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SummaryViewHolder(createViewOfItem(parent, R.layout.summary_in_list_week), context);
+    public SummaryViewHolderWeek onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new SummaryViewHolderWeek(createViewOfItem(parent, R.layout.summary_in_list_week), context);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SummaryViewHolder holder, int position) {
-        SummaryData current = monthSummaryList.get(position);
-        holder.setEverything((SummaryData)current);
+    public void onBindViewHolder(@NonNull SummaryViewHolderWeek holder, int position) {
+        SummaryData current = weekSummaryList.get(position);
+        holder.setEverything(current);
     }
 
     @Override
     public int getItemCount() {
-        return monthSummaryList.size();
+        return weekSummaryList.size();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<SummaryData> monthSummaryList) {
-        this.monthSummaryList = monthSummaryList;
+    public void setData(List<SummaryData> weekSummaryList) {
+        this.weekSummaryList = weekSummaryList;
         notifyDataSetChanged();
     }
 
-    public void clear(){
-        this.monthSummaryList.clear();
+    @SuppressLint("NotifyDataSetChanged")
+    public void addData(List<SummaryData> monthSummaryList) {
+        this.weekSummaryList.addAll(monthSummaryList);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        this.weekSummaryList.clear();
     }
 }

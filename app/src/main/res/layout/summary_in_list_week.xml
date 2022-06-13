@@ -7,6 +7,7 @@
     android:background="@color/foreground">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewSummaryWeek"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="5dp"
@@ -33,12 +34,12 @@
                 android:fontFamily="@font/signika_regular"
                 android:text="summary name"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/detailImageView3"
+                app:layout_constraintEnd_toStartOf="@+id/detailImageViewWeek"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/detailImageView3"
+                android:id="@+id/detailImageViewWeek"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginEnd="15dp"

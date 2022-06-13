@@ -7,6 +7,30 @@
     android:background="@color/background"
     tools:context=".ui.summary.SummaryEditorActivity">
 
+    <ImageView
+        android:id="@+id/imageView13"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:alpha="0.2"
+        android:rotationX="180"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/summaryTitleText"
+        app:srcCompat="@drawable/shadow" />
+
+    <ImageView
+        android:id="@+id/isEditedImage"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="15dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/summaryTitleText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pencil"
+        app:tint="@color/imageTintColor_2" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/editSummaryFab2"
         style="@style/Widget.AppCompat.Button"
@@ -29,12 +53,12 @@
         tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/summaryTitleText"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/signika_regular"
-        android:text="opis podsumowania"
+        android:text="@string/app_name"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,19 +73,20 @@
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/summaryTitleText"
         app:srcCompat="@drawable/shadow" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:background="@color/background"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+        app:layout_constraintTop_toBottomOf="@+id/summaryTitleText">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,11 +97,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:alpha="0.2"
+                    android:rotationX="180"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4"
+                    app:srcCompat="@drawable/shadow" />
+
+                <ImageView
+                    android:id="@+id/imageView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:alpha="0.2"
+                    android:rotationX="180"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3"
+                    app:srcCompat="@drawable/shadow" />
+
+                <ImageView
+                    android:id="@+id/imageView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="15dp"
+                    android:alpha="0.2"
+                    android:rotationX="180"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/summaryTitle"
+                    app:srcCompat="@drawable/shadow" />
+
                 <androidx.core.widget.NestedScrollView
                     android:id="@+id/nestedScrollView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@color/background"
                     android:fillViewport="true"
@@ -84,7 +146,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView14"
                     app:layout_constraintVertical_bias="0.0">
 
                     <LinearLayout
@@ -93,33 +155,32 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/summaryEditText"
+                            android:id="@+id/summaryAchievementsText2"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:background="#00F4F4F4"
                             android:enabled="true"
-                            android:justificationMode="inter_word"
-                            android:gravity="fill_horizontal"
                             android:fontFamily="@font/signika_regular"
+                            android:justificationMode="inter_word"
                             android:paddingTop="5dp"
+                            android:gravity="fill_horizontal"
                             android:paddingBottom="5dp"
                             android:text="@string/large_text"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"/>
 
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/summaryTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
                     android:background="@color/background"
                     android:fontFamily="@font/signika_regular"
-                    android:text="Co osiągnąłem/am w tym tygodniu?"
-                    android:textSize="18sp"
+                    android:text="@string/achievments"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -135,7 +196,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView15"
                     app:layout_constraintVertical_bias="0.0">
 
                     <LinearLayout
@@ -144,17 +205,17 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/summaryEditText2"
+                            android:id="@+id/summaryNotFinishedText2"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:background="#00F4F4F4"
                             android:enabled="true"
-                            android:justificationMode="inter_word"
-                            android:gravity="fill_horizontal"
                             android:fontFamily="@font/signika_regular"
+                            android:justificationMode="inter_word"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
+                            android:gravity="fill_horizontal"
                             android:text="@string/large_text"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -163,14 +224,14 @@
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:background="@color/background"
                     android:fontFamily="@font/signika_regular"
-                    android:text="Co odpuściłem/am?"
-                    android:textSize="18sp"
+                    android:text="@string/summary_leave"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/nestedScrollView2" />
@@ -178,13 +239,15 @@
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal|center"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:fontFamily="@font/signika_regular"
-                    android:text="Nad czym chcę jeszcze popracować?"
-                    android:textSize="18sp"
+                    android:gravity="start"
+                    android:text="@string/work_on_summary"
+                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -197,14 +260,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="10dp"
                     android:background="@color/background"
                     android:fillViewport="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView16"
                     app:layout_constraintVertical_bias="0.0">
 
                     <LinearLayout
@@ -213,9 +275,9 @@
                         android:orientation="vertical">
 
                         <EditText
-                            android:id="@+id/summaryEditText3"
+                            android:id="@+id/summaryToWorkOutText2"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:background="@color/background"
                             android:enabled="true"
@@ -223,8 +285,8 @@
                             android:justificationMode="inter_word"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
+                            android:gravity="fill_horizontal"
                             android:text="@string/large_text"
-                            android:textAlignment="center"
                             android:textSize="14sp" />
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>

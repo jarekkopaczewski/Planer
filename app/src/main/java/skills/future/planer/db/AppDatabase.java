@@ -12,15 +12,22 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.habit.HabitDuration;
 import skills.future.planer.db.summary.SummaryDao;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
+import skills.future.planer.db.task.enums.category.TaskCategory;
+import skills.future.planer.db.task.enums.priority.Priorities;
+import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
 @Database(entities = {TaskData.class, HabitData.class, GoalData.class, SummaryData.class},
@@ -46,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
+                    .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
         }
 
         return sInstance;
@@ -84,9 +91,9 @@ public abstract class AppDatabase extends RoomDatabase {
             // Start the app with a clean database every time.
             // Not needed if you only populate the database
             // when it is first created
-//            mDao.deleteAll();
-//            habitDao.deleteAll();
-//            goalsDao.deleteAll();
+            //mDao.deleteAll();
+            //habitDao.deleteAll();
+            //goalsDao.deleteAll();
             summaryDao.deleteAll();
             CalendarDay day = CalendarDay.today();
 //            CalendarDay day2 = CalendarDay.from(2022, 5, 5);
@@ -148,16 +155,23 @@ public abstract class AppDatabase extends RoomDatabase {
 //                e.printStackTrace();
 //            }
 
-            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day), SummaryType.monthSummary));
-            summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu tygodnia", DatesParser.toLocalDate(day), SummaryType.weekSummary));
+            String test = "Material is the metaphor.A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The Material is the metaphor. A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The Material is the metaphor. A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The";
+            String test2 = "Material is the metaphor.A material metaphor is the unifying theory of a rationalized space and a system of motion.";
 
-            for( int i = 1; i < 3; i++)
+            CalendarDay calendarDay = CalendarDay.from(2022, 1, 9);
+            LocalDate localDate = DatesParser.toLocalDate(calendarDay);
+
+
+            for( int i = 0; i < 8; i++)
             {
-                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).plusMonths(i), SummaryType.monthSummary));
-                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).minusMonths(i), SummaryType.monthSummary));
-                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).plusMonths(i).plusYears(1), SummaryType.monthSummary));
-                summaryDao.insert(new SummaryData("Dane Testowe", "Wiadomo co, wiadomo kogo", "Zawsze i wszedzie. wciagu miesiaca", DatesParser.toLocalDate(day).minusMonths(i).minusYears(1), SummaryType.monthSummary));
+                summaryDao.insert(new SummaryData(test2, test2, test2, localDate.plusMonths(i), SummaryType.monthSummary));
             }
+
+            for( int i = 0; i < 30; i++)
+            {
+                summaryDao.insert(new SummaryData(test, test, test, localDate.plusDays(i*7), SummaryType.weekSummary));
+            }
+
 //            for (int i = 0; i <= 1; i++) {
 //                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie " + counter, "", day3, day6);
 //                mDao.insert(word);

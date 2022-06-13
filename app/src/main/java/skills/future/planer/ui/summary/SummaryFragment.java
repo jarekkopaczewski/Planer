@@ -11,18 +11,19 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Calendar;
+
 import skills.future.planer.databinding.FragmentSummaryBrowserBinding;
 import skills.future.planer.db.summary.SummaryViewModel;
+import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.summary.adapter.SummaryTotalAdapter;
 
 public class SummaryFragment extends Fragment {
 
     private SummaryViewModel summaryViewModel;
     private FragmentSummaryBrowserBinding binding;
-    private RecyclerView summaryBrowserRecycler;
     private SummaryTotalAdapter summaryTotalAdapter;
     private com.shawnlin.numberpicker.NumberPicker yearPicker;
-    private int currentYear;
 
     public SummaryFragment() {
     }
@@ -33,25 +34,28 @@ public class SummaryFragment extends Fragment {
         View root = binding.getRoot();
 
         summaryViewModel = new ViewModelProvider(this).get(SummaryViewModel.class);
-
         yearPicker = binding.yearPicker;
 
-        summaryBrowserRecycler = binding.summaryBrowserRecycler;
+        RecyclerView summaryBrowserRecycler = binding.summaryBrowserRecycler;
         summaryTotalAdapter = new SummaryTotalAdapter(this.getContext(), this);
         summaryBrowserRecycler.setAdapter(summaryTotalAdapter);
         summaryBrowserRecycler.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
         loadSummaries();
-        yearPicker.setOnValueChangedListener((X,D,DD)-> loadSummaries());
+        yearPicker.setOnValueChangedListener((picker, oldVal, newVal) -> loadSummaries());
 
+        // set min/max value in year picker
+        yearPicker.setMaxValue(Calendar.getInstance().get(Calendar.YEAR) + 1);
+        yearPicker.setMinValue(summaryViewModel.getMinimumYear() - 1);
+
+        AnimateView.animateInOut(yearPicker, getContext());
         return root;
     }
 
     /**
      * Loads new months summaries after picker change
      */
-    private void loadSummaries()
-    {
-        currentYear = yearPicker.getValue();
+    private void loadSummaries() {
+        int currentYear = yearPicker.getValue();
         summaryTotalAdapter.clear();
         try {
             summaryTotalAdapter.setData(summaryViewModel.getMonthsFromYearSummary(currentYear));

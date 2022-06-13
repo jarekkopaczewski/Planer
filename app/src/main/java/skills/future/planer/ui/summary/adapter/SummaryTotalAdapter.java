@@ -19,18 +19,16 @@ import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.summary.viewholders.SummaryViewHolder;
 import skills.future.planer.ui.summary.viewholders.SummaryViewHolderExtended;
-import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolder;
-import skills.future.planer.ui.tasklist.viewholders.TaskDataViewHolderExtended;
 
 public class SummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHolder> {
 
-    protected final Context context;
-    private final LayoutInflater layoutInflater;
-    private List<SummaryData> monthSummaryList;
-    private Fragment fragment;
     private static final int LAYOUT_SMALL = 0;
     private static final int LAYOUT_BIG = 1;
+    protected final Context context;
+    private final LayoutInflater layoutInflater;
     private final AtomicInteger positionToChange = new AtomicInteger(-1);
+    private final Fragment fragment;
+    private List<SummaryData> monthSummaryList;
 
     public SummaryTotalAdapter(Context context, Fragment fragment) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -50,14 +48,10 @@ public class SummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHolder>
     @NonNull
     @Override
     public SummaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return switch (viewType) {
-            case LAYOUT_BIG -> new SummaryViewHolderExtended(
-                    createViewOfItem(parent,
-                            R.layout.summary_in_list_extended), context, fragment);
-            default -> new SummaryViewHolder(
-                    createViewOfItem(parent,
-                            R.layout.summary_in_list), context);
-        };
+        if (viewType == LAYOUT_BIG)
+            return new SummaryViewHolderExtended(createViewOfItem(parent, R.layout.summary_in_list_extended), context, fragment);
+        else
+            return new SummaryViewHolder(createViewOfItem(parent, R.layout.summary_in_list), context);
     }
 
     /**
@@ -98,7 +92,7 @@ public class SummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHolder>
     @Override
     public void onBindViewHolder(@NonNull SummaryViewHolder holder, int position) {
         SummaryData current = monthSummaryList.get(position);
-        holder.setEverything((SummaryData)current);
+        holder.setEverything(current);
         createListenerToExtendView(holder);
     }
 
@@ -113,7 +107,7 @@ public class SummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHolder>
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         this.monthSummaryList.clear();
     }
 }

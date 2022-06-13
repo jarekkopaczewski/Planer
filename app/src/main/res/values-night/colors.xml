@@ -6,6 +6,7 @@
     <color name="navigationBarColor">#090909</color>
     <color name="second_color_30">#007E8F</color>
     <color name="second_color_30_2">#63FFFA</color>
+    <color name="month_summary">#25464B</color>
     <color name="background">#151515</color>
     <color name="background_2">#202020</color>
     <color name="foreground">#303030</color>

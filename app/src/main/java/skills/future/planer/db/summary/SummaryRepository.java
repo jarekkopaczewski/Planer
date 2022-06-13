@@ -19,6 +19,24 @@ public class SummaryRepository {
     }
 
     /**
+     * get month summary from year
+     * @param year
+     * @param month
+     * @return
+     */
+    List<SummaryData> getMonthSummary(int year, int month){
+        return summaryDao.getMonthSummary(year, month);
+    }
+
+    /**
+     * Get min year in database
+     * @return
+     */
+    public int getMinimumYear(){
+        return summaryDao.getMinimumYear();
+    }
+
+    /**
      * @return reference to list of all summaries
      */
     LiveData<List<SummaryData>> getAllSummaries() {
