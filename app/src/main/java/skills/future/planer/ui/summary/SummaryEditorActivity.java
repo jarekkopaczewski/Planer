@@ -1,8 +1,5 @@
 package skills.future.planer.ui.summary;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +9,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,6 +29,7 @@ import skills.future.planer.ui.AnimateView;
 
 public class SummaryEditorActivity extends AppCompatActivity {
 
+    private final SimpleDateFormat formatterDate = new SimpleDateFormat("dd.MM", Locale.getDefault());
     private boolean isEdited = false;
     private FloatingActionButton editSummaryFab;
     private Bundle parameters;
@@ -37,8 +38,8 @@ public class SummaryEditorActivity extends AppCompatActivity {
     private EditText summaryNotFinishedText;
     private EditText summaryToWorkOutText;
     private TextView summaryTitleText;
+    private TextView summaryTitle;
     private ImageView isEditedImage;
-    private final SimpleDateFormat formatterDate = new SimpleDateFormat("dd.MM", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class SummaryEditorActivity extends AppCompatActivity {
         summaryToWorkOutText = binding.summaryToWorkOutText2;
         summaryTitleText = binding.summaryTitleText;
         isEditedImage = binding.isEditedImage;
+        summaryTitle = binding.summaryTitle;
 
         this.parameters = getIntent().getExtras();
         setUpValues();
@@ -62,7 +64,14 @@ public class SummaryEditorActivity extends AppCompatActivity {
         setTextListener(summaryNotFinishedText);
         setTextListener(summaryToWorkOutText);
 
-        editSummaryFab.setOnClickListener(e->{
+        setUpFabListener();
+    }
+
+    /**
+     * Sets up save listener
+     */
+    private void setUpFabListener() {
+        editSummaryFab.setOnClickListener(e -> {
             AnimateView.singleAnimation(editSummaryFab, this, R.anim.editsummary);
             AnimateView.singleAnimation(isEditedImage, this, R.anim.editsummary);
             summaryData.setAchievements(summaryAchievementsText.getText().toString());
@@ -73,20 +82,24 @@ public class SummaryEditorActivity extends AppCompatActivity {
             editSummaryFab.hide();
             new ViewModelProvider(this).get(SummaryViewModel.class).edit(summaryData);
         });
-
     }
 
-    private void setTextListener(EditText view)
-    {
+    /**
+     * Adds listener to change text
+     *
+     * @param view EditText
+     */
+    private void setTextListener(EditText view) {
         Context context = this;
         view.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
             }
+
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!isEdited)
-                {
+                if (!isEdited) {
                     editSummaryFab.show();
                     isEditedImage.setVisibility(View.VISIBLE);
                     AnimateView.singleAnimation(editSummaryFab, context, R.anim.editsummary2);
@@ -101,18 +114,14 @@ public class SummaryEditorActivity extends AppCompatActivity {
      * pass values of summary from database to text views
      */
     @SuppressLint("SetTextI18n")
-    private void setUpValues()
-    {
+    private void setUpValues() {
         editSummaryFab.hide();
         // check edit
-        if(!parameters.getBoolean("editable"))
-        {
+        if (!parameters.getBoolean("editable")) {
             summaryAchievementsText.setEnabled(false);
             summaryNotFinishedText.setEnabled(false);
             summaryToWorkOutText.setEnabled(false);
-        }
-        else
-        {
+        } else {
             AnimateView.singleAnimation(editSummaryFab, this, R.anim.downup);
         }
 
@@ -122,14 +131,13 @@ public class SummaryEditorActivity extends AppCompatActivity {
         summaryNotFinishedText.setText(summaryData.getNotFinished());
         summaryToWorkOutText.setText(summaryData.getToWorkOut());
 
-        if(summaryData.getSummaryType() == SummaryType.monthSummary )
-        {
-            var text = this.getResources().getStringArray(R.array.months)[summaryData.getMonth()-1];
+        if (summaryData.getSummaryType() == SummaryType.monthSummary) {
+            var text = this.getResources().getStringArray(R.array.months)[summaryData.getMonth() - 1];
             String upper = text.substring(0, 1).toUpperCase() + text.substring(1);
             summaryTitleText.setText(upper + " " + summaryData.getYear());
-        }
-        else
-        {
+            summaryTitle.setText(R.string.achievments_month);
+
+        } else {
             Calendar date = Calendar.getInstance();
             date.set(summaryData.getYear(), summaryData.getMonth(), 1);
             date.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
@@ -140,7 +148,7 @@ public class SummaryEditorActivity extends AppCompatActivity {
             date2.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
             date2.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
-            summaryTitleText.setText("Od " + formatterDate.format(date.getTime()) + " do " + formatterDate.format(date2.getTime()) + " - " + summaryData.getYear()+"r");
+            summaryTitleText.setText("Od " + formatterDate.format(date.getTime()) + " do " + formatterDate.format(date2.getTime()) + " - " + summaryData.getYear() + "r");
         }
     }
 
@@ -150,8 +158,7 @@ public class SummaryEditorActivity extends AppCompatActivity {
     }
 
     private void showDialog() {
-        if(isEdited)
-        {
+        if (isEdited) {
             new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_rounded)
                     .setIcon(R.drawable.warning)
                     .setTitle(R.string.exit_activity_warning_1)
@@ -159,9 +166,7 @@ public class SummaryEditorActivity extends AppCompatActivity {
                     .setPositiveButton(R.string.agree, (dialog, which) -> finish())
                     .setNegativeButton(R.string.disagree, null)
                     .show();
-        }
-        else
-        {
+        } else {
             finish();
         }
     }

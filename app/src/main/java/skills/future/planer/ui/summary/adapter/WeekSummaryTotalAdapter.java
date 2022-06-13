@@ -15,7 +15,6 @@ import java.util.List;
 import skills.future.planer.R;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.summary.viewholders.SummaryViewHolder;
 import skills.future.planer.ui.summary.viewholders.SummaryViewHolderWeek;
 
 public class WeekSummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHolderWeek> {
@@ -47,7 +46,7 @@ public class WeekSummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHol
     @Override
     public void onBindViewHolder(@NonNull SummaryViewHolderWeek holder, int position) {
         SummaryData current = weekSummaryList.get(position);
-        holder.setEverything((SummaryData)current);
+        holder.setEverything(current);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class WeekSummaryTotalAdapter extends RecyclerView.Adapter<SummaryViewHol
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         this.weekSummaryList.clear();
     }
 }

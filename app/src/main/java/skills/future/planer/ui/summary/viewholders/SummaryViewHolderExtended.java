@@ -11,21 +11,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Random;
-
 import skills.future.planer.R;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.summary.adapter.SummaryTotalAdapter;
 import skills.future.planer.ui.summary.adapter.WeekSummaryTotalAdapter;
 
-public class SummaryViewHolderExtended extends SummaryViewHolder{
+public class SummaryViewHolderExtended extends SummaryViewHolder {
 
     private WeekSummaryTotalAdapter weekSummaryTotalAdapter;
-    private ImageView detailImageView2;
-    private RecyclerView weekRecyclerView;
-    private Fragment fragment;
+    private final ImageView detailImageView2;
+    private final RecyclerView weekRecyclerView;
+    private final Fragment fragment;
 
     @SuppressLint("ResourceAsColor")
     public SummaryViewHolderExtended(@NonNull View itemView, Context context, Fragment fragment) {
@@ -36,8 +33,7 @@ public class SummaryViewHolderExtended extends SummaryViewHolder{
     }
 
     @Override
-    public void setEverything(SummaryData summaryData)
-    {
+    public void setEverything(SummaryData summaryData) {
         super.setEverything(summaryData);
         SummaryViewModel summaryViewModel = new ViewModelProvider(fragment).get(SummaryViewModel.class);
         weekSummaryTotalAdapter = new WeekSummaryTotalAdapter(context);
@@ -51,8 +47,8 @@ public class SummaryViewHolderExtended extends SummaryViewHolder{
             e.printStackTrace();
         }
 
-        if(detailImageView2 != null)
-            detailImageView2.setOnClickListener(e->{
+        if (detailImageView2 != null)
+            detailImageView2.setOnClickListener(e -> {
                 AnimateView.singleAnimation(detailImageView2, context, R.anim.rotate2);
                 itemView.callOnClick();
             });

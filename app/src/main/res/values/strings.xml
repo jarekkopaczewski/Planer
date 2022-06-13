@@ -49,6 +49,16 @@
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
         "technologically advanced and open to imagination and magic."
         "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "Material is the metaphor."
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic."
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "Material is the metaphor."
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic."
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
     </string>
     <string name="dateInterval">do</string>
     <string name="work">Praca</string>
@@ -101,4 +111,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="achievments">Co osiągnąłem/am w tym tygodniu?</string>
+    <string name="achievments_month">Co osiągnąłem/am w tym miesiącu?</string>
+    <string name="summary_leave">Co odpuściłem/am?</string>
+    <string name="work_on_summary">Nad czym chcę jeszcze popracować?</string>
 </resources>

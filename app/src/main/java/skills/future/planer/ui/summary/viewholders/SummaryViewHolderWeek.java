@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,16 +18,14 @@ import lombok.Getter;
 import skills.future.planer.R;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryType;
-import skills.future.planer.db.summary.SummaryViewModel;
 import skills.future.planer.ui.AnimateView;
-import skills.future.planer.ui.habit.HabitCreatorActivity;
 import skills.future.planer.ui.summary.SummaryEditorActivity;
 
 @Getter
-public class SummaryViewHolderWeek extends SummaryViewHolder  {
+public class SummaryViewHolderWeek extends SummaryViewHolder {
     private final SimpleDateFormat formatterDate = new SimpleDateFormat("dd.MM", Locale.getDefault());
-    private CardView cardViewSummaryWeek;
-    private ImageView detailImageViewWeek;
+    private final CardView cardViewSummaryWeek;
+    private final ImageView detailImageViewWeek;
 
     public SummaryViewHolderWeek(@NonNull View itemView, Context context) {
         super(itemView, context);
@@ -38,8 +34,7 @@ public class SummaryViewHolderWeek extends SummaryViewHolder  {
     }
 
     @SuppressLint({"SetTextI18n"})
-    public void setEverything(SummaryData summaryData)
-    {
+    public void setEverything(SummaryData summaryData) {
         Calendar date = Calendar.getInstance();
         date.set(summaryData.getYear(), summaryData.getMonth(), 1);
         date.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
@@ -50,18 +45,17 @@ public class SummaryViewHolderWeek extends SummaryViewHolder  {
         date2.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
         date2.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
-        if( summaryData.getSummaryType() == SummaryType.monthSummary ){
-            var text = context.getResources().getStringArray(R.array.months)[summaryData.getMonth()-1];
+        if (summaryData.getSummaryType() == SummaryType.monthSummary) {
+            var text = context.getResources().getStringArray(R.array.months)[summaryData.getMonth() - 1];
             nameTextView.setText("Podsumowanie " + text);
             cardViewSummaryWeek.setCardBackgroundColor(context.getColor(R.color.month_summary));
 
-        }
-        else if( summaryData.getSummaryType() == SummaryType.weekSummary ){
+        } else if (summaryData.getSummaryType() == SummaryType.weekSummary) {
             nameTextView.setText("Tydzień od " + formatterDate.format(date.getTime()) + " do " + formatterDate.format(date2.getTime()));
         }
 
-        if(detailImageViewWeek != null)
-            detailImageViewWeek.setOnClickListener(e->{
+        if (detailImageViewWeek != null)
+            detailImageViewWeek.setOnClickListener(e -> {
                 AnimateView.animateInOut(detailImageViewWeek, context);
                 var intent = new Intent(this.getContext(), SummaryEditorActivity.class);
                 var bundle = new Bundle();
@@ -71,7 +65,7 @@ public class SummaryViewHolderWeek extends SummaryViewHolder  {
                 context.startActivity(intent);
             });
 
-        itemView.setOnClickListener(e->{
+        itemView.setOnClickListener(e -> {
             AnimateView.animateInOut(itemView, context);
             var intent = new Intent(this.getContext(), SummaryEditorActivity.class);
             var bundle = new Bundle();
