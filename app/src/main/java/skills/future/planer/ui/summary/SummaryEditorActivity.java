@@ -141,11 +141,13 @@ public class SummaryEditorActivity extends AppCompatActivity {
             Calendar date = Calendar.getInstance();
             date.set(Calendar.YEAR, summaryData.getYear());
             date.setFirstDayOfWeek(Calendar.MONDAY);
+            date.setMinimalDaysInFirstWeek(7);
             date.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
             date.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 
             Calendar date2 = Calendar.getInstance();
             date2.set(Calendar.YEAR, summaryData.getYear());
+            date2.setMinimalDaysInFirstWeek(7);
             date2.setFirstDayOfWeek(Calendar.MONDAY);
             date2.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
             date2.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);

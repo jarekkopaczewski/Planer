@@ -40,31 +40,13 @@ public class SummaryViewHolderWeek extends SummaryViewHolder {
         date.setFirstDayOfWeek(Calendar.MONDAY);
         date.setMinimalDaysInFirstWeek(7);
         date.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
-
-        System.out.println("====================");
-        System.out.println("====================");
-        System.out.println(summaryData.getWeekNumber());
-        System.out.println(date.get(Calendar.DAY_OF_WEEK));
-        System.out.println(date.get(Calendar.DAY_OF_MONTH));
-        System.out.println(date.get(Calendar.MONTH));
-
         date.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-
 
         Calendar date2 = Calendar.getInstance();
         date2.set(Calendar.YEAR, summaryData.getYear());
         date2.setMinimalDaysInFirstWeek(7);
         date2.setFirstDayOfWeek(Calendar.MONDAY);
-
         date2.set(Calendar.WEEK_OF_YEAR, summaryData.getWeekNumber());
-
-        System.out.println("====================");
-        System.out.println(date2.get(Calendar.DAY_OF_WEEK));
-        System.out.println(date2.get(Calendar.DAY_OF_MONTH));
-        System.out.println(date2.get(Calendar.MONTH));
-        System.out.println("====================");
-        System.out.println("====================");
-
         date2.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 
         if (summaryData.getSummaryType() == SummaryType.monthSummary) {
