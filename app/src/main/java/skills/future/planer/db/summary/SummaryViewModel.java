@@ -15,7 +15,25 @@ public class SummaryViewModel extends AndroidViewModel {
 
     public SummaryViewModel(@NonNull Application application) {
         super(application);
-        summaryRepository = new SummaryRepository(application);
+        summaryRepository = new SummaryRepository(application.getApplicationContext());
+    }
+
+    /**
+     * get month summary from year
+     * @param year
+     * @param month
+     * @return
+     */
+    public List<SummaryData> getMonthSummary(int year, int month){
+        return summaryRepository.getMonthSummary(year, month);
+    }
+
+    /**
+     * Get min year in database
+     * @return
+     */
+    public int getMinimumYear(){
+        return summaryRepository.getMinimumYear();
     }
 
     /**
@@ -23,6 +41,20 @@ public class SummaryViewModel extends AndroidViewModel {
      */
     public LiveData<List<SummaryData>> getAllSummary() {
         return summaryRepository.getAllSummaries();
+    }
+
+    /**
+     * @return return all months summary from given year
+     */
+    public List<SummaryData> getMonthsFromYearSummary(int year){
+        return summaryRepository.getMonthsFromYearSummary(year);
+    }
+
+    /**
+     * @return return all months summary from given year
+     */
+    public List<SummaryData> getWeeksFromMonthSummary(int year, int month){
+        return summaryRepository.getWeeksFromMonthSummary(year, month);
     }
 
     /**

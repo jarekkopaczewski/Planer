@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitRepository;
+import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.tools.DatesParser;
 
 public class NotificationFactory {
@@ -18,11 +19,15 @@ public class NotificationFactory {
 
     private static int notificationId = 1;
     private final Context context;
-    private final HabitRepository habitRepository;
+    private HabitRepository habitRepository;
 
     public NotificationFactory(Context context, HabitRepository habitRepository) {
         this.context = context;
         this.habitRepository = habitRepository;
+    }
+
+    public NotificationFactory(Context context) {
+        this.context = context;
     }
 
     /**
@@ -40,7 +45,7 @@ public class NotificationFactory {
     /**
      * Generates Notification depending on type
      */
-    public MyNotification generateNewNotification(boolean daySummary, HabitData habitNotify, LocalDate date) {
+    public MyNotification generateNewNotificationHabit(boolean daySummary, HabitData habitNotify, LocalDate date) {
         createHabitNotificationChannel();
         if (daySummary) {
             long numberOfNotDoneHabits = countNotDoneNotification(date);
@@ -58,6 +63,14 @@ public class NotificationFactory {
                     notificationId++);
 
         return null;
+    }
+
+    /**
+     * Generates Notification for summary
+     */
+    public MyNotification generateNewNotificationSummary(SummaryType weekSummary) {
+        createHabitNotificationChannel();
+        return new MyNotification(context, CHANNEL_ID, notificationId++, weekSummary);
     }
 
     /**

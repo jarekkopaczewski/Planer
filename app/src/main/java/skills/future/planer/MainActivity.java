@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -20,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -41,8 +41,9 @@ import skills.future.planer.db.AppDatabase;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.notification.NotificationService;
 import skills.future.planer.ui.settings.SettingsActivity;
+import skills.future.planer.ui.summary.generator.SummaryService;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BatteryPermissionDialog.NoticeDialogListener {
 
 
     private static BottomNavigationView bottomView;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private static boolean notification = false;
     private int numberOfNotDoneHabits;
+    private static boolean firstBoot = true;
 
 
     /**
@@ -109,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
         createService();
 
+        startService(new Intent(this, SummaryService.class));
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -127,9 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 .findFragmentById(R.id.nav_host_fragment_content_main);
 
         // set up corner menu
-
         assert navHostFragment != null;
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_gallery).setOpenableLayout(drawer).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home, R.id.nav_summary, R.id.nav_habit_creator).setOpenableLayout(drawer).build();
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -161,18 +164,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Checks if battery optimization is enabled
+     * Asks user for battery optimization
      */
     private void askForBatteryPermission() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        if (preferences.getBoolean("firstBoot", true)) {
+            new BatteryPermissionDialog().show(getSupportFragmentManager(), "Battery Permission");
+            editor.putBoolean("firstBoot", false);
+            editor.apply();
+        }
+    }
+
+    /**
+     * Checks if battery optimization is enabled
+     */
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
         Intent intent = new Intent();
         String packageName = getPackageName();
         PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
         if (!pm.isIgnoringBatteryOptimizations(packageName)) {
-            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-            intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+            intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
             startActivity(intent);
         }
     }
+
 
     /**
      * Make move if someone click notification

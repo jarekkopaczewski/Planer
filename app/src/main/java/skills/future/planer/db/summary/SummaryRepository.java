@@ -1,6 +1,6 @@
 package skills.future.planer.db.summary;
 
-import android.app.Application;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
@@ -13,9 +13,27 @@ import skills.future.planer.db.AppDatabase;
 public class SummaryRepository {
     private final SummaryDao summaryDao;
 
-    public SummaryRepository(Application application) {
+    public SummaryRepository(Context application) {
         AppDatabase db = AppDatabase.getInstance(application);
         this.summaryDao = db.summaryDao();
+    }
+
+    /**
+     * get month summary from year
+     * @param year
+     * @param month
+     * @return
+     */
+    List<SummaryData> getMonthSummary(int year, int month){
+        return summaryDao.getMonthSummary(year, month);
+    }
+
+    /**
+     * Get min year in database
+     * @return
+     */
+    public int getMinimumYear(){
+        return summaryDao.getMinimumYear();
     }
 
     /**
@@ -27,10 +45,23 @@ public class SummaryRepository {
 
     public List<SummaryData> getSummary(LocalDate date, SummaryType summaryType) {
         return switch (summaryType) {
-            case yearSummary -> summaryDao.getYearSummary(date.getYear());
             case monthSummary -> summaryDao.getMonthSummary(date.getYear(), date.getMonthValue());
             case weekSummary -> summaryDao.getWeekSummary(date.getYear(), date.get(ChronoField.ALIGNED_WEEK_OF_YEAR));
         };
+    }
+
+    /**
+     * @return return all months summary from given year
+     */
+    List<SummaryData> getMonthsFromYearSummary(int year){
+        return summaryDao.getMonthsFromYearSummary(year);
+    }
+
+    /**
+     * @return return all months summary from given year and month
+     */
+    List<SummaryData> getWeeksFromMonthSummary(int year, int month){
+        return summaryDao.getWeeksFromMonthSummary(year, month);
     }
 
     /**
@@ -38,7 +69,7 @@ public class SummaryRepository {
      *
      * @param summaryData which will be inserted
      */
-    void insert(SummaryData summaryData) {
+    public void insert(SummaryData summaryData) {
         summaryData.setSummaryId(summaryDao.insert(summaryData));
     }
 

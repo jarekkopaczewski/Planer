@@ -40,9 +40,6 @@ public interface TaskDataDao {
     @Query("SELECT * FROM taskData ORDER BY startingDate, endingDate ASC")
     LiveData<List<TaskData>> getTaskData();
 
-    @Query("SELECT * FROM taskData ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData2();
-
     /**
      * @param taskCategory specified taskCategory
      * @return all taskData with specified taskCategory
@@ -65,60 +62,11 @@ public interface TaskDataDao {
     @Query("SELECT * FROM taskData WHERE :date >= startingDate AND :date <= endingDate")
     LiveData<List<TaskData>> getTaskDataByDate(long date);
 
-    /**
-     * @param priorities   specified taskCategory
-     * @param timePriority specified timePriority
-     * @return all taskData with specified priorities and timePriority
-     */
-    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority);
-
-    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority AND status = :status ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority, int status) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND category = :taskCategory ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(Priorities priorities, TaskCategory taskCategory) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND category = :taskCategory AND status = :status ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(Priorities priorities, TaskCategory taskCategory, int status) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE timePriority =:timePriority AND category = :taskCategory ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(TaskCategory taskCategory, TimePriority timePriority) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE timePriority =:timePriority AND category = :taskCategory AND status = :status ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(TaskCategory taskCategory, TimePriority timePriority, int status) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE priorities =:priorities AND timePriority = :timePriority AND category = :category ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority, TaskCategory category) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE timePriority = :timePriority ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(TimePriority timePriority) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE priorities = :priorities ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(Priorities priorities) throws Exception;
-
     @Query("SELECT * FROM taskData WHERE status = :status ORDER BY startingDate, endingDate ASC")
     List<TaskData> getTaskData(int status) throws Exception;
 
     @Query("SELECT * FROM taskData WHERE status = :status ORDER BY startingDate DESC, endingDate DESC")
     List<TaskData> getTaskData_desc(int status) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE priorities = :priorities AND status = :status ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(Priorities priorities,int status) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE timePriority = :timePriority AND status = :status ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(TimePriority timePriority,int status) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE category = :taskCategory AND status = :status ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(TaskCategory taskCategory,int status) throws Exception;
-
-    @Query("SELECT * FROM taskData WHERE (priorities is null or priorities =:priorities) " +
-            "AND (timePriority is null or timePriority = :timePriority ) " +
-            "AND (category is null or category = :category ) " +
-            "AND (status is null or status = :status ) ORDER BY startingDate, endingDate ASC")
-    List<TaskData> getTaskData(Priorities priorities, TimePriority timePriority, TaskCategory category, int status) throws Exception;
-
-
 
     /**
      * Method delete taskData from database

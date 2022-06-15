@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat;
 import skills.future.planer.MainActivity;
 import skills.future.planer.R;
 import skills.future.planer.db.habit.HabitData;
+import skills.future.planer.db.summary.SummaryType;
 
 public class MyNotification extends android.app.Notification {
     private final Context context;
@@ -40,8 +41,14 @@ public class MyNotification extends android.app.Notification {
         setNotificationSettings(moreThanOne);
     }
 
-    private void createNotificationIntent() {
+    public MyNotification(Context context, String channelId, int notificationId, SummaryType summaryType) {
+        this.context = context;
+        this.channelId = channelId;
+        this.notificationId = notificationId;
+        setNotificationSettings(summaryType);
+    }
 
+    private void createNotificationIntent() {
         Intent notificationIntent = new Intent(context.getApplicationContext(), MainActivity.class);
         notificationIntent.putExtra("move", true);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -77,6 +84,19 @@ public class MyNotification extends android.app.Notification {
                     .setContentText(context.getText(R.string.reminder_about_habit_singular))
                     .setStyle(new NotificationCompat.BigTextStyle()
                             .bigText(context.getText(R.string.reminder_about_habit_singular)));
+    }
+
+    private void setNotificationSettings(SummaryType summaryType) {
+        builder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.prior)
+                .setContentTitle("Podsumowania")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .setAutoCancel(true);
+        if (summaryType == SummaryType.monthSummary)
+            builder.setContentText("Posiadasz nowe podsumowanie miesiąca do uzupełnienia");
+        else
+            builder.setContentText("Posiadasz nowe podsumowanie tygodnia do uzupełnienia");
     }
 
     public Notification getNotification() {

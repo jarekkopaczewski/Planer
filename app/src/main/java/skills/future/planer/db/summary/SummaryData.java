@@ -29,9 +29,9 @@ public class SummaryData {
         this.toWorkOut = toWorkOut;
         this.summaryType = summaryType;
         year = localDate.getYear();
-        switch (summaryType) {
-            case monthSummary -> month = localDate.getMonthValue();
-            case weekSummary -> weekNumber = localDate.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
+        month = localDate.getMonthValue();
+        if (summaryType == SummaryType.weekSummary) {
+            weekNumber = localDate.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
         }
     }
 }
