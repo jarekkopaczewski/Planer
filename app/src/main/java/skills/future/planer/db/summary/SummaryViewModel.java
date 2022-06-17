@@ -68,6 +68,10 @@ public class SummaryViewModel extends AndroidViewModel {
         return summaryRepository.getSummary(date, summaryType);
     }
 
+    public LiveData<List<SummaryData>> getSummary2(LocalDate date, SummaryType summaryType) {
+        return summaryRepository.getSummary2(date, summaryType);
+    }
+
     /**
      * Method insert summary to database
      *

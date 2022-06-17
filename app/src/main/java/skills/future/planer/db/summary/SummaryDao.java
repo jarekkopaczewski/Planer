@@ -37,6 +37,9 @@ public interface SummaryDao {
     @Query("SELECT * FROM SummaryData WHERE year = :year and weekNumber =:weekNumber and  summaryType = \"weekSummary\"")
     List<SummaryData> getWeekSummary(int year, int weekNumber);
 
+    @Query("SELECT * FROM SummaryData WHERE year = :year and weekNumber =:weekNumber and  summaryType = \"weekSummary\"")
+    LiveData<List<SummaryData>> getWeekSummary2(int year, int weekNumber);
+
 
     @Query("SELECT MIN(year) FROM SummaryData;")
     int getMinimumYear();

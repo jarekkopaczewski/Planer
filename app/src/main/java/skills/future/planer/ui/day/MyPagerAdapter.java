@@ -8,14 +8,14 @@ import lombok.Getter;
 import skills.future.planer.ui.day.views.daylist.DayTaskListFragment;
 import skills.future.planer.ui.day.views.habits.HabitFragment;
 import skills.future.planer.ui.day.views.matrix.MatrixFragment;
-import skills.future.planer.ui.day.views.summary.SummaryFragment;
+import skills.future.planer.ui.day.views.summary.DaySummaryFragment;
 
 @Getter
 public class MyPagerAdapter extends FragmentPagerAdapter {
     private static final int NUM_ITEMS = 3;
     private final DayTaskListFragment taskListFragment = new DayTaskListFragment();
     private final MatrixFragment matrixFragment = new MatrixFragment();
-    private final SummaryFragment summaryFragment = new SummaryFragment();
+    private final DaySummaryFragment summaryFragment = new DaySummaryFragment();
     private final HabitFragment habitFragment = new HabitFragment();
 
     public MyPagerAdapter(FragmentManager fragmentManager) {
