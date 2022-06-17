@@ -53,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                    .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
+                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
         }
 
         return sInstance;
@@ -158,16 +158,16 @@ public abstract class AppDatabase extends RoomDatabase {
             String test = "Material is the metaphor.A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The Material is the metaphor. A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The Material is the metaphor. A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The";
             String test2 = "Material is the metaphor.A material metaphor is the unifying theory of a rationalized space and a system of motion.";
 
-            CalendarDay calendarDay = CalendarDay.from(2022, 1, 9);
+            CalendarDay calendarDay = CalendarDay.from(2021, 12, 13);
             LocalDate localDate = DatesParser.toLocalDate(calendarDay);
 
 
-            for( int i = 0; i < 8; i++)
+            for( int i = 0; i < 18; i++)
             {
                 summaryDao.insert(new SummaryData(test2, test2, test2, localDate.plusMonths(i), SummaryType.monthSummary));
             }
 
-            for( int i = 0; i < 30; i++)
+            for( int i = 0; i < 44; i++)
             {
                 summaryDao.insert(new SummaryData(test, test, test, localDate.plusDays(i*7), SummaryType.weekSummary));
             }

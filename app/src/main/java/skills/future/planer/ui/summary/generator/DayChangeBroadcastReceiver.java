@@ -31,7 +31,7 @@ public class DayChangeBroadcastReceiver extends BroadcastReceiver {
          */
         if (today.getDayOfWeek() == DayOfWeek.SUNDAY) {
             summaryRepository.insert(new SummaryData("",
-                    "", "", today, SummaryType.weekSummary));
+                    "", "", today.minusDays(6), SummaryType.weekSummary));
             startJob(context, SummaryType.weekSummary);
         }
 
