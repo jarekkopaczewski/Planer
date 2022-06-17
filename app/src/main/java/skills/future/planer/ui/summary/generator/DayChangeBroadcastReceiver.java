@@ -10,7 +10,6 @@ import android.os.PersistableBundle;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Random;
 
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryRepository;
@@ -30,19 +29,27 @@ public class DayChangeBroadcastReceiver extends BroadcastReceiver {
          * Creates new week summary
          */
         if (today.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            LocalDate dateMinus = today.minusDays(6);
             summaryRepository.insert(new SummaryData("",
-                    "", "", today.minusDays(6), SummaryType.weekSummary));
+                    "", "", dateMinus, SummaryType.weekSummary));
+
+            if (summaryRepository.getSummary(dateMinus, SummaryType.monthSummary).size() == 0)
+                createMonthSummary(context, summaryRepository, dateMinus);
             startJob(context, SummaryType.weekSummary);
         }
 
         /*
          * Creates new month summary
          */
-        if (today.getDayOfMonth() == 1) {
-            summaryRepository.insert(new SummaryData("",
-                    "", "", today, SummaryType.monthSummary));
-            startJob(context, SummaryType.monthSummary);
-        }
+        if (today.getDayOfMonth() == 1)
+            createMonthSummary(context, summaryRepository, today);
+
+    }
+
+    private void createMonthSummary(Context context, SummaryRepository summaryRepository, LocalDate today) {
+        summaryRepository.insert(new SummaryData("",
+                "", "", today, SummaryType.monthSummary));
+        startJob(context, SummaryType.monthSummary);
     }
 
     /**
@@ -58,7 +65,7 @@ public class DayChangeBroadcastReceiver extends BroadcastReceiver {
 
         var jobInfo = new JobInfo.Builder(JOB_ID++, new ComponentName(context, SummaryServiceJob.class))
                 .setExtras(bundle)
-                .setMinimumLatency(new Random().nextInt((int) (8 * ONE_HOUR_MILLISECONDS)) + 12 * ONE_HOUR_MILLISECONDS).build();
+                .setMinimumLatency(12 * ONE_HOUR_MILLISECONDS).build();
         jobScheduler.schedule(jobInfo);
     }
 
