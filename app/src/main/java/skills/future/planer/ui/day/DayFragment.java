@@ -22,6 +22,7 @@ import skills.future.planer.db.task.TaskData;
 import skills.future.planer.ui.day.views.daylist.DayTaskListViewModel;
 import skills.future.planer.ui.day.views.habits.HabitDayViewModel;
 import skills.future.planer.ui.day.views.matrix.MatrixModelView;
+import skills.future.planer.ui.day.views.summary.DaySummaryViewModel;
 import skills.future.planer.ui.month.MonthFragment;
 
 
@@ -37,6 +38,7 @@ public class DayFragment extends Fragment {
     private MaterialCalendarView calendarView;
     private ViewPager vpPager;
     private ImageView todayIcon;
+    private DaySummaryViewModel daySummaryViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class DayFragment extends Fragment {
         dayTaskListViewModel = new ViewModelProvider(this).get(DayTaskListViewModel.class);
         matrixModelView = new ViewModelProvider(this).get(MatrixModelView.class);
         habitDayViewModel = new ViewModelProvider(this).get(HabitDayViewModel.class);
+        daySummaryViewModel = new ViewModelProvider(this).get(DaySummaryViewModel.class);
 
         binding = FragmentDayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -158,6 +161,9 @@ public class DayFragment extends Fragment {
         else if (dayViewModel.checkIsHabitsView(vpPager))
             if (HabitDayViewModel.getViewLifecycleOwner() != null)
                 habitDayViewModel.updateDate(selectedDay);
+            if (dayViewModel.checkIsSummaryView(vpPager)) {
+                daySummaryViewModel.updateDate(selectedDay);
+            }
     }
 
     /**
