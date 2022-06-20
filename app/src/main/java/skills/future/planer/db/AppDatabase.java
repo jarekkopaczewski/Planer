@@ -36,7 +36,7 @@ import skills.future.planer.tools.DatesParser;
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
-    private static final String DB_NAME = "planer3.db";
+    private static final String DB_NAME = "planer4.db";
     private static AppDatabase sInstance;
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
 
@@ -54,7 +54,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                    .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
+                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
         }
 
         return sInstance;
