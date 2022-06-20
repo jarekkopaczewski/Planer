@@ -11,7 +11,7 @@ import skills.future.planer.ui.tasklist.TaskTotalAdapter;
 public class DayTaskListViewModel extends ViewModel {
 
     private static TaskDataViewModel taskDataViewModel;
-    private static TaskTotalAdapter taskDayAdapter;
+    private static TaskDayAdapter taskDayAdapter;
     private static LifecycleOwner viewLifecycleOwner;
 
     public static TaskDataViewModel getMWordViewModel() {
@@ -27,7 +27,7 @@ public class DayTaskListViewModel extends ViewModel {
                         taskData -> taskDayAdapter.setDisplayedList(taskData));
     }
 
-    public void setTaskDayAdapter(TaskTotalAdapter taskDayAdapter) {
+    public void setTaskDayAdapter(TaskDayAdapter taskDayAdapter) {
         DayTaskListViewModel.taskDayAdapter = taskDayAdapter;
     }
 
@@ -39,7 +39,7 @@ public class DayTaskListViewModel extends ViewModel {
         DayTaskListViewModel.taskDataViewModel = mWordViewModel;
     }
 
-    public static TaskTotalAdapter getTaskDayAdapter() {
+    public static TaskDayAdapter getTaskDayAdapter() {
         return taskDayAdapter;
     }
 

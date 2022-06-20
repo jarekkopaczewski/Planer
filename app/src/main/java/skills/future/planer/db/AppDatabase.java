@@ -15,6 +15,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import java.time.LocalDate;
 import java.util.Calendar;
 
+import lombok.SneakyThrows;
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
@@ -53,7 +54,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (sInstance == null) {
             sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
+                    .allowMainThreadQueries().addCallback(sRoomDatabaseCallback).build();
         }
 
         return sInstance;
@@ -86,43 +87,49 @@ public abstract class AppDatabase extends RoomDatabase {
             summaryDao = db.summaryDao();
         }
 
+        @SneakyThrows
         @Override
         protected Void doInBackground(final Void... params) {
             // Start the app with a clean database every time.
             // Not needed if you only populate the database
             // when it is first created
-            //mDao.deleteAll();
-            //habitDao.deleteAll();
+            mDao.deleteAll();
+            habitDao.deleteAll();
             //goalsDao.deleteAll();
             summaryDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-//            CalendarDay day2 = CalendarDay.from(2022, 5, 5);
-//            CalendarDay day3 = CalendarDay.from(2022, 5, 23);
-//            CalendarDay day4 = CalendarDay.from(2022, 5, 15);
-//            CalendarDay day5 = CalendarDay.from(2022, 5, 30);
-//            var cal = Calendar.getInstance();
-//            int counter = 1;
-//
-//            for (int i = 0; i < 3; i++) {
-//                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
-//                word.setTaskDataId(mDao.insert(word));
-//                counter++;
-//            }
-//            for (int i = 0; i < 3; i++) {
-//                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie nieważne i pilne" + counter, "", day2, day3);
-//                word.setTaskDataId(mDao.insert(word));
-//                counter++;
-//            }
-//            for (int i = 0; i <= 3; i++) {
-//                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day4, day5);
-//                word.setTaskDataId(mDao.insert(word));
-//                counter++;
-//            }
-//            for (int i = 0; i <= 3; i++) {
-//                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day4, day5);
-//                word.setTaskDataId(mDao.insert(word));
-//                counter++;
-//            }
+            CalendarDay day3 = CalendarDay.from(2022, 6, 23);
+            CalendarDay day2 = CalendarDay.from(2022, 6, 5);
+            CalendarDay day4 = CalendarDay.from(2022, 6, 15);
+            CalendarDay day5 = CalendarDay.from(2022, 6, 30);
+            var cal = Calendar.getInstance();
+            int counter = 1;
+
+            for (int i = 0; i < 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.Important, TimePriority.Urgent, "Zadanie ważne i pilne" + counter, "", day2, day3);
+                word.setTaskDataId(mDao.insert(word));
+                counter++;
+            }
+            for (int i = 0; i < 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Work, Priorities.NotImportant, TimePriority.Urgent, "Zadanie nieważne i pilne" + counter, "", day2, day3);
+                word.setTaskDataId(mDao.insert(word));
+                counter++;
+            }
+            for (int i = 0; i <= 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.Important, TimePriority.NotUrgent, "Zadanie ważne i niepilne" + counter, "", day4, day5);
+                word.setTaskDataId(mDao.insert(word));
+                counter++;
+            }
+            for (int i = 0; i <= 3; i++) {
+                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne" + counter, "", day4, day5);
+                word.setTaskDataId(mDao.insert(word));
+                counter++;
+            }
+            habitDao.insert(new HabitData("Nauczyć się francuskiego", "1111111",
+                    HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 1));
+            habitDao.insert(new HabitData("Programować", "1111111",
+                    HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
+
 //
 //
 //            try {
@@ -139,12 +146,7 @@ public abstract class AppDatabase extends RoomDatabase {
 //                        " seams, divides space, and indicates moving parts." +
 //                        " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
 //                goal.setGoalId(goalsDao.insert(goal));
-//                habitDao.insert(new HabitData("test", "1111111",
-//                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 1, goal.getGoalId()));
-//                habitDao.insert(new HabitData("testbezcelu", "1111111",
-//                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
-//                habitDao.insert(new HabitData("test2", "1111111",
-//                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
+
 //                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
 //                word.setTaskDataId(mDao.insert(word));
 //
@@ -160,16 +162,19 @@ public abstract class AppDatabase extends RoomDatabase {
 
             CalendarDay calendarDay = CalendarDay.from(2021, 12, 13);
             LocalDate localDate = DatesParser.toLocalDate(calendarDay);
+            LocalDate localDate1 = DatesParser.toLocalDate(CalendarDay.today());
 
 
             for( int i = 0; i < 18; i++)
             {
-                summaryDao.insert(new SummaryData(test2, test2, test2, localDate.plusMonths(i), SummaryType.monthSummary));
+                if(localDate1.isAfter(localDate.plusMonths(i)))
+                    summaryDao.insert(new SummaryData(test2, test2, test2, localDate.plusMonths(i), SummaryType.monthSummary));
             }
 
             for( int i = 0; i < 44; i++)
             {
-                summaryDao.insert(new SummaryData(test, test, test, localDate.plusDays(i*7), SummaryType.weekSummary));
+                if(localDate1.isAfter(localDate.plusDays(i*7)))
+                    summaryDao.insert(new SummaryData(test, test, test, localDate.plusDays(i*7), SummaryType.weekSummary));
             }
 
 //            for (int i = 0; i <= 1; i++) {
