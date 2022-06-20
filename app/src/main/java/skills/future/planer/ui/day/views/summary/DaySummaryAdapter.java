@@ -16,6 +16,7 @@ import java.util.List;
 import skills.future.planer.R;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryViewModel;
+import skills.future.planer.ui.day.views.matrix.MatrixListTotalAdapter;
 
 public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.DaySummaryViewHolder> {
 
@@ -82,6 +83,7 @@ public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.Da
     public int getItemViewType(int position) {
         return 0;
     }
+
 
     class DaySummaryViewHolder extends RecyclerView.ViewHolder{
 
