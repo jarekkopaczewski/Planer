@@ -35,7 +35,7 @@ import skills.future.planer.tools.DatesParser;
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
-    private static final String DB_NAME = "planer2.db";
+    private static final String DB_NAME = "planer3.db";
     private static AppDatabase sInstance;
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
 
