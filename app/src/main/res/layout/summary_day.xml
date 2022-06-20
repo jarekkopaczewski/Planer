@@ -25,7 +25,7 @@
             android:layout_marginEnd="10dp"
             android:background="@color/background"
             android:fontFamily="@font/signika_regular"
-            android:text="@string/week_summary_text1"
+            android:text="@string/achievments"
             android:textSize="18sp" />
 
         <com.codesgood.views.JustifiedTextView
@@ -50,7 +50,7 @@
             android:layout_marginEnd="10dp"
             android:background="@color/background"
             android:fontFamily="@font/signika_regular"
-            android:text="@string/week_summary_text2"
+            android:text="@string/summary_leave"
             android:textSize="18sp" />
 
         <com.codesgood.views.JustifiedTextView
@@ -74,7 +74,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/signika_regular"
-            android:text="@string/week_summary_text3"
+            android:text="@string/work_on_summary"
             android:textSize="18sp" />
 
         <com.codesgood.views.JustifiedTextView

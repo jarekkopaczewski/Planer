@@ -8,13 +8,8 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import org.threeten.bp.DayOfWeek;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
-import java.util.Calendar;
-import java.util.Locale;
-
-import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.db.summary.SummaryViewModel;
 import skills.future.planer.tools.DatesParser;
 
