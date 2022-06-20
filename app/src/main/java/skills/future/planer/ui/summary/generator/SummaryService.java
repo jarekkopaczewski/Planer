@@ -11,6 +11,12 @@ public class SummaryService extends Service {
     private final IBinder binder = new SummaryService.LocalBinder();
     private final DayChangeBroadcastReceiver dayChangeBroadcastReceiver = new DayChangeBroadcastReceiver();
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_DATE_CHANGED);
+        registerReceiver(dayChangeBroadcastReceiver, filter);
+    }
 
     public class LocalBinder extends Binder {
         public SummaryService getService() {

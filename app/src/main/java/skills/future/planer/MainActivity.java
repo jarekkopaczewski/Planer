@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements BatteryPermission
     private NavigationView navigationView;
     private static boolean notification = false;
     private int numberOfNotDoneHabits;
+    private static boolean firstBoot = true;
 
 
     /**
@@ -109,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements BatteryPermission
         themePreferences();
 
         createService();
+
+        startService(new Intent(this, SummaryService.class));
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -233,9 +236,11 @@ public class MainActivity extends AppCompatActivity implements BatteryPermission
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings -> {
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -254,37 +259,25 @@ public class MainActivity extends AppCompatActivity implements BatteryPermission
     /**
      * Binding service to run in background
      */
+    private NotificationService notificationService;
 
     private void createService() {
         if (!NotificationService.serviceRunning) {
             Intent serviceIntent = new Intent(this, NotificationService.class);
             startService(serviceIntent);
             bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-            Intent summaryIntent = new Intent(this, SummaryService.class);
-            startService(summaryIntent);
-            bindService(summaryIntent, serviceConnectionSummary, Context.BIND_AUTO_CREATE);
         }
     }
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            ((NotificationService.LocalBinder) service).getService();
+            notificationService = ((NotificationService.LocalBinder) service).getService();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-        }
-    };
-
-    private final ServiceConnection serviceConnectionSummary = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            ((SummaryService.LocalBinder) service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
+            notificationService = null;
         }
     };
 
