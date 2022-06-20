@@ -16,6 +16,7 @@ import java.util.List;
 import skills.future.planer.R;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryViewModel;
+import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.day.views.matrix.MatrixListTotalAdapter;
 
 public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.DaySummaryViewHolder> {
@@ -39,16 +40,28 @@ public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.Da
 
     @SuppressLint("NotifyDataSetChanged")
     public void setSummaryDataList(List<SummaryData> summaryDataList) {
-        this.summaryDataList = summaryDataList;
-        System.out.println(summaryDataList.get(0).getWeekNumber());
-        notifyDataSetChanged();
+        if(this.summaryDataList.size() != 0) {
+            if (summaryDataList.get(0).getWeekNumber() != this.summaryDataList.get(0).getWeekNumber()){
+                this.summaryDataList = summaryDataList;
+                notifyDataSetChanged();
+            }
+        }else {
+            this.summaryDataList = summaryDataList;
+            notifyDataSetChanged();
+        }
     }
 
     @NonNull
     @Override
     public DaySummaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.fragment_task_in_matrix_done, parent, false);
-        return new DaySummaryViewHolder(itemView);
+        //View itemView = layoutInflater.inflate(R.layout.fragment_summary, parent, false);
+        return new DaySummaryViewHolder(createViewOfItem(parent,R.layout.summary_day));
+    }
+
+    @NonNull
+    protected View createViewOfItem(@NonNull ViewGroup parent, int layoutType) {
+        View itemView = layoutInflater.inflate(layoutType, parent, false);
+        return itemView;
     }
 
     @Override
@@ -69,6 +82,11 @@ public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.Da
         return 0;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return 0;
+    }
+
     class DaySummaryViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView text1, text2, text3;
@@ -84,6 +102,9 @@ public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.Da
             text1.setText(summaryData.getAchievements());
             text2.setText(summaryData.getNotFinished());
             text3.setText(summaryData.getToWorkOut());
+            System.out.println(text1);
+            System.out.println(text2);
+            System.out.println(text3);
         }
     }
 }
