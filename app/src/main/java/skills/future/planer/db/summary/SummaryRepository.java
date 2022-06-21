@@ -50,10 +50,10 @@ public class SummaryRepository {
         };
     }
 
-    public LiveData<List<SummaryData>> getSummary2(LocalDate date, SummaryType summaryType) {
+    public LiveData<List<SummaryData>> getSummary2(LocalDate date, int weekNumber) {
         //return switch (summaryType) {
             //case monthSummary -> summaryDao.getMonthSummary(date.getYear(), date.getMonthValue());
-            return summaryDao.getWeekSummary2(date.getYear(), date.get(ChronoField.ALIGNED_WEEK_OF_YEAR));
+            return summaryDao.getWeekSummary2(date.getYear(), weekNumber);
        // };
     }
 
