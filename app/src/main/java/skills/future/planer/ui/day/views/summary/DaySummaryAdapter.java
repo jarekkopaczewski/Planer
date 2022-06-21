@@ -41,7 +41,6 @@ public class DaySummaryAdapter extends RecyclerView.Adapter<DaySummaryAdapter.Da
         if(this.summaryDataList.size() != 0 && summaryDataList.size() != 0) {
             if (summaryDataList.get(0).getWeekNumber() != this.summaryDataList.get(0).getWeekNumber()){
                 this.summaryDataList = summaryDataList;
-                System.out.println(summaryDataList.get(0).getWeekNumber());
                 notifyDataSetChanged();
             }
         }else {
