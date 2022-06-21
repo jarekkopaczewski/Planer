@@ -37,9 +37,9 @@ public class SummaryFragment extends Fragment {
         binding = FragmentSummaryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        editText1 = binding.summaryEditText;
-        editText2 = binding.summaryEditText2;
-        editText3 = binding.summaryEditText3;
+        editText1 = binding.summaryAchievementsText;
+        editText2 = binding.summaryNotFinishedText;
+        editText3 = binding.summaryToWorkOutText;
 
         editButton = binding.editSummaryFab;
         editButton.setOnClickListener(e->{

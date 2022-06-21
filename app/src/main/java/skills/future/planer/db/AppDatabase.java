@@ -1,9 +1,7 @@
 package skills.future.planer.db;
 
 import android.content.Context;
-import android.icu.util.Calendar;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -15,12 +13,17 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 
+import lombok.SneakyThrows;
 import skills.future.planer.db.goal.GoalData;
 import skills.future.planer.db.goal.GoalsDao;
 import skills.future.planer.db.habit.HabitDao;
 import skills.future.planer.db.habit.HabitData;
 import skills.future.planer.db.habit.HabitDuration;
+import skills.future.planer.db.summary.SummaryDao;
+import skills.future.planer.db.summary.SummaryData;
+import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.db.task.TaskData;
 import skills.future.planer.db.task.TaskDataDao;
 import skills.future.planer.db.task.enums.category.TaskCategory;
@@ -28,11 +31,12 @@ import skills.future.planer.db.task.enums.priority.Priorities;
 import skills.future.planer.db.task.enums.priority.TimePriority;
 import skills.future.planer.tools.DatesParser;
 
-@Database(entities = {TaskData.class, HabitData.class, GoalData.class}, exportSchema = false, version = 8)
+@Database(entities = {TaskData.class, HabitData.class, GoalData.class, SummaryData.class},
+        exportSchema = false, version = 10)
 public abstract class AppDatabase extends RoomDatabase {
 
     @VisibleForTesting
-    private static final String DB_NAME = "planer2.db";
+    private static final String DB_NAME = "planer4.db";
     private static AppDatabase sInstance;
     private static final String LOG_TAG = AppDatabase.class.getSimpleName();
 
@@ -42,18 +46,17 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract GoalsDao goalsDao();
 
+    public abstract SummaryDao summaryDao();
+
     public static AppDatabase getInstance(final Context context/*, final AppExecutors executors*/) {
+
+
         if (sInstance == null) {
-            synchronized (AppDatabase.class) {
-                if (sInstance == null) {
-                    Log.d(LOG_TAG, "Creating new database instance");
-                    sInstance = Room.databaseBuilder(context.getApplicationContext(),
+            sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, DB_NAME).fallbackToDestructiveMigration()
-                            .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
-                }
-            }
+                    .allowMainThreadQueries()/*.addCallback(sRoomDatabaseCallback)*/.build();
         }
-        Log.d(LOG_TAG, "Getting the database instance");
+
         return sInstance;
     }
 
@@ -73,6 +76,7 @@ public abstract class AppDatabase extends RoomDatabase {
         private final TaskDataDao mDao;
         private final HabitDao habitDao;
         private final GoalsDao goalsDao;
+        private final SummaryDao summaryDao;
         //String[] words = {"dolphin", "crocodile", "cobra"};
 
         PopulateDbAsync(AppDatabase db) {
@@ -80,8 +84,10 @@ public abstract class AppDatabase extends RoomDatabase {
             mDao = db.taskDataTabDao();
             habitDao = db.habitDao();
             goalsDao = db.goalsDao();
+            summaryDao = db.summaryDao();
         }
 
+        @SneakyThrows
         @Override
         protected Void doInBackground(final Void... params) {
             // Start the app with a clean database every time.
@@ -89,12 +95,13 @@ public abstract class AppDatabase extends RoomDatabase {
             // when it is first created
             mDao.deleteAll();
             habitDao.deleteAll();
-            goalsDao.deleteAll();
+            //goalsDao.deleteAll();
+            summaryDao.deleteAll();
             CalendarDay day = CalendarDay.today();
-            CalendarDay day2 = CalendarDay.from(2022, 5, 5);
-            CalendarDay day3 = CalendarDay.from(2022, 5, 23);
-            CalendarDay day4 = CalendarDay.from(2022, 5, 15);
-            CalendarDay day5 = CalendarDay.from(2022, 5, 30);
+            CalendarDay day3 = CalendarDay.from(2022, 6, 23);
+            CalendarDay day2 = CalendarDay.from(2022, 6, 5);
+            CalendarDay day4 = CalendarDay.from(2022, 6, 15);
+            CalendarDay day5 = CalendarDay.from(2022, 6, 30);
             var cal = Calendar.getInstance();
             int counter = 1;
 
@@ -118,36 +125,56 @@ public abstract class AppDatabase extends RoomDatabase {
                 word.setTaskDataId(mDao.insert(word));
                 counter++;
             }
+            habitDao.insert(new HabitData("Nauczyć się francuskiego", "1111111",
+                    HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 1));
+            habitDao.insert(new HabitData("Programować", "1111111",
+                    HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
+
+//
+//
+//            try {
+//                var goal = new GoalData("Cel " + 1, "Material is the metaphor. " +
+//                        " A material metaphor is the unifying theory of a rationalized space and a system of motion." +
+//                        " The material is grounded in tactile reality, inspired by the study of paper and ink, yet " +
+//                        " technologically advanced and open to imagination and magic." +
+//                        " Surfaces and edges of the material provide visual cues that are grounded in reality. The " +
+//                        " use of familiar tactile attributes helps users quickly understand affordances. Yet the" +
+//                        " flexibility of the material creates new affordances that supercede those in the physical " +
+//                        " world, without breaking the rules of physics." +
+//                        " The fundamentals of light, surface, and movement are key to conveying how objects move, " +
+//                        " interact, and exist in space and in relation to each other. Realistic lighting shows " +
+//                        " seams, divides space, and indicates moving parts." +
+//                        " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
+//                goal.setGoalId(goalsDao.insert(goal));
+
+//                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
+//                word.setTaskDataId(mDao.insert(word));
+//
+//                var goal2 =
+//                        new GoalData("Cel " + "agagasg", "opisasgasgagasg", LocalDate.of(2022, 2, 1));
+//                goal2.setGoalId(goalsDao.insert(goal2));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+
+            String test = "Material is the metaphor.A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The Material is the metaphor. A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The Material is the metaphor. A material metaphor is the unifying theory of a rationalized space and a system of motion. The material is grounded in tactile reality, inspired by the study of paper and ink, yet technologically advanced and open to imagination and magic. Surfaces and edges of the material provide visual cues that are grounded in reality. The";
+            String test2 = "Material is the metaphor.A material metaphor is the unifying theory of a rationalized space and a system of motion.";
+
+            CalendarDay calendarDay = CalendarDay.from(2021, 12, 13);
+            LocalDate localDate = DatesParser.toLocalDate(calendarDay);
+            LocalDate localDate1 = DatesParser.toLocalDate(CalendarDay.today());
 
 
-            try {
-                var goal = new GoalData("Cel " + 1, "Material is the metaphor. " +
-                        " A material metaphor is the unifying theory of a rationalized space and a system of motion." +
-                        " The material is grounded in tactile reality, inspired by the study of paper and ink, yet " +
-                        " technologically advanced and open to imagination and magic." +
-                        " Surfaces and edges of the material provide visual cues that are grounded in reality. The " +
-                        " use of familiar tactile attributes helps users quickly understand affordances. Yet the" +
-                        " flexibility of the material creates new affordances that supercede those in the physical " +
-                        " world, without breaking the rules of physics." +
-                        " The fundamentals of light, surface, and movement are key to conveying how objects move, " +
-                        " interact, and exist in space and in relation to each other. Realistic lighting shows " +
-                        " seams, divides space, and indicates moving parts." +
-                        " Bold, graphic, intentional.", LocalDate.of(2022, 1, 1));
-                goal.setGoalId(goalsDao.insert(goal));
-                habitDao.insert(new HabitData("test", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2, goal.getGoalId()));
-                habitDao.insert(new HabitData("testbezcelu", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day2), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 2));
-                habitDao.insert(new HabitData("test2", "1111111",
-                        HabitDuration.Short, DatesParser.toLocalDate(day), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE) + 4, goal.getGoalId()));
-                TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "Zadanie nieważne i niepilne z celem" + counter, "", day2, day3, goal.getGoalId());
-                word.setTaskDataId(mDao.insert(word));
+            for( int i = 0; i < 18; i++)
+            {
+                if(localDate1.isAfter(localDate.plusMonths(i)))
+                    summaryDao.insert(new SummaryData(test2, test2, test2, localDate.plusMonths(i), SummaryType.monthSummary));
+            }
 
-                var goal2 =
-                        new GoalData("Cel " + "agagasg", "opisasgasgagasg", LocalDate.of(2022, 2, 1));
-                goal2.setGoalId(goalsDao.insert(goal2));
-            } catch (Exception e) {
-                e.printStackTrace();
+            for( int i = 0; i < 44; i++)
+            {
+                if(localDate1.isAfter(localDate.plusDays(i*7)))
+                    summaryDao.insert(new SummaryData(test, test, test, localDate.plusDays(i*7), SummaryType.weekSummary));
             }
 
 //            for (int i = 0; i <= 1; i++) {
@@ -184,6 +211,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 TaskData word = new TaskData(TaskCategory.Private, Priorities.NotImportant, TimePriority.NotUrgent, "4ninu","",day4,day4);
                 mDao.insert(word);
             }*/
+
             return null;
         }
     }

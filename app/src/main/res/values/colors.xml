@@ -6,10 +6,12 @@
     <color name="taskListBottomColor">#F3EDED</color>
     <color name="navigationBarColor">#FFFFFF</color>
     <color name="second_color_30">#007E8F</color>
+    <color name="month_summary">#A3F4FF</color>
     <color name="second_color_30_2">#63FFFA</color>
     <color name="background">#F4F4F4</color>
     <color name="background_2">#B5B5B5</color>
     <color name="foreground">#FFFFFF</color>
+    <color name="foreground2">#E8E8E8</color>
     <color name="second_color_3320">#F36718</color>
     <color name="imageTintColor">#FF000000</color>
     <color name="imageTintColor_2">#7A7A7A</color>
@@ -23,8 +25,8 @@
     <color name="f2">#FF715397</color>
     <color name="progress_gradient">#DCDCDC</color>
     <color name="progress_background">#FF000000</color>
-    <color name="good">#00E676</color>
-    <color name="mid">#FFFB00</color>
-    <color name="bad">#FF1744</color>
+    <color name="good">#8EF3C2</color>
+    <color name="mid">#FAF88E</color>
+    <color name="bad">#FD899F</color>
     <color name="scroll">#00FF1744</color>
 </resources>

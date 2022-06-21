@@ -80,7 +80,7 @@ public class DayFragment extends Fragment {
         myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
-        vpPager.setCurrentItem(2);
+        vpPager.setCurrentItem(1);
     }
 
     /**
@@ -96,7 +96,6 @@ public class DayFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         CalendarDay selectedDay = MonthFragment.getGlobalSelectedDate();
         checkToUpdateComponents(selectedDay);
         dayViewModel.returnToDate(calendarView, selectedDay);
@@ -120,6 +119,31 @@ public class DayFragment extends Fragment {
             public void onPageScrollStateChanged(int state) {
             }
         });
+    }
+
+    /**
+     * Waiting for habit fragment creation and change page
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (MainActivity.isNotification()) {
+            new Thread(() -> {
+                while (true) {
+                    if (habitDayViewModel.getHabitViewModel() != null) {
+                        getActivity().runOnUiThread(() -> vpPager.setCurrentItem(2));
+                        MainActivity.setNotification(false);
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+        }
     }
 
     /**

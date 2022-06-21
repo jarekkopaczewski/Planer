@@ -3,6 +3,7 @@
     package="skills.future.planer">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:allowBackup="true"
@@ -10,6 +11,21 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Planer">
+        <service
+            android:name=".ui.summary.generator.SummaryServiceJob"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".ui.summary.generator.SummaryService"
+            android:exported="false"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+        <activity
+            android:name=".ui.summary.SummaryEditorActivity"
+            android:exported="false"
+            android:label="@string/title_activity_summary_editor"
+            android:theme="@style/Theme.Planer.NoActionBar" />
         <activity
             android:name=".ui.tasklist.TaskCreatorActivity"
             android:exported="false">
@@ -17,7 +33,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".ui.goals.creator.GoalsCreatorActivity"
             android:exported="false">
@@ -28,8 +43,10 @@
 
         <service
             android:name=".notification.NotificationService"
+            android:enabled="true"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" />
 
         <activity
             android:name=".SplashActivity"
@@ -60,6 +77,14 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Planer.NoActionBar" />
+
+        <receiver
+            android:name=".notification.NotificationBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.NOTIFY" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

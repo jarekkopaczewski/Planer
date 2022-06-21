@@ -44,19 +44,21 @@
     <string name="agree">Tak</string>
     <string name="disagree">Nie</string>
     <string name="large_text">
-
         "Material is the metaphor."
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
         "technologically advanced and open to imagination and magic."
         "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics."
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts."
-        "Bold, graphic, intentional."
+        "Material is the metaphor."
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic."
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "Material is the metaphor."
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic."
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
     </string>
     <string name="dateInterval">do</string>
     <string name="work">Praca</string>
@@ -81,8 +83,8 @@
     <string name="reminder_too_many_habits">Masz za dużo nawyków!</string>
     <string name="goalCreatorTitleHint">Nazwa celu</string>
     <string name="goalCreatorDetailsHint">Opis celu</string>
-    <string name="dateOfBeginGoalCreatorHint">data zakończenia celu</string>
-    <string name="goalCreatorDateLabel">Data zakończenia celu:</string>
+    <string name="dateOfBeginGoalCreatorHint">data osiągnięcia celu</string>
+    <string name="goalCreatorDateLabel">Data osiągnięcia celu:</string>
     <string name="GoalListHabitsAndTasksLabel">Nawyki i zadania:</string>
     <string name="goalText">Cel</string>
     <string name="choiceGoalText">Wybierz cel:</string>
@@ -96,4 +98,21 @@
     <string name="empty">brak</string>
     <string name="exit_activity_warning_1">Dane nie zostały zapisane!</string>
     <string name="exit_activity_warning_2">Na pewno chcesz wyjść z edytora?</string>
+    <string name="noGoals">Cel: 0/0</string>
+    <string name="day_habit_no_habits_info">Nie posiadasz dzisiaj żadnych nawyków</string>
+    <string name="goal_month_picker_title">Kiedy planujesz osiągnąć swój cel?</string>
+    <string name="goal_error_date">Niepoprawna data osiągnięcia celu!</string>
+    <string name="title_activity_summary_editor">SummaryEditorActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="achievments">Co osiągnąłem/am w tym tygodniu?</string>
+    <string name="achievments_month">Co osiągnąłem/am w tym miesiącu?</string>
+    <string name="summary_leave">Co odpuściłem/am?</string>
+    <string name="work_on_summary">Nad czym chcę jeszcze popracować?</string>
 </resources>

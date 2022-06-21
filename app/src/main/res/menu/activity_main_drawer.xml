@@ -9,13 +9,9 @@
                 android:icon="@drawable/goal"
                 android:title="@string/goals"/>
         <item
-                android:id="@+id/nav_gallery"
+                android:id="@+id/nav_summary"
                 android:icon="@drawable/prior"
                 android:title="@string/priorities"/>
-        <item
-                android:id="@+id/nav_slideshow"
-                android:icon="@drawable/stat"
-                android:title="@string/stats"/>
         <item
             android:id="@+id/nav_habit_creator"
             android:icon="@drawable/routine"
