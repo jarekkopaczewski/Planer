@@ -50,13 +50,6 @@ public class SummaryRepository {
         };
     }
 
-    public LiveData<List<SummaryData>> getSummary2(LocalDate date, int weekNumber) {
-        //return switch (summaryType) {
-            //case monthSummary -> summaryDao.getMonthSummary(date.getYear(), date.getMonthValue());
-            return summaryDao.getWeekSummary2(date.getYear(), weekNumber);
-       // };
-    }
-
     /**
      * @return return all months summary from given year
      */

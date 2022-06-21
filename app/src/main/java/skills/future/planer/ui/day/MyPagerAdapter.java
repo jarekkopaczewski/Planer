@@ -8,14 +8,14 @@ import lombok.Getter;
 import skills.future.planer.ui.day.views.daylist.DayTaskListFragment;
 import skills.future.planer.ui.day.views.habits.HabitFragment;
 import skills.future.planer.ui.day.views.matrix.MatrixFragment;
-import skills.future.planer.ui.day.views.summary.DaySummaryFragment;
+import skills.future.planer.ui.day.views.summary.SummaryFragment;
 
 @Getter
 public class MyPagerAdapter extends FragmentPagerAdapter {
-    private static final int NUM_ITEMS = 4;
+    private static final int NUM_ITEMS = 3;
     private final DayTaskListFragment taskListFragment = new DayTaskListFragment();
     private final MatrixFragment matrixFragment = new MatrixFragment();
-    private final DaySummaryFragment summaryFragment = new DaySummaryFragment();
+    private final SummaryFragment summaryFragment = new SummaryFragment();
     private final HabitFragment habitFragment = new HabitFragment();
 
     public MyPagerAdapter(FragmentManager fragmentManager) {
@@ -31,20 +31,20 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         return switch (position) {
-            case 1 -> matrixFragment;
-            case 2 -> taskListFragment;
-            case 3 -> habitFragment;
-            default -> summaryFragment;
+            case 1 -> taskListFragment;
+            case 2 -> habitFragment;
+            default -> matrixFragment;
+            //default -> summaryFragment;
         };
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         return switch (position) {
-            case 0 -> "Podsumowanie tygodnia";
-            case 1 -> "Macierz";
-            case 2 -> "Lista zadań";
-            case 3 -> "Nawyki";
+            //case 0 -> "Podsumowanie tygodnia";
+            case 0 -> "Macierz";
+            case 1 -> "Lista zadań";
+            case 2 -> "Nawyki";
             default -> null;
         };
     }

@@ -33,5 +33,6 @@ public class SummaryData {
         if (summaryType == SummaryType.weekSummary) {
             weekNumber = localDate.get(ChronoField.ALIGNED_WEEK_OF_YEAR);
         }
+
     }
 }
