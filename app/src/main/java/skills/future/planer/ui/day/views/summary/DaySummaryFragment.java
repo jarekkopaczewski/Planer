@@ -50,12 +50,14 @@ public class DaySummaryFragment extends Fragment {
 
         editButton = binding.editSummaryFab;
         editButton.setOnClickListener(e->{
-            var intent = new Intent(this.getContext(), SummaryEditorActivity.class);
-            var bundle = new Bundle();
-            bundle.putLong("summaryId", daySummaryAdapter.getSummaryDataList().get(0).getSummaryId());
-            bundle.putBoolean("editable", true);
-            intent.putExtras(bundle);
-            context.startActivity(intent);
+            if(daySummaryAdapter.getSummaryDataList().size() != 0) {
+                var intent = new Intent(this.getContext(), SummaryEditorActivity.class);
+                var bundle = new Bundle();
+                bundle.putLong("summaryId", daySummaryAdapter.getSummaryDataList().get(0).getSummaryId());
+                bundle.putBoolean("editable", true);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
         });
         return root;
     }

@@ -3,6 +3,15 @@ package skills.future.planer.ui.day.views.summary;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+
+import org.threeten.bp.DayOfWeek;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.util.Calendar;
+import java.util.Locale;
+
 import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.db.summary.SummaryViewModel;
 import skills.future.planer.tools.DatesParser;
@@ -26,7 +35,17 @@ public class DaySummaryViewModel extends ViewModel {
     }
 
     public void updateDate(CalendarDay selectedDay) {
-      summaryViewModel.getSummary2(DatesParser.toLocalDate(selectedDay), SummaryType.weekSummary)
+
+        LocalDate day = DatesParser.toLocalDate(selectedDay);
+
+        while(selectedDay.getDate().getDayOfWeek() != DayOfWeek.MONDAY){
+                LocalDate date = DatesParser.toLocalDate(selectedDay).minusDays(1);
+                selectedDay = DatesParser.toCalendarDay(date);
+        }
+
+        int weekNumber = DatesParser.toLocalDate(selectedDay).get(ChronoField.ALIGNED_WEEK_OF_YEAR) + 1;
+
+      summaryViewModel.getSummary2(day, weekNumber)
               .observe(lifecycleOwner, summary -> daySummaryAdapter.setSummaryDataList(summary));
     }
 
