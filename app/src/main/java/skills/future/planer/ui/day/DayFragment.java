@@ -83,7 +83,7 @@ public class DayFragment extends Fragment {
         myPagerAdapter = new MyPagerAdapter(getChildFragmentManager());
         myPagerAdapter.setPrimaryItem(container, 1, myPagerAdapter.getTaskListFragment());
         vpPager.setAdapter(myPagerAdapter);
-        vpPager.setCurrentItem(2);
+        vpPager.setCurrentItem(1);
     }
 
     /**
@@ -134,7 +134,7 @@ public class DayFragment extends Fragment {
             new Thread(() -> {
                 while (true) {
                     if (habitDayViewModel.getHabitViewModel() != null) {
-                        getActivity().runOnUiThread(() -> vpPager.setCurrentItem(3));
+                        getActivity().runOnUiThread(() -> vpPager.setCurrentItem(2));
                         MainActivity.setNotification(false);
                         break;
                     }
