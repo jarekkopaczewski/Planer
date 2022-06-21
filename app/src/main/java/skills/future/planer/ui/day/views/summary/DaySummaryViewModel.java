@@ -1,5 +1,7 @@
 package skills.future.planer.ui.day.views.summary;
 
+import android.annotation.SuppressLint;
+
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -20,6 +22,7 @@ public class DaySummaryViewModel extends ViewModel {
 
     private static SummaryViewModel summaryViewModel;
     private static LifecycleOwner lifecycleOwner;
+    @SuppressLint("StaticFieldLeak")
     private static DaySummaryAdapter daySummaryAdapter;
 
     public static void setSummaryViewModel(SummaryViewModel summaryViewModel) {

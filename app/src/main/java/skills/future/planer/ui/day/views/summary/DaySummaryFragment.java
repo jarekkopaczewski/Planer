@@ -22,7 +22,6 @@ public class DaySummaryFragment extends Fragment {
 
     private FragmentSummaryBinding binding;
     private FloatingActionButton editButton;
-    private boolean state; // true - edit, false - view
     private SummaryViewModel summaryViewModel;
     private DaySummaryAdapter daySummaryAdapter;
     private DaySummaryViewModel daySummaryViewModel;
@@ -38,7 +37,6 @@ public class DaySummaryFragment extends Fragment {
         daySummaryViewModel.setSummaryViewModel(summaryViewModel);
         context = requireContext();
         binding = FragmentSummaryBinding.inflate(inflater, container, false);
-
         daySummaryAdapter = new DaySummaryAdapter(this.getContext(), summaryViewModel, daySummaryViewModel);
         daySummaryViewModel.setDaySummaryAdapter(daySummaryAdapter);
         daySummaryViewModel.setLifecycleOwner(this.getViewLifecycleOwner());

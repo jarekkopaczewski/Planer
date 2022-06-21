@@ -26,6 +26,7 @@ import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryType;
 import skills.future.planer.db.summary.SummaryViewModel;
 import skills.future.planer.ui.AnimateView;
+import skills.future.planer.ui.day.views.summary.DaySummaryViewModel;
 
 public class SummaryEditorActivity extends AppCompatActivity {
 
@@ -70,6 +71,7 @@ public class SummaryEditorActivity extends AppCompatActivity {
     /**
      * Sets up save listener
      */
+    @SuppressLint("NotifyDataSetChanged")
     private void setUpFabListener() {
         editSummaryFab.setOnClickListener(e -> {
             AnimateView.singleAnimation(editSummaryFab, this, R.anim.editsummary);
@@ -81,6 +83,7 @@ public class SummaryEditorActivity extends AppCompatActivity {
             isEditedImage.setVisibility(View.INVISIBLE);
             editSummaryFab.hide();
             new ViewModelProvider(this).get(SummaryViewModel.class).edit(summaryData);
+            DaySummaryViewModel.getDaySummaryAdapter().notifyDataSetChanged();
         });
     }
 
