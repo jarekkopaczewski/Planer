@@ -41,7 +41,7 @@ public class DaySummaryViewModel extends ViewModel {
                 selectedDay = DatesParser.toCalendarDay(date);
         }
 
-        int weekNumber = DatesParser.toLocalDate(selectedDay).get(ChronoField.ALIGNED_WEEK_OF_YEAR) + 1;
+        int weekNumber = DatesParser.toLocalDate(selectedDay).get(ChronoField.ALIGNED_WEEK_OF_YEAR);
 
       summaryViewModel.getSummary2(day, weekNumber)
               .observe(lifecycleOwner, summary -> daySummaryAdapter.setSummaryDataList(summary));
