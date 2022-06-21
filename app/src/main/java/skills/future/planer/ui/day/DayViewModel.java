@@ -42,6 +42,10 @@ public class DayViewModel extends ViewModel {
     public boolean checkIsHabitsView(@NonNull ViewPager vpPager) {
         return vpPager.getAdapter().getPageTitle(vpPager.getCurrentItem()).equals("Nawyki");
     }
+
+    public boolean checkIsSummaryView(@NonNull ViewPager vpPager) {
+        return vpPager.getAdapter().getPageTitle(vpPager.getCurrentItem()).equals("Podsumowanie tygodnia");
+    }
 }
 
 
