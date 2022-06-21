@@ -115,4 +115,8 @@
     <string name="achievments_month">Co osiągnąłem/am w tym miesiącu?</string>
     <string name="summary_leave">Co odpuściłem/am?</string>
     <string name="work_on_summary">Nad czym chcę jeszcze popracować?</string>
+    <string name="week_summary_text1">Co osiągnąłem/am w tym tygodniu?</string>
+    <string name="week_summary_text2">Co odpuściłem/am?</string>
+    <string name="week_summary_text3">Nad czym chcę jeszcze popracować?</string>
+
 </resources>

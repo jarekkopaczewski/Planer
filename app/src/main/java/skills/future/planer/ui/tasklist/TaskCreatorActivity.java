@@ -98,7 +98,7 @@ public class TaskCreatorActivity extends AppCompatActivity {
 
         saveBtnOnClickListenerSetter(edit);
 
-        if (!edit)
+        if (editTask.getStartingDate() != 0 && !edit)
             setStartingDateByGlobalDate();
 
         setUpGoals();

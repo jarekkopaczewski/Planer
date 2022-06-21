@@ -45,10 +45,7 @@ public class SummaryFragment extends Fragment {
 
         // set min/max value in year picker
         yearPicker.setMaxValue(Calendar.getInstance().get(Calendar.YEAR) + 1);
-        if(summaryViewModel.getMinimumYear()!=0)
-            yearPicker.setMinValue(summaryViewModel.getMinimumYear() - 1);
-        else
-            yearPicker.setMinValue(Calendar.getInstance().get(Calendar.YEAR) - 1);
+        yearPicker.setMinValue(summaryViewModel.getMinimumYear() - 1);
 
         AnimateView.animateInOut(yearPicker, getContext());
         return root;

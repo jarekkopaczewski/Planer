@@ -11,14 +11,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-
-import java.time.LocalDate;
-
 import skills.future.planer.R;
 import skills.future.planer.db.summary.SummaryData;
 import skills.future.planer.db.summary.SummaryViewModel;
-import skills.future.planer.tools.DatesParser;
 import skills.future.planer.ui.AnimateView;
 import skills.future.planer.ui.summary.adapter.WeekSummaryTotalAdapter;
 
@@ -46,14 +41,8 @@ public class SummaryViewHolderExtended extends SummaryViewHolder {
         weekRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
 
         try {
-            CalendarDay calendarDay = CalendarDay.today();
-            LocalDate localDate = DatesParser.toLocalDate(calendarDay);
-
             weekSummaryTotalAdapter.setData(summaryViewModel.getWeeksFromMonthSummary(summaryData.getYear(), summaryData.getMonth()));
-
-            if(localDate.getMonthValue() > summaryData.getMonth())
-                weekSummaryTotalAdapter.addData(summaryViewModel.getMonthSummary(summaryData.getYear(), summaryData.getMonth()));
-
+            weekSummaryTotalAdapter.addData(summaryViewModel.getMonthSummary(summaryData.getYear(), summaryData.getMonth()));
         } catch (Exception e) {
             e.printStackTrace();
         }
