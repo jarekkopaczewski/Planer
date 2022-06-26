@@ -1,10 +1,12 @@
 # Spis treści
 * [Opis projeku](#opis-projeku)
-* [Widoki listy zadań ](#widoki-listy-zadań)
-* [Widok macierzy oraz nawyków](#widok-macierzy-oraz-nawyków)
+* [Widok miesiąca i listy zadań w dniu](#widok-miesiąca-i-listy-zadań-w-dniu)
+* [Widok macierzy oraz listy zadań w dniu](#widok-macierzy-oraz-listy-zadań-w-dniu)
+* [Lista wszystkich zadań](#lista-wszystkich-zadań)
+* [Widok listy nawyków i nawyków w dniu](#widok-listy-nawyków-i-nawyków-w-dniu)
+* [Widok listy celów](#widok-listy-celów)
+* [Widok podsumowań](#widok-podsumowań)
 * [Technologie i narzędzia](#technologie-i-narzędzia)
-* [Ustawienia oraz nawigacja](#ustawienia-oraz-nawigacja)
-* [Widoki celów i nawyków](#widoki-celów-i-nawyków)
 
 # O projekcie
 
