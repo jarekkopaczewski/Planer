@@ -16,28 +16,27 @@ Główne realizowane funkcje:
  - system wyrabiania nawyków
  - wyznaczanie i realizacja celów
  
-## Widoki listy zadań 
+## Widok miesiąca i listy zadań w dniu
 
 Aplikacja umożliwia dodawanie, usuwanie oraz edycję zadań. Zadania kategoryzowane są pod względem pilności oraz wagi zadania - każdy z wariantów specyfikowany jest przez inny kolor personalizowany w ustawieniach. Koncept jest implementacją Macierzy Eisenhowera(matryca priorytetów).
-
 <p float="left">
   <img src="https://github.com/jarekkopaczewski/Planer/blob/3a8fee7a5598d009c0cdc95a7436140edd30399c/screens/1.gif" height="550" hspace="100"/>
 </p>
 
-## Widok macierzy oraz nawyków
+## Widok macierzy oraz listy zadań w dniu
 
 <p float="left">
   <img src="https://github.com/jarekkopaczewski/Planer/blob/3a8fee7a5598d009c0cdc95a7436140edd30399c/screens/2.gif" height="550" hspace="100"/>
 </p>
 
-## Ustawienia oraz nawigacja
+## Lista wszystkich zadań
 W aplikacji dostępny jest boczny pasek nawigacji do którego dodawane będą kolejne funkcjonalności. Użytkownik może spersonalizować ustawienia motywu oraz kolorów zadań.
 
 <p float="left">
   <img src="https://github.com/jarekkopaczewski/Planer/blob/3a8fee7a5598d009c0cdc95a7436140edd30399c/screens/3.gif" height="550" hspace="100"/>
 </p>
 
-## Widok listy nawyków
+## Widok listy nawyków i nawyków w dniu
 
 <p float="left">
   <img src="https://github.com/jarekkopaczewski/Planer/blob/3a8fee7a5598d009c0cdc95a7436140edd30399c/screens/4.gif" height="550" hspace="100"/>
