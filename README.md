@@ -17,7 +17,19 @@ Główne realizowane funkcje:
  - planowanie działań codziennych
  - system wyrabiania nawyków
  - wyznaczanie i realizacja celów
+
+## Broszura
+
+<p align="center">
+  <img src="https://github.com/jarekkopaczewski/Planer/blob/dbb367dfc9315b201b3580fd8a2619ad51263df0/screens/planer-broszura/planer-broszura-1.png" height="550" hspace="100"/>
+</p>
+
+## Plakat
  
+<p align="center">
+  <img src="https://github.com/jarekkopaczewski/Planer/blob/dbb367dfc9315b201b3580fd8a2619ad51263df0/screens/planer-plakat/planer-plakat-1.png" height="1000" hspace="100"/>
+</p>
+
 ## Widok miesiąca i listy zadań w dniu
 
 Aplikacja umożliwia dodawanie, usuwanie oraz edycję zadań. Zadania kategoryzowane są pod względem pilności oraz wagi zadania - każdy z wariantów specyfikowany jest przez inny kolor personalizowany w ustawieniach. Koncept jest implementacją Macierzy Eisenhowera(matryca priorytetów).
