@@ -161,6 +161,8 @@ public class TaskCreatorActivity extends AppCompatActivity {
                     .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
             beginDateEditText.setText(DatesParser.toLocalDate(editTask.getStartingDate())
                     .format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            beginDay = CalendarDay.from(beginDate.getYear(), beginDate.getMonth(), beginDate.getDay());
+            endingDay = CalendarDay.from(endingDate.getYear(), endingDate.getMonth(), endingDate.getDay());
         }
     }
 
