@@ -21,7 +21,7 @@ Główne realizowane funkcje:
 ## Broszura
 
 <p align="center">
-  <img src="https://github.com/jarekkopaczewski/Planer/blob/dbb367dfc9315b201b3580fd8a2619ad51263df0/screens/planer-broszura/planer-broszura-1.png" height="550" hspace="100"/>
+  <img src="https://github.com/jarekkopaczewski/Planer/blob/dbb367dfc9315b201b3580fd8a2619ad51263df0/screens/planer-broszura/planer-broszura-1.png" height="450" hspace="100"/>
 </p>
 
 ## Plakat
