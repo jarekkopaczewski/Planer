@@ -11,7 +11,7 @@
 # O projekcie
 
 ## Opis projeku
-Aplikacji do organizacji czasu i energii osobistej. Jej zadaniem jest połączenie kalendarza z planowaniem zadań oraz pomoc w wypracowaniu nawyków. Aplikacja bazuje na istniejącym w formie fizyczno - papierowej plannerze firmy Future Skills.
+Aplikacja mobilna służąca do organizacji czasu i energii osobistej. Na główne funkcjonalności składa się lista zadań bazującą na macierzy priorytetów, system wypracowywania nawyków oraz tworzenie celów.
 
 Główne realizowane funkcje:
  - planowanie działań codziennych
